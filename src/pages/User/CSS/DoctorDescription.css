@@ -1,0 +1,35 @@
+/* DoctorDescription.css */
+.doctor-description h1 {
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+    font-size: 2em; /* Kích thước mặc định của h1 */
+}
+
+.doctor-description h2 {
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+    font-size: 1.5em; /* Kích thước mặc định của h2 */
+}
+.doctor-description h3 {
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+}
+
+.doctor-description ul {
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+    margin-left: 1.5rem;
+    list-style-type: disc;
+}
+
+.doctor-description li {
+    margin: 1rem;
+}
+
+/* Add custom font styling for the span elements */
+.doctor-description span {
+    font-weight: normal;
+}
