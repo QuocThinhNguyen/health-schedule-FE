@@ -9,6 +9,8 @@ import Logo from '~/components/Logo';
 import { toast } from 'react-toastify';
 import { AiOutlineEdit } from 'react-icons/ai';
 import { MdDeleteOutline } from 'react-icons/md';
+import { RiDeleteBin6Line } from 'react-icons/ri';
+import { FiEdit } from 'react-icons/fi';
 const UserManagement = () => {
     const [isExpanded, setIsExpanded] = useState(true);
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -486,16 +488,16 @@ const UserManagement = () => {
                                 <td className="border border-gray-300 px-4 py-2 text-center">{user.phoneNumber}</td>
                                 <td className="border border-gray-300 px-4 py-2 text-center space-x-8">
                                     <button
-                                        className="text-blue-500 text-3xl hover:text-blue-700"
+                                        className="text-blue-500 text-2xl hover:text-blue-700"
                                         onClick={() => getDetailUserAPI(user.userId)}
                                     >
-                                        <AiOutlineEdit />
+                                        <FiEdit />
                                     </button>
                                     <button
-                                        className="text-red-500 text-3xl hover:text-red-700"
+                                        className="text-red-500 text-2xl hover:text-red-700"
                                         onClick={() => handleDeleteClick(user.userId)}
                                     >
-                                        <MdDeleteOutline />
+                                        <RiDeleteBin6Line />
                                     </button>
                                 </td>
                             </tr>

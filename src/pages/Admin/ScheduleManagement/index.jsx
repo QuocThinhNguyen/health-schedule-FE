@@ -6,6 +6,7 @@ import { UserContext } from '~/context/UserContext';
 import { axiosInstance } from '~/api/apiRequest';
 import { toast } from 'react-toastify';
 import { AiOutlineEdit } from 'react-icons/ai';
+import { FiEdit } from 'react-icons/fi';
 
 const ScheduleManagement = () => {
     const [isExpanded, setIsExpanded] = useState(true);
@@ -342,10 +343,10 @@ const ScheduleManagement = () => {
                                     </td>
                                     <td className="border border-gray-300 px-4 py-2 text-center space-x-8">
                                         <button
-                                            className="text-blue-500 text-3xl hover:text-blue-700"
+                                            className="text-blue-500 text-2xl hover:text-blue-700"
                                             onClick={() => getDetailScheduleAPI(sche.bookingId)}
                                         >
-                                            <AiOutlineEdit />
+                                            <FiEdit />
                                         </button>
                                     </td>
                                 </tr>
