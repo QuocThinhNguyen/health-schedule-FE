@@ -7,6 +7,8 @@ import { UserContext } from '~/context/UserContext';
 import { axiosInstance } from '~/api/apiRequest';
 import { toast } from 'react-toastify';
 import { MdDeleteOutline } from 'react-icons/md';
+import { FiEdit } from 'react-icons/fi';
+import { RiDeleteBin6Line } from 'react-icons/ri';
 
 const ClinicManagement = () => {
     const [isExpanded, setIsExpanded] = useState(true);
@@ -454,13 +456,16 @@ const ClinicManagement = () => {
                                 <td className="border border-gray-300 px-4 py-2 text-center">{clinic.phoneNumber}</td>
                                 <td className="border border-gray-300 px-4 py-2 text-center space-x-8">
                                     <button
-                                        className="text-blue-500 text-3xl hover:text-blue-700"
+                                        className="text-blue-500 text-2xl hover:text-blue-700"
                                         onClick={() => getDetailClinicAPI(clinic.clinicId)}
                                     >
-                                        <AiOutlineEdit />
+                                        <FiEdit />
                                     </button>
-                                    <button className="text-red-500 text-3xl hover:text-red-700" onClick={() => handleDeleteClick(clinic.clinicId)}>
-                                        <MdDeleteOutline />
+                                    <button
+                                        className="text-red-500 text-2xl hover:text-red-700"
+                                        onClick={() => handleDeleteClick(clinic.clinicId)}
+                                    >
+                                        <RiDeleteBin6Line />
                                     </button>
                                 </td>
                             </tr>

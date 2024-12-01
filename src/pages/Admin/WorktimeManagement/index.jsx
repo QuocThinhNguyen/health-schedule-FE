@@ -9,6 +9,8 @@ import Logo from '~/components/Logo';
 import { toast } from 'react-toastify';
 import { MdDeleteOutline } from 'react-icons/md';
 import { AiOutlineEdit } from 'react-icons/ai';
+import { RiDeleteBin6Line } from 'react-icons/ri';
+import { FiEdit } from 'react-icons/fi';
 
 const WorktimeManagement = () => {
     const [isExpanded, setIsExpanded] = useState(true);
@@ -469,18 +471,18 @@ const WorktimeManagement = () => {
                                         ))}
                                     </div>
                                 </td>
-                                <td className="border border-gray-300 px-4 py-2 text-center">
+                                <td className="border border-gray-300 px-4 py-2 text-center space-x-8">
                                     <button
-                                        className="text-blue-500 hover:text-blue-700 mr-2"
+                                        className="text-blue-500 text-2xl hover:text-blue-700 mr-2"
                                         onClick={() => getDetailWorkTimeAPI(item.doctorId.userId, item.scheduleDate)}
                                     >
-                                        <AiOutlineEdit />
+                                        <FiEdit />
                                     </button>
                                     <button
-                                        className="text-red-500 hover:text-red-700"
+                                        className="text-red-500 text-2xl hover:text-red-700"
                                         onClick={() => handleDeleteClick(item.doctorId.userId, item.scheduleDate)}
                                     >
-                                        <MdDeleteOutline />
+                                        <RiDeleteBin6Line />
                                     </button>
                                 </td>
                             </tr>
