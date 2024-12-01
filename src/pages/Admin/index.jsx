@@ -57,103 +57,10 @@ const Dashboard = () => {
         };
     }, []);
 
-    // Dữ liệu các mục menu
-    const menuItems = [
-        { path: '/admin/dashboard', label: 'Bảng thống kê', icon: <FontAwesomeIcon icon={faGauge} /> },
-        { path: '/admin/clinic', label: 'Quản lý bệnh viện', icon: <FontAwesomeIcon icon={faHospital} /> },
-        { path: '/admin/doctor', label: 'Quản lý bác sĩ', icon: '👩‍⚕️' },
-        { path: '/admin/user', label: 'Quản lý tài khoản người dùng', icon: '👤' },
-        { path: '/admin/specialty', label: 'Quản lý chuyên khoa', icon: '🩺' },
-        { path: '/admin/schedule', label: 'Quản lý lịch hẹn', icon: '📅' },
-        { path: '/admin/worktime', label: 'Quản lý thời gian làm việc', icon: <FontAwesomeIcon icon={faClock} /> },
-    ];
-
     return (
-        <div className="flex min-h-screen">
-            {/* Sidebar */}
-            <div className={`bg-gray-100 border-r transition-all duration-300 mt-4 ${isExpanded ? 'w-100' : 'w-16'}`}>
-                <div className="flex items-center justify-between px-4 py-2 bg-gray-300">
-                    {isExpanded && <span className="font-bold">Admin Menu</span>}
-                    <button onClick={toggleAdminMenu} className="p-2 text-gray-700 hover:bg-gray-200 rounded">
-                        {isExpanded ? <IoMenu /> : <IoMenu />}
-                    </button>
-                </div>
-                <ul className="space-y-2 mt-4">
-                    {/* Menu items */}
-                    {menuItems.map((item) => (
-                        <li
-                            key={item.path}
-                            className={`cursor-pointer flex items-center px-4 py-2 rounded ${
-                                location.pathname === item.path
-                                    ? 'bg-pink-500 text-white' // Nền hồng cho mục hiện tại
-                                    : 'hover:bg-gray-200' // Hover hiệu ứng cho mục khác
-                            } ${isExpanded ? 'justify-start' : 'justify-center'}`}
-                            onClick={() => navigate(item.path)}
-                        >
-                            <span className="text-xl">{item.icon}</span>
-                            {isExpanded && <span className="ml-4">{item.label}</span>}
-                        </li>
-                    ))}
-                </ul>
-            </div>
-
+        <>
             {/* Main Content */}
-            <div className="flex-1 p-4">
-                <div className="bg-gray-200">
-                    <div className="border-t border-gray-400"></div>
-                    <div className="bg-gray-200 mx-auto">
-                        <div className="flex justify-between items-center">
-                            <div className="flex items-center space-x-4 ml-4">
-                                {/* <img
-                                    src={
-                                        'https://phuongnamvina.com/img_data/images/logo-benh-vien.jpg' ||
-                                        'https://via.placeholder.com/150'
-                                    }
-                                    alt="Logo"
-                                    className="w-24 h-24 object-contain"
-                                /> */}
-                                <Logo/>
-                            </div>
-                            {/* Admin và Menu */}
-                            <div
-                                ref={adminRef}
-                                className="flex items-center space-x-4 cursor-pointer"
-                                onClick={toggleMenu}
-                            >
-                                <span className="font-bold">Admin</span>
-                                <div className="w-16 h-16 rounded-full bg-gray-400 flex items-center justify-center overflow-hidden">
-                                    <img
-                                        src={
-                                            'https://s3.ap-southeast-1.amazonaws.com/cdn.vntre.vn/default/meme-meo-khoc-5-1725388333.jpg' ||
-                                            'https://via.placeholder.com/150'
-                                        }
-                                        alt="Profile"
-                                        className="w-full h-full object-cover"
-                                    />
-                                </div>
-                            </div>
-
-                            {/* Menu thả xuống */}
-                            {isMenuOpen && (
-                                <div
-                                    ref={menuRef}
-                                    className="absolute right-0 mt-2 bg-white border border-gray-300 rounded shadow-md w-40 z-20"
-                                    style={{
-                                        top: dropdownPosition.top + 8 + 'px', // Add a small offset
-                                        left: dropdownPosition.left + 'px',
-                                    }}
-                                >
-                                    <ul className="py-2">
-                                        <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">Hồ sơ cá nhân</li>
-                                        <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer" onClick={handleLogout}>Đăng xuất</li>
-                                    </ul>
-                                </div>
-                            )}
-                        </div>
-                    </div>
-                    <div className="border-t border-gray-400"></div>
-                </div>
-
+            <div className="p-8">
                 {/* Dashboard cards */}
                 <div className="grid grid-cols-3 gap-4 mt-6">
                     <div className="bg-gray-100 p-4 rounded shadow">
@@ -180,7 +87,7 @@ const Dashboard = () => {
                     </div>
                 </div>
             </div>
-        </div>
+        </>
     );
 };
 
