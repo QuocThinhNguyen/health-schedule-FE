@@ -10,7 +10,7 @@ function AdminLayout() {
             <HeaderAdmin/>
             <div className='flex mt-20 h-screen-minus-20 '>
                 <SidebarAdmin/>
-                <main className='w-full'>
+                <main className='w-full overflow-y-auto'>
                     <Outlet />
                 </main>
             </div>

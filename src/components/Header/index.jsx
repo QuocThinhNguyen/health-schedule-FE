@@ -49,8 +49,7 @@ function Header() {
     }, [user]);
 
     return (
-        <header className="bg-transparent shadow fixed top-0 left-0 right-0 z-50">
-            <div className="absolute inset-0 backdrop-blur-md bg-white/30"></div>
+        <header className="bg-white shadow fixed top-0 left-0 right-0 z-50">
             <div className="relative z-10 max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex justify-between h-20">
                     {/* Logo */}
