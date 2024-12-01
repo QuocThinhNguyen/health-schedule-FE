@@ -18,7 +18,7 @@ function ClinicInfo() {
             try {
                 const response = await axiosInstance.get(`/clinic/${state.clinicId}`);
                 console.log('response:', response);
-                if (response.errCode === 0) {
+                if (response.status === 200) {
                     setClinicData(response.data);
                 }
             } catch (error) {

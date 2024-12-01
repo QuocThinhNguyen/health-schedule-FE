@@ -30,7 +30,7 @@ function PatientManagement() {
                 const response = await axiosInstance.get(`/booking/doctor/${user.userId}?date=${selectedDate}`);
                 console.log('ResponseBooking:', response);
 
-                if (response.status === 'OK') {
+                if (response.status === 200) {
                     setAppointments(response.data);
                 } else {
                     console.error('Failed to fetch data:', response.message);
@@ -59,7 +59,7 @@ function PatientManagement() {
         try {
             const response = await axiosInstance.put(`/booking/${appointmentId}`, { status: statusKey });
 
-            if (response.status === 'OK') {
+            if (response.status === 200) {
                 // Cập nhật trạng thái trực tiếp trên danh sách appointments
                 setAppointments((prevAppointments) =>
                     prevAppointments.map((appointment) =>

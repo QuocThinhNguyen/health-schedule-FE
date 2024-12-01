@@ -23,13 +23,12 @@ function DoctorInfo() {
 
     // console.log('Doctor info: ', doctorInfo);
     useEffect(() => {
-        console.log('1');
         const fetchDoctorInfo = async () => {
             try {
                 const response = await axiosInstance.get(`/doctor/${doctorId}`);
                 console.log('2');
                 console.log('Doctor info000: ', response);
-                if (response.errCode === 0) {
+                if (response.status === 200) {
                     setDoctorInfo(response.data);
                 }
             } catch (error) {
@@ -71,7 +70,7 @@ function DoctorInfo() {
             try {
                 const response = await axiosInstance.get(`/schedule/${doctorId}?date=${currentDate}`);
                 console.log('Schedule:', response);
-                if (response.status === 'OK') {
+                if (response.status === 200) {
                     setSchedule(response.data);
                 }
             } catch (error) {

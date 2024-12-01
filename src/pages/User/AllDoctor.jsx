@@ -50,7 +50,7 @@ function AllDoctor() {
                 console.log('page', pagination.page);
                 console.log(pagination.limit);
                 console.log('response:', response);
-                if (response.errCode === 0) {
+                if (response.status === 200) {
                     setDoctors(response.data);
                     if (response.totalPages === 0) {
                         response.totalPages = 1;

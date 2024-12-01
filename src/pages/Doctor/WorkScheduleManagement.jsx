@@ -32,7 +32,7 @@ function DoctorScheduleManagement() {
     const fetchScheduleByDate = async (date) => {
         try {
             const response = await axiosInstance.get(`/schedule/${user.userId}?date=${date}`);
-            if (response.status === 'OK') {
+            if (response.status === 200) {
                 const bookedSlots = response.data.length > 0 ? response.data[0].timeTypes : [];
                 setSelectedTimeSlots(bookedSlots);
             } else {
@@ -57,7 +57,7 @@ function DoctorScheduleManagement() {
             try {
                 const response = await axiosInstance.get(`/doctor/${user.userId}`);
                 console.log('Doctor infooo:', response);
-                if (response.errCode === 0) {
+                if (response.status === 200) {
                     setSelectedDoctor(response.data);
                 } else {
                     console.error('Error fetching doctor information:', response.errMessage);
@@ -88,7 +88,7 @@ function DoctorScheduleManagement() {
         console.log('Request data:', requestData);
         try {
             const response = await axiosInstance.put(`/schedule/${user.userId}`, requestData);
-            if (response.status === 'OK') {
+            if (response.status === 200) {
                 toast.success('Lưu thành công!');
             } else if (response.message === 'Schedule already exists') {
                 toast.error('Lịch làm việc cho bác sĩ đã tồn tại.');

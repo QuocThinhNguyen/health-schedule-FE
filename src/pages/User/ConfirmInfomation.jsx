@@ -37,7 +37,7 @@ function ConfirmInfomation() {
                 const response = await axiosInstance.get(`/doctor/${state.patientState.doctorId}`);
                 console.log('2');
                 console.log('Doctor info000: ', response);
-                if (response.errCode === 0) {
+                if (response.status === 200) {
                     setDoctorInfo(response.data);
                 }
             } catch (error) {
@@ -64,7 +64,7 @@ function ConfirmInfomation() {
 
             console.log('Response', response);
 
-            if (response.status === 'OK') {
+            if (response.status === 200) {
                 toast.success('Đặt lịch thành công!');
                 navigate('/user/appointments');
             } else {
@@ -87,11 +87,11 @@ function ConfirmInfomation() {
                 reason: reason || '',
             };
 
-            const response = await axiosInstance.post('/booking/book-appointment', payload);
+            const response = await axiosInstance.post('/booking/book-appointment-online', payload);
 
             console.log('Response', response);
 
-            if (response.status === 'OK') {
+            if (response.status === 200) {
                 toast.success('Đặt lịch thành công! Chuyển đến trang thanh toán...');
                 window.location.href = response.paymentUrl; // Chuyển đến URL thanh toán
             } else {
@@ -122,7 +122,7 @@ function ConfirmInfomation() {
             try {
                 const response = await axiosInstance.get(`/patientrecord/${state.patientId}`);
                 console.log('Patient Record', response);
-                if (response.errCode === 0) {
+                if (response.status === 200) {
                     setPatientData(response.data); // Lưu toàn bộ mảng bệnh nhân vào state
                 } else {
                     setError('Không thể lấy dữ liệu');

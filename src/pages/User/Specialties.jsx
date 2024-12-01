@@ -20,7 +20,7 @@ function Specialties() {
             try {
                 const response = await axiosInstance.get(`/specialty/clinicId/${getClinicId}`);
                 console.log('response:', response);
-                if (response.errCode === 0) {
+                if (response.status === 200) {
                     setSpecialty(response.data);
                 }
             } catch (error) {

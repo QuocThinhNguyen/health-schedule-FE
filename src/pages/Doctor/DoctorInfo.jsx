@@ -28,12 +28,8 @@ function DoctorProfile() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                // console.log('UserId:', user.userId);
-
                 const response = await axiosInstance.get(`/doctor/${user.userId}`);
-                // console.log('Response:', response);
-
-                if (response.errCode === 0) {
+                if (response.status === 200) {
                     setDoctorInfo({
                         name: response.data.fullname,
                         address: response.data.address,
@@ -47,8 +43,6 @@ function DoctorProfile() {
                         image: response.data.image,
                     });
                 }
-                // console.log('Doctor data:', response.data);
-                // console.log('Doctor info:', doctorInfo);
             } catch (error) {
                 console.error('Error fetching doctor data:', error);
                 setDoctorInfo({});
@@ -94,7 +88,7 @@ function DoctorProfile() {
                 },
             });
             console.log('Response:', response);
-            if (response.errCode === 0) {
+            if (response.status === 200) {
                 // Check a success code if the backend provides it
                 toast.success('Cập nhật thông tin thành công');
             } else {

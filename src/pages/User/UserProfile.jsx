@@ -30,7 +30,7 @@ function DoctorProfile() {
                 const response = await axiosInstance.get(`/user/${user.userId}`);
                 console.log('Response:', response);
 
-                if (response.status === 'OK') {
+                if (response.status === 200) {
                     setDoctorInfo({
                         name: response.data.fullname,
                         address: response.data.address,
@@ -91,7 +91,7 @@ function DoctorProfile() {
                 },
             });
             console.log('Response:', response);
-            if (response.status === 'OK') {
+            if (response.status === 200) {
                 // Check a success code if the backend provides it
                 toast.success('Cập nhật thông tin thành công');
             } else {
