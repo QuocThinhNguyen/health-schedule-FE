@@ -22,7 +22,7 @@ function PatientRecord() {
             try {
                 const response = await axiosInstance.get(`/patientrecord/patient/${user.userId}`);
                 console.log(response);
-                if (response.status === 'OK') {
+                if (response.status === 200) {
                     setPatientData(response.data); // Lưu toàn bộ mảng bệnh nhân vào state
                 } else {
                     setError('Không thể lấy dữ liệu');
@@ -47,7 +47,7 @@ function PatientRecord() {
         try {
             const response = await axiosInstance.delete(`/patientrecord/${patientIdToDelete}`);
             console.log('DELETE', response);
-            if (response.errCode === 0) {
+            if (response.status === 200) {
                 // Remove the deleted patient from the state
                 setPatientData((prevData) =>
                     prevData.filter((patient) => patient.patientRecordId !== patientIdToDelete),

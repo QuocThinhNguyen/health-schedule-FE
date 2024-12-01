@@ -52,9 +52,9 @@ function AddRecord() {
             const response = await axiosInstance.post('/patientrecord', formData);
             console.log('API Response:', response);
 
-            if (response.errCode === 0) {
+            if (response.status === 200) {
                 toast.success(response.message); // Thông báo thành công
-                navigate('/user/records')
+                navigate('/user/records');
                 handleReset(); // Reset form nếu thành công
             } else {
                 toast.error('Tạo mới thất bại: ' + response.message); // Thông báo lỗi

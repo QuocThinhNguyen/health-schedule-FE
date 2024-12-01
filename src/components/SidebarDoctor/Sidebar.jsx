@@ -41,7 +41,7 @@ const Sidebar = ({ onSelectTab, selectedTab }) => {
         const fetchData = async () => {
             try {
                 const response = await axiosInstance.get(`/doctor/${user.userId}`);
-                if (response.errCode === 0) {
+                if (response.status === 200) {
                     setDoctorInfo({
                         name: response.data.fullname,
                         image: response.data.image,
@@ -75,25 +75,12 @@ const Sidebar = ({ onSelectTab, selectedTab }) => {
                 confirmPassword: confirmPassword,
             });
             // console.log('Response::', response);
-            if (response.status === 'OK') {
+            if (response.status === 200) {
                 toast.success('Mật khẩu đã được thay đổi thành công');
                 setShowChangePasswordModal(false);
             } else {
                 toast.error(response.message);
             }
-            // .then((response) => {
-            //     const { status, message } = response.data;
-            //     if (status === 'OK') {
-            //         alert('Mật khẩu đã được thay đổi thành công');
-            //         setShowChangePasswordModal(false); // Đóng modal sau khi thành công
-            //     } else {
-            //         alert(message); // Hiển thị thông báo lỗi
-            //     }
-            // })
-            // .catch((error) => {
-            //     console.error('Error changing password:', error);
-            //     alert('Đã có lỗi xảy ra khi thay đổi mật khẩu');
-            // });
         } else {
             toast.error('Mật khẩu mới và xác nhận mật khẩu không khớp');
         }
@@ -117,18 +104,6 @@ const Sidebar = ({ onSelectTab, selectedTab }) => {
     return (
         <div className="w-fit h-screen bg-white text-black flex flex-col shadow-lg">
             <div className="text-xl font-bold text-center py-6 border-b border-gray-200 flex items-center justify-center">
-                {/* <img
-                    src={pngegg}
-                    alt="Logo"
-                    className="mx-auto mb-2"
-                    style={{ width: '50px', height: '50px', borderRadius: '50%' }}
-                />
-                <div className="ml-4 text-left">
-                    <p>EasyMed</p>
-                    <small>
-                        Chăm sóc sức khỏe <br /> Bảo vệ cuộc sống
-                    </small>
-                </div> */}
                 <Logo />
             </div>
 

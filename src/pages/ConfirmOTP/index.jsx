@@ -53,12 +53,12 @@ function ConfirmOTP() {
                 otpCode: otpString,
             });
 
-            if (response.status === 'OK') {
+            if (response.status === 200) {
                 toast.success('Đăng kí thành công');
                 setTimeout(() => {
                     navigate('/login');
                 }, 2000);
-            } else if (response.status === 'ERR') {
+            } else if (response.status === 404) {
                 toast.error('OTP không trùng khớp');
             } else {
                 toast.error('OTP đã hết hạn');

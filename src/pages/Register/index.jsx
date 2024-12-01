@@ -20,8 +20,7 @@ function Register() {
     const [confirmPasswordError, setConfirmPasswordError] = useState('');
 
     const inputFocus = useRef(null);
-    const {setEmailRegister,setOtpToken} = useOtpToken();
-    
+    const { setEmailRegister, setOtpToken } = useOtpToken();
 
     useEffect(() => {
         if (inputFocus.current) {
@@ -96,10 +95,10 @@ function Register() {
             });
             console.log(response);
 
-            if (response.status === 'OK') {
+            if (response.status === 200) {
                 setEmailRegister(email);
                 setOtpToken(response.otp_token);
-                toast.success("OTP đã được gửi về email");
+                toast.success('OTP đã được gửi về email');
                 setTimeout(() => {
                     navigate('/confirm-otp');
                 }, 2000);
@@ -108,7 +107,7 @@ function Register() {
             }
         } catch (error) {
             console.error(error);
-            toast.error("Đăng kí không thành công");
+            toast.error('Đăng kí không thành công');
         }
     };
 

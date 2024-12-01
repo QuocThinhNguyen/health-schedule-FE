@@ -67,12 +67,12 @@ function Login() {
                 password,
             });
 
-            if (res.status === 'OK') {
+            if (res.status === 200) {
                 loginContext(email, res.access_token);
                 toast.success('Đăng nhập thành công');
                 const decodeToken = jwtDecode(res.access_token);
                 console.log(decodeToken.roleId);
-                
+
                 if (decodeToken.roleId === 'R1') {
                     navigate('/admin/clinic', { replace: true });
                 } else if (decodeToken.roleId === 'R2') {

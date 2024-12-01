@@ -10,10 +10,10 @@ import { GrLocation } from 'react-icons/gr';
 
 function AllClinic() {
     const [searchQuery, setSearchQuery] = useState('');
-    const [doctors, setDoctors] = useState([]);
+    const [clinics, setClinics] = useState([]);
     const navigate = useNavigate();
     const [pagination, setPagination] = useState({ page: 1, limit: 6, totalPages: 1 });
-    const [allDoctors, setAllDoctors] = useState([]); // Dữ liệu tất cả bác sĩ
+    const [allClinics, setAllClinics] = useState([]); // Dữ liệu tất cả bác sĩ
     const { state } = useLocation();
     // Chuyển trang
     const handlePageChange = async (newPage) => {
@@ -38,32 +38,34 @@ function AllClinic() {
     }
 
     useEffect(() => {
-        const fetchFindDoctors = async () => {
+        const fetchFindClinics = async () => {
             try {
                 const response = await axiosInstance.get(
                     `/doctor?limit=${20}&clinicId=${getClinicId}&specialtyId=${getSpecialtyId}`,
                 );
 
-                if (response.errCode === 0) {
-                    setAllDoctors(response.data);
+                if (response.status === 200) {
+                    setAllClinics(response.data);
                 }
             } catch (error) {
-                console.error('Failed to fetch doctors:', error.message);
+                console.error('Failed to fetch clinics:', error.message);
             }
         };
 
-        fetchFindDoctors();
+        fetchFindClinics();
     }, []);
 
     useEffect(() => {
-        const fetchDoctors = async () => {
+        const fetchClinics = async () => {
             try {
-                const response = await axiosInstance.get(`/clinic?query=${searchQuery}&page=${pagination.page}&limit=${pagination.limit}`);
+                const response = await axiosInstance.get(
+                    `/clinic?query=${searchQuery}&page=${pagination.page}&limit=${pagination.limit}`,
+                );
                 console.log('page', pagination.page);
                 console.log(pagination.limit);
                 console.log('response:', response);
-                if (response.errCode === 0) {
-                    setDoctors(response.data);
+                if (response.status === 200) {
+                    setClinics(response.data);
                     if (response.totalPages === 0) {
                         response.totalPages = 1;
                     }
@@ -76,17 +78,17 @@ function AllClinic() {
                     }
                 }
             } catch (error) {
-                console.error('Failed to fetch doctors:', error.message);
+                console.error('Failed to fetch clinics:', error.message);
             }
         };
 
-        fetchDoctors();
-    }, [pagination,searchQuery]);
+        fetchClinics();
+    }, [pagination, searchQuery]);
 
-    console.log('alldoctors:', allDoctors);
-    console.log('doctors:', doctors);
+    console.log('alldoctors:', allClinics);
+    console.log('clinics:', clinics);
 
-    // const filteredDoctors = doctors.filter(
+    // const filteredDoctors = clinics.filter(
     //     (doctor) => doctor.name.toLowerCase().includes(searchQuery.toLowerCase()),
     //     // doctor.specialtyId.name.toLowerCase().includes(searchQuery.toLowerCase()),
     // );
@@ -144,7 +146,7 @@ function AllClinic() {
 
             {/* Doctors List */}
             <div>
-                {doctors.map((doctor) => (
+                {clinics.map((doctor) => (
                     <div
                         key={doctor._id}
                         className="flex justify-center items-center gap-4 p-6 mb-6 border rounded-lg hover:shadow-lg transition-shadow"

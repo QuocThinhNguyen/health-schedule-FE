@@ -19,7 +19,7 @@ function ForgotPassword() {
             const response = await axiosClient.post('/reset-password', { email });
             console.log(response);
 
-            if (response.status === 'OK') {
+            if (response.status === 200) {
                 toast.success(`${response.message}`);
                 setTimeout(() => {
                     navigate('/login');

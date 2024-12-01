@@ -10,10 +10,10 @@ import { GrLocation } from 'react-icons/gr';
 
 function AllSpecialty() {
     const [searchQuery, setSearchQuery] = useState('');
-    const [doctors, setDoctors] = useState([]);
+    const [specialties, setSpecialties] = useState([]);
     const navigate = useNavigate();
     const [pagination, setPagination] = useState({ page: 1, limit: 6, totalPages: 1 });
-    const [allDoctors, setAllDoctors] = useState([]); // Dữ liệu tất cả bác sĩ
+    const [allSpecialties, setAllSpecialties] = useState([]); // Dữ liệu tất cả bác sĩ
     const { state } = useLocation();
     // Chuyển trang
     const handlePageChange = async (newPage) => {
@@ -44,11 +44,11 @@ function AllSpecialty() {
                     `/doctor?limit=${20}&clinicId=${getClinicId}&specialtyId=${getSpecialtyId}`,
                 );
 
-                if (response.errCode === 0) {
-                    setAllDoctors(response.data);
+                if (response.status === 200) {
+                    setAllSpecialties(response.data);
                 }
             } catch (error) {
-                console.error('Failed to fetch doctors:', error.message);
+                console.error('Failed to fetch specialties:', error.message);
             }
         };
 
@@ -56,7 +56,7 @@ function AllSpecialty() {
     }, []);
 
     useEffect(() => {
-        const fetchDoctors = async () => {
+        const fetchSpecialties = async () => {
             try {
                 const response = await axiosInstance.get(
                     `/specialty?query=${searchQuery}&page=${pagination.page}&limit=${pagination.limit}`,
@@ -64,8 +64,8 @@ function AllSpecialty() {
                 console.log('page', pagination.page);
                 console.log(pagination.limit);
                 console.log('response:', response);
-                if (response.errCode === 0) {
-                    setDoctors(response.data);
+                if (response.status === 200) {
+                    setSpecialties(response.data);
                     if (response.totalPages === 0) {
                         response.totalPages = 1;
                     }
@@ -78,17 +78,17 @@ function AllSpecialty() {
                     }
                 }
             } catch (error) {
-                console.error('Failed to fetch doctors:', error.message);
+                console.error('Failed to fetch specialties:', error.message);
             }
         };
 
-        fetchDoctors();
-    }, [pagination,searchQuery]);
+        fetchSpecialties();
+    }, [pagination, searchQuery]);
 
-    console.log('alldoctors:', allDoctors);
-    console.log('doctors:', doctors);
+    console.log('alldoctors:', allSpecialties);
+    console.log('specialties:', specialties);
 
-    // const filteredDoctors = doctors.filter((doctor) => doctor.name.toLowerCase().includes(searchQuery.toLowerCase()));
+    // const filteredDoctors = specialties.filter((doctor) => doctor.name.toLowerCase().includes(searchQuery.toLowerCase()));
 
     const IMAGE_URL = 'http://localhost:9000/uploads/';
     const formatCurrency = (value) =>
@@ -146,7 +146,7 @@ function AllSpecialty() {
 
             {/* Doctors List */}
             <div>
-                {doctors.map((doctor) => (
+                {specialties.map((doctor) => (
                     <div
                         key={doctor._id}
                         className="flex justify-center items-center gap-4 p-6 mb-6 border rounded-lg hover:shadow-lg transition-shadow"

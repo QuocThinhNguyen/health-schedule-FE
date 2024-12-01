@@ -27,8 +27,7 @@ function Home() {
         const fetcSpecialty = async () => {
             try {
                 const response = await axiosClient.get(`/specialty/dropdown`);
-                console.log('response:', response);
-                if (response.errCode === 0) {
+                if (response.status === 200) {
                     setSpecialties(response.data);
                 }
             } catch (error) {
@@ -44,7 +43,7 @@ function Home() {
             try {
                 const response = await axiosClient.get('/clinic/dropdown');
 
-                if (response.errCode === 0) {
+                if (response.status === 200) {
                     const formattedData = response.data.map((item) => ({
                         id: item.clinicId,
                         name: item.name,
@@ -68,7 +67,7 @@ function Home() {
         const fetchDoctors = async () => {
             try {
                 const response = await axiosClient.get('/doctor/dropdown');
-                if (response.errCode === 0) {
+                if (response.status === 200) {
                     const formattedData = response.data.map((item) => ({
                         id: item.doctorInforId,
                         position: item.position,

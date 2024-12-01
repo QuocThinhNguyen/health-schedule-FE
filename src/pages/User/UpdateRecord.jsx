@@ -23,7 +23,7 @@ function UpdateRecord() {
                 const response = await axiosInstance.get(`/patientrecord/${recordId}`);
                 console.log('RESPONSE', response);
                 console.log('DATA', response.data);
-                if (response.errCode === 0) {
+                if (response.status === 200) {
                     const data = response.data;
                     setFormData({
                         fullname: response.data.fullname || '',
@@ -62,7 +62,7 @@ function UpdateRecord() {
         try {
             const response = await axiosInstance.put(`/patientrecord/${recordId}`, formData);
             console.log('Response Update:', response);
-            if (response.errCode === 0) {
+            if (response.status === 200) {
                 toast.success('Cập nhật thông tin thành công');
             } else {
                 toast.error('Cập nhật thông tin thất bại');

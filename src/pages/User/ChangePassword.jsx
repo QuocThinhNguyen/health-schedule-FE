@@ -36,7 +36,7 @@ function ChangePassword() {
                 confirmPassword: confirmPassword,
             });
             // console.log('Response::', response);
-            if (response.status === 'OK') {
+            if (response.status === 200) {
                 toast.success('Mật khẩu đã được thay đổi thành công');
             } else {
                 toast.error(response.message);

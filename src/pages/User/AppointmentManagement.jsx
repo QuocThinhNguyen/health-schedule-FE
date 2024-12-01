@@ -14,10 +14,12 @@ const AppointmentManagement = () => {
 
     const tabs = [
         // chưa thanh toán
-        { id: 'unpaid', label: 'Chưa thanh toán', keyMap: 'S1' },
-        { id: 'paid', label: 'Đã thanh toán', keyMap: 'S2' },
-        { id: 'examined', label: 'Đã khám', keyMap: 'S3' },
-        { id: 'cancelled', label: 'Đã hủy', keyMap: 'S4' },
+        // chưa xác nhận
+        { id: 'NotConfirmed', label: 'Chưa xác nhận', keyMap: 'S1' },
+        { id: 'Confirmed', label: 'Đã xác nhận', keyMap: 'S2' },
+        { id: 'paid', label: 'Đã thanh toán', keyMap: 'S3' },
+        { id: 'examined', label: 'Đã khám', keyMap: 'S4' },
+        { id: 'cancelled', label: 'Đã hủy', keyMap: 'S5' },
     ];
 
     const [isModalOpen, setModalOpen] = useState(false);
@@ -43,7 +45,7 @@ const AppointmentManagement = () => {
                 });
 
                 console.log('Response:::::', response);
-                if (response.status === 'OK') {
+                if (response.status === 200) {
                     setAppointments(response.data);
                 } else {
                     setError('Không thể tải dữ liệu.');
@@ -65,12 +67,12 @@ const AppointmentManagement = () => {
     const handleCancel = async () => {
         try {
             const response = await axiosInstance.put(`/booking/${selectedBookingId}`, {
-                status: 'S4',
+                status: 'S5',
             });
 
             console.log('Responsese:', response);
 
-            if (response.status === 'OK') {
+            if (response.status === 200) {
                 toast.success('Hủy lịch hẹn thành công.');
                 setAppointments((prev) => prev.filter((appointment) => appointment.bookingId !== selectedBookingId));
             } else {
@@ -177,15 +179,8 @@ const AppointmentManagement = () => {
                                 </div>
                                 {/* Nút hành động */}
                                 <div className="mt-20 flex justify-end space-x-4">
-                                    {/* {appointment.status.valueVi === 'Chưa thanh toán' && (
-                                            <button
-                                                className="px-6 py-3 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600 transition-colors"
-                                                onClick={() => handlePayment(appointment.bookingId)}
-                                            >
-                                                Thanh toán lại
-                                            </button>
-                                        )} */}
-                                    {appointment.status.valueVi === 'Đã xác nhận' && (
+                                    {(appointment.status.valueVi === 'Đã xác nhận' ||
+                                        appointment.status.valueVi === 'Đã thanh toán') && (
                                         <button
                                             className="px-6 py-3 bg-red-500 text-white font-semibold rounded-lg hover:bg-red-600 transition-colors"
                                             onClick={() =>

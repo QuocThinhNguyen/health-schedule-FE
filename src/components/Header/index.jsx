@@ -25,7 +25,7 @@ function Header() {
             if (user.userId) {
                 try {
                     const response = await axiosInstance.get(`/user/${user.userId}`);
-                    if (response.status === 'OK') {
+                    if (response.status === 200) {
                         const imageUrl = response.data.image ? `${IMAGE_URL}/${response.data.image}` : avatar;
                         const img = new Image();
                         img.src = imageUrl;
@@ -64,7 +64,7 @@ function Header() {
                         }}
                         className="flex-shrink-0 flex items-center mr-auto"
                     >
-                        <Logo/>
+                        <Logo />
                     </NavLink>
 
                     {/* Navigation */}
