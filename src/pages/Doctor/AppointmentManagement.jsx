@@ -142,26 +142,26 @@ function PatientManagement() {
                                 <td className="border p-2 space-x-2">
                                     <button
                                         className={`p-1 rounded ${
-                                            appointment.status.keyMap === 'S3' || appointment.status.keyMap === 'S4'
+                                            appointment.status.keyMap === 'S4' || appointment.status.keyMap === 'S5'
                                                 ? 'bg-blue-200 text-gray-500 cursor-not-allowed'
                                                 : 'bg-blue-500 text-white'
                                         }`}
-                                        onClick={() => updateStatus(appointment.bookingId, 'S3')}
+                                        onClick={() => updateStatus(appointment.bookingId, 'S4')}
                                         disabled={
-                                            appointment.status.keyMap === 'S3' || appointment.status.keyMap === 'S4'
+                                            appointment.status.keyMap === 'S4' || appointment.status.keyMap === 'S5'
                                         }
                                     >
                                         Hoàn thành
                                     </button>
                                     <button
                                         className={`p-1 rounded ${
-                                            appointment.status.keyMap === 'S3' || appointment.status.keyMap === 'S4'
+                                            appointment.status.keyMap === 'S4' || appointment.status.keyMap === 'S5'
                                                 ? 'bg-red-200 text-gray-500 cursor-not-allowed'
                                                 : 'bg-red-500 text-white'
                                         }`}
-                                        onClick={() => updateStatus(appointment.bookingId, 'S4')}
+                                        onClick={() => updateStatus(appointment.bookingId, 'S5')}
                                         disabled={
-                                            appointment.status.keyMap === 'S3' || appointment.status.keyMap === 'S4'
+                                            appointment.status.keyMap === 'S4' || appointment.status.keyMap === 'S5'
                                         }
                                     >
                                         Hủy
