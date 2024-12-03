@@ -12,6 +12,7 @@ import { UserContext } from '~/context/UserContext';
 import UserLayout from '~/layouts/UserLayout';
 import UpdateRecord from '~/pages/User/UpdateRecord';
 import AddRecord from '~/pages/User/AddRecord';
+import CommentModel from '~/components/Comment/CommentModel';
 const UserRoutes = () => {
     const { user } = useContext(UserContext);
 
@@ -28,6 +29,7 @@ const UserRoutes = () => {
                 <Route index element={<Navigate to="profile" />} />
                 <Route path="profile" element={<UserProfile />} />
                 <Route path="appointments" element={<AppointmentManagement />} />
+                <Route path="appointments/comment" element={<CommentModel />} />
                 <Route path="records" element={<PatientRecords />} />
                 <Route path="records/addNew" element={<AddRecord />}></Route>
                 <Route path="records/update" element={<UpdateRecord />}></Route>

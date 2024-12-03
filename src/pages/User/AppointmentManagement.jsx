@@ -5,13 +5,15 @@ import { UserContext } from '~/context/UserContext';
 import { Building2, User2, Stethoscope } from 'lucide-react';
 import { toast } from 'react-toastify';
 import ConfirmationModal from '~/components/Confirm/ConfirmationModal';
+import { Route, Navigate, useNavigate, useLocation } from 'react-router-dom';
 
 const AppointmentManagement = () => {
     const [activeTab, setActiveTab] = useState('paid');
     const [appointments, setAppointments] = useState([]);
     const [error, setError] = useState(null);
     const { user } = useContext(UserContext);
-
+    const navigate = useNavigate();
+    const { state } = useLocation();
     const tabs = [
         // chưa thanh toán
         // chưa xác nhận
@@ -37,6 +39,44 @@ const AppointmentManagement = () => {
         setSelectedBookingId(null);
     };
 
+    const checkFeedbackStatus = async (patientId, doctorId, date) => {
+        try {
+            const response = await axiosInstance.post('/feedback/check', {
+                patientId,
+                doctorId,
+                date,
+            });
+            if (response.status === 200 && response.data?.data === true) {
+                return true; // Đã đánh giá
+            }
+            return false; // Chưa đánh giá
+        } catch (error) {
+            console.error('Lỗi khi kiểm tra trạng thái đánh giá:', error);
+            return false;
+        }
+    };
+
+    // useEffect(() => {
+    //     const fetchAppointments = async () => {
+    //         try {
+    //             const response = await axiosInstance.post('/booking/allbooking', {
+    //                 userId: user.userId,
+    //             });
+
+    //             console.log('Response:::::', response);
+    //             if (response.status === 200) {
+    //                 setAppointments(response.data);
+    //             } else {
+    //                 setError('Không thể tải dữ liệu.');
+    //             }
+    //         } catch (err) {
+    //             setError('Đã xảy ra lỗi khi tải dữ liệu.');
+    //         }
+    //     };
+
+    //     fetchAppointments();
+    // }, []);
+
     useEffect(() => {
         const fetchAppointments = async () => {
             try {
@@ -44,9 +84,21 @@ const AppointmentManagement = () => {
                     userId: user.userId,
                 });
 
-                console.log('Response:::::', response);
                 if (response.status === 200) {
-                    setAppointments(response.data);
+                    const updatedAppointments = await Promise.all(
+                        response.data.map(async (appointment) => {
+                            const feedbackChecked = await checkFeedbackStatus(
+                                appointment.patientRecordId.patientRecordId,
+                                appointment.doctorId.userId,
+                                appointment.appointmentDate,
+                            );
+                            return { ...appointment, feedbackChecked };
+
+                            console.log('Feedback checked:', feedbackChecked);
+                        }),
+                    );
+                    setAppointments(updatedAppointments);
+                    console.log('Appointments:', updatedAppointments);
                 } else {
                     setError('Không thể tải dữ liệu.');
                 }
@@ -84,6 +136,21 @@ const AppointmentManagement = () => {
         } finally {
             closeModal();
         }
+    };
+
+    const handleReview = (patientRecordId, userId, doctorId, appointmentDate, nameDoctor) => {
+        navigate(`/user/appointments/comment?doctor=${nameDoctor}`, {
+            state: {
+                patientRecordId: patientRecordId,
+                userId: userId,
+                doctorId: doctorId,
+                appointmentDate: appointmentDate,
+            },
+        });
+    };
+
+    const handleReviewDoctorInfo = (doctorId) => {
+        navigate(`/bac-si/get?id=${doctorId}`);
     };
     return (
         <div className="w-full max-w mx-auto p-4">
@@ -191,6 +258,52 @@ const AppointmentManagement = () => {
                                         </button>
                                     )}
                                 </div>
+
+                                {/* {activeTab === 'examined' && (
+                                    <div className=" flex justify-end space-x-4">
+                                        <button
+                                            className="px-6 py-3 bg-green-500 text-white font-semibold rounded-lg hover:bg-green-600 transition-colors"
+                                            onClick={() =>
+                                                handleReview(
+                                                    appointment.patientRecordId.patientRecordId,
+                                                    appointment.patientRecordId.patientId,
+                                                    appointment.doctorId.userId,
+                                                    new Date(appointment.appointmentDate).toLocaleDateString(),
+                                                    appointment.doctorId.fullname,
+                                                )
+                                            }
+                                        >
+                                            Đánh giá
+                                        </button>
+                                    </div>
+                                )} */}
+                                {activeTab === 'examined' && (
+                                    <div className="flex justify-end space-x-4">
+                                        {appointment.feedbackChecked ? (
+                                            <button
+                                                className="px-6 py-3 bg-gray-500 text-white font-semibold rounded-lg"
+                                                onClick={() => handleReviewDoctorInfo(appointment.doctorId.userId)}
+                                            >
+                                                Đã đánh giá
+                                            </button>
+                                        ) : (
+                                            <button
+                                                className="px-6 py-3 bg-green-500 text-white font-semibold rounded-lg hover:bg-green-600 transition-colors"
+                                                onClick={() =>
+                                                    handleReview(
+                                                        appointment.patientRecordId.patientRecordId,
+                                                        appointment.patientRecordId.patientId,
+                                                        appointment.doctorId.userId,
+                                                        appointment.appointmentDate,
+                                                        appointment.doctorId.fullname,
+                                                    )
+                                                }
+                                            >
+                                                Đánh giá
+                                            </button>
+                                        )}
+                                    </div>
+                                )}
                             </div>
                         </div>
                     ))
