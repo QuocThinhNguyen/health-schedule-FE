@@ -1,23 +1,20 @@
 import { Outlet } from 'react-router-dom';
 import { useContext } from 'react';
 import { UserContext } from '~/context/UserContext';
+import SidebarAdmin from '~/components/SidebarAdmin';
+import HeaderAdmin from '~/components/HeaderAdmin';
 function AdminLayout() {
-    const { logout } = useContext(UserContext);
-    const handleLogout = () => {
-        logout();
-    };
 
     return (
-        <>
-            {/* <header>
-                Header admin
-                <button onClick={handleLogout}>Logout</button>
-            </header> */}
-            <main>
-                <Outlet />
-            </main>
-            {/* <footer>Footer admin</footer> */}
-        </>
+        <div className='h-screen-minus-20 '>
+            <HeaderAdmin/>
+            <div className='flex mt-20 h-screen-minus-20 '>
+                <SidebarAdmin/>
+                <main className='w-full overflow-y-auto'>
+                    <Outlet />
+                </main>
+            </div>
+        </div>
     );
 }
 
