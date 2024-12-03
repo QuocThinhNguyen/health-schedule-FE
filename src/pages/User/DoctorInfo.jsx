@@ -311,8 +311,8 @@ function DoctorInfo() {
                                         </div>
                                     </div>
 
-                                    <span className="text-cyan-500 text-xl">
-                                        đã khám ngày {new Date(feedback.date).toLocaleDateString('vi-VN')}
+                                    <span className="text-cyan-500 text-2xl">
+                                        Đã khám ngày {new Date(feedback.date).toLocaleDateString('vi-VN')}
                                     </span>
                                 </div>
                                 <p className="text-gray-700">{feedback.comment}</p>
