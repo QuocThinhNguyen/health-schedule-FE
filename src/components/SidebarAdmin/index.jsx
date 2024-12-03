@@ -6,10 +6,10 @@ import Logo from '../Logo';
 import { useNavigate } from 'react-router-dom';
 import { CiHospital1 } from 'react-icons/ci';
 import { FaUserDoctor } from 'react-icons/fa6';
-import { FaRegUser} from 'react-icons/fa';
+import { FaRegUser } from 'react-icons/fa';
 import { LiaStethoscopeSolid } from 'react-icons/lia';
 import { SlCalender } from 'react-icons/sl';
-import { MdOutlineAccessTime } from 'react-icons/md';
+import { MdOutlineAccessTime, MdOutlineComment } from 'react-icons/md';
 
 function SidebarAdmin() {
     const [isExpanded, setIsExpanded] = useState(true);
@@ -25,6 +25,7 @@ function SidebarAdmin() {
         { path: '/admin/specialty', label: 'Quản lý chuyên khoa', icon: <LiaStethoscopeSolid /> },
         { path: '/admin/schedule', label: 'Quản lý lịch hẹn', icon: <SlCalender /> },
         { path: '/admin/worktime', label: 'Quản lý thời gian làm việc', icon: <MdOutlineAccessTime /> },
+        { path: '/admin/comment', label: 'Quản lý bình luận', icon: <MdOutlineComment /> },
     ];
 
     return (
