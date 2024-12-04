@@ -9,7 +9,7 @@ import { FaUserDoctor } from 'react-icons/fa6';
 import { FaRegUser } from 'react-icons/fa';
 import { LiaStethoscopeSolid } from 'react-icons/lia';
 import { SlCalender } from 'react-icons/sl';
-import { MdOutlineAccessTime } from 'react-icons/md';
+import { MdOutlineAccessTime, MdOutlineComment } from 'react-icons/md';
 
 function SidebarAdmin() {
     const [isExpanded, setIsExpanded] = useState(true);
@@ -26,6 +26,8 @@ function SidebarAdmin() {
         { path: '/admin/schedule', label: 'Quản lý lịch hẹn', icon: <SlCalender /> },
         { path: '/admin/worktime', label: 'Quản lý thời gian làm việc', icon: <MdOutlineAccessTime /> },
         { path: '/admin/news', label: 'Quản lý tin tức', icon: <IoNewspaperOutline /> },
+        { path: '/admin/comment', label: 'Quản lý bình luận', icon: <MdOutlineComment /> },
+
     ];
 
     return (

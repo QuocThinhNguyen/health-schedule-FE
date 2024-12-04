@@ -203,7 +203,7 @@ function Register() {
                         </button>
                     </div>
                     <div className="text-center my-6">
-                        <span className="text-gray-500">Bạn đã có tài khoản ư?</span>
+                        <span className="text-gray-500">Bạn đã có tài khoản?</span>
                         <NavLink to="/login" className="text-blue-500 ml-1 font-medium">
                             Đăng nhập
                         </NavLink>

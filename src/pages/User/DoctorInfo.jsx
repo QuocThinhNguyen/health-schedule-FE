@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { MapPin, Clock, CreditCard, Shield } from 'lucide-react';
+import { MapPin, Clock, CreditCard, Shield, CheckCircle2, Star } from 'lucide-react';
 import { axiosInstance } from '~/api/apiRequest';
 import { Await, useSearchParams, useNavigate, useLocation } from 'react-router-dom'; // Dùng để lấy `patientRecordId` từ URL
 import parse from 'html-react-parser';
@@ -16,6 +16,7 @@ function DoctorInfo() {
     const { state } = useLocation();
     const { user } = useContext(UserContext);
     console.log('STATE', state);
+    const [rating, setRating] = useState(5);
 
     const [searchParams] = useSearchParams();
     const doctorId = searchParams.get('id') || state.doctorId;
@@ -124,6 +125,70 @@ function DoctorInfo() {
     console.log('doctor', doctorInfo);
     // console.log('customDescription:', customDescription);
 
+    const reviews = [
+        {
+            id: 1,
+            name: 'Nguyễn Hải Đông',
+            verified: true,
+            date: '08/06/2023',
+            comment:
+                'Chị thấy rất tốt dịch vụ rất hài lòng. Bác sỹ khám cho con chị rất có chuyên môn và thân tận tâm với người bệnh. Lương y như từ mẫu',
+        },
+        {
+            id: 2,
+            name: 'Phạm Văn Thuận',
+            verified: true,
+            date: '18/08/2022',
+            comment: 'Tốt rồi.',
+        },
+        {
+            id: 3,
+            name: 'Đỗ Xuân Vinh',
+            verified: true,
+            date: '12/03/2022',
+            comment: 'Mình rất hài lòng',
+        },
+        {
+            id: 4,
+            name: 'Lại Hữu Bền',
+            verified: true,
+            date: '19/02/2022',
+            comment: 'Hướng dẫn khách hàng mới đến khai báo y tế nhanh hơn.',
+        },
+        {
+            id: 5,
+            name: 'Trần Thị Thương',
+            verified: true,
+            date: '01/11/2021',
+            comment: 'Khá tốt',
+        },
+        {
+            id: 6,
+            name: 'Vũ Văn Thủy',
+            verified: true,
+            date: '20/07/2021',
+            comment: 'Các bạn hỗ trợ rất tốt',
+        },
+    ];
+
+    const [feedbacks, setFeedbacks] = useState([]);
+
+    useEffect(() => {
+        const fetchFeedbacks = async () => {
+            try {
+                const response = await axiosInstance.get(`/feedback/${doctorId}`);
+                if (response.status === 200) {
+                    setFeedbacks(response.data);
+                }
+            } catch (error) {
+                console.error('Failed to fetch feedbacks: ', error.message);
+            }
+        };
+        fetchFeedbacks();
+    }, [doctorId]);
+
+    console.log('Feedbacks:', feedbacks);
+
     return (
         <div className="max-w-fit mx-auto p-6 mt-24 ">
             {/* Doctor Info Section */}
@@ -214,6 +279,49 @@ function DoctorInfo() {
 
             <div className="doctor-description leading-7 my-6 border w-[874px] p-4">
                 {doctorInfo.description ? parse(doctorInfo.description) : 'Mô tả không có sẵn'}
+            </div>
+
+            <div className="doctor-description leading-7 my-6 border w-[874px] p-4">
+                <h1>Phản hồi của bệnh nhân sau khi đi khám</h1>
+                <div className="space-y-6 mt-10">
+                    {feedbacks.length > 0 ? (
+                        feedbacks.map((feedback) => (
+                            <div key={feedback.id} className="border-b pb-4">
+                                <div className="flex items-start justify-between mb-2">
+                                    <div className="flex items-center gap-2">
+                                        <strong className="font-bold">{feedback.patientId.fullname}</strong>
+                                        <div className="flex items-center gap-2 mb-2">
+                                            {[1, 2, 3, 4, 5].map((star) => (
+                                                <button
+                                                    key={star}
+                                                    type="button"
+                                                    onClick={() => setRating(star)}
+                                                    className="focus:outline-none"
+                                                    disabled
+                                                >
+                                                    <Star
+                                                        className={`w-8 h-8 ${
+                                                            star <= feedback.rating
+                                                                ? 'fill-yellow-400 text-yellow-400'
+                                                                : 'text-gray-300'
+                                                        }`}
+                                                    />
+                                                </button>
+                                            ))}
+                                        </div>
+                                    </div>
+
+                                    <span className="text-cyan-500 text-2xl">
+                                        Đã khám ngày {new Date(feedback.date).toLocaleDateString('vi-VN')}
+                                    </span>
+                                </div>
+                                <p className="text-gray-700">{feedback.comment}</p>
+                            </div>
+                        ))
+                    ) : (
+                        <p>Không có phản hồi nào</p>
+                    )}
+                </div>
             </div>
         </div>
     );

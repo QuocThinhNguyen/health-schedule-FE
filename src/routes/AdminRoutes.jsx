@@ -12,6 +12,8 @@ import SpecialtyManagement from '~/pages/Admin/SpecialtyManagement';
 import ScheduleManagement from '~/pages/Admin/ScheduleManagement';
 import WorktimeManagement from '~/pages/Admin/WorktimeManagement';
 import NewsManagement from '~/pages/Admin/NewsManagement';
+import CommentManagement from '~/pages/Admin/CommentManagement';
+
 
 function AdminRoutes() {
     const { user } = useContext(UserContext);
@@ -35,6 +37,7 @@ function AdminRoutes() {
                 <Route path="schedule" element={<ScheduleManagement />} />
                 <Route path="worktime" element={<WorktimeManagement />} />
                 <Route path="news" element={<NewsManagement />} />
+                <Route path="comment" element={<CommentManagement />} />
             </Route>
         </Fragment>
     );
