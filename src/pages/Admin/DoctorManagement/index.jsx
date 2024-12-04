@@ -5,6 +5,7 @@ import { axiosInstance } from '~/api/apiRequest';
 import { toast } from 'react-toastify';
 import { AiOutlineEdit } from 'react-icons/ai';
 import { FiEdit } from 'react-icons/fi';
+import CustomTinyMCE from '~/components/CustomTinyMCE';
 
 const DoctorManagement = () => {
     const [isExpanded, setIsExpanded] = useState(true);
@@ -504,8 +505,11 @@ const DoctorManagement = () => {
                                     {doctor.doctorId.phoneNumber}
                                 </td>
                                 <td className="border border-gray-300 px-4 py-2 text-center space-x-8">
-                                    <button className="text-blue-500 text-2xl hover:text-blue-700" onClick={() => getDetailDoctorAPI(doctor)}>
-                                    <FiEdit />
+                                    <button
+                                        className="text-blue-500 text-2xl hover:text-blue-700"
+                                        onClick={() => getDetailDoctorAPI(doctor)}
+                                    >
+                                        <FiEdit />
                                     </button>
                                 </td>
                             </tr>
@@ -552,7 +556,7 @@ const DoctorManagement = () => {
                 {/* Modal Cập Nhật Bác sĩ */}
                 {isUpdateModalOpen && (
                     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-                        <div className="bg-white w-1/2 p-6 rounded shadow-lg relative">
+                        <div className="bg-white w-1/2 p-6 rounded shadow-lg relative max-h-[600px] overflow-y-scroll">
                             <button
                                 onClick={handleCloseUpdateModal}
                                 className="absolute top-2 right-2 text-gray-500 hover:text-gray-800"
@@ -737,7 +741,15 @@ const DoctorManagement = () => {
                                 </div>
                                 <div className="col-span-2">
                                     <label>Mô tả</label>
-                                    <textarea
+
+                                    <CustomTinyMCE
+                                        name="description"
+                                        value={updateDoctor.description}
+                                        onChange={handleUpdateChange}
+                                        onBlur={handleBlur}
+                                    />
+
+                                    {/* <textarea
                                         name="description"
                                         value={updateDoctor.description}
                                         onChange={handleUpdateChange}
@@ -746,7 +758,7 @@ const DoctorManagement = () => {
                                         className={`border w-full px-2 py-1 rounded ${
                                             validationErrors.description ? 'border-red-500' : 'border-gray-400'
                                         }`}
-                                    ></textarea>
+                                    ></textarea> */}
                                     {validationErrors.description && (
                                         <p className="text-red-500 text-sm">{validationErrors.description}</p>
                                     )}

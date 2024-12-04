@@ -9,6 +9,7 @@ import { toast } from 'react-toastify';
 import { MdDeleteOutline } from 'react-icons/md';
 import { FiEdit } from 'react-icons/fi';
 import { RiDeleteBin6Line } from 'react-icons/ri';
+import CustomTinyMCE from '~/components/CustomTinyMCE';
 
 const ClinicManagement = () => {
     const [isExpanded, setIsExpanded] = useState(true);
@@ -101,7 +102,6 @@ const ClinicManagement = () => {
         setUpdateClinic({ ...updateClinic, clinicId: clinicId });
         try {
             const response = await axiosInstance.get(`/clinic/${clinicId}`);
-
             if (response.status === 200) {
                 // Xử lý khi thành công
                 setUpdateClinic(response.data);
@@ -146,7 +146,7 @@ const ClinicManagement = () => {
                     }));
                 }
             } else {
-                console.error('No users are found:', response.message);
+                console.error('No clinics are found:', response.message);
                 setClinics([]);
             }
         } catch (error) {
@@ -512,7 +512,7 @@ const ClinicManagement = () => {
                 {/* Modal Thêm Bệnh Viện*/}
                 {isModalOpen && (
                     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-                        <div className="bg-white w-1/2 p-6 rounded shadow-lg relative">
+                        <div className="bg-white w-1/2 p-6 rounded shadow-lg relative max-h-[600px] overflow-y-scroll">
                             <button
                                 onClick={handleCloseModal}
                                 className="absolute top-2 right-2 text-gray-500 hover:text-gray-800"
@@ -627,7 +627,13 @@ const ClinicManagement = () => {
                                     <label>
                                         Mô tả<span className="text-red-500">*</span>
                                     </label>
-                                    <textarea
+                                    <CustomTinyMCE
+                                        name="description"
+                                        value={clinic.description}
+                                        onChange={handleChange}
+                                        onBlur={handleBlur}
+                                    />
+                                    {/* <textarea
                                         name="description"
                                         value={clinic.description}
                                         onChange={handleChange}
@@ -636,7 +642,7 @@ const ClinicManagement = () => {
                                         className={`border w-full px-2 py-1 rounded ${
                                             validationErrors.description ? 'border-red-500' : 'border-gray-400'
                                         }`}
-                                    ></textarea>
+                                    ></textarea> */}
                                     {validationErrors.description && (
                                         <p className="text-red-500 text-sm">{validationErrors.description}</p>
                                     )}
@@ -656,7 +662,7 @@ const ClinicManagement = () => {
                 {/* Modal Cập Nhật Bệnh Viện */}
                 {isUpdateModalOpen && (
                     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-                        <div className="bg-white w-1/2 p-6 rounded shadow-lg relative">
+                        <div className="bg-white w-1/2 p-6 rounded shadow-lg relative max-h-[600px] overflow-y-scroll">
                             <button
                                 onClick={handleCloseUpdateModal}
                                 className="absolute top-2 right-2 text-gray-500 hover:text-gray-800"
@@ -762,7 +768,15 @@ const ClinicManagement = () => {
                                 </div>
                                 <div className="col-span-2">
                                     <label>Mô tả</label>
-                                    <textarea
+
+                                    <CustomTinyMCE
+                                        name="description"
+                                        value={updateClinic.description}
+                                        onChange={handleUpdateChange}
+                                        onBlur={handleBlur}
+                                    />
+
+                                    {/* <textarea
                                         name="description"
                                         value={updateClinic.description}
                                         onChange={handleUpdateChange}
@@ -771,7 +785,7 @@ const ClinicManagement = () => {
                                         className={`border w-full px-2 py-1 rounded ${
                                             validationErrors.description ? 'border-red-500' : 'border-gray-400'
                                         }`}
-                                    ></textarea>
+                                    ></textarea> */}
                                     {validationErrors.description && (
                                         <p className="text-red-500 text-sm">{validationErrors.description}</p>
                                     )}
