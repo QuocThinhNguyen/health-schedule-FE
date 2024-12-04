@@ -14,14 +14,15 @@ function Home() {
     const navigate = useNavigate();
 
     console.log('doctor', doctors);
+
+    const IMAGE_URL = `http://localhost:${import.meta.env.VITE_BE_PORT}/uploads/`;
+
     const images = [
         'https://i.pinimg.com/736x/8b/d9/44/8bd944a2576148952682eacd62970fc8.jpg',
         'https://i.pinimg.com/736x/af/c5/53/afc553e12c89eef85f87e9f9a34e02a0.jpg',
-        'https://i.pinimg.com/736x/3a/26/8d/3a268ddc724585a07b1306e051641417.jpg',
+        `${IMAGE_URL}banner1.png`,
         'https://i.pinimg.com/736x/36/c5/28/36c5286f8f150bf662214022935332c4.jpg',
     ];
-
-    const IMAGE_URL = `http://localhost:${import.meta.env.VITE_BE_PORT}/uploads/`;
 
     useEffect(() => {
         const fetcSpecialty = async () => {
@@ -181,7 +182,7 @@ function Home() {
     return (
         <div>
             <div>
-                <div className="h-[500px] bg-sky-100 relative overflow-hidden mt-20">
+                <div className="w-full h-[600px] bg-sky-100 relative overflow-hidden mt-20 pt-30">
                     {/* Background image */}
                     {images.map((image, index) => (
                         <div
@@ -193,17 +194,23 @@ function Home() {
                                 backgroundImage: `url(${image})`,
                                 backgroundSize: 'cover',
                                 backgroundPosition: 'center',
+                                backgroundRepeat: 'no-repeat',
+                                height: '100%',
+                                width: '100%',
                             }}
                         ></div>
                     ))}
                     {/* Lớp phủ để làm mờ */}
                     {/* <div className="absolute inset-0 bg-slate-400 opacity-30 z-10"></div> */}
                     {/* Search */}
-                    <div className="absolute left-0 right-0 top-52 z-20 max-w-5xl mx-auto ">
-                        <h1 className="text-3xl md:text-4xl font-bold text-blue-500 text-center mb-4">
+                    <div
+                        className="absolute left-0 right-0 top-72 z-20 max-w-5xl mx-auto"
+                        style={{ textShadow: '3px 3px 5px rgba(0, 0, 0, 0.7), 0 0 25px rgba(255, 255, 255, 0.8)' }}
+                    >
+                        <h1 className="text-3xl md:text-4xl font-bold text-white text-center mb-8">
                             Nền tảng công nghệ
                         </h1>
-                        <h2 className="text-4xl md:text-5xl font-bold text-slate-900 text-center mb-8">
+                        <h2 className="text-4xl md:text-5xl font-bold text-white text-center mb-8">
                             Kết nối người dân với Cơ sở - Dịch vụ Y tế
                         </h2>
                         {/* <div className="relative mb-8">
@@ -234,7 +241,7 @@ function Home() {
                 </div>
             </div>
 
-            <div className="w-full bg-[#f0f7ff] pt-20">
+            <div className="w-full bg-gradient-to-b from-[#fff] to-[#f0f7ff] pt-20">
                 <div className="container mx-auto px-4">
                     <h2 className="text-center text-[28px] font-bold text-[#003366] mb-8">CƠ SỞ Y TẾ</h2>
                     <div className="relative max-w-screen-xl mx-auto px-4">
@@ -259,12 +266,18 @@ function Home() {
                                                 </div>
 
                                                 <div className="flex flex-col justify-between gap-6 w-full">
-                                                    <h3 className="text-3xl font-semibold text-center h-[37.5px]">
+                                                    <h3
+                                                        className={`text-3xl font-semibold ${
+                                                            facility.name.length > 25 ? 'text-left' : 'text-center'
+                                                        } h-[37.5px]`}
+                                                    >
                                                         {facility.name}
                                                     </h3>
-                                                    <div className="flex items-start gap-2 text-gray-600 text-2xl h-[37.5px]">
+                                                    <div className="flex items-start gap-2 text-gray-600 text-2xl h-[37.5px] ">
                                                         <GrLocation className="mt-1" />
-                                                        <span>{facility.location}</span>
+                                                        <span className="line-clamp-2 overflow-hidden text-ellipsis">
+                                                            {facility.location}
+                                                        </span>
                                                     </div>
                                                     <div
                                                         className="w-full text-center bg-[#00B5F1] hover:bg-white border hover:border-[#00B5F1] hover:text-[#00B5F1] text-white font-bold py-3 px-4 rounded-xl"
@@ -300,7 +313,14 @@ function Home() {
                 </div>
             </div>
 
-            <div className="w-full bg-[#f0f7ff] pt-20">
+            <div
+                className="w-full pt-20 bg-gradient-to-b from-[#fff] to-[#f0f7ff]"
+                style={{
+                    backgroundImage: 'url(https://cdn.bookingcare.vn/fo/w1920/2023/11/01/140311-background5.png)',
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                }}
+            >
                 <div className="container mx-auto px-4">
                     <h2 className="text-center text-[28px] font-bold text-[#003366] mb-8">BÁC SĨ</h2>
                     <div className="relative max-w-screen-xl mx-auto px-4">
@@ -379,26 +399,33 @@ function Home() {
                 </div>
             </div>
 
-            <div className="w-full bg-[#f0f7ff] pt-20 pb-12">
+            <div className="w-full bg-gradient-to-b from-[#f0f7ff] to-[#fff] pt-20 pb-12">
                 <div className="container mx-auto pb-8">
                     <div className="max-w-screen-xl mx-auto">
-                        <h1 className="text-3xl font-bold text-center mb-8 text-[28px]">CHUYÊN KHOA</h1>
-                        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-8 gap-4">
+                        <h1 className="text-3xl font-bold text-center mb-12 text-[28px]">CHUYÊN KHOA</h1>
+                        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-8 gap-x-[32px] gap-y-[48px]">
                             {specialties.map((specialty, index) => (
                                 <div
                                     key={index}
                                     className="flex flex-col items-center text-center cursor-pointer"
                                     onClick={() => handleGetDoctorBySpecialty(specialty.specialtyId, specialty.name)}
                                 >
-                                    <div className="w-32 h- flex items-center justify-center mb-2">
+                                    <div className="w-32 h-32 flex items-center justify-center mb-2">
                                         <img src={`${IMAGE_URL}${specialty.image}`} alt={specialty.name} />
                                     </div>
-                                    <span className="text-2xl">{specialty.name}</span>
+                                    <span className="text-3xl">{specialty.name}</span>
                                 </div>
                             ))}
                         </div>
+                        <div className="flex items-center font-normal max-w-64 border border-transparent hover:border-[#00B5F1] hover:rounded-2xl mx-auto mt-5 px-8 py-[8px] text-3xl">
+                        <NavLink to="/chuyen-khoa" className="flex items-center gap-1 text-[#00b5f1]">
+                            Xem tất cả
+                            <MdKeyboardDoubleArrowRight className="mt-1" />
+                        </NavLink>
+                    </div>
                     </div>
                 </div>
+
             </div>
         </div>
     );

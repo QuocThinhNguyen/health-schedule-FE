@@ -7,6 +7,7 @@ import { LiaStethoscopeSolid } from 'react-icons/lia';
 import { BsCoin } from 'react-icons/bs';
 import { CiHospital1 } from 'react-icons/ci';
 import { GrLocation } from 'react-icons/gr';
+import Pagination from '~/components/Pagination';
 
 function AllDoctor() {
     const [searchQuery, setSearchQuery] = useState('');
@@ -198,7 +199,7 @@ function AllDoctor() {
                     <option value="15">15</option>
                 </select>
             </div>
-            <div className="flex justify-end items-center space-x-4 mt-4">
+            {/* <div className="flex justify-end items-center space-x-4 mt-4">
                 <button
                     className={`${pagination.page === 1 ? 'font-normal text-gray-500' : 'font-bold text-blue-500'}`}
                     onClick={() => handlePageChange(pagination.page - 1)}
@@ -220,6 +221,13 @@ function AllDoctor() {
                 >
                     Next
                 </button>
+            </div> */}
+            <div className="text-center">
+                <Pagination
+                    currentPage={pagination.page}
+                    totalPages={pagination.totalPages}
+                    onPageChange={handlePageChange}
+                />
             </div>
         </div>
     );

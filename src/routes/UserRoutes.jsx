@@ -33,7 +33,6 @@ const UserRoutes = () => {
                 <Route path="records" element={<PatientRecords />} />
                 <Route path="records/addNew" element={<AddRecord />}></Route>
                 <Route path="records/update" element={<UpdateRecord />}></Route>
-
                 <Route path="change-password" element={<ChangePassword />} />
             </Route>
         </Fragment>

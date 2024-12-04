@@ -17,6 +17,8 @@ import ClinicInfo from '~/pages/User/ClinicInfo';
 import Specialties from '~/pages/User/Specialties';
 import AllClinic from '~/pages/User/AllClinic';
 import AllSpecialty from '~/pages/User/AllSpecialty';
+import AllNews from '~/pages/User/AllNews';
+import NewsDetail from '~/pages/User/NewsDetail';
 
 function AppRoutes() {
     return (
@@ -36,6 +38,8 @@ function AppRoutes() {
                     <Route path="/benh-vien" element={<ClinicInfo />} />
                     <Route path="/benh-vien/chuyen-khoa" element={<Specialties />} />
                     <Route path="/chuyen-khoa" element={<AllSpecialty />} />
+                    <Route path="/tin-tuc" element={<AllNews />} />
+                    <Route path="/tin-tuc/:title" element={<NewsDetail />} />
                 </Route>
                 {AdminRoutes()}
                 {DoctorRoutes()}
