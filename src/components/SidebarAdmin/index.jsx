@@ -1,12 +1,12 @@
 import { faClock, faHospital } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState } from 'react';
-import { IoMenu, IoTimeOutline } from 'react-icons/io5';
+import { IoMenu, IoNewspaperOutline, IoTimeOutline } from 'react-icons/io5';
 import Logo from '../Logo';
 import { useNavigate } from 'react-router-dom';
 import { CiHospital1 } from 'react-icons/ci';
 import { FaUserDoctor } from 'react-icons/fa6';
-import { FaRegUser} from 'react-icons/fa';
+import { FaRegUser } from 'react-icons/fa';
 import { LiaStethoscopeSolid } from 'react-icons/lia';
 import { SlCalender } from 'react-icons/sl';
 import { MdOutlineAccessTime } from 'react-icons/md';
@@ -25,16 +25,17 @@ function SidebarAdmin() {
         { path: '/admin/specialty', label: 'Quản lý chuyên khoa', icon: <LiaStethoscopeSolid /> },
         { path: '/admin/schedule', label: 'Quản lý lịch hẹn', icon: <SlCalender /> },
         { path: '/admin/worktime', label: 'Quản lý thời gian làm việc', icon: <MdOutlineAccessTime /> },
+        { path: '/admin/news', label: 'Quản lý tin tức', icon: <IoNewspaperOutline /> },
     ];
 
     return (
-        <div className={`bg-white border-r transition-all duration-300 ${isExpanded ? 'w-[320px]' : 'w-[16px]'}`}>
+        <div className={`bg-white border-r transition-all duration-300 ${isExpanded ? 'w-[300px]' : 'w-[16px]'}`}>
             <ul className="space-y-2 mt-4">
                 {/* Menu items */}
                 {menuItems.map((item) => (
                     <li
                         key={item.path}
-                        className={`cursor-pointer flex items-center px-4 py-2 rounded ${
+                        className={`cursor-pointer flex items-center px-3 py-3 rounded ${
                             location.pathname === item.path
                                 ? 'bg-pink-500 text-white' // Nền hồng cho mục hiện tại
                                 : 'hover:bg-gray-200' // Hover hiệu ứng cho mục khác
