@@ -35,7 +35,7 @@ function NewsManagement() {
     const [showConfirm, setShowConfirm] = useState(false);
     const [filterValue, setFilterValue] = useState('');
 
-    const [pagination, setPagination] = useState({ page: 1, limit: 5, totalPages: 1 });
+    const [pagination, setPagination] = useState({ page: 1, limit: 12, totalPages: 1 });
 
     const { user } = useContext(UserContext);
 
@@ -397,9 +397,9 @@ function NewsManagement() {
                     value={pagination.limit}
                     onChange={handleLimitChange}
                 >
-                    <option value="9">9</option>
-                    <option value="15">15</option>
-                    <option value="21">21</option>
+                    <option value="12">12</option>
+                    <option value="20">20</option>
+                    <option value="25">25</option>
                 </select>
             </div>
             <div className="flex justify-end items-center space-x-4 mt-4">
