@@ -124,7 +124,7 @@ function AllNews() {
                                             <h3>{post.title}</h3>
                                             <p className="flex items-center text-xl gap-2">
                                                 <MdOutlineDateRange />
-                                                <span>{FormatDate(post.updateAt)}</span>
+                                                <span>{formatDate(post.updateAt)}</span>
                                                 <span>-</span>
                                                 <span>{post.userId.fullname}</span>
                                             </p>
@@ -163,7 +163,7 @@ function AllNews() {
                                         ></p>
                                         <p className="flex items-center text-xl gap-2">
                                             <MdOutlineDateRange />
-                                            <span>{FormatDate(post.updateAt)}</span>
+                                            <span>{formatDate(post.updateAt)}</span>
                                             <span> - </span>
                                             <span>{post.userId.fullname}</span>
                                         </p>
