@@ -276,10 +276,11 @@ const ScheduleManagement = () => {
                 <div className="flex space-x-4 mb-4">
                     {[
                         { label: 'Tất cả', value: '' },
-                        { label: 'Thanh toán trực tiếp', value: 'S1' },
-                        { label: 'Đã thanh toán', value: 'S2' },
-                        { label: 'Đã khám xong', value: 'S3' },
-                        { label: 'Đã hủy', value: 'S4' },
+                        { label: 'Chưa xác nhận', value: 'S1' },
+                        { label: 'Đã xác nhận', value: 'S2' },
+                        { label: 'Đã thanh toán', value: 'S3' },
+                        { label: 'Đã khám xong', value: 'S4' },
+                        { label: 'Đã hủy', value: 'S5' },
                     ]
                         .filter((statusOption) => statusOption.label.trim() !== '') // Loại bỏ khoảng trống
                         .map((statusOption) => (
@@ -333,10 +334,11 @@ const ScheduleManagement = () => {
                                     <td className="border border-gray-300 px-2 py-1">
                                         {(() => {
                                             const statusMapping = {
-                                                S1: 'Thanh toán trực tiếp',
-                                                S2: 'Đã thanh toán',
-                                                S3: 'Đã khám xong',
-                                                S4: 'Đã hủy',
+                                                S1: 'Chưa xác nhận',
+                                                S2: 'Đã xác nhận',
+                                                S3: 'Đã thanh toán',
+                                                S4: 'Đã khám xong',
+                                                S5: 'Đã hủy',
                                             };
                                             return statusMapping[sche.status] || 'Đang xử lý';
                                         })()}
@@ -485,10 +487,11 @@ const ScheduleManagement = () => {
                                         className="border border-gray-400 w-full px-2 py-1 rounded"
                                     >
                                         <option value="">Chọn trạng thái</option>
-                                        <option value="S1">Thanh toán trực tiếp</option>
-                                        <option value="S2">Đã thanh toán</option>
-                                        <option value="S3">Đã khám xong</option>
-                                        <option value="S4">Đã hủy</option>
+                                        <option value="S1">Chưa xác nhận</option>
+                                        <option value="S2">Đã xác nhận</option>
+                                        <option value="S3">Đã thanh toán</option>
+                                        <option value="S4">Đã khám xong</option>
+                                        <option value="S5">Đã hủy</option>
                                     </select>
                                     {validationErrors.status && (
                                         <p className="text-red-500 text-sm">{validationErrors.status}</p>
