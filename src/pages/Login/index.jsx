@@ -152,7 +152,7 @@ function Login() {
                     <div className="text-center mt-6">
                         <span className="text-gray-500">Bạn chưa có tài khoản?</span>
                         <NavLink to="/register" className="text-blue-500 ml-1 font-medium">
-                            Đăng kí
+                            Đăng ký
                         </NavLink>
                     </div>
                 </div>
