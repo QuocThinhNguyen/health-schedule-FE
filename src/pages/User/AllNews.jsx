@@ -10,7 +10,6 @@ import { formatTitleForUrl } from '~/utils/formatTitleForUrl';
 function AllNews() {
     const IMAGE_URL = `http://localhost:${import.meta.env.VITE_BE_PORT}/uploads/`;
     const [posts, setPosts] = useState([]);
-    const [post, setPost] = useState({});
 
     const [pagination, setPagination] = useState({ page: 1, limit: 15, totalPages: 1 });
 
@@ -68,8 +67,7 @@ function AllNews() {
                     {posts[0] && (
                         <div className="w-[90%]">
                             <NavLink
-                                to={`/tin-tuc/${formatTitleForUrl(posts[0].title)}`}
-                                state={{ postId: posts[0].postId }}
+                                to={`/tin-tuc/${formatTitleForUrl(posts[0].title)}-${posts[0].postId}`}
                                 className="cursor-pointer"
                             >
                                 <div className="w-full h-[374px] max-h-[374px]">
@@ -107,8 +105,7 @@ function AllNews() {
                         {posts.slice(1, 6).map((post) => (
                             <div key={post.postId} className="pb-4 mb-4">
                                 <NavLink
-                                    to={`/tin-tuc/${formatTitleForUrl(post.title)}`}
-                                    state={{ postId: post.postId }}
+                                    to={`/tin-tuc/${formatTitleForUrl(post.title)}-${post.postId}`}
                                     className="cursor-pointer"
                                 >
                                     <div className="flex gap-4">
@@ -141,8 +138,7 @@ function AllNews() {
                     {posts.slice(6).map((post) => (
                         <div key={post.postId} className="max-w-lg pb-4 mb-4">
                             <NavLink
-                                to={`/tin-tuc/${formatTitleForUrl(post.title)}`}
-                                state={{ postId: post.postId }}
+                                to={`/tin-tuc/${formatTitleForUrl(post.title)}-${post.postId}`}
                                 className="cursor-pointer"
                             >
                                 {console.log('postId', post.postId)}
