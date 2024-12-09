@@ -1,7 +1,7 @@
 import parse from 'html-react-parser';
 import { useEffect, useState } from 'react';
 import { MdOutlineDateRange } from 'react-icons/md';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import { axiosClient } from '~/api/apiRequest';
 import formatDate from '~/utils/formatDate';
 import './CSS/NewsCss.css';
@@ -10,11 +10,15 @@ function NewsDetail() {
     const IMAGE_URL = `http://localhost:${import.meta.env.VITE_BE_PORT}/uploads/`;
 
     const [post, setPost] = useState({});
-    const location = useLocation();
-    console.log('location:', location);
 
-    const { postId } = location.state || {};
-    console.log('postId:', postId);
+    const { title } = useParams();
+
+    const extractIdFromSlug = (slug) => {
+        const match = slug.match(/-(\d+)$/); // Tìm số cuối cùng sau dấu '-'
+        return match ? parseInt(match[1], 10) : null;
+    };
+
+    const postId = extractIdFromSlug(title);
 
     useEffect(() => {
         if (postId) {
