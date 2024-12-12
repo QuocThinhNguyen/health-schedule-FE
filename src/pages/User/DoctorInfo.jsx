@@ -221,6 +221,7 @@ function DoctorInfo() {
                             type="date"
                             value={currentDate}
                             onChange={handleDateChange}
+                            min={new Date().toISOString().split('T')[0]}
                             className="w-1/3 p-1 border rounded-lg cursor-pointer"
                         />
                         <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mt-5 h-[112.5px] items-center">

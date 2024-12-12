@@ -158,7 +158,7 @@ const CommentManagement = () => {
                     <thead className="bg-gray-200">
                         <tr>
                             <th className="border border-gray-300 px-4 py-2">STT</th>
-                            <th className="border border-gray-300 px-4 py-2">Người dùng</th>
+                            <th className="border border-gray-300 px-4 py-2 w-fit">Người dùng</th>
                             <th className="border border-gray-300 px-4 py-2 min-w-48">Nội dung bình luận</th>
                             <th className="border border-gray-300 px-4 py-2">Số sao</th>
                             <th className="border border-gray-300 px-4 py-2">Bác sĩ</th>

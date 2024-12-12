@@ -52,6 +52,7 @@ function NewsManagement() {
     const handleConfirmDelete = () => {
         deletePostAPI(deletePost.postId);
         setShowConfirm(false);
+        toast.success('Xóa bài viết thành công!');
     };
 
     const handleOpenModal = () => {

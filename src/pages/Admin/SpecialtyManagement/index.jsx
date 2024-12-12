@@ -205,6 +205,7 @@ const SpecialtyManagement = () => {
     const handleConfirmDelete = () => {
         deleteSpecialtyAPI(deleteSpecialty.specialtyId); // Gọi hàm xóa bệnh viện từ props hoặc API
         setShowConfirm(false); // Ẩn hộp thoại sau khi xóa
+        toast.success('Xóa chuyên khoa thành công!');
     };
 
     const handleLogout = () => {
