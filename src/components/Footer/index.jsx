@@ -52,7 +52,7 @@ function Footer() {
     ];
 
     return (
-        <footer className="text-gray-500 bg-gray-50  pt-20 pb-5">
+        <footer className="text-gray-500 bg-white  pt-20 pb-5">
             <div className="px-4 mx-auto max-w-screen-xl  md:px-8 ">
                 <div className="gap-6 justify-between md:flex">
                     <div className="flex-1">

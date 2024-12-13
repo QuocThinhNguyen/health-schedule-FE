@@ -69,7 +69,7 @@ function PatientManagement() {
                                   status: {
                                       ...appointment.status,
                                       keyMap: statusKey,
-                                      valueVi: statusKey === 'S3' ? 'Hoàn thành' : 'Hủy',
+                                      valueVi: statusKey === 'S4' ? 'Đã khám xong' : 'Đã hủy',
                                   },
                               }
                             : appointment,

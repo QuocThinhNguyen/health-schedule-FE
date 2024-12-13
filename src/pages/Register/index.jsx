@@ -22,6 +22,8 @@ function Register() {
     const inputFocus = useRef(null);
     const { setEmailRegister, setOtpToken } = useOtpToken();
 
+    const [isLoading, setIsLoading] = useState(false);
+
     useEffect(() => {
         if (inputFocus.current) {
             inputFocus.current.focus();
@@ -87,6 +89,7 @@ function Register() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setIsLoading(true);
         try {
             const response = await axiosClient.post('/sign-up', {
                 fullname,
@@ -107,7 +110,9 @@ function Register() {
             }
         } catch (error) {
             console.error(error);
-            toast.error('Đăng kí không thành công');
+            toast.error('Đăng ký không thành công');
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -121,7 +126,7 @@ function Register() {
         <div className="flex items-center justify-center min-h-screen bg-[#e9ebee]">
             <div className="w-full max-w-xl p-8 bg-white shadow-xl border rounded-2xl">
                 <div className="mb-6">
-                    <h3 className="text-4xl font-bold text-gray-800 text-center">Đăng kí</h3>
+                    <h3 className="text-4xl font-bold text-gray-800 text-center">Đăng ký</h3>
                 </div>
                 <div>
                     <div className="mb-4">
@@ -199,8 +204,17 @@ function Register() {
                             className="w-full text-white font-semibold bg-blue-500 py-3 px-6 rounded-lg hover:bg-blue-600"
                             onClick={handleSubmit}
                         >
-                            Đăng kí
+                            Đăng ký
                         </button>
+                        {isLoading && (
+                            <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+                                <img
+                                    src="https://media.tenor.com/On7kvXhzml4AAAAj/loading-gif.gif"
+                                    alt="Loading..."
+                                    className="w-24 h-24"
+                                />
+                            </div>
+                        )}
                     </div>
                     <div className="text-center my-6">
                         <span className="text-gray-500">Bạn đã có tài khoản?</span>

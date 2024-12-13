@@ -23,8 +23,8 @@ html {
 }
 
 body {
-    font-family: 'IBM Plex Sans', san-serif;
-    /* font-family: Roboto, serif !important; */
+    /* font-family: 'IBM Plex Sans', san-serif; */
+    font-family: Roboto, serif !important;
     font-size: 1.6rem;
     line-height: 1.5;
     text-rendering: optimizeSpeed;

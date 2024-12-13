@@ -12,6 +12,7 @@ function ConfirmInfomation() {
     const [reason, setReason] = useState('');
     const [patientData, setPatientData] = useState([]);
     const navigate = useNavigate();
+    const [isLoading, setIsLoading] = useState(false);
 
     const timeSlots = [
         { label: '8:00 - 9:00', value: 'T1' },
@@ -103,11 +104,26 @@ function ConfirmInfomation() {
         }
     };
 
-    const handleConfirm = () => {
-        if (paymentMethod === 'direct') {
-            handlePaymentDirect();
-        } else if (paymentMethod === 'online') {
-            handlePaymentOnline();
+    // const handleConfirm = () => {
+    //     if (paymentMethod === 'direct') {
+    //         handlePaymentDirect();
+    //     } else if (paymentMethod === 'online') {
+    //         handlePaymentOnline();
+    //     }
+    // };
+
+    const handleConfirm = async () => {
+        setIsLoading(true);
+        try {
+            if (paymentMethod === 'direct') {
+                await handlePaymentDirect();
+            } else if (paymentMethod === 'online') {
+                await handlePaymentOnline();
+            }
+        } catch (error) {
+            console.error('Error during payment:', error);
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -296,6 +312,15 @@ function ConfirmInfomation() {
                 <button className="px-6 py-3 bg-blue-500 text-white rounded hover:bg-blue-600" onClick={handleConfirm}>
                     Xác nhận
                 </button>
+                {isLoading && (
+                    <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+                        <img
+                            src="https://media.tenor.com/On7kvXhzml4AAAAj/loading-gif.gif"
+                            alt="Loading..."
+                            className="w-24 h-24"
+                        />
+                    </div>
+                )}
             </div>
         </div>
     );
