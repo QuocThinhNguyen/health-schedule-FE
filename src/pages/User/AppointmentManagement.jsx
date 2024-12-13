@@ -6,6 +6,7 @@ import { Building2, User2, Stethoscope } from 'lucide-react';
 import { toast } from 'react-toastify';
 import ConfirmationModal from '~/components/Confirm/ConfirmationModal';
 import { Route, Navigate, useNavigate, useLocation } from 'react-router-dom';
+import { MdOutlineCalendarToday } from 'react-icons/md';
 
 const AppointmentManagement = () => {
     const [activeTab, setActiveTab] = useState('paid');
@@ -207,7 +208,7 @@ const AppointmentManagement = () => {
                                     BÁC SĨ {appointment.doctorId.fullname}
                                 </h3>
 
-                                <div className="flex gap-2 relative top-5">
+                                <div className="flex gap-x-9 relative top-5">
                                     {/* Cột 1 */}
                                     <div className="flex flex-col gap-6">
                                         <div className="flex">
