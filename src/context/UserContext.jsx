@@ -43,6 +43,21 @@ const UserProvider = ({ children }) => {
         }
     };
 
+    const loginContextGoogle = (email, userId, roleId, token) => {
+        try {
+            setUser({
+                email: email,
+                userId: userId,
+                role: roleId,
+                auth: true,
+            });
+            localStorage.setItem('email', email);
+            localStorage.setItem('token', token);
+        } catch (error) {
+            console.error('Invalid token:', error);
+        }
+    };
+
     const logout = () => {
         localStorage.removeItem('token');
         setUser({
@@ -75,7 +90,11 @@ const UserProvider = ({ children }) => {
     }, []);
     console.log('User:', user);
 
-    return <UserContext.Provider value={{ user, loginContext, logout }}>{children}</UserContext.Provider>;
+    return (
+        <UserContext.Provider value={{ user, loginContext, loginContextGoogle, logout }}>
+            {children}
+        </UserContext.Provider>
+    );
 };
 
 export { UserContext, UserProvider };
