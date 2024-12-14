@@ -7,6 +7,9 @@ import { useContext } from 'react';
 import { UserContext } from '../../context/UserContext';
 import { axiosClient } from '~/api/apiRequest';
 import { jwtDecode } from 'jwt-decode';
+import { GoogleLogin } from '@react-oauth/google';
+import { useGoogleLogin } from '@react-oauth/google';
+
 function Login() {
     const [showPassword, setShowPassword] = useState(false);
     const [email, setEmail] = useState('');
@@ -24,7 +27,7 @@ function Login() {
     const navigate = useNavigate();
     const location = useLocation();
 
-    const { user, loginContext } = useContext(UserContext);
+    const { user, loginContext, loginContextGoogle } = useContext(UserContext);
 
     const toggleShowPassword = () => {
         setShowPassword(!showPassword);
@@ -94,6 +97,39 @@ function Login() {
         }
     };
 
+    const handleSuccess = async (credentialResponse) => {
+        try {
+            const token = credentialResponse.credential;
+            const result = await axiosClient.post(`/google-login`, { token });
+            console.log('RESULT: ', result);
+            if (result.status === 200) {
+                loginContextGoogle(result.data.email, result.data.userId, result.data.roleId, result.access_token);
+                toast.success('Đăng nhập thành công');
+                if (result.data.roleId === 'R1') {
+                    navigate('/admin/clinic', { replace: true });
+                } else if (result.data.roleId === 'R2') {
+                    navigate('/doctor/', { replace: true });
+                } else if (result.data.roleId === 'R3') {
+                    navigate('/', { replace: true });
+                }
+            } else {
+                toast.error('Đăng nhập thất bại');
+            }
+            // console.log(token);
+        } catch (error) {
+            console.log('error', error);
+        }
+    };
+
+    const handleError = () => {
+        console.log('error');
+        toast.error('Đăng nhập thất bại');
+    };
+
+    const login = useGoogleLogin({
+        onSuccess: handleSuccess(),
+        onError: handleError,
+    });
     return (
         <div className="flex items-center justify-center min-h-screen bg-[#e9ebee]">
             <div className="w-full max-w-xl p-8 bg-white shadow-xl border rounded-2xl">
@@ -149,6 +185,14 @@ function Login() {
                             Đăng nhập
                         </button>
                     </div>
+                    <div className="mt-4 w-full h-[44px] flex items-center justify-center bg-white rounded-lg border-none">
+                        <GoogleLogin onSuccess={handleSuccess} onError={handleError} />
+                    </div>
+
+                    {/* <div>
+                        <button onClick={() => login()}>Sign in with Google 🚀</button>;
+                    </div> */}
+
                     <div className="text-center mt-6">
                         <span className="text-gray-500">Bạn chưa có tài khoản?</span>
                         <NavLink to="/register" className="text-blue-500 ml-1 font-medium">
