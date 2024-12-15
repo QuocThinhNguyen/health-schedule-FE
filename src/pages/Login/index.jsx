@@ -223,8 +223,21 @@ function Login() {
                         <div className="flex-grow border-t border-gray-300"></div>
                     </div>
 
-                    <div className="mt-4 w-full h-[44px] flex items-center justify-center bg-white rounded-lg border-none">
-                        <GoogleLogin onSuccess={handleSuccess} onError={handleError} />
+                    <div>
+                        <div className="mt-4 w-full h-[44px] flex items-center justify-center bg-white rounded-lg border-none">
+                            <GoogleLogin onSuccess={handleSuccess} onError={handleError} />
+                        </div>
+
+                        <div className="mt-4">
+                            <FacebookLogin
+                                appId={import.meta.env.VITE_APP_FB_CLIENT_ID}
+                                fields="name,email,picture"
+                                callback={handleResponseFacebook}
+                                cssClass="custom-facebook-button"
+
+                                // textButton="Đăng nhập với Facebook"
+                            />
+                        </div>
                     </div>
 
                     {/* <button
@@ -260,43 +273,6 @@ function Login() {
                     {/* <div>
                         <button onClick={() => login()}>Sign in with Google 🚀</button>;
                     </div> */}
-
-                    <div className="mt-4">
-                        {/* <FacebookLogin
-                            appId={import.meta.env.VITE_APP_FB_CLIENT_ID}
-                            autoLoad={true}
-                            fields="name,email,picture"
-                            onClick={handlClickFacebook}
-                            callback={handleResponseFacebook}
-                        /> */}
-
-                        <FacebookLogin
-                            appId={import.meta.env.VITE_APP_FB_CLIENT_ID}
-                            fields="name,email,picture"
-                            callback={handleResponseFacebook}
-                            cssClass="custom-facebook-button"
-                            textButton="Đăng nhập với Facebook"
-                        />
-
-                        {/* <FacebookLogin
-                            appId={import.meta.env.VITE_APP_FB_CLIENT_ID}
-                            fields="name,email,picture"
-                            callback={handleResponseFacebook}
-                            render={(renderProps) => (
-                                <button
-                                    onClick={renderProps.onClick}
-                                    className="flex items-center justify-center w-full bg-blue-500 text-white font-semibold py-3 px-6 rounded-lg hover:bg-blue-600"
-                                >
-                                    <img
-                                        src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg"
-                                        alt="Facebook Logo"
-                                        className="w-6 h-6 mr-2"
-                                    />
-                                    Đăng nhập bằng Facebook
-                                </button>
-                            )}
-                        /> */}
-                    </div>
 
                     <div className="text-center mt-6">
                         <span className="text-gray-500">Bạn chưa có tài khoản?</span>
