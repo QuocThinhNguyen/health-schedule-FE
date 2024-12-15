@@ -1,0 +1,29 @@
+.custom-facebook-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #2880f3;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+    width: 100%; /* Hoặc tuỳ chỉnh theo thiết kế */
+}
+
+.custom-facebook-button:hover {
+    background-color: #155ab6;
+}
+
+.custom-facebook-button::before {
+    content: '';
+    background-image: url('https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg'); /* Link ảnh icon Facebook */
+    background-size: cover;
+    width: 20px;
+    height: 20px;
+    display: inline-block;
+    position: absolute;
+    left: 580px; /* Điều chỉnh vị trí icon */
+}
