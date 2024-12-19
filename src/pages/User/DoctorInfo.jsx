@@ -16,6 +16,7 @@ function DoctorInfo() {
     const { state } = useLocation();
     const { user } = useContext(UserContext);
     console.log('STATE', state);
+    console.log('CURRENT DAY', currentDate);
     const [rating, setRating] = useState(5);
 
     const [searchParams] = useSearchParams();
@@ -70,7 +71,7 @@ function DoctorInfo() {
         const fetchSchedule = async () => {
             try {
                 const response = await axiosInstance.get(`/schedule/${doctorId}?date=${currentDate}`);
-                console.log('Schedule:', response);
+                console.log('Schedule:', response, ' ', currentDate);
                 if (response.status === 200) {
                     setSchedule(response.data);
                 }

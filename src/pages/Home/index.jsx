@@ -18,10 +18,10 @@ function Home() {
     const IMAGE_URL = `http://localhost:${import.meta.env.VITE_BE_PORT}/uploads/`;
 
     const images = [
-        'https://i.pinimg.com/736x/8b/d9/44/8bd944a2576148952682eacd62970fc8.jpg',
-        'https://i.pinimg.com/736x/af/c5/53/afc553e12c89eef85f87e9f9a34e02a0.jpg',
-        `${IMAGE_URL}banner1.png`,
-        'https://i.pinimg.com/736x/36/c5/28/36c5286f8f150bf662214022935332c4.jpg',
+        'https://www.hopkinsmedicine.org/-/media/images/option3.jpg',
+        'https://pmc.bookingcare.vn/assets/anh/bookingcare-cover-4.jpg',
+        'https://cdn.medpro.vn/prod-partner/92b6d682-4b5a-4c94-ac54-97a077c0c6c5-homepage_banner.webp',
+        'https://cdn.youmed.vn/wp-content/themes/youmed/images/your-medical-booking.webp',
     ];
 
     useEffect(() => {
@@ -418,14 +418,13 @@ function Home() {
                             ))}
                         </div>
                         <div className="flex items-center font-normal max-w-64 border border-transparent hover:border-[#00B5F1] hover:rounded-2xl mx-auto mt-5 px-8 py-[8px] text-3xl">
-                        <NavLink to="/chuyen-khoa" className="flex items-center gap-1 text-[#00b5f1]">
-                            Xem tất cả
-                            <MdKeyboardDoubleArrowRight className="mt-1" />
-                        </NavLink>
-                    </div>
+                            <NavLink to="/chuyen-khoa" className="flex items-center gap-1 text-[#00b5f1]">
+                                Xem tất cả
+                                <MdKeyboardDoubleArrowRight className="mt-1" />
+                            </NavLink>
+                        </div>
                     </div>
                 </div>
-
             </div>
         </div>
     );
