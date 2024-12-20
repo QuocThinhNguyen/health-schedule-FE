@@ -1,0 +1,92 @@
+import {
+    Chart,
+    ArcElement,
+    BarElement,
+    LineElement,
+    CategoryScale,
+    LinearScale,
+    Title,
+    Tooltip,
+    Legend,
+    PointElement,
+} from 'chart.js';
+import { Doughnut } from 'react-chartjs-2';
+
+const centerTextPlugin = {
+    id: 'centerText',
+    beforeDraw: (chart) => {
+        if (chart.config.type !== 'doughnut') return;
+        const { ctx, width, height } = chart;
+        ctx.restore();
+        const fontSize = (height / 200).toFixed(2);
+        ctx.font = `${fontSize}em sans-serif`;
+        ctx.textBaseline = 'middle';
+
+        const total = chart.data.datasets[0].data.reduce((acc, value) => acc + value, 0);
+        const text = total.toString();
+        const textX = Math.round((width - ctx.measureText(text).width) / 2);
+        const textY = height / 2.2;
+
+        ctx.fillText(text, textX, textY);
+        ctx.save();
+    },
+};
+
+Chart.register(
+    ArcElement,
+    BarElement,
+    centerTextPlugin,
+    LineElement,
+    CategoryScale,
+    LinearScale,
+    Title,
+    Tooltip,
+    Legend,
+    PointElement,
+);
+
+function ThongKeCaKhamTrongThangNay() {
+    return (
+        <Doughnut
+            data={{
+                labels: ['Chưa xác nhận', 'Đã xác nhận', 'Đã thanh toán', 'Đã hoàn thành', 'Đã hủy'],
+                datasets: [
+                    {
+                        label: 'Số lượt đặt khám',
+                        backgroundColor: ['#3e95cd', '#8e5ea2', '#3cba9f', '#e8c3b9', '#c45850'],
+                        data: [2478, 5267, 734, 784, 433],
+                    },
+                ],
+            }}
+            options={{
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'bottom',
+                        labels: {
+                            pointStyle: 'circle',
+                            usePointStyle: true,
+                            boxWidth: 7,
+                            boxHeight: 7,
+                        },
+                        align: 'start',
+                    },
+                    title: {
+                        display: true,
+                        text: 'Biểu đồ ca khám trong tháng',
+                    },
+                    centerText: true, // Kích hoạt plugin tùy chỉnh cho biểu đồ này
+                },
+                maintainAspectRatio: false,
+                layout: {
+                    padding: {
+                        left: 10,
+                        right: 10,
+                    },
+                },
+            }}
+        />
+    );
+}
+
+export default ThongKeCaKhamTrongThangNay;

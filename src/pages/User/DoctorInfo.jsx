@@ -15,8 +15,7 @@ function DoctorInfo() {
     const [doctorInfo, setDoctorInfo] = useState([]);
     const { state } = useLocation();
     const { user } = useContext(UserContext);
-    console.log('STATE', state);
-    console.log('CURRENT DAY', currentDate);
+
     const [rating, setRating] = useState(5);
 
     const [searchParams] = useSearchParams();
@@ -71,7 +70,6 @@ function DoctorInfo() {
         const fetchSchedule = async () => {
             try {
                 const response = await axiosInstance.get(`/schedule/${doctorId}?date=${currentDate}`);
-                console.log('Schedule:', response, ' ', currentDate);
                 if (response.status === 200) {
                     setSchedule(response.data);
                 }
@@ -80,6 +78,8 @@ function DoctorInfo() {
             }
         };
         fetchSchedule();
+        console.log('currentDay:', currentDate);
+        console.log('schedule:', schedule);
     }, [currentDate]);
 
     // Map timeTypes sang label
@@ -123,7 +123,7 @@ function DoctorInfo() {
     };
 
     // const customDescription = doctorInfo.description;
-    console.log('doctor', doctorInfo);
+
     // console.log('customDescription:', customDescription);
 
     const reviews = [
@@ -188,7 +188,7 @@ function DoctorInfo() {
         fetchFeedbacks();
     }, [doctorId]);
 
-    console.log('Feedbacks:', feedbacks);
+ 
 
     return (
         <div className="max-w-fit mx-auto p-6 mt-24 ">
