@@ -4,7 +4,7 @@ import AdminLayout from '~/layouts/AdminLayout';
 import { useContext } from 'react';
 import { UserContext } from '~/context/UserContext';
 import { Fragment } from 'react';
-import Admin from '~/pages/Admin';
+import Admin from '~/pages/Admin/DashboardManagement';
 import ClinicManagement from '~/pages/Admin/ClinicManagement';
 import DoctorManagement from '~/pages/Admin/DoctorManagement';
 import UserManagement from '~/pages/Admin/UserManagement';
@@ -13,6 +13,7 @@ import ScheduleManagement from '~/pages/Admin/ScheduleManagement';
 import WorktimeManagement from '~/pages/Admin/WorktimeManagement';
 import NewsManagement from '~/pages/Admin/NewsManagement';
 import CommentManagement from '~/pages/Admin/CommentManagement';
+import DashboardManagement from '~/pages/Admin/DashboardManagement';
 
 
 function AdminRoutes() {
@@ -29,7 +30,7 @@ function AdminRoutes() {
                 }
             >
                 <Route index element={<Navigate to="dashboard" />} />
-                <Route path="dashboard" element={<Admin />} />
+                <Route path="dashboard" element={<DashboardManagement />} />
                 <Route path="clinic" element={<ClinicManagement />} />
                 <Route path="doctor" element={<DoctorManagement />} />
                 <Route path="user" element={<UserManagement />} />

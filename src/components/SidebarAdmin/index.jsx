@@ -1,9 +1,7 @@
-import { faClock, faHospital } from '@fortawesome/free-regular-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState } from 'react';
-import { IoMenu, IoNewspaperOutline, IoTimeOutline } from 'react-icons/io5';
-import Logo from '../Logo';
+import { IoMenu, IoNewspaperOutline} from 'react-icons/io5';
 import { useNavigate } from 'react-router-dom';
+import { LuLayoutDashboard } from "react-icons/lu";
 import { CiHospital1 } from 'react-icons/ci';
 import { FaUserDoctor } from 'react-icons/fa6';
 import { FaRegUser } from 'react-icons/fa';
@@ -18,7 +16,7 @@ function SidebarAdmin() {
         setIsExpanded(!isExpanded);
     };
     const menuItems = [
-        //{ path: '/admin/dashboard', label: 'Bảng thống kê', icon: <FontAwesomeIcon icon={faGauge} /> },
+        { path: '/admin/dashboard', label: 'Bảng thống kê', icon: <LuLayoutDashboard /> },
         { path: '/admin/clinic', label: 'Quản lý bệnh viện', icon: <CiHospital1 /> },
         { path: '/admin/doctor', label: 'Quản lý bác sĩ', icon: <FaUserDoctor /> },
         { path: '/admin/user', label: 'Quản lý tài khoản người dùng', icon: <FaRegUser /> },
