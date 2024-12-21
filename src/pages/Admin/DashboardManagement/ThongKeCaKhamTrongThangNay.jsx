@@ -56,7 +56,6 @@ function ThongKeCaKhamTrongThangNay() {
             try {
                 const response = await axiosInstance.get('/admin/status-booking-chart');
                 if (response.status === 200) {
-                    console.log('response', response.data);
                     setLabels(response.data.labels);
                     setValues(response.data.values);
                 } else {
