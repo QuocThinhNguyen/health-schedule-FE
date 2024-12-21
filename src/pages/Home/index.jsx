@@ -18,8 +18,8 @@ function Home() {
     const IMAGE_URL = `http://localhost:${import.meta.env.VITE_BE_PORT}/uploads/`;
 
     const images = [
-        'https://www.hopkinsmedicine.org/-/media/images/option3.jpg',
         'https://pmc.bookingcare.vn/assets/anh/bookingcare-cover-4.jpg',
+        'https://www.hopkinsmedicine.org/-/media/images/option3.jpg',
         'https://cdn.medpro.vn/prod-partner/92b6d682-4b5a-4c94-ac54-97a077c0c6c5-homepage_banner.webp',
         'https://cdn.youmed.vn/wp-content/themes/youmed/images/your-medical-booking.webp',
     ];
