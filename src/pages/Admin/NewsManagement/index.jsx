@@ -9,6 +9,7 @@ import { IoCloseOutline } from 'react-icons/io5';
 import { toast } from 'react-toastify';
 import { UserContext } from '~/context/UserContext';
 import CustomTinyMCE from '~/components/CustomTinyMCE';
+import { Edit2, Eye, Trash2, Search, XCircle } from 'lucide-react';
 
 function NewsManagement() {
     const [posts, setPosts] = useState([]);
@@ -316,10 +317,10 @@ function NewsManagement() {
 
     return (
         <div className="p-8">
-            <h2 className="text-center text-2xl font-bold mb-4">QUẢN LÝ TIN TỨC</h2>
+            <h2 className="text-center text-3xl font-bold mb-4">QUẢN LÝ TIN TỨC</h2>
 
             <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center space-x-2">
+                {/* <div className="flex items-center space-x-2">
                     <input
                         type="text"
                         placeholder="Tìm kiếm"
@@ -333,10 +334,30 @@ function NewsManagement() {
                     >
                         🔍
                     </button>
+                </div> */}
+                <div className="relative flex-1 max-w-md">
+                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-600 w-6 h-6" />
+                    <input
+                        type="text"
+                        placeholder="Tìm kiếm"
+                        value={filterValue}
+                        onChange={(e) => setFilterValue(e.target.value)}
+                        className="w-full pl-10 pr-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
                 </div>
 
-                <button
+                {/* <button
                     className="flex items-center space-x-2 bg-gray-200 border border-gray-400 px-4 py-2 rounded"
+                    onClick={handleOpenModal}
+                >
+                    <span>Thêm</span>
+                    <span>
+                        <FontAwesomeIcon icon={faPlus} />
+                    </span>
+                </button> */}
+                <button
+                    // className="flex items-center space-x-2 bg-gray-200 border border-gray-400 px-4 py-2 rounded"
+                    className="flex items-center gap-2 px-4 py-2 text-blue-600 bg-blue-50 rounded-md hover:bg-blue-100 border border-blue-600"
                     onClick={handleOpenModal}
                 >
                     <span>Thêm</span>
@@ -346,50 +367,54 @@ function NewsManagement() {
                 </button>
             </div>
 
-            <table className="w-full border border-gray-300">
-                <thead className="bg-gray-200">
-                    <tr>
-                        <th className="border border-gray-300 px-4 py-2 w-1">STT</th>
-                        <th className="border border-gray-300 px-4 py-2 w-72">Tiêu đề</th>
-                        <th className="border border-gray-300 px-4 py-2 w-36">Tác giả</th>
-                        <th className="border border-gray-300 px-4 py-2 w-14">Ngày đăng</th>
-                        <th className="border border-gray-300 px-4 py-2 w-14">Ngày cập nhật</th>
-                        <th className="border border-gray-300 px-4 py-2 w-10">Thao tác</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {posts.map((post, index) => (
-                        <tr key={post.postId}>
-                            <td className="border border-gray-300 px-4 py-2 text-center">
-                                {index + 1 + pagination.limit * (pagination.page - 1)}
-                            </td>
-                            <td className="border border-gray-300 px-4 py-2 text-center">{post.title}</td>
-                            <td className="border border-gray-300 px-4 py-2 text-center">{post.userId.fullname}</td>
-                            <td className="border border-gray-300 px-4 py-2 text-center">
-                                {' '}
-                                {format(new Date(post.createAt), 'dd-MM-yyyy')}
-                            </td>
-                            <td className="border border-gray-300 px-4 py-2 text-center">
-                                {format(new Date(post.updateAt), 'dd-MM-yyyy')}
-                            </td>
-                            <td className="border border-gray-300 px-4 py-2 text-center space-x-8">
-                                <button
-                                    className="text-blue-500 text-2xl hover:text-blue-700"
-                                    onClick={() => getDetailPostAPI(post.postId)}
-                                >
-                                    <FiEdit />
-                                </button>
-                                <button
-                                    className="text-red-500 text-2xl hover:text-red-700"
-                                    onClick={() => handleDeleteClick(post.postId)}
-                                >
-                                    <RiDeleteBin6Line />
-                                </button>
-                            </td>
+            <div className="overflow-x-auto rounded-lg border">
+                <table className="min-w-full divide-y divide-gray-200">
+                    <thead className="bg-gray-200">
+                        <tr>
+                            <th className="px-4 py-2 font-bold uppercase tracking-wider w-1">STT</th>
+                            <th className="px-4 py-2 font-bold uppercase tracking-wider w-72">Tiêu đề</th>
+                            <th className="px-4 py-2 font-bold uppercase tracking-wider w-36">Tác giả</th>
+                            <th className="px-4 py-2 font-bold uppercase tracking-wider w-14">Ngày đăng</th>
+                            <th className="px-4 py-2 font-bold uppercase tracking-wider w-14">Ngày cập nhật</th>
+                            <th className="px-4 py-2 font-bold uppercase tracking-wider w-10">Thao tác</th>
                         </tr>
-                    ))}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        {posts.map((post, index) => (
+                            <tr key={post.postId} className={index % 2 === 0 ? 'bg-white' : 'bg-gray-100'}>
+                                <td className="px-4 py-2 text-gray-900 text-center">
+                                    {index + 1 + pagination.limit * (pagination.page - 1)}
+                                </td>
+                                <td className="px-4 py-2 text-gray-900 text-center">{post.title}</td>
+                                <td className="px-4 py-2 text-gray-900 text-center">{post.userId.fullname}</td>
+                                <td className="px-4 py-2 text-gray-900 text-center">
+                                    {' '}
+                                    {format(new Date(post.createAt), 'dd-MM-yyyy')}
+                                </td>
+                                <td className="px-4 py-2 text-gray-900 text-center">
+                                    {format(new Date(post.updateAt), 'dd-MM-yyyy')}
+                                </td>
+                                <td className="px-4 py-2">
+                                    <div className="flex items-center justify-center gap-3">
+                                        <button
+                                            className="text-blue-500 text-2xl hover:text-blue-700"
+                                            onClick={() => getDetailPostAPI(post.postId)}
+                                        >
+                                            <Edit2 className="w-7 h-7" />
+                                        </button>
+                                        <button
+                                            className="text-red-500 text-2xl hover:text-red-700"
+                                            onClick={() => handleDeleteClick(post.postId)}
+                                        >
+                                            <Trash2 className="w-7 h-7" />
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
 
             <div className="flex justify-end items-center space-x-4 mt-4">
                 <select

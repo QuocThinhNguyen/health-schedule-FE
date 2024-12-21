@@ -4,6 +4,7 @@ import { axiosClient, axiosInstance } from '~/api/apiRequest';
 import { UserContext } from '~/context/UserContext';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
+import ConfirmationModal from '~/components/Confirm/ConfirmationModal';
 
 function PatientManagement() {
     const [appointments, setAppointments] = useState([]);
@@ -82,7 +83,24 @@ function PatientManagement() {
         } catch (error) {
             console.error('Error updating status:', error);
             toast.error('Có lỗi xảy ra khi cập nhật trạng thái.');
+        } finally {
+            closeModal();
         }
+    };
+
+    const [isModalOpen, setModalOpen] = useState(false);
+    const [selectedBookingId, setSelectedBookingId] = useState(null);
+    const [patientName, setPatientName] = useState('');
+
+    const openModal = (bookingId, patientName) => {
+        setSelectedBookingId(bookingId);
+        setPatientName(patientName);
+        setModalOpen(true);
+    };
+
+    const closeModal = () => {
+        setModalOpen(false);
+        setSelectedBookingId(null);
     };
 
     return (
@@ -106,71 +124,101 @@ function PatientManagement() {
             {error && <div className="text-red-500">{error}</div>}
 
             {/* Bảng thông tin bệnh nhân */}
-            <table className="w-full border-collapse border text-center">
-                <thead>
-                    <tr className="bg-gray-100">
-                        <th className="border p-2">STT</th>
-                        <th className="border p-2">Thời gian khám</th>
-                        <th className="border p-2">Tên bệnh nhân</th>
-                        <th className="border p-2">Địa chỉ</th>
-                        <th className="border p-2">Số điện thoại</th>
-                        <th className="border p-2">Giới tính</th>
-                        <th className="border p-2">Lý do khám</th>
-                        <th className="border p-2">Trạng thái</th>
-                        <th className="border p-2">Hành động</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {appointments
-                        .filter((appointment) => appointment.status.keyMap !== 'S1')
-                        .map((appointment, index) => (
-                            <tr key={appointment._id}>
-                                <td className="border p-2">{index + 1}</td>
-                                <td className="border p-2">{appointment.timeType.valueVi}</td>
-                                <td className="border p-2">{appointment.patientRecordId.fullname}</td>
-                                <td className="border p-2">{appointment.patientRecordId.address}</td>
-                                <td className="border p-2">{appointment.patientRecordId.phoneNumber}</td>
-                                <td className="border p-2">
-                                    {appointment.patientRecordId.gender === 'Male'
-                                        ? 'Nam'
-                                        : appointment.patientRecordId.gender === 'Female'
-                                        ? 'Nữ'
-                                        : 'Khác'}
-                                </td>
-                                <td className="border p-2">{appointment.reason}</td>
-                                <td className="border p-2">{appointment.status.valueVi}</td>
-                                <td className="border p-2 space-x-2">
-                                    <button
-                                        className={`p-1 rounded ${
-                                            appointment.status.keyMap === 'S4' || appointment.status.keyMap === 'S5'
-                                                ? 'bg-blue-200 text-gray-500 cursor-not-allowed'
-                                                : 'bg-blue-500 text-white'
-                                        }`}
-                                        onClick={() => updateStatus(appointment.bookingId, 'S4')}
-                                        disabled={
-                                            appointment.status.keyMap === 'S4' || appointment.status.keyMap === 'S5'
-                                        }
-                                    >
-                                        Hoàn thành
-                                    </button>
-                                    <button
-                                        className={`p-1 rounded ${
-                                            appointment.status.keyMap === 'S4' || appointment.status.keyMap === 'S5'
-                                                ? 'bg-red-200 text-gray-500 cursor-not-allowed'
-                                                : 'bg-red-500 text-white'
-                                        }`}
-                                        onClick={() => updateStatus(appointment.bookingId, 'S5')}
-                                        disabled={
-                                            appointment.status.keyMap === 'S4' || appointment.status.keyMap === 'S5'
-                                        }
-                                    >
-                                        Hủy
-                                    </button>
-                                </td>
-                            </tr>
-                        ))}
-                </tbody>
-            </table>
+            <div className="overflow-x-auto rounded-lg border">
+                <table className="min-w-full divide-y divide-gray-200">
+                    <thead className="bg-gray-200">
+                        <tr className="bg-gray-100">
+                            <th className="px-4 py-2 font-bold tracking-wider">STT</th>
+                            <th className="px-4 py-2 font-bold tracking-wider">Thời gian khám</th>
+                            <th className="px-4 py-2 font-bold tracking-wider">Tên bệnh nhân</th>
+                            <th className="px-4 py-2 font-bold tracking-wider">Địa chỉ</th>
+                            <th className="px-4 py-2 font-bold tracking-wider">Số điện thoại</th>
+                            <th className="px-4 py-2 font-bold tracking-wider">Giới tính</th>
+                            <th className="px-4 py-2 font-bold tracking-wider">Lý do khám</th>
+                            <th className="px-4 py-2 font-bold tracking-wider">Trạng thái</th>
+                            <th className="px-4 py-2 font-bold tracking-wider">Hành động</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {appointments
+                            .filter((appointment) => appointment.status.keyMap !== 'S1')
+                            .map((appointment, index) => (
+                                <tr key={appointment._id}>
+                                    <td className="px-4 py-2 text-gray-900 text-center">{index + 1}</td>
+                                    <td className="px-4 py-2 text-gray-900 text-center">
+                                        {appointment.timeType.valueVi}
+                                    </td>
+                                    <td className="px-4 py-2 text-gray-900 text-center">
+                                        {appointment.patientRecordId.fullname}
+                                    </td>
+                                    <td className="px-4 py-2 text-gray-900 text-center">
+                                        {appointment.patientRecordId.address}
+                                    </td>
+                                    <td className="px-4 py-2 text-gray-900 text-center">
+                                        {appointment.patientRecordId.phoneNumber}
+                                    </td>
+                                    <td className="px-4 py-2 text-gray-900 text-center">
+                                        {appointment.patientRecordId.gender === 'Male'
+                                            ? 'Nam'
+                                            : appointment.patientRecordId.gender === 'Female'
+                                            ? 'Nữ'
+                                            : 'Khác'}
+                                    </td>
+                                    <td className="px-4 py-2 text-gray-900 text-center">{appointment.reason}</td>
+                                    <td className="px-4 py-2 text-gray-900 text-center">
+                                        {appointment.status.valueVi}
+                                    </td>
+                                    <td className="px-4 py-2">
+                                        <div className="flex items-center justify-center gap-3">
+                                            <button
+                                                className={`p-1 rounded ${
+                                                    appointment.status.keyMap === 'S4' ||
+                                                    appointment.status.keyMap === 'S5'
+                                                        ? 'bg-blue-200 text-gray-500 cursor-not-allowed'
+                                                        : 'bg-blue-500 text-white'
+                                                }`}
+                                                onClick={() => updateStatus(appointment.bookingId, 'S4')}
+                                                disabled={
+                                                    appointment.status.keyMap === 'S4' ||
+                                                    appointment.status.keyMap === 'S5'
+                                                }
+                                            >
+                                                Hoàn thành
+                                            </button>
+                                            <button
+                                                className={`p-1 rounded ${
+                                                    appointment.status.keyMap === 'S4' ||
+                                                    appointment.status.keyMap === 'S5'
+                                                        ? 'bg-red-200 text-gray-500 cursor-not-allowed'
+                                                        : 'bg-red-500 text-white'
+                                                }`}
+                                                // onClick={() => updateStatus(appointment.bookingId, 'S5')}
+                                                onClick={() =>
+                                                    openModal(
+                                                        appointment.bookingId,
+                                                        appointment.patientRecordId.fullname,
+                                                    )
+                                                }
+                                                disabled={
+                                                    appointment.status.keyMap === 'S4' ||
+                                                    appointment.status.keyMap === 'S5'
+                                                }
+                                            >
+                                                Hủy
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            ))}
+                    </tbody>
+                </table>
+            </div>
+            <ConfirmationModal
+                isOpen={isModalOpen}
+                onClose={closeModal}
+                onConfirm={() => updateStatus(selectedBookingId, 'S5')}
+                message={`Bạn có chắc chắn muốn hủy lịch hẹn của ${patientName} không?`}
+            />
         </div>
     );
 }

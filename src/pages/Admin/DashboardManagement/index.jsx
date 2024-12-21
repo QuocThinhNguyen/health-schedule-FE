@@ -9,8 +9,6 @@ import { FaHospital, FaUser } from 'react-icons/fa';
 import { AiOutlineSchedule } from 'react-icons/ai';
 import { axiosClient, axiosInstance } from '~/api/apiRequest';
 
-
-
 function Dashboard() {
     const [count, setCounts] = useState({
         countClinic: 0,
@@ -42,7 +40,6 @@ function Dashboard() {
         };
         fetchStatistics();
     }, []);
-
 
     const ITEMS = [
         {
@@ -78,7 +75,7 @@ function Dashboard() {
     return (
         <>
             <div className="p-8">
-                <h1 className="text-2xl font-bold text-center">BẢNG THỐNG KÊ</h1>
+                <h1 className="text-3xl font-bold text-center">BẢNG THỐNG KÊ</h1>
 
                 <div className="flex flex-wrap justify-between h-36 gap-6 mt-8 text-white">
                     {ITEMS.map((item) => (

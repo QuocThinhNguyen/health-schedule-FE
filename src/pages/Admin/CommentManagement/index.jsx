@@ -11,7 +11,7 @@ import { MdDeleteOutline } from 'react-icons/md';
 import { AiOutlineEdit } from 'react-icons/ai';
 import { RiDeleteBin6Line } from 'react-icons/ri';
 import { FiEdit } from 'react-icons/fi';
-import { Star } from 'lucide-react';
+import { Edit2, Eye, Trash2, Search, Star } from 'lucide-react';
 
 const CommentManagement = () => {
     const [rating, setRating] = useState(5);
@@ -132,11 +132,11 @@ const CommentManagement = () => {
             {/* Nội dung chính */}
             <div className="p-8">
                 {/* Tiêu đề */}
-                <h2 className="text-center text-2xl font-bold mb-4">QUẢN LÝ BÌNH LUẬN</h2>
+                <h2 className="text-center text-3xl font-bold mb-4">QUẢN LÝ BÌNH LUẬN</h2>
 
                 <div className="flex items-center justify-between mb-4">
                     {/* Thanh tìm kiếm */}
-                    <div className="flex items-center space-x-2">
+                    {/* <div className="flex items-center space-x-2">
                         <input
                             type="text"
                             placeholder="Tìm kiếm theo tên bác sĩ"
@@ -150,72 +150,85 @@ const CommentManagement = () => {
                         >
                             🔍
                         </button>
+                    </div> */}
+
+                    <div className="relative flex-1 max-w-md">
+                        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-600 w-6 h-6" />
+                        <input
+                            type="text"
+                            placeholder="Tìm kiếm"
+                            value={filterValue}
+                            onChange={(e) => setFilterValue(e.target.value)}
+                            className="w-full pl-10 pr-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        />
                     </div>
                 </div>
 
                 {/* Bảng */}
-                <table className="w-full border border-gray-300">
-                    <thead className="bg-gray-200">
-                        <tr>
-                            <th className="border border-gray-300 px-4 py-2">STT</th>
-                            <th className="border border-gray-300 px-4 py-2 w-fit">Người dùng</th>
-                            <th className="border border-gray-300 px-4 py-2 min-w-48">Nội dung bình luận</th>
-                            <th className="border border-gray-300 px-4 py-2">Số sao</th>
-                            <th className="border border-gray-300 px-4 py-2">Bác sĩ</th>
-                            <th className="border border-gray-300 px-4 py-2">Thời gian</th>
-                            <th className="border border-gray-300 px-4 py-2 min-w-24">Thao tác</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {comments.map((item, index) => (
-                            <tr key={index} className="text-center">
-                                <td className="border border-gray-300 px-4 py-2 text-center">
-                                    {index + 1 + pagination.limit * (pagination.page - 1)}
-                                </td>
-                                <td className="border border-gray-300 px-4 py-2 text-center">
-                                    {item.patientId.fullname}
-                                </td>
-                                <td className="border border-gray-300 px-4 py-2 text-center">{item.comment}</td>
-                                <td className="border border-gray-300 px-4 py-2 text-center">
-                                    <div className="flex items-center gap-2 mb-2 justify-center">
-                                        {[1, 2, 3, 4, 5].map((star) => (
-                                            <button
-                                                key={star}
-                                                type="button"
-                                                onClick={() => setRating(star)}
-                                                className="focus:outline-none"
-                                                disabled
-                                            >
-                                                <Star
-                                                    className={`w-8 h-8 ${
-                                                        star <= item.rating
-                                                            ? 'fill-yellow-400 text-yellow-400'
-                                                            : 'text-gray-300'
-                                                    }`}
-                                                />
-                                            </button>
-                                        ))}
-                                    </div>
-                                </td>
-
-                                <td className="border border-gray-300 px-4 py-2 text-center">
-                                    {item.doctorId.fullname}
-                                </td>
-                                <td className="border border-gray-300 px-4 py-2 text-center">
-                                    {new Date(item.date).toLocaleDateString('vi-VN')}
-                                </td>
-                                <td className="border border-gray-300 px-4 py-2 text-center space-x-8">
-                                    <button
-                                        className="text-red-500 text-2xl hover:text-red-700"
-                                        onClick={() => handleDeleteClick(item.feedBackId)}
-                                    >
-                                        <RiDeleteBin6Line />
-                                    </button>
-                                </td>
+                <div className="overflow-x-auto rounded-lg border">
+                    <table className="min-w-full divide-y divide-gray-200">
+                        <thead className="bg-gray-200">
+                            <tr>
+                                <th className="px-4 py-2 font-bold uppercase tracking-wider">STT</th>
+                                <th className="px-4 py-2 font-bold uppercase tracking-wider w-fit">Người dùng</th>
+                                <th className="px-4 py-2 font-bold uppercase tracking-wider min-w-48">
+                                    Nội dung bình luận
+                                </th>
+                                <th className="px-4 py-2 font-bold uppercase tracking-wider">Số sao</th>
+                                <th className="px-4 py-2 font-bold uppercase tracking-wider">Bác sĩ</th>
+                                <th className="px-4 py-2 font-bold uppercase tracking-wider">Thời gian</th>
+                                <th className="px-4 py-2 font-bold uppercase tracking-wider min-w-24">Thao tác</th>
                             </tr>
-                        ))}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            {comments.map((item, index) => (
+                                <tr key={index} className={index % 2 === 0 ? 'bg-white' : 'bg-gray-100'}>
+                                    <td className="px-4 py-2 text-gray-900 text-center mt-5 mb-5">
+                                        {index + 1 + pagination.limit * (pagination.page - 1)}
+                                    </td>
+                                    <td className="px-4 py-2 text-gray-900 text-center">{item.patientId.fullname}</td>
+                                    <td className="px-4 py-2 text-gray-900 text-center max-w-xl">{item.comment}</td>
+                                    <td className="px-4 py-2 text-gray-900 text-center">
+                                        <div className="flex items-center gap-2 mb-2 justify-center">
+                                            {[1, 2, 3, 4, 5].map((star) => (
+                                                <button
+                                                    key={star}
+                                                    type="button"
+                                                    onClick={() => setRating(star)}
+                                                    className="focus:outline-none"
+                                                    disabled
+                                                >
+                                                    <Star
+                                                        className={`w-8 h-8 ${
+                                                            star <= item.rating
+                                                                ? 'fill-yellow-400 text-yellow-400'
+                                                                : 'text-gray-300'
+                                                        }`}
+                                                    />
+                                                </button>
+                                            ))}
+                                        </div>
+                                    </td>
+
+                                    <td className="px-4 py-2 text-gray-900 text-center">{item.doctorId.fullname}</td>
+                                    <td className="px-4 py-2 text-gray-900 text-center">
+                                        {new Date(item.date).toLocaleDateString('vi-VN')}
+                                    </td>
+                                    <td className="px-4 py-2">
+                                        <div className="flex items-center justify-center gap-3">
+                                            <button
+                                                className="text-red-500 text-2xl hover:text-red-700"
+                                                onClick={() => handleDeleteClick(item.feedBackId)}
+                                            >
+                                                <Trash2 className="w-7 h-7" />
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
                 {/* Điều hướng phân trang */}
                 <div className="flex justify-end items-center space-x-4 mt-4">
                     <select
