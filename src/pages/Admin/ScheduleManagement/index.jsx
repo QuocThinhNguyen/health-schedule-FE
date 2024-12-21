@@ -7,6 +7,7 @@ import { axiosInstance } from '~/api/apiRequest';
 import { toast } from 'react-toastify';
 import { AiOutlineEdit } from 'react-icons/ai';
 import { FiEdit } from 'react-icons/fi';
+import { Edit2, Eye, Trash2, Search, XCircle } from 'lucide-react';
 
 const ScheduleManagement = () => {
     const [isExpanded, setIsExpanded] = useState(true);
@@ -241,12 +242,12 @@ const ScheduleManagement = () => {
             {/* Nội dung chính */}
             <div className="p-8">
                 {/* Tiêu đề */}
-                <h2 className="text-center text-2xl font-bold mb-4">QUẢN LÝ LỊCH HẸN</h2>
+                <h2 className="text-center text-3xl font-bold mb-4">QUẢN LÝ LỊCH HẸN</h2>
 
                 <div className="flex items-center justify-between mb-4">
                     {/* Thanh tìm kiếm */}
                     <div className="grid grid-col-2 gap-4">
-                        <div className="flex items-center space-x-2 ">
+                        {/* <div className="flex items-center space-x-2 ">
                             <input
                                 type="text"
                                 placeholder="Tìm kiếm"
@@ -260,6 +261,16 @@ const ScheduleManagement = () => {
                             >
                                 🔍
                             </button>
+                        </div> */}
+                        <div className="relative flex-1 max-w-md">
+                            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-600 w-6 h-6" />
+                            <input
+                                type="text"
+                                placeholder="Tìm kiếm"
+                                value={filterValue}
+                                onChange={(e) => setFilterValue(e.target.value)}
+                                className="w-full pl-10 pr-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            />
                         </div>
                         <div>
                             <input
@@ -287,7 +298,7 @@ const ScheduleManagement = () => {
                             <button
                                 key={statusOption.value}
                                 onClick={() => setSelectedStatus(statusOption.value)}
-                                className={`px-4 py-2 rounded border ${
+                                className={`flex items-center gap-2 px-4 py-2 bg-blue-50 rounded-md hover:bg-blue-100 border ${
                                     selectedStatus === statusOption.value ? 'bg-gray-300 font-bold' : 'bg-white'
                                 }`}
                             >
@@ -296,72 +307,80 @@ const ScheduleManagement = () => {
                         ))}
                 </div>
                 {/* Bảng */}
-                <table className="w-full border border-gray-300">
-                    <thead className="bg-gray-200">
-                        <tr>
-                            <th className="border border-gray-300 px-4 py-2">STT</th>
-                            <th className="border border-gray-300 px-4 py-2">Ngày khám</th>
-                            <th className="border border-gray-300 px-4 py-2">Ca khám</th>
-                            <th className="border border-gray-300 px-4 py-2">Bác sĩ</th>
-                            <th className="border border-gray-300 px-4 py-2">Tên bệnh nhân</th>
-                            <th className="border border-gray-300 px-4 py-2">SĐT</th>
-                            <th className="border border-gray-300 px-4 py-2">Địa chỉ</th>
-                            <th className="border border-gray-300 px-4 py-2">Trạng thái</th>
-                            <th className="border border-gray-300 px-4 py-2">Thao tác</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {schedules.length > 0 ? (
-                            schedules.map((sche, index) => (
-                                <tr key={sche.bookingId} className="text-center">
-                                    <td className="border border-gray-300 px-2 py-1">
-                                        {index + 1 + pagination.limit * (pagination.page - 1)}
-                                    </td>
-                                    <td className="border border-gray-300 px-2 py-1">
-                                        {sche.appointmentDate.split('-').reverse().join('-')}
-                                    </td>
-                                    <td className="border border-gray-300 px-2 py-1">
-                                        {getTimeValue(sche.timeType)} {/* Gọi hàm để lấy value */}
-                                    </td>
-                                    <td className="border border-gray-300 px-2 py-1">{sche.doctorId.fullname}</td>
-                                    <td className="border border-gray-300 px-2 py-1">
-                                        {sche.patientRecordId.fullname}
-                                    </td>
-                                    <td className="border border-gray-300 px-2 py-1">
-                                        {sche.patientRecordId.phoneNumber}
-                                    </td>
-                                    <td className="border border-gray-300 px-2 py-1">{sche.patientRecordId.address}</td>
-                                    <td className="border border-gray-300 px-2 py-1">
-                                        {(() => {
-                                            const statusMapping = {
-                                                S1: 'Chưa xác nhận',
-                                                S2: 'Đã xác nhận',
-                                                S3: 'Đã thanh toán',
-                                                S4: 'Đã khám xong',
-                                                S5: 'Đã hủy',
-                                            };
-                                            return statusMapping[sche.status] || 'Đang xử lý';
-                                        })()}
-                                    </td>
-                                    <td className="border border-gray-300 px-4 py-2 text-center space-x-8">
-                                        <button
-                                            className="text-blue-500 text-2xl hover:text-blue-700"
-                                            onClick={() => getDetailScheduleAPI(sche.bookingId)}
-                                        >
-                                            <FiEdit />
-                                        </button>
+                <div className="overflow-x-auto rounded-lg border">
+                    <table className="min-w-full divide-y divide-gray-200">
+                        <thead className="bg-gray-200">
+                            <tr>
+                                <th className="px-4 py-2 font-bold uppercase tracking-wider">STT</th>
+                                <th className="px-4 py-2 font-bold uppercase tracking-wider">Ngày khám</th>
+                                <th className="px-4 py-2 font-bold uppercase tracking-wider">Ca khám</th>
+                                <th className="px-4 py-2 font-bold uppercase tracking-wider">Bác sĩ</th>
+                                <th className="px-4 py-2 font-bold uppercase tracking-wider">Tên bệnh nhân</th>
+                                <th className="px-4 py-2 font-bold uppercase tracking-wider">SĐT</th>
+                                <th className="px-4 py-2 font-bold uppercase tracking-wider">Địa chỉ</th>
+                                <th className="px-4 py-2 font-bold uppercase tracking-wider">Trạng thái</th>
+                                <th className="px-4 py-2 font-bold uppercase tracking-wider">Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {schedules.length > 0 ? (
+                                schedules.map((sche, index) => (
+                                    <tr key={sche.bookingId} className={index % 2 === 0 ? 'bg-white' : 'bg-gray-100'}>
+                                        <td className="px-4 py-2 text-gray-900 text-center">
+                                            {index + 1 + pagination.limit * (pagination.page - 1)}
+                                        </td>
+                                        <td className="px-4 py-2 text-gray-900 text-center">
+                                            {sche.appointmentDate.split('-').reverse().join('-')}
+                                        </td>
+                                        <td className="px-4 py-2 text-gray-900 text-center">
+                                            {getTimeValue(sche.timeType)} {/* Gọi hàm để lấy value */}
+                                        </td>
+                                        <td className="px-4 py-2 text-gray-900 text-center">
+                                            {sche.doctorId.fullname}
+                                        </td>
+                                        <td className="px-4 py-2 text-gray-900 text-center">
+                                            {sche.patientRecordId.fullname}
+                                        </td>
+                                        <td className="px-4 py-2 text-gray-900 text-center">
+                                            {sche.patientRecordId.phoneNumber}
+                                        </td>
+                                        <td className="px-4 py-2 text-gray-900 text-center">
+                                            {sche.patientRecordId.address}
+                                        </td>
+                                        <td className="px-4 py-2 text-gray-900 text-center">
+                                            {(() => {
+                                                const statusMapping = {
+                                                    S1: 'Chưa xác nhận',
+                                                    S2: 'Đã xác nhận',
+                                                    S3: 'Đã thanh toán',
+                                                    S4: 'Đã khám xong',
+                                                    S5: 'Đã hủy',
+                                                };
+                                                return statusMapping[sche.status] || 'Đang xử lý';
+                                            })()}
+                                        </td>
+                                        <td className="px-4 py-2">
+                                            <div className="flex items-center justify-center gap-3">
+                                                <button
+                                                    className="text-blue-500 text-2xl hover:text-blue-700"
+                                                    onClick={() => getDetailScheduleAPI(sche.bookingId)}
+                                                >
+                                                    <Edit2 className="w-7 h-7" />
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                ))
+                            ) : (
+                                <tr>
+                                    <td colSpan="8" className="text-center py-4">
+                                        Không có lịch hẹn nào
                                     </td>
                                 </tr>
-                            ))
-                        ) : (
-                            <tr>
-                                <td colSpan="8" className="text-center py-4">
-                                    Không có lịch hẹn nào
-                                </td>
-                            </tr>
-                        )}
-                    </tbody>
-                </table>
+                            )}
+                        </tbody>
+                    </table>
+                </div>
                 {/* Điều hướng phân trang */}
                 <div className="flex justify-end items-center space-x-4 mt-4">
                     <select

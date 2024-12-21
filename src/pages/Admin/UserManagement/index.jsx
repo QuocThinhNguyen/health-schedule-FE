@@ -11,6 +11,8 @@ import { AiOutlineEdit } from 'react-icons/ai';
 import { MdDeleteOutline } from 'react-icons/md';
 import { RiDeleteBin6Line } from 'react-icons/ri';
 import { FiEdit } from 'react-icons/fi';
+import { Edit2, Eye, Trash2, Search, XCircle } from 'lucide-react';
+
 const UserManagement = () => {
     const [isExpanded, setIsExpanded] = useState(true);
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -422,11 +424,11 @@ const UserManagement = () => {
             {/* Nội dung chính */}
             <div className="p-8">
                 {/* Tiêu đề */}
-                <h2 className="text-center text-2xl font-bold mb-4">QUẢN LÝ TÀI KHOẢN NGƯỜI DÙNG</h2>
+                <h2 className="text-center text-3xl font-bold mb-4">QUẢN LÝ TÀI KHOẢN NGƯỜI DÙNG</h2>
 
                 <div className="flex items-center justify-between mb-4">
                     {/* Thanh tìm kiếm */}
-                    <div className="flex items-center space-x-2">
+                    {/* <div className="flex items-center space-x-2">
                         <input
                             type="text"
                             placeholder="Tìm kiếm"
@@ -440,11 +442,33 @@ const UserManagement = () => {
                         >
                             🔍
                         </button>
+                    </div> */}
+
+                    <div className="relative flex-1 max-w-md">
+                        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-600 w-6 h-6" />
+                        <input
+                            type="text"
+                            placeholder="Tìm kiếm"
+                            value={filterValue}
+                            onChange={(e) => setFilterValue(e.target.value)}
+                            className="w-full pl-10 pr-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        />
                     </div>
 
                     {/* Nút Thêm */}
-                    <button
+                    {/* <button
                         className="flex items-center space-x-2 bg-gray-200 border border-gray-400 px-4 py-2 rounded"
+                        onClick={handleOpenModal}
+                    >
+                        <span>Thêm</span>
+                        <span>
+                            <FontAwesomeIcon icon={faPlus} />
+                        </span>
+                    </button> */}
+
+                    <button
+                        // className="flex items-center space-x-2 bg-gray-200 border border-gray-400 px-4 py-2 rounded"
+                        className="flex items-center gap-2 px-4 py-2 text-blue-600 bg-blue-50 rounded-md hover:bg-blue-100 border border-blue-600"
                         onClick={handleOpenModal}
                     >
                         <span>Thêm</span>
@@ -455,55 +479,59 @@ const UserManagement = () => {
                 </div>
 
                 {/* Bảng */}
-                <table className="w-full border border-gray-300">
-                    <thead className="bg-gray-200">
-                        <tr>
-                            <th className="border border-gray-300 px-4 py-2">STT</th>
-                            <th className="border border-gray-300 px-4 py-2">Hình ảnh</th>
-                            <th className="border border-gray-300 px-4 py-2">Tên</th>
-                            <th className="border border-gray-300 px-4 py-2">Email</th>
-                            <th className="border border-gray-300 px-4 py-2">Địa chỉ</th>
-                            <th className="border border-gray-300 px-4 py-2">Số điện thoại</th>
-                            <th className="border border-gray-300 px-4 py-2">Thao tác</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {users.map((user, index) => (
-                            <tr key={user.userId}>
-                                <td className="border border-gray-300 px-4 py-2 text-center">
-                                    {index + 1 + pagination.limit * (pagination.page - 1)}
-                                </td>
-                                <td className="border border-gray-300 px-4 py-2 text-center">
-                                    <div className="w-24 h-24 bg-gray-300 rounded-full mx-auto">
-                                        <img
-                                            src={`http://localhost:9000/uploads/${user.image}`}
-                                            alt="No Image"
-                                            className="w-full h-full object-cover"
-                                        />
-                                    </div>
-                                </td>
-                                <td className="border border-gray-300 px-4 py-2 text-center">{user.fullname}</td>
-                                <td className="border border-gray-300 px-4 py-2 text-center">{user.email}</td>
-                                <td className="border border-gray-300 px-4 py-2 text-center">{user.address}</td>
-                                <td className="border border-gray-300 px-4 py-2 text-center">{user.phoneNumber}</td>
-                                <td className="border border-gray-300 px-4 py-2 text-center space-x-8">
-                                    <button
-                                        className="text-blue-500 text-2xl hover:text-blue-700"
-                                        onClick={() => getDetailUserAPI(user.userId)}
-                                    >
-                                        <FiEdit />
-                                    </button>
-                                    <button
-                                        className="text-red-500 text-2xl hover:text-red-700"
-                                        onClick={() => handleDeleteClick(user.userId)}
-                                    >
-                                        <RiDeleteBin6Line />
-                                    </button>
-                                </td>
+                <div className="overflow-x-auto rounded-lg border">
+                    <table className="min-w-full divide-y divide-gray-200">
+                        <thead className="bg-gray-200">
+                            <tr>
+                                <th className="px-4 py-2 font-bold uppercase tracking-wider">STT</th>
+                                <th className="px-4 py-2 font-bold uppercase tracking-wider">Hình ảnh</th>
+                                <th className="px-4 py-2 font-bold uppercase tracking-wider">Tên</th>
+                                <th className="px-4 py-2 font-bold uppercase tracking-wider">Email</th>
+                                <th className="px-4 py-2 font-bold uppercase tracking-wider">Địa chỉ</th>
+                                <th className="px-4 py-2 font-bold uppercase tracking-wider">Số điện thoại</th>
+                                <th className="px-4 py-2 font-bold uppercase tracking-wider">Thao tác</th>
                             </tr>
-                        ))}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            {users.map((user, index) => (
+                                <tr key={user.userId} className={index % 2 === 0 ? 'bg-white' : 'bg-gray-100'}>
+                                    <td className="px-4 py-2 text-gray-900 text-center">
+                                        {index + 1 + pagination.limit * (pagination.page - 1)}
+                                    </td>
+                                    <td className="px-4 py-2 text-gray-900 text-center">
+                                        <div className="w-24 h-24 bg-gray-300 rounded-full mx-auto">
+                                            <img
+                                                src={`http://localhost:9000/uploads/${user.image}`}
+                                                alt="No Image"
+                                                className="w-full h-full object-cover"
+                                            />
+                                        </div>
+                                    </td>
+                                    <td className="px-4 py-2 text-gray-900 text-center">{user.fullname}</td>
+                                    <td className="px-4 py-2 text-gray-900 text-center">{user.email}</td>
+                                    <td className="px-4 py-2 text-gray-900 text-center">{user.address}</td>
+                                    <td className="px-4 py-2 text-gray-900 text-center">{user.phoneNumber}</td>
+                                    <td className="px-4 py-2">
+                                        <div className="flex items-center justify-center gap-3">
+                                            <button
+                                                className="text-blue-500 text-2xl hover:text-blue-700"
+                                                onClick={() => getDetailUserAPI(user.userId)}
+                                            >
+                                                <Edit2 className="w-7 h-7" />
+                                            </button>
+                                            <button
+                                                className="text-red-500 text-2xl hover:text-red-700"
+                                                onClick={() => handleDeleteClick(user.userId)}
+                                            >
+                                                <Trash2 className="w-7 h-7" />
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
                 {/* Điều hướng phân trang */}
                 <div className="flex justify-end items-center space-x-4 mt-4">
                     <select

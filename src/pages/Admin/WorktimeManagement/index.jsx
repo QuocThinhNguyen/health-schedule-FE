@@ -11,6 +11,7 @@ import { MdDeleteOutline } from 'react-icons/md';
 import { AiOutlineEdit } from 'react-icons/ai';
 import { RiDeleteBin6Line } from 'react-icons/ri';
 import { FiEdit } from 'react-icons/fi';
+import { Edit2, Eye, Trash2, Search, XCircle } from 'lucide-react';
 
 const WorktimeManagement = () => {
     const [isExpanded, setIsExpanded] = useState(true);
@@ -400,11 +401,11 @@ const WorktimeManagement = () => {
             {/* Nội dung chính */}
             <div className="p-8">
                 {/* Tiêu đề */}
-                <h2 className="text-center text-2xl font-bold mb-4">QUẢN LÝ CA LÀM VIỆC</h2>
+                <h2 className="text-center text-3xl font-bold mb-4">QUẢN LÝ CA LÀM VIỆC</h2>
 
                 <div className="flex items-center justify-between mb-4">
                     {/* Thanh tìm kiếm */}
-                    <div className="flex items-center space-x-2">
+                    {/* <div className="flex items-center space-x-2">
                         <input
                             type="text"
                             placeholder="Tìm kiếm"
@@ -418,6 +419,16 @@ const WorktimeManagement = () => {
                         >
                             🔍
                         </button>
+                    </div> */}
+                    <div className="relative flex-1 max-w-md">
+                        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-600 w-6 h-6" />
+                        <input
+                            type="text"
+                            placeholder="Tìm kiếm"
+                            value={filterValue}
+                            onChange={(e) => setFilterValue(e.target.value)}
+                            className="w-full pl-10 pr-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        />
                     </div>
                 </div>
                 <div className="flex items-center justify-between mb-4">
@@ -429,7 +440,8 @@ const WorktimeManagement = () => {
                     />
                     {/* Nút Thêm */}
                     <button
-                        className="flex items-center space-x-2 bg-gray-200 border border-gray-400 px-4 py-2 rounded"
+                        // className="flex items-center space-x-2 bg-gray-200 border border-gray-400 px-4 py-2 rounded"
+                        className="flex items-center gap-2 px-4 py-2 text-blue-600 bg-blue-50 rounded-md hover:bg-blue-100 border border-blue-600"
                         onClick={handleOpenModal}
                     >
                         <span>Thêm</span>
@@ -440,55 +452,61 @@ const WorktimeManagement = () => {
                 </div>
 
                 {/* Bảng */}
-                <table className="w-full border border-gray-300">
-                    <thead className="bg-gray-200">
-                        <tr>
-                            <th className="border border-gray-300 px-4 py-2">STT</th>
-                            <th className="border border-gray-300 px-4 py-2">Tên bác sĩ</th>
-                            <th className="border border-gray-300 px-4 py-2 min-w-48">Ngày khám</th>
-                            <th className="border border-gray-300 px-4 py-2">Ca khám</th>
-                            <th className="border border-gray-300 px-4 py-2 min-w-24">Thao tác</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {worktimes.map((item, index) => (
-                            <tr key={index} className="text-center">
-                                <td className="border border-gray-300 px-4 py-2 text-center">
-                                    {index + 1 + pagination.limit * (pagination.page - 1)}
-                                </td>
-                                <td className="border border-gray-300 px-4 py-2 text-center">
-                                    {item.doctorId.fullname}
-                                </td>
-                                <td className="border border-gray-300 px-4 py-2 text-center">
-                                    {item.scheduleDate.split('-').reverse().join('-')}
-                                </td>
-                                <td className="border border-gray-300 px-4 py-2 text-center">
-                                    <div className="grid grid-cols-3 gap-2">
-                                        {item.timeTypes.map((time, timeIndex) => (
-                                            <span key={timeIndex} className="bg-gray-100 px-2 py-1 rounded border">
-                                                {getTimeValue(time)} {/* Gọi hàm để lấy value */}
-                                            </span>
-                                        ))}
-                                    </div>
-                                </td>
-                                <td className="border border-gray-300 px-4 py-2 text-center space-x-8">
-                                    <button
-                                        className="text-blue-500 text-2xl hover:text-blue-700 mr-2"
-                                        onClick={() => getDetailWorkTimeAPI(item.doctorId.userId, item.scheduleDate)}
-                                    >
-                                        <FiEdit />
-                                    </button>
-                                    <button
-                                        className="text-red-500 text-2xl hover:text-red-700"
-                                        onClick={() => handleDeleteClick(item.doctorId.userId, item.scheduleDate)}
-                                    >
-                                        <RiDeleteBin6Line />
-                                    </button>
-                                </td>
+                <div className="overflow-x-auto rounded-lg border">
+                    <table className="min-w-full divide-y divide-gray-200">
+                        <thead className="bg-gray-200">
+                            <tr>
+                                <th className="px-4 py-2 font-bold uppercase tracking-wider">STT</th>
+                                <th className="px-4 py-2 font-bold uppercase tracking-wider">Tên bác sĩ</th>
+                                <th className="px-4 py-2 font-bold uppercase tracking-wider min-w-48">Ngày khám</th>
+                                <th className="px-4 py-2 font-bold uppercase tracking-wider">Ca khám</th>
+                                <th className="px-4 py-2 font-bold uppercase tracking-wider min-w-24">Thao tác</th>
                             </tr>
-                        ))}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            {worktimes.map((item, index) => (
+                                <tr key={index} className={index % 2 === 0 ? 'bg-white' : 'bg-gray-100'}>
+                                    <td className="px-4 py-2 text-gray-900 text-center">
+                                        {index + 1 + pagination.limit * (pagination.page - 1)}
+                                    </td>
+                                    <td className="px-4 py-2 text-gray-900 text-center">{item.doctorId.fullname}</td>
+                                    <td className="px-4 py-2 text-gray-900 text-center">
+                                        {item.scheduleDate.split('-').reverse().join('-')}
+                                    </td>
+                                    <td className="px-4 py-2 text-gray-900 text-center">
+                                        <div className="grid grid-cols-3 gap-2">
+                                            {item.timeTypes.map((time, timeIndex) => (
+                                                <span key={timeIndex} className="bg-gray-200 px-2 py-1 rounded border">
+                                                    {getTimeValue(time)} {/* Gọi hàm để lấy value */}
+                                                </span>
+                                            ))}
+                                        </div>
+                                    </td>
+                                    <td className="px-4 py-2">
+                                        <div className="flex items-center justify-center gap-3">
+                                            <button
+                                                className="text-blue-500 text-2xl hover:text-blue-700 mr-2"
+                                                onClick={() =>
+                                                    getDetailWorkTimeAPI(item.doctorId.userId, item.scheduleDate)
+                                                }
+                                            >
+                                                <Edit2 className="w-7 h-7" />
+                                            </button>
+                                            <button
+                                                className="text-red-500 text-2xl hover:text-red-700"
+                                                onClick={() =>
+                                                    handleDeleteClick(item.doctorId.userId, item.scheduleDate)
+                                                }
+                                            >
+                                                <Trash2 className="w-7 h-7" />
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
                 {/* Điều hướng phân trang */}
                 <div className="flex justify-end items-center space-x-4 mt-4">
                     <select
