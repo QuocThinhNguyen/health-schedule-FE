@@ -79,7 +79,7 @@ function Login() {
                 console.log(decodeToken.roleId);
 
                 if (decodeToken.roleId === 'R1') {
-                    navigate('/admin/clinic', { replace: true });
+                    navigate('/admin/dashboard', { replace: true });
                 } else if (decodeToken.roleId === 'R2') {
                     navigate('/doctor/', { replace: true });
                 } else if (decodeToken.roleId === 'R3') {
@@ -147,7 +147,7 @@ function Login() {
                 // loginContextGoogle(result.data.email, result.data.userId, result.data.roleId, result.access_token);
                 toast.success('Đăng nhập thành công');
                 if (result.data.roleId === 'R1') {
-                    navigate('/admin/clinic', { replace: true });
+                    navigate('/admin/dashboard', { replace: true });
                 } else if (result.data.roleId === 'R2') {
                     navigate('/doctor/', { replace: true });
                 } else if (result.data.roleId === 'R3') {
@@ -163,7 +163,7 @@ function Login() {
 
     return (
         <div className="flex items-center justify-center min-h-screen bg-[#e9ebee]">
-            <div className="w-full max-w-xl p-8 bg-white shadow-xl border rounded-2xl">
+            <div className="w-full max-w-3xl p-8 bg-white shadow-xl border rounded-2xl">
                 <div className="mb-6">
                     <h3 className="text-4xl font-bold text-gray-800 text-center">Đăng nhập</h3>
                 </div>
@@ -223,19 +223,25 @@ function Login() {
                         <div className="flex-grow border-t border-gray-300"></div>
                     </div>
 
-                    <div>
-                        <div className="mt-4 w-full h-[44px] flex items-center justify-center bg-white rounded-lg border-none">
+                    <div className="flex justify-between items-center">
+                        <div>
                             <GoogleLogin onSuccess={handleSuccess} onError={handleError} />
                         </div>
 
-                        <div className="mt-4">
+                        <div className="mt-[3px]">
                             <FacebookLogin
                                 appId={import.meta.env.VITE_APP_FB_CLIENT_ID}
                                 fields="name,email,picture"
                                 callback={handleResponseFacebook}
                                 cssClass="custom-facebook-button"
-
-                                // textButton="Đăng nhập với Facebook"
+                                textButton={
+                                    <div className="facebook-button-text">
+                                        <span className="facebook-icon"></span>
+                                        <span className="flex items-center justify-center h-full w-full">
+                                            Đăng nhập bằng Facebook
+                                        </span>
+                                    </div>
+                                }
                             />
                         </div>
                     </div>

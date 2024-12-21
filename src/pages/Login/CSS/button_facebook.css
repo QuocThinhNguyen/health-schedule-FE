@@ -4,26 +4,34 @@
     justify-content: center;
     background-color: #2880f3;
     color: white;
-    font-size: 15px;
-    font-weight: bold;
+    font-size: 13px;
+    font-weight: 500;
     border: none;
-    border-radius: 5px;
-    padding: 10px 20px;
+    border-radius: 3px;
+    padding: 0 15px;
     cursor: pointer;
-    width: 100%; /* Hoặc tuỳ chỉnh theo thiết kế */
+    width: 100%;
+    height: 40px;
+    position: relative;
 }
 
 .custom-facebook-button:hover {
     background-color: #155ab6;
 }
 
-.custom-facebook-button::before {
-    content: '';
-    background-image: url('https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg'); /* Link ảnh icon Facebook */
+.custom-facebook-button .facebook-icon {
+    background-image: url('https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_(2019).svg');
     background-size: cover;
     width: 20px;
     height: 20px;
     display: inline-block;
-    position: absolute;
-    left: 580px; /* Điều chỉnh vị trí icon */
+    margin-right: 8px;
+    flex-shrink: 0;
+    position: relative;
+}
+
+.facebook-button-text {
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
