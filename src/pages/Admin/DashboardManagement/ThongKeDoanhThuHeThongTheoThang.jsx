@@ -10,31 +10,45 @@ import {
     Legend,
     PointElement,
 } from 'chart.js';
+import { useEffect, useState } from 'react';
 import { Bar } from 'react-chartjs-2';
+import { axiosInstance } from '~/api/apiRequest';
 Chart.register(ArcElement, BarElement, LineElement, CategoryScale, LinearScale, Title, Tooltip, Legend, PointElement);
 
 function ThongKeDoanhThuHeThongTheoThang() {
+    const [labels, setLabels] = useState([]);
+    const [values, setValues] = useState([]);
+
+    useEffect(() => {
+        const fetchRevenueChart = async () => {
+            try {
+                const response = await axiosInstance.get('/admin/revenue-chart');
+                if (response.status === 200) {
+                    console.log('response', response.data);
+                    setLabels(response.data.labels);
+                    setValues(response.data.values);
+                } else {
+                    console.error('Failed to fetch data:', response.message);
+                    setLabels([]);
+                    setValues([]);
+                }
+            } catch (error) {
+                console.error('Error fetching appointments:', error);
+                setLabels([]);
+                setValues([]);
+            }
+        };
+        fetchRevenueChart();
+    }, []);
+
     return (
         <Bar
             data={{
-                labels: [
-                    'Tháng 1',
-                    'Tháng 2',
-                    'Tháng 3',
-                    'Tháng 4',
-                    'Tháng 5',
-                    'Tháng 6',
-                    'Tháng 7',
-                    'Tháng 8',
-                    'Tháng 9',
-                    'Tháng 10',
-                    'Tháng 11',
-                    'Tháng 12',
-                ],
+                labels: labels,
                 datasets: [
                     {
                         label: 'VNĐ',
-                        data: [120, 150, 180, 200, 170, 190, 220, 210, 0, 0, 10, 0],
+                        data: values,
                         backgroundColor: 'rgba(54, 162, 235, 0.6)',
                         borderColor: 'rgba(54, 162, 235, 1)',
                         borderWidth: 1,

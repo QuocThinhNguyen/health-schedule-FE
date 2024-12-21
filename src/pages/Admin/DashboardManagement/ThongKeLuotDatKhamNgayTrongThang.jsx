@@ -11,21 +11,41 @@ import {
     Legend,
     PointElement,
 } from 'chart.js';
+import { useEffect, useState } from 'react';
+import { axiosInstance } from '~/api/apiRequest';
 Chart.register(ArcElement, BarElement, LineElement, CategoryScale, LinearScale, Title, Tooltip, Legend, PointElement);
 function ThongKeLuotDatKhamNgayTrongThang() {
-    const currentDate = new Date();
-    const currentYear = currentDate.getFullYear();
-    const currentMonth = currentDate.getMonth();
-    const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+    const [labels, setLabels] = useState([]);
+    const [values, setValues] = useState([]);
+
+    useEffect(() => {
+        const fetchBookingDayInMonthChart = async () => {
+            try {
+                const response = await axiosInstance.get('/admin/booking-dayinmonth-chart');
+                if (response.status === 200) {
+                    console.log('response', response.data);
+                    setLabels(response.data.labels);
+                    setValues(response.data.values);
+                } else {
+                    console.error('Failed to fetch data:', response.message);
+                    setLabels([]);
+                    setValues([]);
+                }
+            } catch (error) {
+                console.error('Error fetching appointments:', error);
+                setLabels([]);
+                setValues([]);
+            }
+        };
+        fetchBookingDayInMonthChart();
+    }, []);
+
     const dayData = {
-        labels: Array.from({ length: daysInMonth }, (_, i) => `${i + 1}`),
+        labels: labels,
         datasets: [
             {
                 label: 'Số lượt đặt khám',
-                data: [
-                    10, 15, 20, 18, 0, 25, 20, 12, 28, 35, 22, 25, 30, 29, 24, 22, 31, 33, 27, 25, 20, 19, 18, 24, 29,
-                    35, 37, 40, 42, 38, 35,
-                ],
+                data: values,
                 borderColor: 'rgba(255, 0, 0, 1)',
                 backgroundColor: 'rgba(75, 192, 192, 0.2)', // Màu nền của các điểm dữ liệu
                 pointBackgroundColor: 'rgba(255, 0, 0, 1)', // Màu nền của các điểm dữ liệu
@@ -85,6 +105,15 @@ function ThongKeLuotDatKhamNgayTrongThang() {
                 title: {
                     display: true,
                     text: 'Số lượt đặt khám',
+                },
+                ticks: {
+                    beginAtZero: true,
+                    stepSize: 1,
+                    callback: function (value) {
+                        if (Number.isInteger(value)) {
+                            return value;
+                        }
+                    },
                 },
             },
         },
