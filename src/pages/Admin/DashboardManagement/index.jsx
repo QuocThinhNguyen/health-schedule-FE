@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
 import ThongKeLuotDatKhamNgayTrongThang from './ThongKeLuotDatKhamNgayTrongThang';
 import ThongKeLuotDatKhamThangTrongNam from './ThongKeLuotDatKhamThangTrongNam';
@@ -22,7 +22,6 @@ function Dashboard() {
             try {
                 const response = await axiosInstance.get('/admin/homepage');
                 if (response.status === 200) {
-                    console.log('response', response.data);
                     setCounts({
                         countClinic: response.data.totalClinics,
                         countDoctor: response.data.totalDoctors,
@@ -41,36 +40,39 @@ function Dashboard() {
         fetchStatistics();
     }, []);
 
-    const ITEMS = [
-        {
-            id: 1,
-            key: 'Tổng số bệnh viện',
-            value: count.countClinic,
-            backgroundColor: 'bg-[linear-gradient(45deg,_rgb(88,86,214)_0%,_rgb(111,103,219)_100%)]',
-            icon: <FaUserDoctor />,
-        },
-        {
-            id: 2,
-            key: 'Tổng số bác sĩ',
-            value: count.countDoctor,
-            backgroundColor: 'bg-[linear-gradient(45deg,_rgb(51,153,255)_0%,_rgb(41,130,204)_100%)]',
-            icon: <FaHospital />,
-        },
-        {
-            id: 3,
-            key: 'Người dùng mới tháng này',
-            value: count.countUser,
-            backgroundColor: 'bg-[linear-gradient(45deg,_rgb(249,177,21)_0%,_rgb(246,150,11)_100%)]',
-            icon: <FaUser />,
-        },
-        {
-            id: 4,
-            key: 'Số ca khám tháng này',
-            value: count.countBooking,
-            backgroundColor: 'bg-[linear-gradient(45deg,_rgb(229,83,83)_0%,_rgb(217,55,55)_100%)]',
-            icon: <AiOutlineSchedule />,
-        },
-    ];
+    const ITEMS = useMemo(
+        () => [
+            {
+                id: 1,
+                key: 'Tổng số bệnh viện',
+                value: count.countClinic,
+                backgroundColor: 'bg-[linear-gradient(45deg,_rgb(88,86,214)_0%,_rgb(111,103,219)_100%)]',
+                icon: <FaUserDoctor />,
+            },
+            {
+                id: 2,
+                key: 'Tổng số bác sĩ',
+                value: count.countDoctor,
+                backgroundColor: 'bg-[linear-gradient(45deg,_rgb(51,153,255)_0%,_rgb(41,130,204)_100%)]',
+                icon: <FaHospital />,
+            },
+            {
+                id: 3,
+                key: 'Người dùng mới tháng này',
+                value: count.countUser,
+                backgroundColor: 'bg-[linear-gradient(45deg,_rgb(249,177,21)_0%,_rgb(246,150,11)_100%)]',
+                icon: <FaUser />,
+            },
+            {
+                id: 4,
+                key: 'Số ca khám tháng này',
+                value: count.countBooking,
+                backgroundColor: 'bg-[linear-gradient(45deg,_rgb(229,83,83)_0%,_rgb(217,55,55)_100%)]',
+                icon: <AiOutlineSchedule />,
+            },
+        ],
+        [count],
+    );
 
     return (
         <>
