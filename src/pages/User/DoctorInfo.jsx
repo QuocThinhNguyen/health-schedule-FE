@@ -188,8 +188,6 @@ function DoctorInfo() {
         fetchFeedbacks();
     }, [doctorId]);
 
- 
-
     return (
         <div className="max-w-fit mx-auto p-6 mt-24 ">
             {/* Doctor Info Section */}

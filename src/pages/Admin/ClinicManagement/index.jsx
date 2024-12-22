@@ -1,16 +1,13 @@
 import React, { useState, useEffect, useRef, useContext } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
-import { AiOutlineEdit } from 'react-icons/ai';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { UserContext } from '~/context/UserContext';
 import { axiosInstance } from '~/api/apiRequest';
 import { toast } from 'react-toastify';
-import { MdDeleteOutline } from 'react-icons/md';
-import { FiEdit } from 'react-icons/fi';
-import { RiDeleteBin6Line } from 'react-icons/ri';
 import CustomTinyMCE from '~/components/CustomTinyMCE';
 import { Edit2, Eye, Trash2, Search, XCircle } from 'lucide-react';
+import defaultImage from '../../../assets/img/addImage.png';
 
 const ClinicManagement = () => {
     const [isExpanded, setIsExpanded] = useState(true);
@@ -134,7 +131,6 @@ const ClinicManagement = () => {
             );
 
             if (response.status === 200) {
-                //console.log('Fetched users:', response.data);
                 setClinics(response.data);
                 if (response.totalPages === 0) {
                     response.totalPages = 1;
@@ -640,7 +636,7 @@ const ClinicManagement = () => {
                                             onClick={() => imageInputRef.current.click()}
                                         >
                                             <img
-                                                src={clinic.image}
+                                                src={clinic.image || defaultImage}
                                                 alt="No image"
                                                 className="w-full h-full object-cover"
                                             />

@@ -2,16 +2,11 @@ import React, { useState, useEffect, useRef, useContext } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHospital, faGauge, faClock, faPlus, faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { IoMenu } from 'react-icons/io5';
 import { UserContext } from '~/context/UserContext';
 import { axiosInstance } from '~/api/apiRequest';
-import Logo from '~/components/Logo';
 import { toast } from 'react-toastify';
-import { AiOutlineEdit } from 'react-icons/ai';
-import { MdDeleteOutline } from 'react-icons/md';
-import { RiDeleteBin6Line } from 'react-icons/ri';
-import { FiEdit } from 'react-icons/fi';
 import { Edit2, Eye, Trash2, Search, XCircle } from 'lucide-react';
+import defaultImage from '../../../assets/img/addImage.png';
 
 const UserManagement = () => {
     const [isExpanded, setIsExpanded] = useState(true);
@@ -639,7 +634,7 @@ const UserManagement = () => {
                                             onClick={() => imageInputRef.current.click()}
                                         >
                                             <img
-                                                src={addUser.image}
+                                                src={addUser.image || defaultImage}
                                                 alt="No Image"
                                                 className="w-full h-full object-cover"
                                             />

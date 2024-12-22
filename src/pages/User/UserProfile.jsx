@@ -94,6 +94,9 @@ function DoctorProfile() {
             if (response.status === 200) {
                 // Check a success code if the backend provides it
                 toast.success('Cập nhật thông tin thành công');
+                setTimeout(() => {
+                    window.location.reload();
+                }, 2000);
             } else {
                 toast.warn(response.data.message || 'Đã xảy ra vấn đề');
             }

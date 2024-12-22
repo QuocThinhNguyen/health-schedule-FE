@@ -66,7 +66,11 @@ const UserProvider = ({ children }) => {
             role: '',
             auth: false,
         });
-        navigate('/');
+        if (window.location.pathname !== '/') {
+            navigate('/');
+        } else if (window.location.pathname === '/') {
+            window.scrollTo(0, 0);
+        }
         toast.success('Đăng xuất thành công');
     };
 
