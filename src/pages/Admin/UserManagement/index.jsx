@@ -822,10 +822,11 @@ const UserManagement = () => {
                                                 className={`border w-full px-2 py-1 rounded ${
                                                     validationErrors.password ? 'border-red-500' : 'border-gray-400'
                                                 }`}
+                                                disabled
                                             />
                                             <span
                                                 onClick={() => toggleShowPassword()} // Toggle trạng thái showPassword
-                                                className="absolute right-2 top-1/2 transform -translate-y-1/2 cursor-pointer text-xl text-gray-500"
+                                                className="absolute right-2 top-1/2 transform -translate-y-1/2 cursor-pointer text-xl text-gray-500 pointer-events-none"
                                             >
                                                 <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
                                             </span>
