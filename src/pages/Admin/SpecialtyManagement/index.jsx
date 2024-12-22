@@ -2,16 +2,11 @@ import React, { useState, useEffect, useRef, useContext } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHospital, faGauge, faClock, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { IoMenu } from 'react-icons/io5';
 import { UserContext } from '~/context/UserContext';
 import { axiosInstance } from '~/api/apiRequest';
-import Logo from '~/components/Logo';
 import { toast } from 'react-toastify';
-import { AiOutlineEdit } from 'react-icons/ai';
-import { MdDeleteOutline } from 'react-icons/md';
-import { FiEdit } from 'react-icons/fi';
-import { RiDeleteBin6Line } from 'react-icons/ri';
 import { Edit2, Eye, Trash2, Search, XCircle } from 'lucide-react';
+import defaultImage from '../../../assets/img/addImage.png';
 
 const SpecialtyManagement = () => {
     const [isExpanded, setIsExpanded] = useState(true);
@@ -564,7 +559,7 @@ const SpecialtyManagement = () => {
                                             onClick={() => imageInputRef.current.click()}
                                         >
                                             <img
-                                                src={specialty.image || 'https://via.placeholder.com/150'}
+                                                src={specialty.image || defaultImage}
                                                 alt="Current Specialty"
                                                 className="w-full h-full object-cover"
                                             />

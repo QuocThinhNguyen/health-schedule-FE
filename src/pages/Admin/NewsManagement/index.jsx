@@ -1,15 +1,14 @@
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState, useEffect, useRef, useContext } from 'react';
-import { FiEdit } from 'react-icons/fi';
-import { RiDeleteBin6Line } from 'react-icons/ri';
 import { axiosClient, axiosInstance } from '~/api/apiRequest';
 import { format } from 'date-fns';
 import { IoCloseOutline } from 'react-icons/io5';
 import { toast } from 'react-toastify';
 import { UserContext } from '~/context/UserContext';
 import CustomTinyMCE from '~/components/CustomTinyMCE';
-import { Edit2, Eye, Trash2, Search, XCircle } from 'lucide-react';
+import { Edit2, Trash2, Search, XCircle } from 'lucide-react';
+import defaultImage from '../../../assets/img/addImage.png';
 
 function NewsManagement() {
     const [posts, setPosts] = useState([]);
@@ -36,7 +35,7 @@ function NewsManagement() {
     const [showConfirm, setShowConfirm] = useState(false);
     const [filterValue, setFilterValue] = useState('');
 
-    const [pagination, setPagination] = useState({ page: 1, limit: 12, totalPages: 1 });
+    const [pagination, setPagination] = useState({ page: 1, limit: 7, totalPages: 1 });
 
     const { user } = useContext(UserContext);
 
@@ -423,9 +422,9 @@ function NewsManagement() {
                     value={pagination.limit}
                     onChange={handleLimitChange}
                 >
-                    <option value="12">12</option>
-                    <option value="20">20</option>
-                    <option value="25">25</option>
+                    <option value="7">7</option>
+                    <option value="14">14</option>
+                    <option value="21">21</option>
                 </select>
             </div>
             <div className="flex justify-end items-center space-x-4 mt-4">
@@ -492,7 +491,11 @@ function NewsManagement() {
                                         className="w-40 h-40 border rounded overflow-hidden cursor-pointer flex items-center justify-center"
                                         onClick={() => imageInputRef.current.click()}
                                     >
-                                        <img src={post.image} alt="No image" className="w-full h-full object-cover" />
+                                        <img
+                                            src={post.image || defaultImage}
+                                            alt="No image"
+                                            className="w-full h-full object-cover"
+                                        />
                                     </div>
                                     <input //  Nút để tải lên hình ảnh mới
                                         type="file"

@@ -128,6 +128,9 @@ const AppointmentManagement = () => {
             if (response.status === 200) {
                 toast.success('Hủy lịch hẹn thành công.');
                 setAppointments((prev) => prev.filter((appointment) => appointment.bookingId !== selectedBookingId));
+                setTimeout(() => {
+                    window.location.reload();
+                }, 2000);
             } else {
                 toast.error('Hủy lịch hẹn thất bại.');
             }
