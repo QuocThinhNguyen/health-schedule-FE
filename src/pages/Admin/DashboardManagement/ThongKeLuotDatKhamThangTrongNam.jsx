@@ -11,7 +11,7 @@ import {
     Legend,
     PointElement,
 } from 'chart.js';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { axiosInstance } from '~/api/apiRequest';
 Chart.register(ArcElement, BarElement, LineElement, CategoryScale, LinearScale, Title, Tooltip, Legend, PointElement);
 function ThongKeLuotDatKhamThangTrongNam() {
@@ -39,7 +39,7 @@ function ThongKeLuotDatKhamThangTrongNam() {
         fetchBookingMonthInYearChart();
     }, []);
 
-    const monthData = {
+    const monthData = useMemo(() => ({
         labels: labels,
         datasets: [
             {
@@ -50,9 +50,9 @@ function ThongKeLuotDatKhamThangTrongNam() {
                 borderWidth: 1,
             },
         ],
-    };
+    }), [labels, values]);
 
-    const monthOptions = {
+    const monthOptions= useMemo(() => ({
         responsive: true,
         plugins: {
             title: {
@@ -90,7 +90,7 @@ function ThongKeLuotDatKhamThangTrongNam() {
                 right: 10,
             },
         },
-    };
+    }), []);
     return <Bar data={monthData} options={monthOptions} />;
 }
 export default ThongKeLuotDatKhamThangTrongNam;

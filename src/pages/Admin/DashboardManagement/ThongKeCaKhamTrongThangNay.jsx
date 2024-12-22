@@ -101,6 +101,18 @@ function ThongKeCaKhamTrongThangNay() {
                         display: true,
                         text: 'Biểu đồ ca khám trong tháng',
                     },
+                    tooltip: {
+                        callbacks: {
+                            title: function () {
+                                return '';
+                            },
+                            label: function (context) {
+                                const label = context.label || '';
+                                const value = context.raw || 0;
+                                return `${label}: ${value}`;
+                            },
+                        },
+                    },
                     centerText: true, // Kích hoạt plugin tùy chỉnh cho biểu đồ này
                 },
                 maintainAspectRatio: false,
