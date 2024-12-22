@@ -73,7 +73,6 @@ function ThongKeLuotDatKhamNgayTrongThang() {
 
     const dayOptions = useMemo(
         () => ({
-            responsive: true,
             plugins: {
                 title: {
                     display: true,
@@ -103,6 +102,7 @@ function ThongKeLuotDatKhamNgayTrongThang() {
                 },
             },
             maintainAspectRatio: false,
+            responsive: true,
             scales: {
                 x: {
                     title: {
