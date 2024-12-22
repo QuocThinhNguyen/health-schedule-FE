@@ -36,9 +36,10 @@ const refreshToken = async () => {
         const response = await axiosClient.post('/refresh_token');
         console.log('refresh_token:', response);
 
-        if (response.status === 'OK') return response.access_token;
-        else {
-            console.error('Error: ', response.message);
+        if (response.status === 200) {
+            return response.access_token;
+        } else {
+            console.error('Lỗi: ', response.message);
             return null;
         }
     } catch (error) {
