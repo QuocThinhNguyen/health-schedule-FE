@@ -8,7 +8,8 @@ function formatDate(dateString) {
         minute: '2-digit',
     });
 
-    return `${formattedDate}, ${formattedTime}`;
+    // return `${formattedDate}, ${formattedTime}`;
+    return `${formattedDate}`;
 }
 
 export default formatDate;

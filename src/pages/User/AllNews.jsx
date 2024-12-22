@@ -88,8 +88,8 @@ function AllNews() {
                                     <span className="flex items-center font-semibold gap-2">
                                         <MdOutlineDateRange />
                                         <span>{formatDate(posts[0].updateAt)}</span>
-                                        <span> - </span>
-                                        <span>{posts[0].userId.fullname}</span>
+                                        {/* <span> - </span>
+                                        <span>{posts[0].userId.fullname}</span> */}
                                     </span>
                                 </div>
                                 <button className="flex items-center text-3xl mt-4 font-semibold text-blue-500">
@@ -122,8 +122,8 @@ function AllNews() {
                                             <p className="flex items-center text-xl gap-2">
                                                 <MdOutlineDateRange />
                                                 <span>{formatDate(post.updateAt)}</span>
-                                                <span>-</span>
-                                                <span>{post.userId.fullname}</span>
+                                                {/* <span>-</span>
+                                                <span>{post.userId.fullname}</span> */}
                                             </p>
                                         </div>
                                     </div>
@@ -160,8 +160,8 @@ function AllNews() {
                                         <p className="flex items-center text-xl gap-2">
                                             <MdOutlineDateRange />
                                             <span>{formatDate(post.updateAt)}</span>
-                                            <span> - </span>
-                                            <span>{post.userId.fullname}</span>
+                                            {/* <span> - </span>
+                                            <span>{post.userId.fullname}</span> */}
                                         </p>
                                     </div>
                                     <button className="flex items-center font-semibold text-blue-500">
