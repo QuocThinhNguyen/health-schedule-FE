@@ -399,7 +399,7 @@ function Home() {
                 </div>
             </div>
 
-            <div className="w-full bg-gradient-to-b from-[#f0f7ff] to-[#fff] pt-20 pb-12">
+            <div className="w-full bg-[rgb(232,244,253)] pt-20 pb-12">
                 <div className="container mx-auto pb-8">
                     <div className="max-w-screen-xl mx-auto">
                         <h1 className="text-3xl font-bold text-center mb-12 text-[28px]">CHUYÊN KHOA</h1>
