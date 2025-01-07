@@ -163,7 +163,7 @@ function Login() {
 
     return (
         <div className="flex items-center justify-center min-h-screen bg-[#e9ebee]">
-            <div className="w-full max-w-3xl p-8 bg-white shadow-xl border rounded-2xl">
+            <div className="w-full max-w-2xl p-8 bg-white shadow-xl border rounded-2xl">
                 <div className="mb-6">
                     <h3 className="text-4xl font-bold text-gray-800 text-center">Đăng nhập</h3>
                 </div>
@@ -237,8 +237,11 @@ function Login() {
                                 textButton={
                                     <div className="facebook-button-text">
                                         <span className="facebook-icon"></span>
-                                        <span className="flex items-center justify-center h-full w-full">
-                                            Đăng nhập bằng Facebook
+                                        <span
+                                            className="flex items-center justify-center h-full w-full font-[500]"
+                                            style={{ fontFamily: '"Google Sans", arial, sans-serif' }}
+                                        >
+                                            Sign in with Facebook
                                         </span>
                                     </div>
                                 }
