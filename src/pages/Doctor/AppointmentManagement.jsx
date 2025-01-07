@@ -134,7 +134,7 @@ function PatientManagement() {
                             <th className="px-4 py-2 font-bold tracking-wider">Địa chỉ</th>
                             <th className="px-4 py-2 font-bold tracking-wider">Số điện thoại</th>
                             <th className="px-4 py-2 font-bold tracking-wider">Giới tính</th>
-                            <th className="px-4 py-2 font-bold tracking-wider">Lý do khám</th>
+                            <th className="px-4 py-2 font-bold tracking-wider">Tình trạng bệnh</th>
                             <th className="px-4 py-2 font-bold tracking-wider">Trạng thái</th>
                             <th className="px-4 py-2 font-bold tracking-wider">Hành động</th>
                         </tr>
