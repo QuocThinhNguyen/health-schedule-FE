@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { MapPin, Search, Clock, DollarSign } from 'lucide-react';
-import axios from 'axios';
-import { axiosInstance } from '~/api/apiRequest';
+import { axiosClient, axiosInstance } from '~/api/apiRequest';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { LiaStethoscopeSolid } from 'react-icons/lia';
 import { BsCoin } from 'react-icons/bs';
@@ -15,6 +14,8 @@ function AllDoctor() {
     const navigate = useNavigate();
     const [pagination, setPagination] = useState({ page: 1, limit: 6, totalPages: 1 });
     const [allDoctors, setAllDoctors] = useState([]); // Dữ liệu tất cả bác sĩ
+    const [academicRanksAndDegreess, setAcademicRanksAndDegreess] = useState([]);
+
     const { state } = useLocation();
     // Chuyển trang
     const handlePageChange = async (newPage) => {
@@ -27,8 +28,6 @@ function AllDoctor() {
         const newLimit = parseInt(e.target.value, 10);
         setPagination((prev) => ({ ...prev, limit: newLimit, page: 1 }));
     };
-
-    console.log('STATEEEE', state);
 
     let getClinicId = '';
     let getSpecialtyId = '';
@@ -48,9 +47,6 @@ function AllDoctor() {
                 const response = await axiosInstance.get(
                     `/doctor?query=${searchQuery}&page=${pagination.page}&limit=${pagination.limit}&clinicId=${getClinicId}&specialtyId=${getSpecialtyId}`,
                 );
-                console.log('page', pagination.page);
-                console.log(pagination.limit);
-                console.log('response:', response);
                 if (response.status === 200) {
                     setDoctors(response.data);
                     if (response.totalPages === 0) {
@@ -72,8 +68,23 @@ function AllDoctor() {
         fetchDoctors();
     }, [pagination, searchQuery]);
 
-    console.log('alldoctors:', allDoctors);
-    console.log('doctors:', doctors);
+    useEffect(() => {
+        const getDropdownAcademicRanksAndDegrees = async () => {
+            try {
+                const response = await axiosClient.get(`/doctor/academic-ranks-and-degrees`);
+                if (response.status === 200) {
+                    setAcademicRanksAndDegreess(response.data);
+                } else {
+                    console.error('No academic ranks and degrees are found:', response.message);
+                    setAcademicRanksAndDegreess([]);
+                }
+            } catch (error) {
+                console.error('Error fetching academic ranks and degrees:', error);
+                setAcademicRanksAndDegreess([]);
+            }
+        };
+        getDropdownAcademicRanksAndDegrees();
+    }, []);
 
     // const filteredDoctors = doctors.filter(
     //     (doctor) =>
@@ -88,22 +99,6 @@ function AllDoctor() {
     const handleBooking = (doctorId) => {
         // Điều hướng đến trang với ID bác sĩ
         navigate(`/bac-si/get?id=${doctorId}`);
-    };
-
-    const positions = ['P0', 'P1', 'P2', 'P3']; // Mảng các giá trị cần so sánh
-
-    const getPositionLabel = (position) => {
-        if (position === 'P0') {
-            return 'Bác sĩ';
-        } else if (position === 'P1') {
-            return 'Trưởng khoa';
-        } else if (position === 'P2') {
-            return 'Giáo sư';
-        } else if (position === 'P3') {
-            return 'Phó giáo sư';
-        } else {
-            return ''; // Giá trị mặc định nếu không khớp với bất kỳ giá trị nào trong mảng
-        }
     };
 
     return (
@@ -151,7 +146,10 @@ function AllDoctor() {
                             <div className="flex justify-between flex-col items-start">
                                 <div className="flex gap-2">
                                     <h4 className="font-bold text-blue-600 text-3xl">
-                                        {getPositionLabel(doctor.position)}
+                                        {academicRanksAndDegreess.find(
+                                            (academicRanksAndDegrees) =>
+                                                academicRanksAndDegrees.keyMap === doctor.position,
+                                        )?.valueVi || 'Chưa xác định'}
                                     </h4>
                                     <h4 className="font-semibold text-blue-600 text-3xl">{doctor.doctorId.fullname}</h4>
                                 </div>
