@@ -11,6 +11,7 @@ function Home() {
     const [facilities, setFacilities] = useState([]);
     const [doctors, setDoctors] = useState([]);
     const [specialties, setSpecialties] = useState([]);
+    const [academicRanksAndDegreess, setAcademicRanksAndDegreess] = useState([]);
     const navigate = useNavigate();
 
     console.log('doctor', doctors);
@@ -25,7 +26,7 @@ function Home() {
     ];
 
     useEffect(() => {
-        const fetcSpecialty = async () => {
+        const fetchSpecialty = async () => {
             try {
                 const response = await axiosClient.get(`/specialty/dropdown`);
                 if (response.status === 200) {
@@ -36,7 +37,7 @@ function Home() {
             }
         };
 
-        fetcSpecialty();
+        fetchSpecialty();
     }, []);
 
     useEffect(() => {
@@ -90,6 +91,25 @@ function Home() {
             }
         };
         fetchDoctors();
+    }, []);
+
+    useEffect(() => {
+        const getDropdownAcademicRanksAndDegrees = async () => {
+            try {
+                const response = await axiosClient.get(`/doctor/academic-ranks-and-degrees`);
+
+                if (response.status === 200) {
+                    setAcademicRanksAndDegreess(response.data);
+                } else {
+                    console.error('No academic ranks and degrees are found:', response.message);
+                    setAcademicRanksAndDegreess([]);
+                }
+            } catch (error) {
+                console.error('Error fetching academic ranks and degrees:', error);
+                setAcademicRanksAndDegreess([]);
+            }
+        };
+        getDropdownAcademicRanksAndDegrees();
     }, []);
 
     //Slider
@@ -146,22 +166,6 @@ function Home() {
                 clinicId,
             },
         });
-    };
-
-    const positions = ['P0', 'P1', 'P2', 'P3']; // Mảng các giá trị cần so sánh
-
-    const getPositionLabel = (position) => {
-        if (position === 'P0') {
-            return 'Bác sĩ';
-        } else if (position === 'P1') {
-            return 'Trưởng khoa';
-        } else if (position === 'P2') {
-            return 'Giáo sư';
-        } else if (position === 'P3') {
-            return 'Phó giáo sư';
-        } else {
-            return ''; // Giá trị mặc định nếu không khớp với bất kỳ giá trị nào trong mảng
-        }
     };
 
     const handleGetDoctor = (doctorId, doctorName) => {
@@ -345,7 +349,10 @@ function Home() {
                                             <div className="flex flex-col justify-between gap-4 w-full text-[#003553]">
                                                 <div>
                                                     <h3 className="text-3xl font-normal text-left">
-                                                        {getPositionLabel(doctor.position)}
+                                                        {academicRanksAndDegreess.find(
+                                                            (academicRanksAndDegrees) =>
+                                                                academicRanksAndDegrees.keyMap === doctor.position,
+                                                        )?.valueVi || 'Chưa xác định'}
                                                     </h3>
                                                     <h3 className="text-4xl font-semibold text-left truncate">
                                                         {doctor.fullname}
