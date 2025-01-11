@@ -22,7 +22,6 @@ function DoctorInfo() {
     const doctorId = searchParams.get('id') || state.doctorId;
     const navigate = useNavigate();
 
-    // console.log('Doctor info: ', doctorInfo);
     useEffect(() => {
         const fetchDoctorInfo = async () => {
             try {
@@ -178,7 +177,7 @@ function DoctorInfo() {
         const fetchFeedbacks = async () => {
             try {
                 const response = await axiosInstance.get(`/feedback/${doctorId}`);
-                if (response.status === 200) {
+                if (response.status === 200) {       
                     setFeedbacks(response.data);
                 }
             } catch (error) {

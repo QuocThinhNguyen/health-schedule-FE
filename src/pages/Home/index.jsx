@@ -6,6 +6,8 @@ import { CiHospital1 } from 'react-icons/ci';
 import { BsCoin } from 'react-icons/bs';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { axiosClient } from '~/api/apiRequest';
+import { IoIosStar } from 'react-icons/io';
+import { FaUser } from 'react-icons/fa';
 
 function Home() {
     const [facilities, setFacilities] = useState([]);
@@ -79,6 +81,8 @@ function Home() {
                         price: item.price,
                         image: item.doctorId.image,
                         userId: item.doctorId.userId,
+                        rating: item.avgRating,
+                        bookingCount: item.bookingCount,
                     }));
                     setDoctors(formattedData);
                 } else {
@@ -358,6 +362,16 @@ function Home() {
                                                         {doctor.fullname}
                                                     </h3>
                                                 </div>
+                                                <div className="flex justify-between items-center">
+                                                    <p className="flex items-center justify-center gap-1">
+                                                        <IoIosStar className="text-yellow-500" />
+                                                        {doctor.rating}
+                                                    </p>
+                                                    <p className="flex items-center justify-center gap-1">
+                                                        Lượt khám: {doctor.bookingCount}
+                                                        <FaUser className="text-yellow-500" />
+                                                    </p>
+                                                </div>
                                                 <div className="flex flex-col gap-2 leading-[20px]">
                                                     <div className="flex items-start gap-2">
                                                         <LiaStethoscopeSolid className="mt-1" />
@@ -367,7 +381,7 @@ function Home() {
                                                         <BsCoin className="mt-1" />
                                                         {doctor.price}
                                                     </div>
-                                                    <div className="flex items-start gap-2">
+                                                    <div className="flex items-start gap-2 h-[37.5px]">
                                                         <CiHospital1 className="mt-1" />
                                                         {doctor.clinicName}
                                                     </div>
