@@ -5,7 +5,7 @@ import { UserContext } from '~/context/UserContext';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import ConfirmationModal from '~/components/Confirm/ConfirmationModal';
-
+import { Eye } from 'lucide-react';
 function PatientManagement() {
     const [appointments, setAppointments] = useState([]);
     const [selectedDate, setSelectedDate] = useState('');
@@ -14,7 +14,11 @@ function PatientManagement() {
     const navigate = useNavigate(); // Thêm useNavigate
 
     const { user } = useContext(UserContext);
+    const [selectedImages, setSelectedImages] = useState([]);
+    const [currentIndex, setCurrentIndex] = useState(0);
+    const [isModalOpen1, setIsModalOpen1] = useState(false);
 
+    console.log('Image', selectedImages);
     useEffect(() => {
         // Đặt ngày mặc định là ngày hiện tại khi component được tải
         const today = new Date().toISOString().split('T')[0];
@@ -56,6 +60,28 @@ function PatientManagement() {
         setSelectedDate(e.target.value);
     };
 
+    const getImage = async (bookingId) => {
+        try {
+            const response = await axiosInstance.get(`/bookingImage/${bookingId}`);
+            // console.log('ResponseImage:', response);
+
+            if (response.status === 200) {
+                const images = response.data.map((item) => item.imageName);
+                if (images.length === 0) {
+                    toast.info('Không có ảnh đính kèm.');
+                    return;
+                }
+                setSelectedImages(images); // Lưu danh sách ảnh từ API
+                setIsModalOpen1(true); // Mở Modal
+            } else {
+                toast.error('Không thể tải ảnh.');
+            }
+        } catch (error) {
+            console.error('Error fetching images:', error);
+            toast.error('Có lỗi xảy ra khi tải ảnh.');
+        }
+    };
+    const IMAGE_URL = 'http://localhost:9000/uploads/';
     const updateStatus = async (appointmentId, statusKey) => {
         try {
             const response = await axiosInstance.put(`/booking/${appointmentId}`, { status: statusKey });
@@ -103,6 +129,20 @@ function PatientManagement() {
         setSelectedBookingId(null);
     };
 
+    const viewImages = (images) => {
+        setSelectedImages(images);
+        setIsModalOpen1(true);
+    };
+
+    const closeModal1 = () => {
+        setIsModalOpen1(false);
+        setSelectedImages([]);
+    };
+    const handleViewImage = (image) => {
+        const imageUrl = `${IMAGE_URL}${image}`;
+        window.open(imageUrl, '_blank');
+        console.log('OPEN');
+    };
     return (
         <div className="p-4 w-150 h-full border rounded-lg shadow-lg bg-white overflow-y-auto">
             {/* Chọn ngày khám */}
@@ -134,14 +174,18 @@ function PatientManagement() {
                             <th className="px-4 py-2 font-bold tracking-wider">Địa chỉ</th>
                             <th className="px-4 py-2 font-bold tracking-wider">Số điện thoại</th>
                             <th className="px-4 py-2 font-bold tracking-wider">Giới tính</th>
-                            <th className="px-4 py-2 font-bold tracking-wider">Lý do khám</th>
+                            <th className="px-4 py-2 font-bold tracking-wider">Tình trạng bệnh</th>
+                            <th className="px-4 py-2 font-bold tracking-wider">Ảnh đính kèm</th>
                             <th className="px-4 py-2 font-bold tracking-wider">Trạng thái</th>
                             <th className="px-4 py-2 font-bold tracking-wider">Hành động</th>
                         </tr>
                     </thead>
                     <tbody>
                         {appointments
-                            .filter((appointment) => appointment.status.keyMap !== 'S1')
+                            .filter(
+                                (appointment) =>
+                                    appointment.status.keyMap !== 'S1' && appointment.status.keyMap !== 'S5',
+                            )
                             .map((appointment, index) => (
                                 <tr key={appointment._id}>
                                     <td className="px-4 py-2 text-gray-900 text-center">{index + 1}</td>
@@ -165,6 +209,21 @@ function PatientManagement() {
                                             : 'Khác'}
                                     </td>
                                     <td className="px-4 py-2 text-gray-900 text-center">{appointment.reason}</td>
+                                    {/* <td className="px-4 py-2 text-blue-500 text-center cursor-pointer hover:text-blue-800">
+                                        <button
+                                            className="text-blue-500 hover:text-blue-700 flex items-center gap-2 ml-20"
+                                            onClick={() => viewImages(appointment.bookingId)}
+                                        >
+                                            3 ảnh
+                                        </button>
+                                    </td> */}
+
+                                    <td
+                                        className="px-4 py-2 text-center text-blue-500 hover:text-blue-700 cursor-pointer"
+                                        onClick={() => getImage(appointment.bookingId)}
+                                    >
+                                        Xem ảnh
+                                    </td>
                                     <td className="px-4 py-2 text-gray-900 text-center">
                                         {appointment.status.valueVi}
                                     </td>
@@ -213,6 +272,43 @@ function PatientManagement() {
                     </tbody>
                 </table>
             </div>
+
+            {isModalOpen1 && selectedImages.length > 0 && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                    <div className="bg-white rounded-lg p-4 w-4/5 h-4/5">
+                        {/* Tiêu đề và nút đóng */}
+                        <div className="flex justify-between items-center">
+                            <h2 className="text-2xl font-bold">Ảnh đính kèm</h2>
+                            <button className="text-red-500 hover:text-red-700 font-bold" onClick={closeModal1}>
+                                Đóng
+                            </button>
+                        </div>
+
+                        {/* Danh sách ảnh */}
+                        <div className="flex flex-wrap gap-4 mt-4 overflow-auto h-full">
+                            {selectedImages.map((image, index) => (
+                                <div key={index} className="relative group w-80 h-80 border rounded-lg overflow-hidden">
+                                    {/* Hiển thị ảnh */}
+                                    <img
+                                        src={`${IMAGE_URL}${image}`}
+                                        alt={`Ảnh ${index + 1}`}
+                                        className="w-full h-full object-cover"
+                                    />
+
+                                    {/* Eye Icon (Zoom) */}
+                                    <div
+                                        className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"
+                                        onClick={() => handleViewImage(image)}
+                                    >
+                                        <Eye className="text-white w-8 h-8" />
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            )}
+
             <ConfirmationModal
                 isOpen={isModalOpen}
                 onClose={closeModal}
