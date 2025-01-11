@@ -10,7 +10,7 @@ import DoctorInfo from '~/pages/User/DoctorInfo';
 import UserRoutes from './UserRoutes';
 import ForgotPassword from '~/pages/ForgotPassword';
 import ConfirmOTP from '~/pages/ConfirmOTP';
-import AllDoctor from '~/pages/User/AllDoctor';
+import AllDoctor from '~/pages/User/AllDoctor/AllDoctor';
 import ChoosePatientRecord from '~/pages/User/ChoosePatientRecords';
 import ConfirmInfomation from '~/pages/User/ConfirmInfomation';
 import ClinicInfo from '~/pages/User/ClinicInfo';

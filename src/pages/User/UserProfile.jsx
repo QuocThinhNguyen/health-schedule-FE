@@ -3,7 +3,7 @@ import { FaCamera } from 'react-icons/fa';
 import { axiosClient, axiosInstance } from '~/api/apiRequest';
 import { UserContext } from '~/context/UserContext';
 import { toast } from 'react-toastify';
-
+import defaultImage from '../../assets/img/avatar.png';
 function DoctorProfile() {
     const [doctorInfo, setDoctorInfo] = useState({
         name: '',
@@ -94,6 +94,9 @@ function DoctorProfile() {
             if (response.status === 200) {
                 // Check a success code if the backend provides it
                 toast.success('Cập nhật thông tin thành công');
+                setTimeout(() => {
+                    window.location.reload();
+                }, 2000);
             } else {
                 toast.warn(response.data.message || 'Đã xảy ra vấn đề');
             }
@@ -106,6 +109,10 @@ function DoctorProfile() {
     console.log('doctorinfo', doctorInfo);
 
     const IMAGE_URL = 'http://localhost:9000/uploads/';
+    const doctorInfo_Image = {
+        image: doctorInfo.image,
+    };
+
     return (
         <div className=" w-150 h-full px-40 border rounded-lg shadow-lg bg-white overflow-y-auto">
             {/* <h2 className="text-5xl font-bold text-center mb-6">Thông Tin Cá Nhân Bác Sĩ</h2> */}
@@ -113,7 +120,7 @@ function DoctorProfile() {
             {/* Ảnh Avatar */}
             <div className="top-3 flex justify-center mb-6 relative">
                 <img
-                    src={previewImage || `${IMAGE_URL}${doctorInfo.image}`} // Thay thế URL này bằng link ảnh thực tế của bác sĩ
+                    src={previewImage || (doctorInfo.image ? `${IMAGE_URL}${doctorInfo.image}` : defaultImage)} // Thay thế URL này bằng link ảnh thực tế của bác sĩ
                     alt="Doctor Avatar"
                     className="w-48 h-48 rounded-full border-2 border-gray-300"
                 />

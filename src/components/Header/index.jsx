@@ -8,6 +8,7 @@ import { IoMdKey } from 'react-icons/io';
 import { axiosInstance } from '~/api/apiRequest';
 import avatar from '../../assets/img/avatar.png';
 import Logo from '~/components/Logo';
+
 function Header() {
     const IMAGE_URL = 'http://localhost:9000/uploads';
 

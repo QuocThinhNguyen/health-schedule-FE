@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, useContext } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { UserContext } from '~/context/UserContext';
-import { axiosInstance } from '~/api/apiRequest';
+import { axiosClient, axiosInstance } from '~/api/apiRequest';
 import { toast } from 'react-toastify';
 import { AiOutlineEdit } from 'react-icons/ai';
 import { FiEdit } from 'react-icons/fi';
@@ -24,6 +24,7 @@ const DoctorManagement = () => {
     const [clinics, setClinics] = useState([]);
     const [specialties, setSpecialties] = useState([]);
     const [avata, setAvata] = useState('');
+    const [academicRanksAndDegreess, setAcademicRanksAndDegreess] = useState([]);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -31,6 +32,7 @@ const DoctorManagement = () => {
             await getDropdownClinics();
             await getDropdownSpecialties();
             await getDropdownUsers();
+            await getDropdownAcademicRanksAndDegrees();
         };
         fetchData();
     }, []);
@@ -147,6 +149,22 @@ const DoctorManagement = () => {
         } catch (error) {
             console.error('Error fetching specialty:', error);
             setSpecialties([]);
+        }
+    };
+
+    const getDropdownAcademicRanksAndDegrees = async () => {
+        try {
+            const response = await axiosClient.get(`/doctor/academic-ranks-and-degrees`);
+
+            if (response.status === 200) {
+                setAcademicRanksAndDegreess(response.data);
+            } else {
+                console.error('No academic ranks and degrees are found:', response.message);
+                setAcademicRanksAndDegreess([]);
+            }
+        } catch (error) {
+            console.error('Error fetching academic ranks and degrees:', error);
+            setAcademicRanksAndDegreess([]);
         }
     };
 
@@ -491,15 +509,11 @@ const DoctorManagement = () => {
                                     </td>
                                     <td className="px-4 py-2 text-center  text-gray-900">{doctor.doctorId.fullname}</td>
                                     <td className="px-4 py-2  text-center text-gray-900">
-                                        {(() => {
-                                            const positionMapping = {
-                                                P0: 'Bác sĩ',
-                                                P1: 'Trưởng khoa',
-                                                P2: 'Giáo sư',
-                                                P3: 'Phó giáo sư',
-                                            };
-                                            return positionMapping[doctor.position] || 'Không xác định';
-                                        })()}
+                                        {
+                                            academicRanksAndDegreess.find(
+                                                (academicRanksAndDegrees) => academicRanksAndDegrees.keyMap === doctor.position,
+                                            )?.valueVi || 'Chưa xác định'
+                                        }
                                     </td>
                                     <td className="px-4 py-2 text-center  text-gray-900">
                                         {/* {clinics.find(clinic => clinic.clinicId === doctor.clinicId)?.name || "Chưa xác định"} */}
@@ -683,10 +697,18 @@ const DoctorManagement = () => {
                                         }`}
                                     >
                                         <option value="">Chọn học hàm, học vị</option>
-                                        <option value="P0">Bác sĩ</option>
+                                        {academicRanksAndDegreess.map((academicRanksAndDegrees, index) => (
+                                            <option
+                                                key={academicRanksAndDegrees.keyMap}
+                                                value={academicRanksAndDegrees.keyMap}
+                                            >
+                                                {academicRanksAndDegrees.valueVi}
+                                            </option>
+                                        ))}
+                                        {/* <option value="P0">Bác sĩ</option>
                                         <option value="P1">Trưởng khoa</option>
                                         <option value="P2">Giáo sư</option>
-                                        <option value="P3">Phó giáo sư</option>
+                                        <option value="P3">Phó giáo sư</option> */}
                                     </select>
                                     {validationErrors.position && (
                                         <p className="text-red-500 text-sm">{validationErrors.position}</p>
@@ -761,17 +783,6 @@ const DoctorManagement = () => {
                                         onChange={handleUpdateChange}
                                         onBlur={handleBlur}
                                     />
-
-                                    {/* <textarea
-                                        name="description"
-                                        value={updateDoctor.description}
-                                        onChange={handleUpdateChange}
-                                        onBlur={handleBlur}
-                                        rows="4"
-                                        className={`border w-full px-2 py-1 rounded ${
-                                            validationErrors.description ? 'border-red-500' : 'border-gray-400'
-                                        }`}
-                                    ></textarea> */}
                                     {validationErrors.description && (
                                         <p className="text-red-500 text-sm">{validationErrors.description}</p>
                                     )}

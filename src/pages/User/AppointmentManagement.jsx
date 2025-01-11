@@ -128,6 +128,9 @@ const AppointmentManagement = () => {
             if (response.status === 200) {
                 toast.success('Hủy lịch hẹn thành công.');
                 setAppointments((prev) => prev.filter((appointment) => appointment.bookingId !== selectedBookingId));
+                setTimeout(() => {
+                    window.location.reload();
+                }, 2000);
             } else {
                 toast.error('Hủy lịch hẹn thất bại.');
             }
@@ -150,7 +153,7 @@ const AppointmentManagement = () => {
         });
     };
 
-    const handleReviewDoctorInfo = (doctorId) => {
+    const handleReschedule = (doctorId) => {
         navigate(`/bac-si/get?id=${doctorId}`);
     };
     return (
@@ -280,6 +283,12 @@ const AppointmentManagement = () => {
                                 )} */}
                                 {activeTab === 'examined' && (
                                     <div className="flex justify-end space-x-4">
+                                        <button
+                                            className="px-6 py-3 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600 transition-colors"
+                                            onClick={() => handleReschedule(appointment.doctorId.userId)}
+                                        >
+                                            Đặt khám lại
+                                        </button>
                                         {appointment.feedbackChecked ? (
                                             <button
                                                 className="px-6 py-3 bg-gray-500 text-white font-semibold rounded-lg"

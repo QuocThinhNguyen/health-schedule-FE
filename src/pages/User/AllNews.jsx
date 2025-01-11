@@ -68,7 +68,7 @@ function AllNews() {
                         <div className="w-[90%]">
                             <NavLink
                                 to={`/tin-tuc/${formatTitleForUrl(posts[0].title)}-${posts[0].postId}`}
-                                className="cursor-pointer"
+                                className="cursor-pointer group"
                             >
                                 <div className="w-full h-[374px] max-h-[374px]">
                                     <img
@@ -79,7 +79,7 @@ function AllNews() {
                                     />
                                 </div>
                                 <div className="mt-12 flex flex-col gap-4">
-                                    <h2 className="text-5xl font-bold">{posts[0].title}</h2>
+                                    <h2 className="text-5xl font-bold group-hover:text-[#00b5f1]">{posts[0].title}</h2>
                                     <p
                                         className="line-clamp-3 overflow-hidden text-ellipsis"
                                         dangerouslySetInnerHTML={{ __html: posts[0].content }}
@@ -88,8 +88,8 @@ function AllNews() {
                                     <span className="flex items-center font-semibold gap-2">
                                         <MdOutlineDateRange />
                                         <span>{formatDate(posts[0].updateAt)}</span>
-                                        <span> - </span>
-                                        <span>{posts[0].userId.fullname}</span>
+                                        {/* <span> - </span>
+                                        <span>{posts[0].userId.fullname}</span> */}
                                     </span>
                                 </div>
                                 <button className="flex items-center text-3xl mt-4 font-semibold text-blue-500">
@@ -106,7 +106,7 @@ function AllNews() {
                             <div key={post.postId} className="pb-4 mb-4">
                                 <NavLink
                                     to={`/tin-tuc/${formatTitleForUrl(post.title)}-${post.postId}`}
-                                    className="cursor-pointer"
+                                    className="cursor-pointer group"
                                 >
                                     <div className="flex gap-4">
                                         <div className="min-w-[160px] min-h-[100px]">
@@ -118,12 +118,12 @@ function AllNews() {
                                             />
                                         </div>
                                         <div className="flex flex-col gap-2 font-semibold">
-                                            <h3>{post.title}</h3>
-                                            <p className="flex items-center text-xl gap-2">
+                                            <h3 className="group-hover:text-[#00b5f1]">{post.title}</h3>
+                                            <p className="flex items-center text-xl gap-2 font-[500]">
                                                 <MdOutlineDateRange />
                                                 <span>{formatDate(post.updateAt)}</span>
-                                                <span>-</span>
-                                                <span>{post.userId.fullname}</span>
+                                                {/* <span>-</span>
+                                                <span>{post.userId.fullname}</span> */}
                                             </p>
                                         </div>
                                     </div>
@@ -139,7 +139,7 @@ function AllNews() {
                         <div key={post.postId} className="max-w-lg pb-4 mb-4">
                             <NavLink
                                 to={`/tin-tuc/${formatTitleForUrl(post.title)}-${post.postId}`}
-                                className="cursor-pointer"
+                                className="cursor-pointer group"
                             >
                                 {console.log('postId', post.postId)}
                                 <div className="flex flex-col gap-4">
@@ -152,7 +152,7 @@ function AllNews() {
                                         />
                                     </div>
                                     <div className="flex flex-col gap-2 mt-4">
-                                        <h3 className="text-3xl font-bold">{post.title}</h3>
+                                        <h3 className="text-3xl font-bold group-hover:text-[#00b5f1]">{post.title}</h3>
                                         <p
                                             className="line-clamp-2 overflow-hidden text-ellipsis"
                                             dangerouslySetInnerHTML={{ __html: post.content }}
@@ -160,8 +160,8 @@ function AllNews() {
                                         <p className="flex items-center text-xl gap-2">
                                             <MdOutlineDateRange />
                                             <span>{formatDate(post.updateAt)}</span>
-                                            <span> - </span>
-                                            <span>{post.userId.fullname}</span>
+                                            {/* <span> - </span>
+                                            <span>{post.userId.fullname}</span> */}
                                         </p>
                                     </div>
                                     <button className="flex items-center font-semibold text-blue-500">

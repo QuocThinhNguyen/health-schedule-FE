@@ -10,7 +10,9 @@ import {
     Legend,
     PointElement,
 } from 'chart.js';
+import { useEffect, useState } from 'react';
 import { Doughnut } from 'react-chartjs-2';
+import { axiosInstance } from '~/api/apiRequest';
 
 const centerTextPlugin = {
     id: 'centerText',
@@ -46,15 +48,39 @@ Chart.register(
 );
 
 function ThongKeCaKhamTrongThangNay() {
+    const [labels, setLabels] = useState([]);
+    const [values, setValues] = useState([]);
+
+    useEffect(() => {
+        const fetchStatusBookingChart = async () => {
+            try {
+                const response = await axiosInstance.get('/admin/status-booking-chart');
+                if (response.status === 200) {
+                    setLabels(response.data.labels);
+                    setValues(response.data.values);
+                } else {
+                    console.error('Failed to fetch data:', response.message);
+                    setLabels([]);
+                    setValues([]);
+                }
+            } catch (error) {
+                console.error('Error fetching appointments:', error);
+                setLabels([]);
+                setValues([]);
+            }
+        };
+        fetchStatusBookingChart();
+    }, []);
+
     return (
         <Doughnut
             data={{
-                labels: ['Chưa xác nhận', 'Đã xác nhận', 'Đã thanh toán', 'Đã hoàn thành', 'Đã hủy'],
+                labels: labels,
                 datasets: [
                     {
                         label: 'Số lượt đặt khám',
                         backgroundColor: ['#3e95cd', '#8e5ea2', '#3cba9f', '#e8c3b9', '#c45850'],
-                        data: [2478, 5267, 734, 784, 433],
+                        data: values,
                     },
                 ],
             }}
@@ -74,6 +100,18 @@ function ThongKeCaKhamTrongThangNay() {
                     title: {
                         display: true,
                         text: 'Biểu đồ ca khám trong tháng',
+                    },
+                    tooltip: {
+                        callbacks: {
+                            title: function () {
+                                return '';
+                            },
+                            label: function (context) {
+                                const label = context.label || '';
+                                const value = context.raw || 0;
+                                return `${label}: ${value}`;
+                            },
+                        },
                     },
                     centerText: true, // Kích hoạt plugin tùy chỉnh cho biểu đồ này
                 },
