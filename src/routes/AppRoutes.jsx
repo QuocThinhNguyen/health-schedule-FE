@@ -19,6 +19,7 @@ import AllClinic from '~/pages/User/AllClinic';
 import AllSpecialty from '~/pages/User/AllSpecialty';
 import AllNews from '~/pages/User/AllNews';
 import NewsDetail from '~/pages/User/NewsDetail';
+import FilterLayoutDoctor from '~/pages/User/AllDoctor/FilterLayoutDoctor';
 
 function AppRoutes() {
     return (
@@ -32,6 +33,7 @@ function AppRoutes() {
                     <Route path="/confirm-otp" element={<ConfirmOTP />} />
                     <Route path="/benh-vien-all" element={<AllClinic />} />
                     <Route path="/bac-si" element={<AllDoctor />} />
+                    <Route path="/bac-si-filter" element={<FilterLayoutDoctor />} />
                     <Route path="/bac-si/get" element={<DoctorInfo />} />
                     <Route path="/bac-si/get/record" element={<ChoosePatientRecord />} />
                     <Route path="/bac-si/get/record/confirm" element={<ConfirmInfomation />} />
