@@ -254,7 +254,7 @@ function ConfirmInfomation() {
 
     return (
         <div className="bg-[#f3f4f6] mt-20">
-            <div className="max-w-fit mx-auto p-4 space-y-4 mt-32 mb-20">
+            <div className="max-w-fit mx-auto p-4 space-y-4">
                 <h1 className="text-5xl font-bold text-blue-600 mb-2 text-center">Xác nhận thông tin</h1>
                 <div className="grid grid-cols-[20%_60%] gap-x-9 justify-center">
                     {/* Hospital Information */}
