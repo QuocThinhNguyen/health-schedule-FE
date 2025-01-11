@@ -141,8 +141,8 @@ function UpdateRecord() {
                             required
                         >
                             <option value="">Chọn giới tính ...</option>
-                            <option value="Nam">Nam</option>
-                            <option value="Nữ">Nữ</option>
+                            <option value="Male">Nam</option>
+                            <option value="Female">Nữ</option>
                         </select>
                     </div>
 

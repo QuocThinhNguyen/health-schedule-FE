@@ -83,7 +83,7 @@ function DoctorProfile() {
         if (selectedFile) {
             formData.append('image', selectedFile); // Thêm tệp ảnh vào FormData
         }
-
+        console.log('FormData:', formData);
         try {
             const response = await axiosInstance.put(`/user/${user.userId}`, formData, {
                 headers: {
