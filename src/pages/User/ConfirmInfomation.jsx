@@ -175,16 +175,37 @@ function ConfirmInfomation() {
 
     const handlePaymentOnline = async () => {
         try {
-            const payload = {
-                doctorId: state.patientState.doctorId,
-                patientRecordId: state.patientId,
-                appointmentDate: state.patientState.currentDate,
-                timeType: state.patientState.timeSlot,
-                price: doctorInfo.price,
-                reason: reason || '',
-            };
+            // const payload = {
+            //     doctorId: state.patientState.doctorId,
+            //     patientRecordId: state.patientId,
+            //     appointmentDate: state.patientState.currentDate,
+            //     timeType: state.patientState.timeSlot,
+            //     price: doctorInfo.price,
+            //     reason: reason || '',
+            // };
 
-            const response = await axiosInstance.post('/booking/book-appointment-online', payload);
+            // const response = await axiosInstance.post('/booking/book-appointment-online', payload);
+
+            const formData = new FormData();
+
+            // Thêm các thông tin vào FormData
+            formData.append('doctorId', state.patientState.doctorId);
+            formData.append('patientRecordId', state.patientId);
+            formData.append('appointmentDate', state.patientState.currentDate);
+            formData.append('timeType', state.patientState.timeSlot);
+            formData.append('price', doctorInfo.price);
+            formData.append('reason', reason || '');
+
+            // Thêm ảnh vào FormData
+            files.forEach((file, index) => {
+                formData.append('images', file);
+            });
+
+            const response = await axiosInstance.post('/booking/book-appointment-online', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
 
             console.log('Response', response);
 
