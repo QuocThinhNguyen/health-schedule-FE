@@ -52,7 +52,7 @@ function Header() {
     return (
         <header className="bg-white shadow fixed top-0 left-0 right-0 z-50">
             <div className="relative z-10 max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="flex justify-between h-20">
+                <div className="flex justify-between h-16">
                     {/* Logo */}
                     <NavLink
                         to="/"
@@ -71,25 +71,25 @@ function Header() {
                     <nav className="hidden sm:ml-6 sm:flex sm:space-x-8 mr-32">
                         <NavLink
                             to="/benh-vien-all"
-                            className="inline-flex items-center px-1 pt-1 text-2xl font-bold text-gray-500 hover:text-gray-700"
+                            className="inline-flex items-center px-1 pt-1 text-xl font-bold text-gray-500 hover:text-gray-700"
                         >
                             Bệnh viện
                         </NavLink>
                         <NavLink
                             to="/bac-si-filter"
-                            className="inline-flex items-center px-1 pt-1 text-2xl font-bold text-gray-500 hover:text-gray-700"
+                            className="inline-flex items-center px-1 pt-1 text-xl font-bold text-gray-500 hover:text-gray-700"
                         >
                             Bác sĩ
                         </NavLink>
                         <NavLink
                             to="/chuyen-khoa"
-                            className="inline-flex items-center px-1 pt-1 text-2xl font-bold text-gray-500 hover:text-gray-700"
+                            className="inline-flex items-center px-1 pt-1 text-xl font-bold text-gray-500 hover:text-gray-700"
                         >
                             Chuyên khoa
                         </NavLink>
                         <NavLink
                             to="/tin-tuc"
-                            className="inline-flex items-center px-1 pt-1 text-2xl font-bold text-gray-500 hover:text-gray-700"
+                            className="inline-flex items-center px-1 pt-1 text-xl font-bold text-gray-500 hover:text-gray-700"
                         >
                             Tin tức
                         </NavLink>
@@ -101,13 +101,13 @@ function Header() {
                             <>
                                 <NavLink
                                     to="/login"
-                                    className="ml-4 inline-flex items-center justify-center px-5 py-2 border-transparent rounded-md shadow-sm text-xl bg-blue-600 hover:bg-white border hover:border-blue-600 hover:text-blue-600 text-white font-bold"
+                                    className="ml-4 inline-flex items-center justify-center px-4 py-1 border-transparent rounded-md shadow-sm text-xl bg-blue-600 hover:bg-white border hover:border-blue-600 hover:text-blue-600 text-white font-bold"
                                 >
                                     Đăng nhập
                                 </NavLink>
                                 <NavLink
                                     to="/register"
-                                    className="ml-4 inline-flex items-center justify-center px-5 py-2 border-transparent rounded-md shadow-sm text-xl bg-blue-600 hover:bg-white border hover:border-blue-600 hover:text-blue-600 text-white font-bold"
+                                    className="ml-4 inline-flex items-center justify-center px-4 py-1 border-transparent rounded-md shadow-sm text-xl bg-blue-600 hover:bg-white border hover:border-blue-600 hover:text-blue-600 text-white font-bold"
                                 >
                                     Đăng kí
                                 </NavLink>
@@ -121,13 +121,13 @@ function Header() {
                                 <div className="flex justify-center items-center cursor-pointer">
                                     <div>
                                         <img
-                                            className="w-14 h-14 rounded-full"
+                                            className="w-12 h-12 rounded-full"
                                             src={userInfo && userInfo.image ? userInfo.image : avatar}
                                             alt="Avatar"
                                         />
                                     </div>
                                     <div className="ml-2">
-                                        <p className="text-2xl font-bold">
+                                        <p className="text-xl font-bold">
                                             {userInfo && userInfo.fullname ? userInfo.fullname : 'Guest'}
                                         </p>
                                     </div>
@@ -142,7 +142,7 @@ function Header() {
                                         onMouseLeave={() => setIsDropdownOpen(false)}
                                     >
                                         <ul className="py-1">
-                                            <li className="group px-4 py-2 text-left text-2xl font-medium hover:bg-slate-100 cursor-pointer flex items-center">
+                                            <li className="group px-4 py-2 text-left text-xl font-medium hover:bg-slate-100 cursor-pointer flex items-center">
                                                 <NavLink
                                                     to="/user/profile"
                                                     className={({ isActive }) =>
@@ -155,7 +155,7 @@ function Header() {
                                                     Hồ sơ cá nhân
                                                 </NavLink>
                                             </li>
-                                            <li className="group px-4 py-2 text-left text-2xl font-medium hover:bg-slate-100 cursor-pointer flex items-center">
+                                            <li className="group px-4 py-2 text-left text-xl font-medium hover:bg-slate-100 cursor-pointer flex items-center">
                                                 <NavLink
                                                     to="/user/change-password"
                                                     className={({ isActive }) =>
@@ -169,7 +169,7 @@ function Header() {
                                                 </NavLink>
                                             </li>
                                             <li
-                                                className="group px-4 py-2 text-left text-2xl text-[#e74c3c] font-medium hover:bg-slate-100 cursor-pointer flex items-center"
+                                                className="group px-4 py-2 text-left text-xl text-[#e74c3c] font-medium hover:bg-slate-100 cursor-pointer flex items-center"
                                                 onClick={handleLogout}
                                             >
                                                 <IoLogOutOutline className="mr-2 transform group-hover:animate-rotate-fast" />
