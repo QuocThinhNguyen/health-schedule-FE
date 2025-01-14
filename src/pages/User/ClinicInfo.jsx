@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { MapPin, Clock, ChevronRight, Mail, Info, Phone } from 'lucide-react';
 import { axiosInstance } from '~/api/apiRequest';
-import { Route, Navigate, useNavigate, useLocation } from 'react-router-dom';
+import { NavLink, useNavigate, useLocation } from 'react-router-dom';
 import parse from 'html-react-parser';
 
 function ClinicInfo() {
@@ -41,10 +41,21 @@ function ClinicInfo() {
                 <div className="max-w-7xl mx-auto px-4 py-2">
                     <div className="flex items-center gap-2 text-sm">
                         <Mail className="w-4 h-4 text-gray-600" />
-                        <span className="text-gray-600">Đặt lịch với bác sĩ</span>
+                        <NavLink
+                            to="/"
+                            onClick={(e) => {
+                                if (window.location.pathname === '/') {
+                                    e.preventDefault();
+                                    window.scrollTo(0, 0);
+                                }
+                            }}
+                            className="flex-shrink-0 flex items-center"
+                        >
+                            Trang chủ
+                        </NavLink>
                         <ChevronRight className="w-4 h-4 text-gray-400" />
                         <div href="/benh-vien-quoc-te-city" className="text-blue-600 hover:underline">
-                            Bệnh viện Quốc tế City
+                            {clinicData.name}
                         </div>
                     </div>
                 </div>
