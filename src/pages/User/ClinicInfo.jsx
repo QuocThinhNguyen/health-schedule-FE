@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { MapPin, Clock, Send, Calendar, Building, Info, Phone, Mail } from 'lucide-react';
+import { MapPin, Clock, ChevronRight, Mail, Info, Phone } from 'lucide-react';
 import { axiosInstance } from '~/api/apiRequest';
 import { Route, Navigate, useNavigate, useLocation } from 'react-router-dom';
 import parse from 'html-react-parser';
@@ -36,7 +36,19 @@ function ClinicInfo() {
         });
     };
     return (
-        <div className="min-h-screen bg-white mt-20">
+        <div className="min-h-screen bg-white">
+            <div className="w-full bg-blue-50">
+                <div className="max-w-7xl mx-auto px-4 py-2">
+                    <div className="flex items-center gap-2 text-sm">
+                        <Mail className="w-4 h-4 text-gray-600" />
+                        <span className="text-gray-600">Đặt lịch với bác sĩ</span>
+                        <ChevronRight className="w-4 h-4 text-gray-400" />
+                        <div href="/benh-vien-quoc-te-city" className="text-blue-600 hover:underline">
+                            Bệnh viện Quốc tế City
+                        </div>
+                    </div>
+                </div>
+            </div>
             {/* Header */}
             <header className="bg-white shadow-sm h-[300px] relative px-4 sm:px-7">
                 <img
@@ -64,7 +76,7 @@ function ClinicInfo() {
             </header>
 
             {/* Main Content */}
-            <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 mt-8">
+            <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 mt-60">
                 {/* Information Sections */}
                 <div className="space-y-6">
                     <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4">
@@ -137,9 +149,9 @@ function ClinicInfo() {
                             </div>
                         </div>
                     </div>
-                    <div className="max-w-7xl mx-auto py-3">
+                    <div className="max-w-6xl mx-8 py-2">
                         <button
-                            className="w-full bg-blue-500 text-white py-2 rounded-lg font-medium border hover:border-blue-500 hover:text-blue-500 hover:bg-blue-50 transition-colors fixed bottom-0 left-0 right-0"
+                            className="text-xl w-full bg-blue-500 text-white py-2 rounded-lg font-medium border hover:border-blue-500 hover:text-blue-500 hover:bg-blue-50 transition-colors fixed bottom-0 left-0 right-0"
                             onClick={() => handleGetSpecialty(clinicData.clinicId, clinicData.name)}
                         >
                             Chọn Đặt Khám

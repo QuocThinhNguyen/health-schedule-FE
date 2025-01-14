@@ -52,7 +52,7 @@ function Header() {
     return (
         <header className="bg-white shadow fixed top-0 left-0 right-0 z-50">
             <div className="relative z-10 max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="flex justify-between h-16">
+                <div className="flex justify-between h-10">
                     {/* Logo */}
                     <NavLink
                         to="/"
@@ -121,7 +121,7 @@ function Header() {
                                 <div className="flex justify-center items-center cursor-pointer">
                                     <div>
                                         <img
-                                            className="w-12 h-12 rounded-full"
+                                            className="w-8 h-8 rounded-full"
                                             src={userInfo && userInfo.image ? userInfo.image : avatar}
                                             alt="Avatar"
                                         />
