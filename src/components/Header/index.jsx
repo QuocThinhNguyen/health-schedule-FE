@@ -155,7 +155,7 @@ function Header() {
                                                     Hồ sơ cá nhân
                                                 </NavLink>
                                             </li>
-                                            <li className="group px-4 py-2 text-left text-xl font-medium hover:bg-slate-100 cursor-pointer flex items-center">
+                                            <li className="group px-4 py-2 text-left text-2xl font-medium hover:bg-slate-100 cursor-pointer flex items-center">
                                                 <NavLink
                                                     to="/user/change-password"
                                                     className={({ isActive }) =>
@@ -169,7 +169,7 @@ function Header() {
                                                 </NavLink>
                                             </li>
                                             <li
-                                                className="group px-4 py-2 text-left text-xl text-[#e74c3c] font-medium hover:bg-slate-100 cursor-pointer flex items-center"
+                                                className="group px-4 py-2 text-left text-2xl text-[#e74c3c] font-medium hover:bg-slate-100 cursor-pointer flex items-center"
                                                 onClick={handleLogout}
                                             >
                                                 <IoLogOutOutline className="mr-2 transform group-hover:animate-rotate-fast" />
