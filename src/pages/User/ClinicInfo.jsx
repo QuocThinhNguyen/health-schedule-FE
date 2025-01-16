@@ -5,10 +5,12 @@ import { NavLink, useNavigate, useLocation } from 'react-router-dom';
 import parse from 'html-react-parser';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
+import { set } from 'date-fns';
 
 function ClinicInfo() {
     const [clinicData, setClinicData] = useState([]); // Trạng thái lưu dữ liệu từ API
     const { state } = useLocation();
+    const [searchQuery, setSearchQuery] = useState('');
 
     const navigate = useNavigate();
     const [activeTab, setActiveTab] = useState('info');
@@ -17,6 +19,10 @@ function ClinicInfo() {
     const dropdownRef = useRef(null);
     const inputRef = useRef(null);
     const [specialty, setSpecialty] = useState([]);
+    const [specialyId, setSpecialtyId] = useState('');
+    const [showDoctors, setShowDoctors] = useState(false);
+    const [selectedDoctor, setSelectedDoctor] = useState(null);
+    const [pagination, setPagination] = useState({ page: 1, limit: 100, totalPages: 1 });
 
     console.log('STATE', state);
     console.log('clinicData:', clinicData);
@@ -64,6 +70,8 @@ function ClinicInfo() {
                 !inputRef.current.contains(event.target)
             ) {
                 setShowDepartments(false);
+                setShowDoctors(false);
+                setSpecialtyId('');
             }
         };
 
@@ -73,26 +81,30 @@ function ClinicInfo() {
 
     const handleDepartmentSelect = (department) => {
         console.log('department:', department);
-        setSelectedDepartment(department);
+        setSelectedDepartment(department.specialtyId);
+        setSpecialtyId(department.specialtyId.specialtyId);
         setShowDepartments(false);
     };
 
+    console.log('selectedDepartment:', selectedDepartment);
     const handleClearSelection = (e) => {
         e.stopPropagation(); // Prevent dropdown from opening
         setSelectedDepartment(null);
     };
+    const [doctors, setDoctors] = useState([]);
 
-    const departments = [
-        { id: 1, name: 'Tai - Mũi - Họng', icon: '👂' },
-        { id: 2, name: 'Ngoại tổng quát', icon: '🏥' },
-        { id: 3, name: 'Ngoại thần kinh', icon: '🧠' },
-        { id: 4, name: 'Nội tổng quát', icon: '👨‍⚕️' },
-        { id: 5, name: 'Cơ - Xương - Khớp', icon: '🦴' },
-        { id: 6, name: 'Phẫu thuật thẩm mỹ', icon: '✨' },
-        { id: 7, name: 'Tim mạch', icon: '❤️' },
-        { id: 8, name: 'Khoa thấp khớp', icon: '🦿' },
-        { id: 9, name: 'Chỉnh hình', icon: '🦾' },
-    ];
+    console.log('doctorss:', doctors);
+
+    const handleDoctorSelect = (doctor) => {
+        console.log('doctorrrr:', doctor);
+        setSelectedDoctor(doctor);
+        setShowDoctors(false);
+    };
+
+    const handleClearDoctorSelection = (e) => {
+        e.stopPropagation(); // Prevent dropdown from opening
+        setSelectedDoctor(null);
+    };
 
     useEffect(() => {
         const fetchSpecialty = async () => {
@@ -108,6 +120,80 @@ function ClinicInfo() {
         };
         fetchSpecialty();
     }, []);
+
+    // useEffect(() => {
+    //     const fetchDoctors = async () => {
+    //         try {
+    //             const specialtyId = specialty.specialtyId;
+    //             console.log('specialtyId:', specialtyId);
+    //             let response;
+    //             if (!specialtyId) {
+    //                 response = await axiosInstance.get(`/doctor`);
+    //             } else {
+    //                 response = await axiosInstance.get(`/doctor`);
+    //             }
+    //             // const response = await axiosInstance.get(
+    //             //     `/doctor&clinicId=${state.clinicId}&specialtyId=${specialty.specialtyId}`,
+    //             // );
+
+    //             console.log('response doctors:', response);
+    //             if (response.status === 200) {
+    //                 setDoctors(response.data);
+    //             }
+    //         } catch (error) {
+    //             console.error('Failed to fetch doctors:', error.message);
+    //         }
+    //     };
+
+    //     fetchDoctors();
+    // }, []);
+    const handlePageChange = async (newPage) => {
+        if (newPage > 0 && newPage <= pagination.totalPages) {
+            setPagination((prev) => ({ ...prev, page: newPage }));
+        }
+    };
+    //Đổi số lượng (limit)
+    const handleLimitChange = async (e) => {
+        const newLimit = parseInt(e.target.value, 10);
+        setPagination((prev) => ({ ...prev, limit: newLimit, page: 1 }));
+    };
+
+    // console.log('specialty thiss:', specialty);
+    // let getSpecialtyId = '';
+    // if (specialty) {
+    //     getSpecialtyId = specialty.specialtyId;
+    //}
+    console.log('getSpecialtyId:', specialyId);
+
+    useEffect(() => {
+        const fetchDoctors = async () => {
+            try {
+                console.log('getSpecialtyId:', specialyId);
+                const response = await axiosInstance.get(
+                    `/doctor?query=${searchQuery}&page=${pagination.page}&limit=${pagination.limit}&clinicId=${state.clinicId}&specialtyId=${specialyId}`,
+                );
+
+                console.log('response doctors this:', response);
+                if (response.status === 200) {
+                    setDoctors(response.data);
+                    if (response.totalPages === 0) {
+                        response.totalPages = 1;
+                    }
+                    if (pagination.totalPages !== response.totalPages) {
+                        setPagination((prev) => ({
+                            ...prev,
+                            page: 1,
+                            totalPages: response.totalPages,
+                        }));
+                    }
+                }
+            } catch (error) {
+                console.error('Failed to fetch doctors:', error.message);
+            }
+        };
+
+        fetchDoctors();
+    }, [pagination, searchQuery, specialyId]);
 
     return (
         <div className="min-h-screen bg-white">
@@ -408,36 +494,97 @@ function ClinicInfo() {
                                         ref={dropdownRef}
                                         className="absolute z-10 mt-1 w-[355px] bg-white border rounded-lg shadow-lg max-h-80 overflow-y-auto"
                                     >
-                                        {specialty.map((dept) => (
+                                        {doctors.map((dept) => (
                                             <button
-                                                key={dept.specialtyId}
+                                                key={dept.specialtyId.specialtyId}
                                                 className="w-full p-2 text-left hover:bg-gray-50 flex items-center gap-2"
                                                 onClick={() => handleDepartmentSelect(dept)}
                                             >
                                                 <img
                                                     src={`http://localhost:${import.meta.env.VITE_BE_PORT}/uploads/${
-                                                        dept.image
+                                                        dept.specialtyId.image
                                                     }`}
                                                     alt="logo clinic"
                                                     className="h-8 w-8 rounded-full border-4 border-white"
                                                 />
-                                                <span className="text-base font-semibold">{dept.name}</span>
+                                                <span className="text-base font-semibold">{dept.specialtyId.name}</span>
                                             </button>
                                         ))}
                                     </div>
                                 )}
                             </div>
 
-                            <div className="space-y-2">
-                                <label className="text-sm font-medium">Bác sĩ</label>
-                                <div className="p-3 rounded-lg border bg-white cursor-pointer">
-                                    <div className="flex items-center gap-2 pl-2">
-                                        <div className="flex items-center gap-2">
-                                            <Search className=" w-5 h-5 text-gray-400" />
-                                            <input type="text" placeholder="Tìm bác sĩ" className="text-base" />
-                                        </div>
+                            <div className="space-y-2 mt-3">
+                                <label className="block text-sm font-medium">Bác sĩ</label>
+                                <div
+                                    ref={inputRef}
+                                    className="relative cursor-pointer"
+                                    onClick={() => setShowDoctors(true)}
+                                >
+                                    <div className="absolute left-4 top-1/2 -translate-y-1/2 flex items-center gap-2">
+                                        {!selectedDoctor && <Search className="w-5 h-5 text-gray-400" />}
+                                        {selectedDoctor && (
+                                            <img
+                                                src={`http://localhost:${import.meta.env.VITE_BE_PORT}/uploads/${
+                                                    selectedDoctor.doctorId.image
+                                                }`}
+                                                alt="logo clinic"
+                                                className="h-8 w-8 rounded-full border-4 border-white"
+                                            />
+                                        )}
                                     </div>
+
+                                    <input
+                                        type="text"
+                                        placeholder="Tìm bác sĩ"
+                                        className={`w-full py-2.5 text-base font-semibold bg-white border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer ${
+                                            selectedDoctor ? 'pl-14' : 'pl-12'
+                                        }`}
+                                        value={selectedDoctor?.fullname || ''}
+                                        readOnly
+                                    />
+
+                                    {selectedDoctor && (
+                                        <button
+                                            onClick={handleClearDoctorSelection}
+                                            className="absolute right-3 top-1/2 -translate-y-1/2 p-0.5 hover:bg-gray-100 rounded"
+                                        >
+                                            <X className="w-4 h-4 text-gray-400" />
+                                        </button>
+                                    )}
                                 </div>
+
+                                {/* Departments Dropdown */}
+                                {showDoctors && (
+                                    <div
+                                        ref={dropdownRef}
+                                        className="absolute z-10 mt-1 w-[355px] bg-white border rounded-lg shadow-lg max-h-80 overflow-y-auto"
+                                    >
+                                        {doctors.map((doctor) => (
+                                            <button
+                                                key={doctor.doctorId.userId}
+                                                className="w-full p-2 text-left hover:bg-gray-50 flex items-center gap-2"
+                                                onClick={() => handleDoctorSelect(doctor)}
+                                            >
+                                                <img
+                                                    src={`http://localhost:${import.meta.env.VITE_BE_PORT}/uploads/${
+                                                        doctor.doctorId.image
+                                                    }`}
+                                                    alt="logo clinic"
+                                                    className="h-8 w-8 rounded-full border-4 border-white"
+                                                />
+                                                <div className="flex flex-col">
+                                                    <span className="text-base font-semibold">
+                                                        {doctor.doctorId.fullname}
+                                                    </span>
+                                                    <span className="text-sm text-green-500">
+                                                        Giá {doctor.price.toLocaleString()}đ
+                                                    </span>
+                                                </div>
+                                            </button>
+                                        ))}
+                                    </div>
+                                )}
                             </div>
                         </div>
                     </div>
