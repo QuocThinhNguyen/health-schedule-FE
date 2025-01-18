@@ -2,18 +2,16 @@ import { useEffect, useState } from 'react';
 import { BsCoin } from 'react-icons/bs';
 import { CiHospital1 } from 'react-icons/ci';
 import { FaUser } from 'react-icons/fa';
-import { IoIosStar} from 'react-icons/io';
+import { IoIosStar } from 'react-icons/io';
 import { LiaStethoscopeSolid } from 'react-icons/lia';
 import { useNavigate } from 'react-router-dom';
 import { axiosClient } from '~/api/apiRequest';
 
 function Doctor(data) {
-
     const navigate = useNavigate();
-
     const doctor = data.data;
-    console.log("doctor", doctor);
-    
+    console.log('doctor', doctor);
+
     const [academicRanksAndDegreess, setAcademicRanksAndDegreess] = useState([]);
     useEffect(() => {
         const getDropdownAcademicRanksAndDegrees = async () => {
@@ -35,8 +33,8 @@ function Doctor(data) {
     }, [data]);
 
     const handleBooking = (doctorId) => {
-        console.log("Đã click vào nút Đặt khám ngay");
-        
+        console.log('Đã click vào nút Đặt khám ngay');
+
         // Điều hướng đến trang với ID bác sĩ
         navigate(`/bac-si/get?id=${doctorId}`);
     };

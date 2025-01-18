@@ -12,7 +12,7 @@ function FilterLayoutDoctor() {
 
     return (
         <div className="bg-[#f3f4f6] min-h-screen">
-            <div className="relative max-w-[1280px] my-20 py-8 mx-auto px-4 sm:px-6 lg:px-8 flex gap-6 items-start">
+            <div className="relative container my-20 py-8 mx-auto px-4 sm:px-6 lg:px-8 flex gap-6 items-start">
                 <div className="w-1/5 rounded-2xl sticky top-20">
                     <Filter filters={filters} setFilters={setFilters} />
                 </div>

@@ -25,8 +25,6 @@ function NewsDetail() {
             const getPostById = async () => {
                 try {
                     const response = await axiosClient.get(`/post/${postId}`);
-                    console.log('response detail:', response);
-
                     if (response.status === 200) {
                         setPost(response.data);
                     } else {
