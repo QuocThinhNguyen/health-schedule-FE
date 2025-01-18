@@ -15,6 +15,7 @@ function Home() {
     const [specialties, setSpecialties] = useState([]);
     const [academicRanksAndDegreess, setAcademicRanksAndDegreess] = useState([]);
     const navigate = useNavigate();
+    console.log('CHECK', academicRanksAndDegreess);
 
     console.log('doctor', doctors);
 
