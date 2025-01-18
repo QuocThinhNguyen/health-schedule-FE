@@ -6,7 +6,7 @@ function HomeLayout() {
     return (
         <>
             <Header />
-            <main className="min-h-screen-minus-20 mt-10">
+            <main className="min-h-screen-minus-20 mt-14">
                 <Outlet />
             </main>
             <Footer />

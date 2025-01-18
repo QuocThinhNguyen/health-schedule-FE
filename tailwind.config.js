@@ -3,10 +3,10 @@ export default {
     theme: {
         extend: {
             height: {
-                'screen-minus-20': 'calc(100vh - 5rem)',
+                'screen-minus-20': 'calc(100vh - 3.5rem)',
             },
             minHeight: {
-                'screen-minus-20': 'calc(100vh - 5rem)',
+                'screen-minus-20': 'calc(100vh - 3.5rem)',
             },
             animation: {
                 'rotate-fast': 'rotate-fast 1s ease-in-out', // Animation chạy trong 1 giây
