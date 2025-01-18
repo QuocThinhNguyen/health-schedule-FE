@@ -372,6 +372,12 @@ function ClinicInfo() {
             },
         });
     };
+    const handleBooking = (doctorId) => {
+        console.log('Đã click vào nút Đặt khám ngay');
+
+        // Điều hướng đến trang với ID bác sĩ
+        navigate(`/bac-si/get?id=${doctorId}`);
+    };
     return (
         <div className="min-h-screen bg-white">
             <div className="w-full bg-blue-50">
@@ -528,7 +534,7 @@ function ClinicInfo() {
                                                 <p className="text-gray-600 text-base">{clinicData.email}</p>
                                             </div>
 
-                                            <div className="doctor-description text-base">
+                                            <div className="doctor-description">
                                                 {clinicData.description
                                                     ? parse(clinicData.description)
                                                     : 'Mô tả không có sẵn'}
@@ -587,7 +593,9 @@ function ClinicInfo() {
                                                     </div>
                                                     <div className="flex items-center gap-3">
                                                         <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                                                        <span className="font-semibold">{doctor.avgRating}/5</span>
+                                                        <span className="font-semibold">
+                                                            {doctor.avgRating.toFixed(1)}/5
+                                                        </span>
                                                         <span className="text-gray-500 text-sm underline font-medium">
                                                             {doctor.bookingCount} lượt đặt khám
                                                         </span>
@@ -637,7 +645,10 @@ function ClinicInfo() {
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div className="bg-blue-500 hover:bg-blue-600 text-white border px-5 py-2 rounded-lg font-semibold cursor-pointer">
+                                            <div
+                                                className="bg-blue-500 hover:bg-blue-600 text-white border px-5 py-2 rounded-lg font-semibold cursor-pointer"
+                                                onClick={() => handleBooking(doctor.doctorId.userId)}
+                                            >
                                                 Đặt Lịch Hẹn
                                             </div>
                                         </div>
