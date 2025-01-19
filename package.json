@@ -28,6 +28,7 @@
         "fortawesome": "^0.0.1-security",
         "html-react-parser": "^5.1.18",
         "jwt-decode": "^4.0.0",
+        "lib-utils-ts": "^0.0.0-test",
         "lucide-react": "^0.456.0",
         "normalize.css": "^8.0.1",
         "path-browserify": "^1.0.1",
