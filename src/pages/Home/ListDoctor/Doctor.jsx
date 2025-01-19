@@ -32,6 +32,14 @@ function Doctor(data) {
         };
         getDropdownAcademicRanksAndDegrees();
     }, []);
+    const navigate = useNavigate();
+
+    const handleBooking = (doctorId) => {
+        console.log('Đã click vào nút Đặt khám ngay');
+
+        // Điều hướng đến trang với ID bác sĩ
+        navigate(`/bac-si/get?id=${doctorId}`);
+    };
     return (
         <div className="w-1/4 px-2 mt-4 group">
             <div className="bg-white rounded-lg shadow-md cursor-pointer border group-hover:border group-hover:border-[rgb(44,116,223)] group-hover:shadow-2xl">
@@ -85,7 +93,10 @@ function Doctor(data) {
                                     {doctor.clinicName}
                                 </div>
                             </div>
-                            <div className="w-full text-center bg-white group-hover:bg-[rgb(44,116,223)] border border-gray-300 group-hover:border-[#00B5F1] group-hover:text-white  font-semibold py-2 px-3 rounded-lg ">
+                            <div
+                                className="w-full text-center bg-white group-hover:bg-[rgb(44,116,223)] border border-gray-300 group-hover:border-[#00B5F1] group-hover:text-white  font-semibold py-2 px-3 rounded-lg"
+                                onClick={() => handleBooking(doctor.userId)}
+                            >
                                 Đặt khám ngay
                             </div>
                         </div>
