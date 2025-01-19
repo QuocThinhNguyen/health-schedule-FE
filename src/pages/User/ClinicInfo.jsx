@@ -381,8 +381,8 @@ function ClinicInfo() {
     return (
         <div className="min-h-screen bg-white">
             <div className="w-full bg-blue-50">
-                <div className="max-w-6xl py-2">
-                    <div className="flex items-center gap-2 text-sm ml-12">
+                <div className="max-w-6xl py-3 mx-auto">
+                    <div className="flex items-center gap-2 text-sm">
                         <NavLink
                             to="/"
                             onClick={(e) => {
@@ -468,7 +468,7 @@ function ClinicInfo() {
                         <div className="">
                             <main className="max-w-6xl mx-auto">
                                 {/* Information Sections */}
-                                <div className="space-y-6">
+                                <div className="space-y-6 mb-8">
                                     <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4">
                                         <p className="text-base">
                                             EasyMed là Nền tảng Y tế chăm sóc sức khỏe toàn diện hàng đầu Việt Nam kết
@@ -502,7 +502,7 @@ function ClinicInfo() {
                                         </ul>
                                     </div>
 
-                                    <div className="bg-white p-6 rounded-lg text-xl ">
+                                    <div className="bg-white rounded-lg text-xl">
                                         <div className="text-base font-semibold mb-4">GIỚI THIỆU</div>
                                         <div className="space-y-4 ">
                                             <div>
