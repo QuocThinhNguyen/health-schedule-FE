@@ -17,8 +17,8 @@ import ClinicInfo from '~/pages/User/ClinicInfo';
 import Specialties from '~/pages/User/Specialties';
 import AllClinic from '~/pages/User/AllClinic';
 import AllSpecialty from '~/pages/User/AllSpecialty';
-import AllNews from '~/pages/User/AllNews';
-import NewsDetail from '~/pages/User/NewsDetail';
+import AllNews from '~/pages/User/News/AllNews';
+import NewsDetail from '~/pages/User/News/NewsDetail';
 import FilterLayoutDoctor from '~/pages/User/AllDoctor/FilterLayoutDoctor';
 
 function AppRoutes() {

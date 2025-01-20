@@ -78,17 +78,17 @@ function Doctor(data) {
                             </div>
 
                             <div className="flex flex-col leading-[20px] text-sm">
-                                <div className="flex items-start gap-2">
-                                    <LiaStethoscopeSolid className="mt-1" />
+                                <div className="flex items-start gap-2 text-[#2D87F3] font-medium">
+                                    <LiaStethoscopeSolid className="mt-[2px] text-base" />
                                     {doctor.specialtyName}
                                 </div>
                                 <div className="flex items-start gap-2 text-red-700 font-semibold text-base">
-                                    <BsCoin className="mt-1" />
+                                    <BsCoin className="mt-1 text-base" />
                                     {doctor.price.toLocaleString('vi-VN')}đ
                                 </div>
                                 <div className="flex items-start gap-2 h-[37.5px]">
                                     <span>
-                                        <CiHospital1 className="mt-1" />
+                                        <CiHospital1 className="mt-[2px] text-base" />
                                     </span>
                                     {doctor.clinicName}
                                 </div>
