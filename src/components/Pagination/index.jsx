@@ -36,7 +36,7 @@ const Pagination = ({ currentPage, totalPages = 6, onPageChange }) => {
             <button
                 onClick={() => handlePageChange(1)}
                 disabled={currentPage === 1}
-                className="min-w-[32px] h-[32px] bg-white text-[#00b5f1] flex items-center justify-center border border-transparent shadow-[0_3px_15px_rgba(116,_157,_206,_0.2)] transition-all duration-200 ease-in-out hover:bg-gray-100 rounded-lg disabled:opacity-50 disabled:hover:bg-transparent"
+                className="min-w-8 h-8 bg-white text-[#00b5f1] font-normal flex items-center justify-center border border-transparent shadow-[0_3px_15px_rgba(116,_157,_206,_0.2)] transition-all duration-200 ease-in-out hover:bg-gray-100 rounded-md disabled:opacity-50 disabled:hover:bg-transparent"
                 aria-label="First page"
             >
                 <MdKeyboardDoubleArrowLeft />
@@ -46,7 +46,7 @@ const Pagination = ({ currentPage, totalPages = 6, onPageChange }) => {
             <button
                 onClick={() => handlePageChange(currentPage - 1)}
                 disabled={currentPage === 1}
-                className="min-w-[32px] h-[32px] bg-white text-[#00b5f1] flex items-center justify-center border border-transparent shadow-[0_3px_15px_rgba(116,_157,_206,_0.2)] transition-all duration-200 ease-in-out hover:bg-gray-100 rounded-lg disabled:opacity-50 disabled:hover:bg-transparent"
+                className="min-w-8 h-8 bg-white text-[#00b5f1] font-normal flex items-center justify-center border border-transparent shadow-[0_3px_15px_rgba(116,_157,_206,_0.2)] transition-all duration-200 ease-in-out hover:bg-gray-100 rounded-md disabled:opacity-50 disabled:hover:bg-transparent"
                 aria-label="Previous page"
             >
                 <MdKeyboardArrowLeft />
@@ -57,7 +57,7 @@ const Pagination = ({ currentPage, totalPages = 6, onPageChange }) => {
                 <button
                     key={index}
                     onClick={() => page !== '...' && handlePageChange(page)}
-                    className={`min-w-[32px] h-[32px] bg-white text-[#00b5f1] flex items-center justify-center border border-transparent rounded-lg shadow-[0_3px_15px_rgba(116,_157,_206,_0.2)] transition-all duration-200 ease-in-out ${
+                    className={`min-w-8 h-8 bg-white text-[#00b5f1] font-normal flex items-center justify-center border border-transparent rounded-md shadow-[0_3px_15px_rgba(116,_157,_206,_0.2)] transition-all duration-200 ease-in-out ${
                         currentPage === page
                             ? 'bg-gradient-to-r from-[#00b5f1] to-[#00e0ff] text-white '
                             : 'hover:bg-gray-100'
@@ -71,7 +71,7 @@ const Pagination = ({ currentPage, totalPages = 6, onPageChange }) => {
             <button
                 onClick={() => handlePageChange(currentPage + 1)}
                 disabled={currentPage === totalPages}
-                className="min-w-[32px] h-[32px] bg-white text-[#00b5f1] flex items-center justify-center border border-transparent shadow-[0_3px_15px_rgba(116,_157,_206,_0.2)] transition-all duration-200 ease-in-out hover:bg-gray-100 rounded-lg disabled:opacity-50 disabled:hover:bg-transparent"
+                className="min-w-8 h-8 bg-white text-[#00b5f1] font-normal flex items-center justify-center border border-transparent shadow-[0_3px_15px_rgba(116,_157,_206,_0.2)] transition-all duration-200 ease-in-out hover:bg-gray-100 rounded-md disabled:opacity-50 disabled:hover:bg-transparent"
                 aria-label="Next page"
             >
                 <MdKeyboardArrowRight />
@@ -81,7 +81,7 @@ const Pagination = ({ currentPage, totalPages = 6, onPageChange }) => {
             <button
                 onClick={() => handlePageChange(totalPages)}
                 disabled={currentPage === totalPages}
-                className="min-w-[32px] h-[32px] bg-white text-[#00b5f1] flex items-center justify-center border border-transparent shadow-[0_3px_15px_rgba(116,_157,_206,_0.2)]  transition-all duration-200 ease-in-out hover:bg-gray-100 rounded-lg disabled:opacity-50 disabled:hover:bg-transparent"
+                className="min-w-8 h-8 bg-white text-[#00b5f1] font-normal flex items-center justify-center border border-transparent shadow-[0_3px_15px_rgba(116,_157,_206,_0.2)]  transition-all duration-200 ease-in-out hover:bg-gray-100 rounded-md disabled:opacity-50 disabled:hover:bg-transparent"
                 aria-label="Last page"
             >
                 <MdKeyboardDoubleArrowRight />

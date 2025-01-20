@@ -30,7 +30,7 @@ function Home() {
 
     return (
         <div className="bg-[#F8F9FC]">
-            <div className="w-full h-[450px]  relative overflow-hidden mt-14 pt-30">
+            <div className="w-full h-[520px]  relative overflow-hidden mt-14 pt-30">
                 {/* Background image */}
                 {images.map((image, index) => (
                     <div

@@ -65,7 +65,7 @@ function Clinic(data) {
                         <div className="bg-[#2d87f3] bg-opacity-10 group-hover:bg-opacity-30 px-2 py-2 rounded-lg flex flex-col gap-4">
                             <div className="flex items-start gap-1 text-[rgb(89,89,89)] text-xs font-normal h-12">
                                 <span>
-                                    <GoLocation />
+                                    <GoLocation  className='text-xs mt-[2px]'/>
                                 </span>
                                 <span className="">{clinic.address}</span>
                             </div>
