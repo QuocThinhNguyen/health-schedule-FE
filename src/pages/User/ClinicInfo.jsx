@@ -763,7 +763,7 @@ function ClinicInfo() {
                 </div>
 
                 <div className="w-96 shrink-0 mt-4">
-                    <div className="bg-gray-50 rounded-lg p-4">
+                    <div className="bg-blue-100 rounded-lg p-4">
                         <div className="text-lg font-bold mb-2">Đặt lịch ngay</div>
                         <div className="text-sm text-gray-600 mb-6">
                             Lựa chọn bác sĩ phù hợp, dịch vụ y tế cần khám và tiến hành đặt lịch ngay.
