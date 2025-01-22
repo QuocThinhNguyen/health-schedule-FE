@@ -12,6 +12,9 @@ import {
     DollarSign,
     Calendar,
     ChevronLeft,
+    CreditCard,
+    Banknote,
+    Smartphone,
 } from 'lucide-react';
 import { FaMoneyBillWave } from 'react-icons/fa';
 import { axiosInstance, axiosClient } from '~/api/apiRequest';
@@ -364,7 +367,7 @@ function ClinicInfo() {
             return navigate('/login');
         }
         setSelectedTime(timeSlot);
-        navigate('/bac-si/get/record', {
+        navigate('/bac-si/booking', {
             state: {
                 doctorId,
                 currentDate,
@@ -465,7 +468,7 @@ function ClinicInfo() {
 
                     {/* Content */}
                     {activeTab === 'info' && (
-                        <div className="">
+                        <div className="mb-10">
                             <main className="max-w-6xl mx-auto">
                                 {/* Information Sections */}
                                 <div className="space-y-6">
@@ -502,9 +505,11 @@ function ClinicInfo() {
                                         </ul>
                                     </div>
 
-                                    <div className="bg-white p-6 rounded-lg text-xl ">
-                                        <div className="text-base font-semibold mb-4">GIỚI THIỆU</div>
-                                        <div className="space-y-4 ">
+                                    <div className="bg-white rounded-lg text-xl">
+                                        <div className="text-base font-semibold mb-2 border-l-4 border-blue-400 pl-4">
+                                            Giới thiệu
+                                        </div>
+                                        <div className="space-y-4">
                                             <div>
                                                 <h4 className="font-medium mb-2 flex items-center text-base">
                                                     <MapPin className="mr-2" size={15} />
@@ -533,11 +538,47 @@ function ClinicInfo() {
                                                 </h4>
                                                 <p className="text-gray-600 text-base">{clinicData.email}</p>
                                             </div>
-
+                                            <div className="text-base font-semibold mb-2 border-l-4 border-blue-400 pl-4">
+                                                Thông tin bệnh viện
+                                            </div>
                                             <div className="doctor-description">
                                                 {clinicData.description
                                                     ? parse(clinicData.description)
                                                     : 'Mô tả không có sẵn'}
+                                            </div>
+                                            <div className="text-base font-semibold mb-2 border-l-4 border-blue-400 pl-4 mt-5">
+                                                Hướng dẫn khám bệnh
+                                            </div>
+                                            <div className="space-y-2 text-base">
+                                                <p>Quy trình đặt lịch thăm khám qua nền tảng EasyMed:</p>
+                                                <ul className="list-none space-y-2 ml-4">
+                                                    <li>
+                                                        Bước 1: Quý bệnh nhân tiến hành chọn thời gian và đặt lịch trong
+                                                        khung "Đặt lịch hẹn".
+                                                    </li>
+                                                    <li>
+                                                        Bước 2: Sau khi hoàn tất đặt lịch, EasyMed sẽ gửi email xác nhận
+                                                        thông tin lịch hẹn khám cho...
+                                                    </li>
+                                                    <li>
+                                                        Bước 3: Bệnh nhân đến phòng khám theo lịch hẹn, đưa email xác
+                                                        nhận cho đội ngũ lễ tân/y tá và tiến hành thăm khám.
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            <div className="text-base font-semibold mb-2 border-l-4 border-blue-400 pl-4 mt-5">
+                                                Hình thức thanh toán
+                                            </div>
+                                            <div className="grid grid-cols-3 gap-4 mt-5">
+                                                <div className="border rounded-lg hover:border-blue-200 transition-colors cursor-pointer p-6 flex flex-col items-center justify-center">
+                                                    <Banknote className="w-8 h-8 text-green-600 mb-2" />
+                                                    <span className="text-sm font-medium">Tiền mặt</span>
+                                                </div>
+
+                                                <div className="border rounded-lg hover:border-blue-200 transition-colors cursor-pointer p-6 flex flex-col items-center justify-center">
+                                                    <Smartphone className="w-8 h-8 text-blue-600 mb-2" />
+                                                    <span className="text-sm font-medium">Thanh toán trực tuyến</span>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>

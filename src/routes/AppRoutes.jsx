@@ -20,6 +20,7 @@ import AllSpecialty from '~/pages/User/AllSpecialty';
 import AllNews from '~/pages/User/AllNews';
 import NewsDetail from '~/pages/User/NewsDetail';
 import FilterLayoutDoctor from '~/pages/User/AllDoctor/FilterLayoutDoctor';
+import MakeAnAppointment from '~/pages/User/MakeAnAppointment';
 
 function AppRoutes() {
     return (
@@ -35,6 +36,7 @@ function AppRoutes() {
                     <Route path="/bac-si" element={<AllDoctor />} />
                     <Route path="/bac-si-filter" element={<FilterLayoutDoctor />} />
                     <Route path="/bac-si/get" element={<DoctorInfo />} />
+                    <Route path="/bac-si/booking" element={<MakeAnAppointment />} />
                     <Route path="/bac-si/get/record" element={<ChoosePatientRecord />} />
                     <Route path="/bac-si/get/record/confirm" element={<ConfirmInfomation />} />
                     <Route path="/benh-vien" element={<ClinicInfo />} />

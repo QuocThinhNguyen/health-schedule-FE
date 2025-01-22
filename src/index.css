@@ -18,7 +18,8 @@ html {
     --primary: #fe2c55;
     --white: #fff;
     --black: #000;
-    --text-color: #404040;
+    /* --text-color: #404040; */
+    --text-color: #000000;
     /* --text-color: #134460; */
 }
 
