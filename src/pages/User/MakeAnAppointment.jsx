@@ -13,6 +13,7 @@ import {
     Pencil,
     Trash2,
     Plus,
+    Calendar,
 } from 'lucide-react';
 import { BsCoin } from 'react-icons/bs';
 import { axiosInstance } from '~/api/apiRequest';
@@ -35,6 +36,21 @@ function MakeAnAppointment() {
     const [self, setSelf] = useState([]);
     const { user } = useContext(UserContext);
     const [patientData, setPatientData] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
+    const [reason, setReason] = useState('');
+    const [showEditModal, setShowEditModal] = useState(false);
+    const [editingPatient, setEditingPatient] = useState(null);
+    const [formData, setFormData] = useState({
+        fullname: '',
+        birthDate: '',
+        phoneNumber: '',
+        gender: '',
+        job: '',
+        CCCD: '',
+        email: '',
+        address: '',
+    });
+    console.log('FORM DATA', formData);
     // const [loading, setLoading] = useState(true);
     // if (loading) return <div>Loading...</div>;
 
@@ -181,6 +197,133 @@ function MakeAnAppointment() {
         fetchPatientData();
     }, [user.userId]);
 
+    const handleConfirm = async () => {
+        setIsLoading(true);
+        try {
+            if (paymentMethod === 'cash') {
+                await handlePaymentDirect();
+            } else if (paymentMethod === 'online') {
+                await handlePaymentOnline();
+            }
+        } catch (error) {
+            console.error('Error during payment:', error);
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    const handlePaymentDirect = async () => {
+        try {
+            const formData = new FormData();
+            formData.append('doctorId', state.doctorId);
+            formData.append('patientRecordId', selectedPatientId);
+            formData.append('appointmentDate', state.currentDate);
+            formData.append('timeType', state.timeSlot);
+            formData.append('price', doctorInfo.price);
+            formData.append('reason', reason || '');
+
+            files.forEach((file, index) => {
+                formData.append('images', file);
+            });
+            const response = await axiosInstance.post('/booking/book-appointment-direct', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
+            if (response.status === 200) {
+                toast.success('Đặt lịch thành công!');
+                navigate('/user/appointments');
+            } else {
+                toast.error(response.data.message || 'Đặt lịch thất bại!');
+            }
+        } catch (error) {
+            console.error('Failed to confirm booking:', error.message);
+            toast.error('Đã xảy ra lỗi khi đặt lịch!');
+        }
+    };
+
+    const handlePaymentOnline = async () => {
+        try {
+            const formData = new FormData();
+            formData.append('doctorId', state.doctorId);
+            formData.append('patientRecordId', selectedPatientId);
+            formData.append('appointmentDate', state.currentDate);
+            formData.append('timeType', state.timeSlot);
+            formData.append('price', doctorInfo.price);
+            formData.append('reason', reason || '');
+
+            files.forEach((file, index) => {
+                formData.append('images', file);
+            });
+
+            const response = await axiosInstance.post('/booking/book-appointment-online', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
+
+            if (response.status === 200) {
+                toast.success('Đặt lịch thành công! Chuyển đến trang thanh toán...');
+                window.location.href = response.paymentUrl; // Chuyển đến URL thanh toán
+            } else {
+                toast.error(response.data.message || 'Đặt lịch thất bại!');
+            }
+        } catch (error) {
+            console.error('Failed to confirm booking:', error.message);
+            toast.error('Đã xảy ra lỗi khi đặt lịch!');
+        }
+    };
+
+    const recordId = selectedPatientId;
+    useEffect(() => {
+        const fetchRecordData = async () => {
+            try {
+                const response = await axiosInstance.get(`/patientrecord/${recordId}`);
+                console.log('RESPONSE', response);
+                console.log('DATA', response.data);
+                if (response.status === 200) {
+                    const data = response.data;
+                    setFormData({
+                        fullname: response.data.fullname || '',
+                        birthDate: data.birthDate ? data.birthDate.split('T')[0] : '',
+                        phoneNumber: data.phoneNumber || '',
+                        gender: data.gender === 'Male' ? 'Nam' : 'Nữ',
+                        job: data.job || '',
+                        CCCD: data.CCCD || '',
+                        email: data.email || '',
+                        address: data.address || '',
+                    });
+                }
+            } catch (error) {
+                console.log('Error:', error);
+            }
+        };
+        fetchRecordData();
+    }, [recordId]);
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData((prev) => ({
+            ...prev,
+            [name]: value,
+        }));
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        console.log('Form submitted:', formData);
+        try {
+            const response = await axiosInstance.put(`/patientrecord/${recordId}`, formData);
+            console.log('Response Update:', response);
+            if (response.status === 200) {
+                toast.success('Cập nhật thông tin thành công');
+            } else {
+                toast.error('Cập nhật thông tin thất bại');
+            }
+        } catch (error) {
+            console.log('Error:', error);
+        }
+    };
     return (
         <div className="min-h-screen bg-white">
             <div className="w-full bg-blue-50">
@@ -252,60 +395,7 @@ function MakeAnAppointment() {
                             <div className="mt-4 space-y-4">
                                 <div>
                                     <div className="text-lg">Bạn đang đặt lịch hẹn cho</div>
-                                    <div className="mt-2 space-x-6 flex text-lg">
-                                        <label className="flex items-center gap-2 cursor-pointer">
-                                            <input
-                                                type="radio"
-                                                value="self"
-                                                checked={userType === 'self'}
-                                                onChange={() => setUserType('self')}
-                                                className="text-blue-600 transform scale-150"
-                                            />
-                                            Bản thân
-                                        </label>
-                                        <label className="flex items-center gap-2 cursor-pointer">
-                                            <input
-                                                type="radio"
-                                                value="other"
-                                                checked={userType === 'other'}
-                                                onChange={() => setUserType('other')}
-                                                className="text-blue-600 transform scale-150"
-                                            />
-                                            Người khác
-                                        </label>
-                                    </div>
-                                </div>
-
-                                {userType === 'self' ? (
-                                    <div className="space-y-2 mt-5 bg-blue-50 rounded-lg px-4">
-                                        <div className="flex items-center gap-x-2 border-b py-2">
-                                            <img
-                                                src={`${IMAGE_URL}${self.image}`} // Thay thế URL này bằng link ảnh thực tế của bác sĩ
-                                                alt="User profile"
-                                                className="rounded-full w-12 h-12 object-cover border-4"
-                                            />
-                                            <div>
-                                                <div className="font-medium">{self.fullname}</div>
-                                                <div className="text-sm text-gray-500">
-                                                    {self.gender === 'Male' ? 'Nam' : 'Nữ'} •{' '}
-                                                    {new Date(self.birthDate).toLocaleDateString('vi-VN')}
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div className="space-y-2 pb-2">
-                                            <div className="flex items-center gap-x-2">
-                                                <Phone className="w-4 h-4 ml-2 text-gray-500" />
-                                                <div className="text-gray-500">{self.phoneNumber}</div>
-                                            </div>
-                                            <div className="flex items-center gap-x-2">
-                                                <Mail className="w-4 h-4 ml-2 text-gray-500" />
-                                                <div className="text-gray-500">{self.email}</div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                ) : (
-                                    <div className="space-y-2">
+                                    <div className="space-y-2 mt-2">
                                         {patientData.map((patient) => (
                                             <div
                                                 key={patient.patientRecordId}
@@ -325,20 +415,6 @@ function MakeAnAppointment() {
                                                     className="w-5 h-5 accent-blue-600"
                                                 />
 
-                                                {/* <div className="w-12 h-12 bg-blue-50 rounded-full flex items-center justify-center">
-                                                    <svg
-                                                        width="32"
-                                                        height="32"
-                                                        viewBox="0 0 24 24"
-                                                        fill="none"
-                                                        stroke="#2563eb"
-                                                        strokeWidth="2"
-                                                    >
-                                                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-                                                        <circle cx="12" cy="7" r="4" />
-                                                    </svg>
-                                                </div> */}
-
                                                 <div className="flex-1">
                                                     <div className="font-medium text-base">{patient.fullname}</div>
                                                     {/* <div className="text-sm text-gray-500">{patient.relation}</div> */}
@@ -350,7 +426,10 @@ function MakeAnAppointment() {
 
                                                 <div className="flex gap-2">
                                                     <button className="p-2 rounded-md hover:bg-gray-100 transition-colors">
-                                                        <Pencil className="w-4 h-4 text-gray-400" />
+                                                        <Pencil
+                                                            className="w-4 h-4 text-gray-400"
+                                                            onClick={() => setShowEditModal(true)}
+                                                        />
                                                     </button>
                                                     <button className="p-2 rounded-md hover:bg-gray-100 transition-colors">
                                                         <Trash2 className="w-4 h-4 text-gray-400" />
@@ -364,7 +443,7 @@ function MakeAnAppointment() {
                                             Thêm bệnh nhân mới
                                         </button>
                                     </div>
-                                )}
+                                </div>
                             </div>
                             <div className="flex gap-3 items-start p-3 rounded-lg max-w-sm">
                                 <Shield className="w-5 h-5 text-blue-600 mt-0.5" />
@@ -392,7 +471,9 @@ function MakeAnAppointment() {
                             <div className="mt-4">
                                 <textarea
                                     placeholder="Vui lòng mô tả chi tiết triệu chứng của bạn..."
-                                    className="w-full min-h-[100px] p-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                    className="w-full min-h-20 p-2 border rounded-md  focus:border-blue-600 focus:outline-none hover:border-blue-600"
+                                    value={reason}
+                                    onChange={(e) => setReason(e.target.value)}
                                 />
                             </div>
                         </div>
@@ -410,7 +491,7 @@ function MakeAnAppointment() {
                                 onDragLeave={handleDragLeave}
                                 onDrop={handleDrop}
                             >
-                                <div className="text-center py-2">
+                                <div className="text-center py-1">
                                     <div className="flex items-center justify-center">
                                         <div className="text-blue-600 hover:text-blue-700 text-base mr-1">
                                             Chọn tập tin
@@ -465,7 +546,7 @@ function MakeAnAppointment() {
                     </div>
 
                     {/* Right Column */}
-                    <div className="space-y-6 lg:w-3/5 mt-4 border rounded-xl px-6 py-6 h-fit">
+                    <div className="space-y-6 lg:w-3/5 mt-4">
                         {/* Appointment Details */}
                         <div className="border rounded-xl px-6 py-6 h-fit">
                             <div className="flex items-center gap-2 text-base font-bold text-blue-900">
@@ -494,7 +575,7 @@ function MakeAnAppointment() {
                                     <div className="flex items-center gap-2 ">
                                         <Clock className="w-5 h-5" />
                                         <div>
-                                            <div className="font-semibold">
+                                            <div className="font-semibold text-base">
                                                 Lịch hẹn:{' '}
                                                 {selectedTimeSlot
                                                     ? selectedTimeSlot.label
@@ -510,7 +591,7 @@ function MakeAnAppointment() {
                                     <div className="flex items-start gap-2">
                                         <MapPin className="w-5 h-5 mt-1" />
                                         <div>
-                                            <div className="font-semibold">{doctorInfo.clinicName}</div>
+                                            <div className="font-semibold text-base">{doctorInfo.clinicName}</div>
                                             <div className="text-sm text-gray-500">{doctorInfo.addressClinic}</div>
                                             {/* <button className="text-blue-600 text-sm hover:underline">Chỉ đường</button> */}
                                         </div>
@@ -519,7 +600,7 @@ function MakeAnAppointment() {
                                     <div className="flex items-start gap-2">
                                         <BsCoin className="w-5 h-5 mt-1" />
                                         <div>
-                                            <div className="text-sm font-semibold ">Mức phí</div>
+                                            <div className="text-base font-semibold ">Mức phí</div>
                                             <div className="text-red-600 font-medium text-lg">
                                                 {' '}
                                                 {formatCurrency(doctorInfo.price)}
@@ -584,12 +665,207 @@ function MakeAnAppointment() {
                             </div>
                         </div>
 
-                        <button className="w-full py-3 px-4 bg-blue-600 text-white font-medium rounded-md hover:bg-blue-700 transition-colors">
+                        <button
+                            className="w-full py-3 px-4 bg-blue-600 text-white font-medium rounded-md hover:bg-blue-700 transition-colors"
+                            onClick={handleConfirm}
+                        >
                             Xác nhận đặt lịch
                         </button>
+                        {isLoading && (
+                            <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+                                <img
+                                    src="https://media.tenor.com/On7kvXhzml4AAAAj/loading-gif.gif"
+                                    alt="Loading..."
+                                    className="w-24 h-24"
+                                />
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>
+            {/* Edit Profile Modal */}
+            {showEditModal && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 pt-10 pb-10">
+                    <div className="bg-white rounded-lg w-full max-w-lg max-h-screen overflow-hidden p-3">
+                        {/* Header cố định */}
+                        <div className="flex items-center justify-between p-4 border-b sticky top-0 bg-white z-10 max-h-12">
+                            <div className="text-base font-semibold">Chỉnh sửa hồ sơ</div>
+                            <button
+                                onClick={() => setShowEditModal(false)}
+                                className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                            >
+                                <X className="w-5 h-5 text-gray-500" />
+                            </button>
+                        </div>
+
+                        {/* Nội dung cuộn */}
+                        <div className="p-4 overflow-y-auto max-h-[calc(100vh-150px)]">
+                            {/* <div className="flex items-center gap-4 mb-6">
+                                <div className="w-16 h-16 bg-blue-50 rounded-full flex items-center justify-center">
+                                    <svg
+                                        width="40"
+                                        height="40"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="#2563eb"
+                                        strokeWidth="2"
+                                    >
+                                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                                        <circle cx="12" cy="7" r="4" />
+                                    </svg>
+                                </div>
+                                <div className="space-x-2">
+                                    <button className="px-4 py-2 border rounded-lg hover:bg-gray-50 transition-colors">
+                                        Thay đổi ảnh
+                                    </button>
+                                    <button className="px-4 py-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors">
+                                        Gỡ ảnh
+                                    </button>
+                                </div>
+                            </div> */}
+
+                            <form onSubmit={handleSubmit} className="space-y-4">
+                                {/* Form nội dung */}
+                                <div>
+                                    <label className="block mb-1.5 text-sm font-medium">
+                                        Tên bệnh nhân <span className="text-red-500">*</span>
+                                    </label>
+                                    <input
+                                        type="text"
+                                        name="fullname"
+                                        value={formData.fullname}
+                                        onChange={handleChange}
+                                        required
+                                        className="w-full p-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    />
+                                </div>
+
+                                <div>
+                                    <label className="block mb-1.5 text-sm font-medium">
+                                        Ngày sinh <span className="text-red-500">*</span>
+                                    </label>
+                                    <div className="relative">
+                                        <input
+                                            type="date"
+                                            name="birthDate"
+                                            value={formData.birthDate}
+                                            onChange={handleChange}
+                                            className="w-full p-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                            required
+                                        />
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <label className="block mb-1.5 text-sm font-medium">
+                                        Số điện thoại bệnh nhân (Tham khảo)
+                                    </label>
+                                    <input
+                                        type="tel"
+                                        placeholder="Vui lòng điền số điện thoại bệnh nhân"
+                                        name="phoneNumber"
+                                        value={formData.phoneNumber}
+                                        onChange={handleChange}
+                                        className="w-full p-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                        required
+                                    />
+                                </div>
+
+                                <div>
+                                    <label className="block mb-1.5 text-sm font-medium">Giới tính</label>
+                                    <div className="flex gap-4">
+                                        <label className="flex items-center gap-2">
+                                            <input
+                                                type="radio"
+                                                name="gender"
+                                                value="Nam"
+                                                checked={formData.gender === 'Nam'}
+                                                defaultChecked={editingPatient?.gender === 'Nam'}
+                                                className="w-5 h-5 accent-blue-600"
+                                            />
+                                            <span>Nam</span>
+                                        </label>
+                                        <label className="flex items-center gap-2">
+                                            <input
+                                                type="radio"
+                                                name="gender"
+                                                value="Nữ"
+                                                checked={formData.gender === 'Nữ'}
+                                                defaultChecked={editingPatient?.gender === 'Nữ'}
+                                                className="w-5 h-5 accent-blue-600"
+                                            />
+                                            <span>Nữ</span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <label className="block mb-1.5 text-sm font-medium">Nghề nghiệp</label>
+                                    <input
+                                        type="text"
+                                        name="job"
+                                        value={formData.job}
+                                        onChange={handleChange}
+                                        className="w-full p-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                        required
+                                    />
+                                </div>
+
+                                <div>
+                                    <label className="block mb-1.5 text-sm font-medium">
+                                        Số CCCD/Passport <span className="text-red-500">*</span>
+                                    </label>
+                                    <input
+                                        type="text"
+                                        name="CCCD"
+                                        placeholder="Vui lòng nhập Số CCCD/Passport"
+                                        value={formData.CCCD}
+                                        onChange={handleChange}
+                                        className="w-full p-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                        required
+                                    />
+                                </div>
+
+                                <div>
+                                    <label className="block mb-1.5 text-sm font-medium">Địa chỉ Email </label>
+                                    <input
+                                        type="email"
+                                        name="email"
+                                        placeholder="Nhập địa chỉ email để nhận phiếu khám"
+                                        value={formData.email}
+                                        onChange={handleChange}
+                                        className="w-full p-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                        required
+                                    />
+                                </div>
+
+                                <div>
+                                    <label className="block mb-1.5 text-sm font-medium">Địa chỉ hiện tại</label>
+                                    <input
+                                        type="text"
+                                        name="address"
+                                        placeholder="Nhập địa chỉ hiện tại"
+                                        value={formData.address}
+                                        onChange={handleChange}
+                                        className="w-full p-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                        required
+                                    />
+                                </div>
+                            </form>
+                        </div>
+
+                        {/* Footer cố định */}
+                        <div className="p-4 border-t sticky bottom-0 bg-white z-10">
+                            <button
+                                type="submit"
+                                className="w-full py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                            >
+                                Lưu thay đổi
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

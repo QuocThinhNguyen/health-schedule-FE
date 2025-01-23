@@ -115,7 +115,7 @@ function DoctorInfo() {
             return navigate('/login');
         }
         setSelectedTime(timeSlot);
-        navigate('/bac-si/get/record', {
+        navigate('/bac-si/booking', {
             state: {
                 doctorId,
                 currentDate,

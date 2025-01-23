@@ -23,6 +23,7 @@
         "classnames": "^2.5.1",
         "clinic_frontend": "file:",
         "cors": "^2.8.5",
+        "date-fns": "^4.1.0",
         "dotenv": "^16.4.5",
         "fortawesome": "^0.0.1-security",
         "html-react-parser": "^5.1.18",
