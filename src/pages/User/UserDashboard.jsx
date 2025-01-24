@@ -14,12 +14,12 @@ const UserDashboard = () => {
     };
 
     return (
-        <div className="flex h-screen mt-20">
+        <div className="flex h-screen bg-neutral-50 ml-14">
             {/* Sidebar */}
             <Sidebar onSelectTab={handleSelectTab} selectedTab={selectedTab} />
 
             {/* Main content */}
-            <div className="flex-1 p-6 overflow-auto">
+            <div className="flex-1 px-11 overflow-auto">
                 <Outlet />
             </div>
         </div>

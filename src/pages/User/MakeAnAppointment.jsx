@@ -39,7 +39,7 @@ function MakeAnAppointment() {
     const [isLoading, setIsLoading] = useState(false);
     const [reason, setReason] = useState('');
     const [showEditModal, setShowEditModal] = useState(false);
-    const [editingPatient, setEditingPatient] = useState(null);
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [formData, setFormData] = useState({
         fullname: '',
         birthDate: '',
@@ -50,6 +50,21 @@ function MakeAnAppointment() {
         email: '',
         address: '',
     });
+
+    const [showAddModel, setShowAddModel] = useState(false);
+
+    const [formAddData, setFormAddData] = useState({
+        patientId: user.userId,
+        fullname: '',
+        birthDate: '',
+        phoneNumber: '',
+        gender: '',
+        job: '',
+        CCCD: '',
+        email: '',
+        address: '',
+    });
+
     console.log('FORM DATA', formData);
     // const [loading, setLoading] = useState(true);
     // if (loading) return <div>Loading...</div>;
@@ -279,15 +294,15 @@ function MakeAnAppointment() {
         const fetchRecordData = async () => {
             try {
                 const response = await axiosInstance.get(`/patientrecord/${recordId}`);
-                console.log('RESPONSE', response);
-                console.log('DATA', response.data);
+                // console.log('RESPONSE', response);
+                // console.log('DATA', response.data);
                 if (response.status === 200) {
                     const data = response.data;
                     setFormData({
                         fullname: response.data.fullname || '',
                         birthDate: data.birthDate ? data.birthDate.split('T')[0] : '',
                         phoneNumber: data.phoneNumber || '',
-                        gender: data.gender === 'Male' ? 'Nam' : 'Nữ',
+                        gender: data.gender,
                         job: data.job || '',
                         CCCD: data.CCCD || '',
                         email: data.email || '',
@@ -309,6 +324,14 @@ function MakeAnAppointment() {
         }));
     };
 
+    const handleAdd = (e) => {
+        const { name, value } = e.target;
+        setFormAddData((prev) => ({
+            ...prev,
+            [name]: value,
+        }));
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         console.log('Form submitted:', formData);
@@ -317,6 +340,10 @@ function MakeAnAppointment() {
             console.log('Response Update:', response);
             if (response.status === 200) {
                 toast.success('Cập nhật thông tin thành công');
+                setShowEditModal(false);
+                setTimeout(() => {
+                    window.location.reload();
+                }, 1500);
             } else {
                 toast.error('Cập nhật thông tin thất bại');
             }
@@ -324,6 +351,57 @@ function MakeAnAppointment() {
             console.log('Error:', error);
         }
     };
+
+    const handleCancelDelete = () => {
+        setShowDeleteModal(false); // Close the modal without deleting
+    };
+    const handleConfirmDelete = async () => {
+        // console.log(`Xóa hồ sơ bệnh nhân có ID: ${patientIdToDelete}`);
+        try {
+            const response = await axiosInstance.delete(`/patientrecord/${recordId}`);
+            // console.log('DELETE', response);
+            if (response.status === 200) {
+                // Remove the deleted patient from the state
+                setPatientData((prevData) => prevData.filter((patient) => patient.patientRecordId !== recordId));
+                toast.success('Đã xóa hồ sơ thành công');
+                setTimeout(() => {
+                    window.location.reload();
+                }, 1500);
+            } else {
+                toast.error('Không thể xóa hồ sơ');
+            }
+        } catch (error) {
+            console.error('Lỗi khi xóa hồ sơ:', error);
+            toast.error('Đã xảy ra lỗi khi xóa hồ sơ');
+        }
+        setShowDeleteModal(false); // Close the modal after deletion
+    };
+
+    const handleAddPatient = async (e) => {
+        e.preventDefault();
+
+        console.log('Form submitted:', formAddData);
+        try {
+            console.log('Form submitted:', formAddData);
+            const response = await axiosInstance.post('/patientrecord', formAddData);
+            console.log('API Response:', response);
+
+            if (response.status === 200) {
+                toast.success(response.message); // Thông báo thành công
+                // navigate('/user/records');
+                setShowAddModel(false);
+                setTimeout(() => {
+                    window.location.reload();
+                }, 1500);
+            } else {
+                toast.error('Tạo mới thất bại: ' + response.message); // Thông báo lỗi
+            }
+        } catch (error) {
+            console.error('Error creating record:', error);
+            toast.error('Có lỗi xảy ra khi tạo bản ghi.');
+        }
+    };
+
     return (
         <div className="min-h-screen bg-white">
             <div className="w-full bg-blue-50">
@@ -431,14 +509,20 @@ function MakeAnAppointment() {
                                                             onClick={() => setShowEditModal(true)}
                                                         />
                                                     </button>
-                                                    <button className="p-2 rounded-md hover:bg-gray-100 transition-colors">
+                                                    <button
+                                                        className="p-2 rounded-md hover:bg-gray-100 transition-colors"
+                                                        onClick={() => setShowDeleteModal(true)}
+                                                    >
                                                         <Trash2 className="w-4 h-4 text-gray-400" />
                                                     </button>
                                                 </div>
                                             </div>
                                         ))}
 
-                                        <button className="w-full flex items-center justify-center gap-2 p-3 bg-white  rounded-lg text-blue-600 text-sm font-medium hover:bg-blue-50 transition-colors">
+                                        <button
+                                            className="w-full flex items-center justify-center gap-2 p-3 bg-white  rounded-lg text-blue-600 text-sm font-medium hover:bg-blue-50 transition-colors"
+                                            onClick={() => setShowAddModel(true)}
+                                        >
                                             <Plus className="w-4 h-4" />
                                             Thêm bệnh nhân mới
                                         </button>
@@ -700,34 +784,10 @@ function MakeAnAppointment() {
 
                         {/* Nội dung cuộn */}
                         <div className="p-4 overflow-y-auto max-h-[calc(100vh-150px)]">
-                            {/* <div className="flex items-center gap-4 mb-6">
-                                <div className="w-16 h-16 bg-blue-50 rounded-full flex items-center justify-center">
-                                    <svg
-                                        width="40"
-                                        height="40"
-                                        viewBox="0 0 24 24"
-                                        fill="none"
-                                        stroke="#2563eb"
-                                        strokeWidth="2"
-                                    >
-                                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-                                        <circle cx="12" cy="7" r="4" />
-                                    </svg>
-                                </div>
-                                <div className="space-x-2">
-                                    <button className="px-4 py-2 border rounded-lg hover:bg-gray-50 transition-colors">
-                                        Thay đổi ảnh
-                                    </button>
-                                    <button className="px-4 py-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors">
-                                        Gỡ ảnh
-                                    </button>
-                                </div>
-                            </div> */}
-
-                            <form onSubmit={handleSubmit} className="space-y-4">
+                            <div className="space-y-4">
                                 {/* Form nội dung */}
                                 <div>
-                                    <label className="block mb-1.5 text-sm font-medium">
+                                    <label className="block mb-1.5 text-sm font-medium text-gray-500">
                                         Tên bệnh nhân <span className="text-red-500">*</span>
                                     </label>
                                     <input
@@ -741,7 +801,7 @@ function MakeAnAppointment() {
                                 </div>
 
                                 <div>
-                                    <label className="block mb-1.5 text-sm font-medium">
+                                    <label className="block mb-1.5 text-sm font-medium text-gray-500">
                                         Ngày sinh <span className="text-red-500">*</span>
                                     </label>
                                     <div className="relative">
@@ -757,7 +817,7 @@ function MakeAnAppointment() {
                                 </div>
 
                                 <div>
-                                    <label className="block mb-1.5 text-sm font-medium">
+                                    <label className="block mb-1.5 text-sm font-medium text-gray-500">
                                         Số điện thoại bệnh nhân (Tham khảo)
                                     </label>
                                     <input
@@ -772,16 +832,16 @@ function MakeAnAppointment() {
                                 </div>
 
                                 <div>
-                                    <label className="block mb-1.5 text-sm font-medium">Giới tính</label>
+                                    <label className="block mb-1.5 text-sm font-medium text-gray-500">Giới tính</label>
                                     <div className="flex gap-4">
                                         <label className="flex items-center gap-2">
                                             <input
                                                 type="radio"
                                                 name="gender"
-                                                value="Nam"
-                                                checked={formData.gender === 'Nam'}
-                                                defaultChecked={editingPatient?.gender === 'Nam'}
+                                                value="Male"
+                                                checked={formData.gender === 'Male'}
                                                 className="w-5 h-5 accent-blue-600"
+                                                onChange={handleChange}
                                             />
                                             <span>Nam</span>
                                         </label>
@@ -789,10 +849,10 @@ function MakeAnAppointment() {
                                             <input
                                                 type="radio"
                                                 name="gender"
-                                                value="Nữ"
-                                                checked={formData.gender === 'Nữ'}
-                                                defaultChecked={editingPatient?.gender === 'Nữ'}
+                                                value="Female"
+                                                checked={formData.gender === 'Female'}
                                                 className="w-5 h-5 accent-blue-600"
+                                                onChange={handleChange}
                                             />
                                             <span>Nữ</span>
                                         </label>
@@ -800,7 +860,9 @@ function MakeAnAppointment() {
                                 </div>
 
                                 <div>
-                                    <label className="block mb-1.5 text-sm font-medium">Nghề nghiệp</label>
+                                    <label className="block mb-1.5 text-sm font-medium text-gray-500">
+                                        Nghề nghiệp
+                                    </label>
                                     <input
                                         type="text"
                                         name="job"
@@ -812,7 +874,7 @@ function MakeAnAppointment() {
                                 </div>
 
                                 <div>
-                                    <label className="block mb-1.5 text-sm font-medium">
+                                    <label className="block mb-1.5 text-sm font-medium text-gray-500">
                                         Số CCCD/Passport <span className="text-red-500">*</span>
                                     </label>
                                     <input
@@ -827,7 +889,9 @@ function MakeAnAppointment() {
                                 </div>
 
                                 <div>
-                                    <label className="block mb-1.5 text-sm font-medium">Địa chỉ Email </label>
+                                    <label className="block mb-1.5 text-sm font-medium text-gray-500">
+                                        Địa chỉ Email{' '}
+                                    </label>
                                     <input
                                         type="email"
                                         name="email"
@@ -840,7 +904,9 @@ function MakeAnAppointment() {
                                 </div>
 
                                 <div>
-                                    <label className="block mb-1.5 text-sm font-medium">Địa chỉ hiện tại</label>
+                                    <label className="block mb-1.5 text-sm font-medium text-gray-500">
+                                        Địa chỉ hiện tại
+                                    </label>
                                     <input
                                         type="text"
                                         name="address"
@@ -851,16 +917,241 @@ function MakeAnAppointment() {
                                         required
                                     />
                                 </div>
-                            </form>
+                            </div>
                         </div>
 
                         {/* Footer cố định */}
                         <div className="p-4 border-t sticky bottom-0 bg-white z-10">
                             <button
-                                type="submit"
-                                className="w-full py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                                type="button"
+                                onClick={handleSubmit}
+                                className="w-full py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
                             >
                                 Lưu thay đổi
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+            {/* Delete Modal */}
+            {showDeleteModal && (
+                <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4">
+                    <div className="bg-white rounded-xl w-full max-w-md">
+                        {/* Header */}
+                        <div className="flex justify-end p-4">
+                            <button
+                                className="hover:bg-gray-100 p-2 rounded-lg transition-colors"
+                                onClick={handleCancelDelete}
+                            >
+                                <X className="w-5 h-5 text-gray-500" />
+                            </button>
+                        </div>
+
+                        {/* Content */}
+                        <div className="px-6 pb-6 text-center">
+                            {/* Avatar with X icon */}
+                            <div className="relative inline-block mb-4">
+                                <div className="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center">
+                                    <svg viewBox="0 0 24 24" className="w-12 h-12 text-blue-500" fill="currentColor">
+                                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3z M12 20c-2.33 0-4.43-.93-6-2.43.67-1.95 2.68-3.57 6-3.57s5.33 1.62 6 3.57c-1.57 1.5-3.67 2.43-6 2.43z" />
+                                    </svg>
+                                </div>
+                                <div className="absolute -bottom-1 -right-1 bg-red-500 rounded-full p-2">
+                                    <X className="w-4 h-4 text-white" />
+                                </div>
+                            </div>
+
+                            {/* Title */}
+                            <h2 className="text-2xl font-bold mb-4">Xóa thành viên</h2>
+
+                            {/* Message */}
+                            <p className="text-gray-600 mb-8">
+                                Bạn có chắc chắn muốn xóa hồ sơ{' '}
+                                <span className="font-bold text-gray-900">{formData.fullname}</span> khỏi gia đình của
+                                bạn không?
+                            </p>
+
+                            {/* Buttons */}
+                            <div className="flex gap-3">
+                                <button
+                                    // onClick={onConfirm}
+                                    className="flex-1 px-4 py-2.5 border border-blue-600 text-blue-600 rounded-lg hover:bg-blue-50 transition-colors"
+                                    onClick={handleConfirmDelete}
+                                >
+                                    Đồng ý, xóa
+                                </button>
+                                <button
+                                    onClick={handleCancelDelete}
+                                    className="flex-1 px-4 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                                >
+                                    Không, giữ lại
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+            {/* Add Patient Modal */}
+            {showAddModel && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 pt-10 pb-10">
+                    <div className="bg-white rounded-lg w-full max-w-lg max-h-screen overflow-hidden p-3">
+                        {/* Header cố định */}
+                        <div className="flex items-center justify-between p-4 border-b sticky top-0 bg-white z-10 max-h-12">
+                            <div className="text-base font-semibold">Tạo hồ sơ mới</div>
+                            <button
+                                onClick={() => setShowAddModel(false)}
+                                className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                            >
+                                <X className="w-5 h-5 text-gray-500" />
+                            </button>
+                        </div>
+
+                        {/* Nội dung cuộn */}
+                        <div className="p-4 overflow-y-auto max-h-[calc(100vh-150px)]">
+                            <div className="space-y-4">
+                                {/* Form nội dung */}
+                                <div>
+                                    <label className="block mb-1.5 text-sm font-medium text-gray-500">
+                                        Tên bệnh nhân <span className="text-red-500">*</span>
+                                    </label>
+                                    <input
+                                        type="text"
+                                        name="fullname"
+                                        value={formAddData.fullname}
+                                        onChange={handleAdd}
+                                        required
+                                        className="w-full p-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    />
+                                </div>
+
+                                <div>
+                                    <label className="block mb-1.5 text-sm font-medium text-gray-500">
+                                        Ngày sinh <span className="text-red-500">*</span>
+                                    </label>
+                                    <div className="relative">
+                                        <input
+                                            type="date"
+                                            name="birthDate"
+                                            value={formAddData.birthDate}
+                                            onChange={handleAdd}
+                                            className="w-full p-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                            required
+                                        />
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <label className="block mb-1.5 text-sm font-medium text-gray-500">
+                                        Số điện thoại bệnh nhân (Tham khảo)
+                                    </label>
+                                    <input
+                                        type="tel"
+                                        placeholder="Vui lòng điền số điện thoại bệnh nhân"
+                                        name="phoneNumber"
+                                        value={formAddData.phoneNumber}
+                                        onChange={handleAdd}
+                                        className="w-full p-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                        required
+                                    />
+                                </div>
+
+                                <div>
+                                    <label className="block mb-1.5 text-sm font-medium text-gray-500">Giới tính</label>
+                                    <div className="flex gap-4">
+                                        <label className="flex items-center gap-2">
+                                            <input
+                                                type="radio"
+                                                name="gender"
+                                                value="Male"
+                                                checked={formAddData.gender === 'Male'}
+                                                className="w-5 h-5 accent-blue-600"
+                                                onChange={handleAdd}
+                                            />
+                                            <span>Nam</span>
+                                        </label>
+                                        <label className="flex items-center gap-2">
+                                            <input
+                                                type="radio"
+                                                name="gender"
+                                                value="Female"
+                                                checked={formAddData.gender === 'Female'}
+                                                className="w-5 h-5 accent-blue-600"
+                                                onChange={handleAdd}
+                                            />
+                                            <span>Nữ</span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <label className="block mb-1.5 text-sm font-medium text-gray-500">
+                                        Nghề nghiệp
+                                    </label>
+                                    <input
+                                        type="text"
+                                        name="job"
+                                        value={formAddData.job}
+                                        onChange={handleAdd}
+                                        className="w-full p-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                        required
+                                    />
+                                </div>
+
+                                <div>
+                                    <label className="block mb-1.5 text-sm font-medium text-gray-500">
+                                        Số CCCD/Passport <span className="text-red-500">*</span>
+                                    </label>
+                                    <input
+                                        type="text"
+                                        name="CCCD"
+                                        placeholder="Vui lòng nhập Số CCCD/Passport"
+                                        value={formAddData.CCCD}
+                                        onChange={handleAdd}
+                                        className="w-full p-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                        required
+                                    />
+                                </div>
+
+                                <div>
+                                    <label className="block mb-1.5 text-sm font-medium text-gray-500">
+                                        Địa chỉ Email{' '}
+                                    </label>
+                                    <input
+                                        type="email"
+                                        name="email"
+                                        placeholder="Nhập địa chỉ email để nhận phiếu khám"
+                                        value={formAddData.email}
+                                        onChange={handleAdd}
+                                        className="w-full p-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                        required
+                                    />
+                                </div>
+
+                                <div>
+                                    <label className="block mb-1.5 text-sm font-medium text-gray-500">
+                                        Địa chỉ hiện tại
+                                    </label>
+                                    <input
+                                        type="text"
+                                        name="address"
+                                        placeholder="Nhập địa chỉ hiện tại"
+                                        value={formAddData.address}
+                                        onChange={handleAdd}
+                                        className="w-full p-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                        required
+                                    />
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Footer cố định */}
+                        <div className="p-4 border-t sticky bottom-0 bg-white z-10">
+                            <button
+                                type="button"
+                                onClick={handleAddPatient}
+                                className="w-full py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                            >
+                                Thêm bệnh nhân mới
                             </button>
                         </div>
                     </div>

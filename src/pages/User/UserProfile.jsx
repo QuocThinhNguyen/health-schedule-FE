@@ -114,7 +114,7 @@ function DoctorProfile() {
     };
 
     return (
-        <div className=" w-150 h-full px-40 border rounded-lg shadow-lg bg-white overflow-y-auto">
+        <div className=" mt-20 h-fit px-40 border rounded-lg shadow-lg bg-white overflow-y-auto">
             {/* <h2 className="text-5xl font-bold text-center mb-6">Thông Tin Cá Nhân Bác Sĩ</h2> */}
 
             {/* Ảnh Avatar */}

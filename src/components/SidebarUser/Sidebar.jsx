@@ -14,7 +14,7 @@ const Sidebar = ({ selectedTab }) => {
     ];
 
     return (
-        <div className="w-fit h-screen bg-white text-black flex flex-col shadow-lg">
+        <div className="w-fit h-fit bg-white text-black flex flex-col shadow-lg border rounded-md mt-20">
             <ul className="space-y-2 mt-4 px-4">
                 {menuItems.map(({ label, path, icon: Icon }) => (
                     <li
