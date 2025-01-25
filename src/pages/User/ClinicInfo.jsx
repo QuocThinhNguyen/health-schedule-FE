@@ -19,8 +19,6 @@ import { NavLink, useNavigate, useLocation } from 'react-router-dom';
 import parse from 'html-react-parser';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
-import { set } from 'date-fns';
-import { Input } from 'postcss';
 import Pagination from '~/components/Pagination';
 import { UserContext } from '~/context/UserContext';
 
@@ -396,7 +394,7 @@ function ClinicInfo() {
                             Trang chủ
                         </NavLink>
                         <ChevronRight className="w-4 h-4 text-gray-400" />
-                        <div className="text-blue-600 cursor-pointer font-semibold">{clinicData.name}</div>
+                        <div className="text-[#2D87F3] cursor-pointer font-semibold">{clinicData.name}</div>
                     </div>
                 </div>
             </div>
@@ -502,43 +500,44 @@ function ClinicInfo() {
                                         </ul>
                                     </div>
 
-                                    <div className="bg-white rounded-lg text-xl">
-                                        <div className="text-base font-semibold mb-4">GIỚI THIỆU</div>
-                                        <div className="space-y-4 ">
-                                            <div>
-                                                <h4 className="font-medium mb-2 flex items-center text-base">
-                                                    <MapPin className="mr-2" size={15} />
-                                                    Địa chỉ:
-                                                </h4>
-                                                <p className="text-gray-600 text-base ">{clinicData.address}</p>
+                                    <div className="bg-white rounded-lg">
+                                        <div>
+                                            <div className="text-base font-semibold mb-4">GIỚI THIỆU</div>
+                                            <div className="space-y-4 ">
+                                                <div>
+                                                    <h4 className="font-medium mb-2 flex items-center text-base">
+                                                        <MapPin className="mr-2" size={15} />
+                                                        Địa chỉ:
+                                                    </h4>
+                                                    <p className="text-gray-600 text-base ">{clinicData.address}</p>
+                                                </div>
+                                                <div>
+                                                    <h4 className="font-medium mb-2 flex items-center text-base">
+                                                        <Clock className="mr-2" size={15} />
+                                                        Thời gian làm việc:
+                                                    </h4>
+                                                    <p className="text-gray-600 text-base">Thứ 2 đến thứ 7</p>
+                                                </div>
+                                                <div>
+                                                    <h4 className="font-medium mb-2 flex items-center text-base">
+                                                        <Phone className="mr-2" size={15} />
+                                                        Hỗ trợ đặt khám:
+                                                    </h4>
+                                                    <p className="text-gray-600 text-base">{clinicData.phoneNumber}</p>
+                                                </div>
+                                                <div>
+                                                    <h4 className="font-medium mb-2 flex items-center text-base">
+                                                        <Mail className="mr-2" size={15} />
+                                                        Email liên hệ:
+                                                    </h4>
+                                                    <p className="text-gray-600 text-base">{clinicData.email}</p>
+                                                </div>
                                             </div>
-                                            <div>
-                                                <h4 className="font-medium mb-2 flex items-center text-base">
-                                                    <Clock className="mr-2" size={15} />
-                                                    Thời gian làm việc:
-                                                </h4>
-                                                <p className="text-gray-600 text-base">Thứ 2 đến thứ 7</p>
-                                            </div>
-                                            <div>
-                                                <h4 className="font-medium mb-2 flex items-center text-base">
-                                                    <Phone className="mr-2" size={15} />
-                                                    Hỗ trợ đặt khám:
-                                                </h4>
-                                                <p className="text-gray-600 text-base">{clinicData.phoneNumber}</p>
-                                            </div>
-                                            <div>
-                                                <h4 className="font-medium mb-2 flex items-center text-base">
-                                                    <Mail className="mr-2" size={15} />
-                                                    Email liên hệ:
-                                                </h4>
-                                                <p className="text-gray-600 text-base">{clinicData.email}</p>
-                                            </div>
-
-                                            <div className="doctor-description">
-                                                {clinicData.description
-                                                    ? parse(clinicData.description)
-                                                    : 'Mô tả không có sẵn'}
-                                            </div>
+                                        </div>
+                                        <div className="doctor-description">
+                                            {clinicData.description
+                                                ? parse(clinicData.description)
+                                                : 'Mô tả không có sẵn'}
                                         </div>
                                     </div>
                                     {/* <div className="max-w-6xl mx-8 py-2">

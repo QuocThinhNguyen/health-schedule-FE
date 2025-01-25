@@ -58,93 +58,97 @@ function NewsDetail() {
     };
 
     return (
-        <div className="max-w-6xl mx-auto min-h-screen bg-white">
-            <ul className="flex items-center gap-1 px-4 py-3 text-base font-semibold">
-                <li>
-                    <NavLink to="/">Trang chủ</NavLink>
-                </li>
-                <li>
-                    <NavLink to="/tin-tuc" className="flex items-center">
+        <div className="min-h-screen bg-white">
+            <div className="bg-[#e3f2ff]">
+                <ul className=" max-w-6xl mx-auto  flex items-center gap-1 px-4 py-3 text-sm font-semibold">
+                    <li>
+                        <NavLink to="/">Trang chủ</NavLink>
+                    </li>
+                    <li>
+                        <NavLink to="/tin-tuc" className="flex items-center">
+                            <MdKeyboardArrowRight className="mt-1" />
+                            Tin tức
+                        </NavLink>
+                    </li>
+                    <li className="flex items-center cursor-pointer">
                         <MdKeyboardArrowRight className="mt-1" />
-                        Tin tức
-                    </NavLink>
-                </li>
-                <li className="flex items-center cursor-pointer">
-                    <MdKeyboardArrowRight className="mt-1" />
-                    <span className="text-[#00b5f1]">{post.title}</span>
-                </li>
-            </ul>
-            {/* title */}
-            <div className="mt-2 px-4 w-9/12">
-                <div className="text-4xl font-medium">{post.title}</div>
-                <div className="flex items-center text-lg text-[#858585] font-medium gap-2 mt-4">
-                    <MdOutlineDateRange />
-                    <span>{formatDate(post.updateAt)}</span>
-                    <span> - </span>
-                    <span>{post.userId && post.userId.fullname}</span>
-                </div>
-                <div className="mt-6">
-                    <div className="w-full">
-                        <img
-                            src={`${IMAGE_URL}${post.image}`}
-                            alt={post.title}
-                            className="w-full h-full object-cover"
-                            loading="lazy"
-                        />
-                    </div>
-                    <div className="mt-8 news-content">
-                        {post.content ? parse(post.content) : 'Nội dung không có sẵn'}
-                    </div>
-                </div>
+                        <span className="text-[#2D87F3]">{post.title}</span>
+                    </li>
+                </ul>
             </div>
-            <div>
-                <div className="flex items-center justify-between gap-2 mt-10 mb-2 text-2xl text-[#2D87F3]">
-                    <div>
-                        <span className="text-4xl font-bold">Tin liên quan</span>
+            {/* title */}
+            <div className="max-w-6xl mx-auto ">
+                <div className="mt-2 px-4 w-9/12">
+                    <div className="text-4xl font-medium">{post.title}</div>
+                    <div className="flex items-center text-lg text-[#858585] font-medium gap-2 mt-4">
+                        <MdOutlineDateRange />
+                        <span>{formatDate(post.updateAt)}</span>
+                        <span> - </span>
+                        <span>{post.userId && post.userId.fullname}</span>
                     </div>
-                    <p
-                        onClick={() => navigate('/tin-tuc')}
-                        className="text-sm font-semibold cursor-pointer hover:underline flex items-center gap-1"
-                    >
-                        <span>Xem tất cả</span>
-                        <FaAngleRight className="mt-1" />
-                    </p>
+                    <div className="mt-6">
+                        <div className="w-full">
+                            <img
+                                src={`${IMAGE_URL}${post.image}`}
+                                alt={post.title}
+                                className="w-full h-full object-cover"
+                                loading="lazy"
+                            />
+                        </div>
+                        <div className="mt-8 news-content">
+                            {post.content ? parse(post.content) : 'Nội dung không có sẵn'}
+                        </div>
+                    </div>
                 </div>
-                <div className="mt-7 mb-11">
-                    <div className="flex flex-wrap">
-                        {posts.slice(0, 4).map((post) => (
-                            <div className=" px-1 w-1/4 group">
-                                <NavLink
-                                    to={`/tin-tuc/${formatTitleForUrl(post.title)}-${post.postId}`}
-                                    className="cursor-pointer p-3 border border-transparent group-hover:boder group-hover:border-[#00B5F1] rounded-2xl group-hover:shadow-lg block"
-                                >
-                                    {console.log('postId', post.postId)}
-                                    <div className="flex flex-col">
-                                        <div className="w-full h-40 overflow-hidden">
-                                            <img
-                                                src={`${IMAGE_URL}${post.image}`}
-                                                alt={post.title}
-                                                className="w-full h-full object-cover rounded-2xl"
-                                                loading="lazy"
-                                            />
+                <div>
+                    <div className="flex items-center justify-between gap-2 mt-10 mb-2 text-2xl text-[#2D87F3]">
+                        <div>
+                            <span className="text-4xl font-bold">Tin liên quan</span>
+                        </div>
+                        <p
+                            onClick={() => navigate('/tin-tuc')}
+                            className="text-sm font-semibold cursor-pointer hover:underline flex items-center gap-1"
+                        >
+                            <span>Xem tất cả</span>
+                            <FaAngleRight className="mt-1" />
+                        </p>
+                    </div>
+                    <div className="mt-7 mb-11">
+                        <div className="flex flex-wrap">
+                            {posts.slice(0, 4).map((post) => (
+                                <div className=" px-1 w-1/4 group">
+                                    <NavLink
+                                        to={`/tin-tuc/${formatTitleForUrl(post.title)}-${post.postId}`}
+                                        className="cursor-pointer p-3 border border-transparent group-hover:boder group-hover:border-[#00B5F1] rounded-2xl group-hover:shadow-lg block"
+                                    >
+                                        {console.log('postId', post.postId)}
+                                        <div className="flex flex-col">
+                                            <div className="w-full h-40 overflow-hidden">
+                                                <img
+                                                    src={`${IMAGE_URL}${post.image}`}
+                                                    alt={post.title}
+                                                    className="w-full h-full object-cover rounded-2xl"
+                                                    loading="lazy"
+                                                />
+                                            </div>
+                                            <div className="flex flex-col mt-2">
+                                                <h3 className="text-xl font-bold group-hover:text-[#00b5f1] line-clamp-2 overflow-hidden text-ellipsis">
+                                                    {post.title}
+                                                </h3>
+                                                <p className="mt-2 flex items-center text-xs font-medium gap-2">
+                                                    <MdOutlineDateRange />
+                                                    <span>{formatDate(post.updateAt)}</span>
+                                                </p>
+                                            </div>
+                                            <button className="mt-3 flex items-center font-medium text-blue-500">
+                                                Xem tiếp
+                                                <FaArrowRightLong className="ml-2 mt-1" />
+                                            </button>
                                         </div>
-                                        <div className="flex flex-col mt-2">
-                                            <h3 className="text-xl font-bold group-hover:text-[#00b5f1] line-clamp-2 overflow-hidden text-ellipsis">
-                                                {post.title}
-                                            </h3>
-                                            <p className="mt-2 flex items-center text-xs font-medium gap-2">
-                                                <MdOutlineDateRange />
-                                                <span>{formatDate(post.updateAt)}</span>
-                                            </p>
-                                        </div>
-                                        <button className="mt-3 flex items-center font-medium text-blue-500">
-                                            Xem tiếp
-                                            <FaArrowRightLong className="ml-2 mt-1" />
-                                        </button>
-                                    </div>
-                                </NavLink>
-                            </div>
-                        ))}
+                                    </NavLink>
+                                </div>
+                            ))}
+                        </div>
                     </div>
                 </div>
             </div>

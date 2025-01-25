@@ -20,6 +20,7 @@ import AllSpecialty from '~/pages/User/AllSpecialty';
 import AllNews from '~/pages/User/News/AllNews';
 import NewsDetail from '~/pages/User/News/NewsDetail';
 import FilterLayoutDoctor from '~/pages/User/AllDoctor/FilterLayoutDoctor';
+import Filter from '~/pages/User/Filter/Filter';
 
 function AppRoutes() {
     return (
@@ -42,6 +43,9 @@ function AppRoutes() {
                     <Route path="/chuyen-khoa" element={<AllSpecialty />} />
                     <Route path="/tin-tuc" element={<AllNews />} />
                     <Route path="/tin-tuc/:title" element={<NewsDetail />} />
+
+                    <Route path="/tat-ca-benh-vien" element={<Filter />} />
+                    <Route path="/tat-ca-bac-si" element={<Filter />} />
                 </Route>
                 {AdminRoutes()}
                 {DoctorRoutes()}
