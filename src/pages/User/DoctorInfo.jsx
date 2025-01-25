@@ -221,7 +221,7 @@ function DoctorInfo() {
                             Trang chủ
                         </NavLink>
                         <ChevronRight className="w-4 h-4 text-gray-400" />
-                        <div className="text-blue-600 cursor-pointer font-semibold">
+                        <div className="text-[#2D87F3] cursor-pointer font-semibold">
                             {doctorInfo.position} {doctorInfo.fullname}
                         </div>
                     </div>

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Introduce from './Introduce';
 import ListClinic from './ListClinic/ListClinic';
 import ListDoctor from './ListDoctor/ListDoctor';
-import SearchInput from './Search/SearchInput';
+import SearchInput from './Search/Search';
 import Statistics from './Statistics';
 import News from './News/News';
 

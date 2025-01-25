@@ -1,0 +1,107 @@
+import { BsCashCoin, BsCoin } from 'react-icons/bs';
+import { FaMoneyBillWave } from 'react-icons/fa';
+import { IoIosStar } from 'react-icons/io';
+import { RiMoneyDollarCircleFill } from 'react-icons/ri';
+import { useEffect, useState } from 'react';
+import { axiosClient } from '~/api/apiRequest';
+import { useNavigate } from 'react-router-dom';
+function DoctorItem(data) {
+    const navigate = useNavigate();
+    const [academicRanksAndDegreess, setAcademicRanksAndDegreess] = useState([]);
+    const doctor = data.data;
+    const IMAGE_URL = `http://localhost:${import.meta.env.VITE_BE_PORT}/uploads/`;
+
+    const handleBooking = (doctorId) => {
+        console.log('Đã click vào nút Đặt khám ngay');
+
+        // Điều hướng đến trang với ID bác sĩ
+        navigate(`/bac-si/get?id=${doctorId}`);
+    };
+
+    useEffect(() => {
+        const getDropdownAcademicRanksAndDegrees = async () => {
+            try {
+                const response = await axiosClient.get(`/doctor/academic-ranks-and-degrees`);
+
+                if (response.status === 200) {
+                    setAcademicRanksAndDegreess(response.data);
+                } else {
+                    console.error('No academic ranks and degrees are found:', response.message);
+                    setAcademicRanksAndDegreess([]);
+                }
+            } catch (error) {
+                console.error('Error fetching academic ranks and degrees:', error);
+                setAcademicRanksAndDegreess([]);
+            }
+        };
+        getDropdownAcademicRanksAndDegrees();
+    }, []);
+
+    return (
+        <div className="rounded-lg mb-4 border border-[#E4E8EC]">
+            <div className="px-4 pt-4 mb-4 flex gap-4">
+                <img
+                    src={`${IMAGE_URL}${doctor.doctorId.image}` || 'https://via.placeholder.com/150'}
+                    alt={doctor.doctorId.fullname}
+                    className="w-20 h-20 rounded-full object-cover border border-[#E4E8EC]"
+                />
+                <div className="flex-1">
+                    <div className="flex justify-between items-start">
+                        <div>
+                            <h3 className="text-lg font-bold">
+                                {academicRanksAndDegreess.find(
+                                    (academicRanksAndDegrees) => academicRanksAndDegrees.keyMap === doctor.position,
+                                )?.valueVi || 'Chưa xác định'}{' '}
+                                {doctor.doctorId.fullname}
+                            </h3>
+                            <p className="">{doctor.specialtyId.name}</p>
+                        </div>
+                        <div className="flex items-center gap-1">
+                            <div className="flex items-center gap-1 px-2 py-[1px] bg-[#2d87f31a] bg-opacity-10 rounded-full">
+                                <IoIosStar className="text-yellow-500" />
+                                <span className="font-semibold text-black text-sm">{doctor.avgRating}/5</span>
+                            </div>
+                            <span className="underline text-[#595959] text-sm">62 đánh giá</span>
+                        </div>
+                    </div>
+
+                    <div className="flex gap-2 mt-2 mb-1">
+                        <div className="flex items-center justify-center rounded-3xl bg-[#e3f2ff] text-[#2d87f3] border border-[#2d87f3] px-4 py-1">
+                            <p>Đặt lịch khám</p>
+                        </div>
+                    </div>
+
+                    <div className="flex items-center gap-2 text-gray-600">
+                        <div className="flex items-center gap-1">
+                            <BsCoin className="w-4 h-4 font-semibold text-lg text-[#009e5c] mr-2" />
+                            <span>Giá</span>
+                        </div>
+                        <span className="font-semibold text-[#009e5c] text-lg">{doctor.price} đ</span>
+                    </div>
+                </div>
+            </div>
+
+            <div className="bg-[#F8F9FC] px-4 py-2 flex items-center justify-between w-full">
+                <div className="flex items-center gap-2">
+                    <img
+                        src={`${IMAGE_URL}${doctor.clinicId.image}` || 'https://via.placeholder.com/150'}
+                        alt={doctor.clinicId.name}
+                        className="w-10 h-10 rounded-full object-cover border border-[#E4E8EC]"
+                    />
+                    <div>
+                        <div className="font-semibold text-sm">{doctor.clinicId.name}</div>
+                        <div className="text-xs text-[#595959]">{doctor.clinicId.address}</div>
+                    </div>
+                </div>
+                <div
+                    onClick={() => handleBooking(doctor.doctorId.userId)}
+                    className=" h-10 bg-blue-500 hover:bg-blue-600 text-white border px-5 py-2 rounded-lg font-semibold cursor-pointer"
+                >
+                    Đặt Lịch Hẹn
+                </div>
+            </div>
+        </div>
+    );
+}
+
+export default DoctorItem;

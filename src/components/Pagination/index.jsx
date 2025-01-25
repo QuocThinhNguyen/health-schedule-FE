@@ -6,7 +6,7 @@ import {
     MdKeyboardDoubleArrowRight,
 } from 'react-icons/md';
 
-const Pagination = ({ currentPage, totalPages = 6, onPageChange }) => {
+const Pagination = ({ currentPage =1, totalPages = 6, onPageChange }) => {
     const handlePageChange = (page) => {
         if (page < 1 || page > totalPages) return;
         onPageChange(page);
@@ -36,7 +36,7 @@ const Pagination = ({ currentPage, totalPages = 6, onPageChange }) => {
             <button
                 onClick={() => handlePageChange(1)}
                 disabled={currentPage === 1}
-                className="min-w-8 h-8 bg-white text-[#00b5f1] font-normal flex items-center justify-center border border-transparent shadow-[0_3px_15px_rgba(116,_157,_206,_0.2)] transition-all duration-200 ease-in-out hover:bg-gray-100 rounded-md disabled:opacity-50 disabled:hover:bg-transparent"
+                className="min-w-8 h-8 bg-white text-[#2D87F3] border border-[#E4E8EC] font-normal flex items-center justify-center shadow-[0_3px_15px_rgba(116,_157,_206,_0.2)] transition-all duration-200 ease-in-out hover:bg-gray-100 rounded-md disabled:opacity-50 disabled:hover:bg-transparent"
                 aria-label="First page"
             >
                 <MdKeyboardDoubleArrowLeft />
@@ -46,7 +46,7 @@ const Pagination = ({ currentPage, totalPages = 6, onPageChange }) => {
             <button
                 onClick={() => handlePageChange(currentPage - 1)}
                 disabled={currentPage === 1}
-                className="min-w-8 h-8 bg-white text-[#00b5f1] font-normal flex items-center justify-center border border-transparent shadow-[0_3px_15px_rgba(116,_157,_206,_0.2)] transition-all duration-200 ease-in-out hover:bg-gray-100 rounded-md disabled:opacity-50 disabled:hover:bg-transparent"
+                className="min-w-8 h-8 bg-white text-[#2D87F3] border border-[#E4E8EC] font-normal flex items-center justify-center shadow-[0_3px_15px_rgba(116,_157,_206,_0.2)] transition-all duration-200 ease-in-out hover:bg-gray-100 rounded-md disabled:opacity-50 disabled:hover:bg-transparent"
                 aria-label="Previous page"
             >
                 <MdKeyboardArrowLeft />
@@ -57,10 +57,10 @@ const Pagination = ({ currentPage, totalPages = 6, onPageChange }) => {
                 <button
                     key={index}
                     onClick={() => page !== '...' && handlePageChange(page)}
-                    className={`min-w-8 h-8 bg-white text-[#00b5f1] font-normal flex items-center justify-center border border-transparent rounded-md shadow-[0_3px_15px_rgba(116,_157,_206,_0.2)] transition-all duration-200 ease-in-out ${
+                    className={`min-w-8 h-8 border border-[#E4E8EC] font-normal flex items-center justify-center rounded-md shadow-[0_3px_15px_rgba(116,_157,_206,_0.2)] transition-all duration-200 ease-in-out ${
                         currentPage === page
-                            ? 'bg-gradient-to-r from-[#00b5f1] to-[#00e0ff] text-white '
-                            : 'hover:bg-gray-100'
+                            ? 'bg-[#2D87F3] text-white '
+                            : 'bg-white text-[#2D87F3] hover:bg-gray-100'
                     }`}
                 >
                     {page}
@@ -71,7 +71,7 @@ const Pagination = ({ currentPage, totalPages = 6, onPageChange }) => {
             <button
                 onClick={() => handlePageChange(currentPage + 1)}
                 disabled={currentPage === totalPages}
-                className="min-w-8 h-8 bg-white text-[#00b5f1] font-normal flex items-center justify-center border border-transparent shadow-[0_3px_15px_rgba(116,_157,_206,_0.2)] transition-all duration-200 ease-in-out hover:bg-gray-100 rounded-md disabled:opacity-50 disabled:hover:bg-transparent"
+                className="min-w-8 h-8 bg-white text-[#2D87F3] border border-[#E4E8EC] font-normal flex items-center justify-center shadow-[0_3px_15px_rgba(116,_157,_206,_0.2)] transition-all duration-200 ease-in-out hover:bg-gray-100 rounded-md disabled:opacity-50 disabled:hover:bg-transparent"
                 aria-label="Next page"
             >
                 <MdKeyboardArrowRight />
@@ -81,7 +81,7 @@ const Pagination = ({ currentPage, totalPages = 6, onPageChange }) => {
             <button
                 onClick={() => handlePageChange(totalPages)}
                 disabled={currentPage === totalPages}
-                className="min-w-8 h-8 bg-white text-[#00b5f1] font-normal flex items-center justify-center border border-transparent shadow-[0_3px_15px_rgba(116,_157,_206,_0.2)]  transition-all duration-200 ease-in-out hover:bg-gray-100 rounded-md disabled:opacity-50 disabled:hover:bg-transparent"
+                className="min-w-8 h-8 bg-white text-[#2D87F3] border border-[#E4E8EC] font-normal flex items-center justify-center shadow-[0_3px_15px_rgba(116,_157,_206,_0.2)]  transition-all duration-200 ease-in-out hover:bg-gray-100 rounded-md disabled:opacity-50 disabled:hover:bg-transparent"
                 aria-label="Last page"
             >
                 <MdKeyboardDoubleArrowRight />

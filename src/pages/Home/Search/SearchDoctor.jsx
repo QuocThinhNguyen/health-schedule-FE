@@ -1,8 +1,11 @@
 import { useEffect, useState } from 'react';
 import { LiaStethoscopeSolid } from 'react-icons/lia';
+import { useNavigate } from 'react-router-dom';
 import { axiosClient } from '~/api/apiRequest';
 
 function SearchDoctor(data) {
+    const navigate = useNavigate();
+
     const doctor = data.data;
 
     const IMAGE_URL = `http://localhost:${import.meta.env.VITE_BE_PORT}/uploads/`;
@@ -26,8 +29,22 @@ function SearchDoctor(data) {
         };
         getDropdownAcademicRanksAndDegrees();
     }, []);
+
+    const handleBooking = (doctorId) => {
+        console.log('Đã click vào nút Đặt khám ngay');
+
+        // Điều hướng đến trang với ID bác sĩ
+        navigate(`/bac-si/get?id=${doctorId}`);
+    };
+
     return (
-        <div className="px-6 py-2 hover:shadow-xl flex items-center gap-4 hover:bg-[rgba(227,242,255,0.3)] cursor-pointer border-b-2 border-transparent hover:border-b-2 hover:border-blue-400">
+        <div
+        onClick={() => {
+            console.log('doctor:', doctor);
+            handleBooking(doctor.doctorId.userId);
+        }}
+            className="px-6 py-2 hover:shadow-xl flex items-center gap-4 hover:bg-[rgba(227,242,255,0.3)] cursor-pointer border-b-2 border-transparent hover:border-b-2 hover:border-blue-400"
+        >
             <div>
                 <img
                     src={`${IMAGE_URL}${doctor.doctorId.image}`}

@@ -70,23 +70,23 @@ function Header() {
                     {/* Navigation */}
                     <nav className="hidden sm:ml-2 sm:flex sm:space-x-4 text-[#1B3250]">
                         <NavLink
-                            to="/benh-vien-all"
+                            to="/tat-ca-benh-vien"
                             className="inline-flex items-center px-1 text-base font-bold hover:opacity-80"
                         >
                             Bệnh viện
                         </NavLink>
                         <NavLink
-                            to="/bac-si-filter"
+                            to="/tat-ca-bac-si"
                             className="inline-flex items-center px-1 text-base font-bold hover:opacity-80"
                         >
                             Bác sĩ
                         </NavLink>
-                        <NavLink
+                        {/* <NavLink
                             to="/chuyen-khoa"
                             className="inline-flex items-center px-1 text-base font-bold hover:opacity-80"
                         >
                             Chuyên khoa
-                        </NavLink>
+                        </NavLink> */}
                         <NavLink
                             to="/tin-tuc"
                             className="inline-flex items-center px-1 text-base font-bold hover:opacity-80"
