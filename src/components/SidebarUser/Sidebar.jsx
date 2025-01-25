@@ -3,21 +3,37 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { FaUser, FaClipboardList, FaCalendarAlt, FaKey } from 'react-icons/fa';
 import { UserContext } from '~/context/UserContext';
 import { axiosClient, axiosInstance } from '~/api/apiRequest';
+import { X } from 'lucide-react';
 
 const Sidebar = ({ selectedTab }) => {
     const navigate = useNavigate();
     const location = useLocation();
+    const { user, logout } = useContext(UserContext);
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+    const [isOpen, setIsOpen] = useState(false);
+
+    const handleLogout = () => {
+        setIsOpen(true);
+    };
+
+    const onClose = () => {
+        setIsOpen(false);
+    };
+
+    const onConfirm = () => {
+        setIsDropdownOpen(false);
+        logout();
+    };
 
     const menuItems = [
         { label: 'Hồ sơ cá nhân', path: '/user/profile', image: 'user.png' },
         { label: 'Lịch sử đặt lịch khám', path: '/user/appointments', image: 'schedule.png' },
         { label: 'Hồ sơ bệnh nhân', path: '/user/records', image: 'health-report.png' },
         { label: 'Đổi mật khẩu', path: '/user/change-password', image: 'reset-password.png' },
-        { label: 'Trợ giúp', path: '/user/change-password', image: 'question.png' },
-        { label: 'Đăng xuất', path: '/user/change-password', image: 'logout.png' },
+        { label: 'Trợ giúp', path: '/user/help', image: 'question.png' },
+        { label: 'Đăng xuất', onClick: handleLogout, image: 'logout.png' },
     ];
 
-    const { user } = useContext(UserContext);
     const [userProfile, setUserProfile] = useState([]);
     console.log('CHECK', userProfile);
     console.log('CHECK 1', user.userId);
@@ -38,7 +54,7 @@ const Sidebar = ({ selectedTab }) => {
     }, []);
 
     return (
-        <div className="w-fit h-[500px] bg-white text-black flex flex-col shadow-lg border rounded-md mt-20">
+        <div className="w-fit h-fit bg-white text-black flex flex-col shadow-lg border rounded-md mt-20 mb-20">
             <div className="p-4 border-b">
                 <div className="flex items-center gap-3 mb-3">
                     <img
@@ -79,20 +95,60 @@ const Sidebar = ({ selectedTab }) => {
                 <h1 className="text-lg font-semibold mb-1">{userProfile.fullname}</h1>
                 <p className="text-sm text-blue-500">{userProfile.email}</p>
             </div>
-            <ul className="space-y-2 mt-4 px-4">
-                {menuItems.map(({ label, path, image }) => (
+            <div className="space-y-2 mt-4 px-4">
+                {menuItems.map((item, index) => (
                     <li
-                        key={path}
-                        onClick={() => navigate(path)}
+                        key={index}
+                        onClick={item.onClick ? item.onClick : () => navigate(item.path)}
                         className={`p-3 cursor-pointer flex items-center rounded-md hover:bg-blue-100 ${
-                            location.pathname === path ? 'bg-blue-100 text-blue-600' : 'text-gray-700'
+                            location.pathname === item.path ? 'bg-blue-100 text-blue-600' : 'text-gray-700'
                         }`}
                     >
-                        <img src={`/${image}`} alt={label} className="menu-item-icon w-6 h-6 mr-2" />
-                        {label}
+                        <img src={`/${item.image}`} alt={item.label} className="h-6 w-6" />
+                        <span>{item.label}</span>
                     </li>
                 ))}
-            </ul>
+            </div>
+            {isOpen && (
+                <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 bg-opacity-80">
+                    <div className="bg-white rounded-lg w-full max-w-xs">
+                        {/* Close button */}
+                        <div className="flex justify-end p-2">
+                            <button onClick={onClose} className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
+                                <X className="w-5 h-5 text-gray-500" />
+                            </button>
+                        </div>
+
+                        {/* Content */}
+                        <div className="px-6 pb-6">
+                            {/* Icon */}
+                            <div className="flex justify-center mb-4">
+                                <img src="/logout.png" alt={'Thoát'} className="h-12 w-12" />
+                            </div>
+
+                            {/* Text */}
+                            <h3 className="text-xl font-semibold text-center mb-2">Đăng xuất?</h3>
+                            <p className="text-gray-600 text-center mb-6">Bạn có chắc chắn muốn đăng xuất?</p>
+
+                            {/* Buttons */}
+                            <div className="flex gap-3">
+                                <button
+                                    onClick={onClose}
+                                    className="font-semibold flex-1 px-4 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                                >
+                                    Hủy
+                                </button>
+                                <button
+                                    onClick={onConfirm}
+                                    className="font-semibold flex-1 px-4 py-2.5 border-2 border-blue-600 text-blue-600 rounded-lg hover:bg-blue-50 transition-colors"
+                                >
+                                    Đăng xuất
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

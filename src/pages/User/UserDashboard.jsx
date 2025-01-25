@@ -10,7 +10,7 @@ const UserDashboard = () => {
     };
 
     return (
-        <div className="flex h-screen bg-neutral-50 ml-14">
+        <div className="flex min-h-screen bg-neutral-50 ml-14">
             {/* Sidebar */}
             <Sidebar onSelectTab={handleSelectTab} selectedTab={selectedTab} />
 
