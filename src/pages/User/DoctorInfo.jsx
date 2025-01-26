@@ -206,8 +206,8 @@ function DoctorInfo() {
     return (
         <div className="min-h-screen bg-white">
             <div className="w-full bg-blue-50">
-                <div className="max-w-6xl py-2">
-                    <div className="flex items-center gap-2 text-sm ml-12">
+                <div className="max-w-6xl py-3 mx-auto">
+                    <div className="flex items-center gap-2 text-sm">
                         <NavLink
                             to="/"
                             onClick={(e) => {
@@ -221,7 +221,7 @@ function DoctorInfo() {
                             Trang chủ
                         </NavLink>
                         <ChevronRight className="w-4 h-4 text-gray-400" />
-                        <div className="text-blue-600 cursor-pointer font-semibold">
+                        <div className="text-[#2D87F3] cursor-pointer font-semibold">
                             {doctorInfo.position} {doctorInfo.fullname}
                         </div>
                     </div>

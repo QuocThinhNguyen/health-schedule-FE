@@ -1,0 +1,37 @@
+.news-content body,
+.news-content h1,
+.news-content h2,
+.news-content h3,
+.news-content h4,
+.news-content h5,
+.news-content h6,
+.news-content ul,
+.news-content p,
+.news-content li {
+    margin: revert;
+    padding: revert;
+    font-size: revert;
+    text-align: justify;
+    list-style-type: revert;
+}
+
+.news-content h1,
+.news-content h2,
+.news-content h3,
+.news-content h4,
+.news-content h5,
+.news-content h6 {
+    margin-top: 0;
+    margin-bottom: .5em;
+    font-weight: 500;
+}
+
+.news-content ul,
+.news-content p {
+    margin-top: 0;
+    margin-bottom: 1em;
+}
+
+.news-content ul {
+    list-style-type: revert;
+}

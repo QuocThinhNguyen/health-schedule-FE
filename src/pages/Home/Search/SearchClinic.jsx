@@ -1,12 +1,23 @@
 import { GrLocation } from 'react-icons/gr';
+import { useNavigate } from 'react-router-dom';
 
 function SearchClinic(data) {
+    const navigate = useNavigate();
 
     const clinic = data.data;
 
     const IMAGE_URL = `http://localhost:${import.meta.env.VITE_BE_PORT}/uploads/`;
+
+    const handleBooking = (clinicId, clinicName) => {
+        navigate(`/benh-vien?name=${clinicName}`, {
+            state: { clinicId: clinicId },
+        });
+    };
     return (
-        <div className="px-6 py-2 hover:shadow-xl flex items-center gap-4 hover:bg-[rgba(227,242,255,0.3)] cursor-pointer border-b-2 border-transparent hover:border-b-2 hover:border-blue-400">
+        <div
+            onClick={() => handleBooking(clinic.clinicId, clinic.name)}
+            className="px-6 py-2 hover:shadow-xl flex items-center gap-4 hover:bg-[rgba(227,242,255,0.3)] cursor-pointer border-b-2 border-transparent hover:border-b-2 hover:border-blue-400"
+        >
             <div>
                 <img src={`${IMAGE_URL}${clinic.image}`} alt="lỗi" className="w-12 h-12 object-cover rounded-full" />
             </div>

@@ -17,10 +17,11 @@ import ClinicInfo from '~/pages/User/ClinicInfo';
 import Specialties from '~/pages/User/Specialties';
 import AllClinic from '~/pages/User/AllClinic';
 import AllSpecialty from '~/pages/User/AllSpecialty';
-import AllNews from '~/pages/User/AllNews';
-import NewsDetail from '~/pages/User/NewsDetail';
+import AllNews from '~/pages/User/News/AllNews';
+import NewsDetail from '~/pages/User/News/NewsDetail';
 import FilterLayoutDoctor from '~/pages/User/AllDoctor/FilterLayoutDoctor';
 import MakeAnAppointment from '~/pages/User/MakeAnAppointment';
+import Filter from '~/pages/User/Filter/Filter';
 
 function AppRoutes() {
     return (
@@ -44,6 +45,9 @@ function AppRoutes() {
                     <Route path="/chuyen-khoa" element={<AllSpecialty />} />
                     <Route path="/tin-tuc" element={<AllNews />} />
                     <Route path="/tin-tuc/:title" element={<NewsDetail />} />
+
+                    <Route path="/tat-ca-benh-vien" element={<Filter />} />
+                    <Route path="/tat-ca-bac-si" element={<Filter />} />
                 </Route>
                 {AdminRoutes()}
                 {DoctorRoutes()}

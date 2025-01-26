@@ -1,74 +1,37 @@
-/* DoctorDescription.css */
-
-/* Định dạng chung cho toàn bộ phần mô tả bác sĩ */
-.doctor-description {
-    font-family: 'Inter', sans-serif;
-    color: #000000; /* Text màu xám đậm */
-    line-height: 1.75;
-}
-
-/* Tiêu đề cấp 1 */
-.doctor-description h1 {
-    margin-top: 1.5rem;
-    margin-bottom: 0.5rem;
-    font-weight: 700;
-    font-size: 2rem; /* Điều chỉnh kích thước phù hợp */
-    color: #000000; /* Text màu xám tối */
-}
-
-/* Tiêu đề cấp 2 */
-.doctor-description h2 {
-    margin-top: 1.5rem;
-    margin-bottom: 0.5rem;
-    font-weight: 600;
-    font-size: 1.75rem;
-    color: #000000;
-}
-
-/* Tiêu đề cấp 3 */
-.doctor-description h3 {
-    margin-top: 1.5rem;
-    margin-bottom: 0.5rem;
-    font-weight: 500;
-    font-size: 1.5rem;
-    color: #000000;
-}
-
-/* Danh sách không thứ tự */
-.doctor-description ul {
-    margin-top: 1.5rem;
-    margin-bottom: 1.5rem;
-    padding-left: 1.5rem;
-    list-style-type: disc;
-}
-
-/* Mục trong danh sách */
+.doctor-description body,
+.doctor-description h1,
+.doctor-description h2,
+.doctor-description h3,
+.doctor-description h4,
+.doctor-description h5,
+.doctor-description h6,
+.doctor-description ul,
+.doctor-description p,
 .doctor-description li {
-    margin: 0.75rem 0; /* Khoảng cách giữa các mục */
-    color: #000000; /* Màu xám vừa */
+    margin: revert;
+    padding: revert;
+    font-size: revert;
+    text-align: justify;
+    list-style-type: revert;
 }
 
-/* Phong cách cho văn bản span */
-.doctor-description span {
-    font-weight: 400; /* Normal weight */
-    color: #000000; /* Màu xám nhạt */
+.doctor-description h1,
+.doctor-description h2,
+.doctor-description h3,
+.doctor-description h4,
+.doctor-description h5,
+.doctor-description h6 {
+    margin-top: 0;
+    margin-bottom: .5em;
+    font-weight: 500;
 }
 
-/* Tùy chọn thêm: Định dạng liên kết */
-.doctor-description a {
-    color: #3b82f6; /* Màu xanh dương */
-    text-decoration: underline;
-    transition: color 0.3s;
-}
-
-.doctor-description a:hover {
-    color: #2563eb; /* Màu xanh dương đậm hơn khi hover */
-}
-
-/* Khoảng cách giữa các đoạn văn */
+.doctor-description ul,
 .doctor-description p {
-    margin-top: 1rem;
-    margin-bottom: 1rem;
-    font-size: 1rem;
-    color: #000000;
+    margin-top: 0;
+    margin-bottom: 1em;
+}
+
+.doctor-description ul {
+    list-style-type: revert;
 }
