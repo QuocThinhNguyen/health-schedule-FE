@@ -12,6 +12,9 @@ import {
     DollarSign,
     Calendar,
     ChevronLeft,
+    CreditCard,
+    Banknote,
+    Smartphone,
 } from 'lucide-react';
 import { FaMoneyBillWave } from 'react-icons/fa';
 import { axiosInstance, axiosClient } from '~/api/apiRequest';
@@ -19,6 +22,8 @@ import { NavLink, useNavigate, useLocation } from 'react-router-dom';
 import parse from 'html-react-parser';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
+import { set } from 'date-fns';
+import { Input } from 'postcss';
 import Pagination from '~/components/Pagination';
 import { UserContext } from '~/context/UserContext';
 
@@ -362,7 +367,7 @@ function ClinicInfo() {
             return navigate('/login');
         }
         setSelectedTime(timeSlot);
-        navigate('/bac-si/get/record', {
+        navigate('/bac-si/booking', {
             state: {
                 doctorId,
                 currentDate,
@@ -379,8 +384,8 @@ function ClinicInfo() {
     return (
         <div className="min-h-screen bg-white">
             <div className="w-full bg-blue-50">
-                <div className="max-w-6xl py-3 mx-auto">
-                    <div className="flex items-center gap-2 text-sm">
+                <div className="max-w-6xl py-2">
+                    <div className="flex items-center gap-2 text-sm ml-12">
                         <NavLink
                             to="/"
                             onClick={(e) => {
@@ -394,7 +399,7 @@ function ClinicInfo() {
                             Trang chủ
                         </NavLink>
                         <ChevronRight className="w-4 h-4 text-gray-400" />
-                        <div className="text-[#2D87F3] cursor-pointer font-semibold">{clinicData.name}</div>
+                        <div className="text-blue-600 cursor-pointer font-semibold">{clinicData.name}</div>
                     </div>
                 </div>
             </div>
@@ -463,10 +468,10 @@ function ClinicInfo() {
 
                     {/* Content */}
                     {activeTab === 'info' && (
-                        <div className="">
+                        <div className="mb-10">
                             <main className="max-w-6xl mx-auto">
                                 {/* Information Sections */}
-                                <div className="space-y-6 mb-8">
+                                <div className="space-y-6">
                                     <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4">
                                         <p className="text-base">
                                             EasyMed là Nền tảng Y tế chăm sóc sức khỏe toàn diện hàng đầu Việt Nam kết
@@ -500,44 +505,81 @@ function ClinicInfo() {
                                         </ul>
                                     </div>
 
-                                    <div className="bg-white rounded-lg">
-                                        <div>
-                                            <div className="text-base font-semibold mb-4">GIỚI THIỆU</div>
-                                            <div className="space-y-4 ">
-                                                <div>
-                                                    <h4 className="font-medium mb-2 flex items-center text-base">
-                                                        <MapPin className="mr-2" size={15} />
-                                                        Địa chỉ:
-                                                    </h4>
-                                                    <p className="text-gray-600 text-base ">{clinicData.address}</p>
+                                    <div className="bg-white rounded-lg text-xl">
+                                        <div className="text-base font-semibold mb-2 border-l-4 border-blue-400 pl-4">
+                                            Giới thiệu
+                                        </div>
+                                        <div className="space-y-4">
+                                            <div>
+                                                <h4 className="font-medium mb-2 flex items-center text-base">
+                                                    <MapPin className="mr-2" size={15} />
+                                                    Địa chỉ:
+                                                </h4>
+                                                <p className="text-gray-600 text-base ">{clinicData.address}</p>
+                                            </div>
+                                            <div>
+                                                <h4 className="font-medium mb-2 flex items-center text-base">
+                                                    <Clock className="mr-2" size={15} />
+                                                    Thời gian làm việc:
+                                                </h4>
+                                                <p className="text-gray-600 text-base">Thứ 2 đến thứ 7</p>
+                                            </div>
+                                            <div>
+                                                <h4 className="font-medium mb-2 flex items-center text-base">
+                                                    <Phone className="mr-2" size={15} />
+                                                    Hỗ trợ đặt khám:
+                                                </h4>
+                                                <p className="text-gray-600 text-base">{clinicData.phoneNumber}</p>
+                                            </div>
+                                            <div>
+                                                <h4 className="font-medium mb-2 flex items-center text-base">
+                                                    <Mail className="mr-2" size={15} />
+                                                    Email liên hệ:
+                                                </h4>
+                                                <p className="text-gray-600 text-base">{clinicData.email}</p>
+                                            </div>
+                                            <div className="text-base font-semibold mb-2 border-l-4 border-blue-400 pl-4">
+                                                Thông tin bệnh viện
+                                            </div>
+                                            <div className="doctor-description">
+                                                {clinicData.description
+                                                    ? parse(clinicData.description)
+                                                    : 'Mô tả không có sẵn'}
+                                            </div>
+                                            <div className="text-base font-semibold mb-2 border-l-4 border-blue-400 pl-4 mt-5">
+                                                Hướng dẫn khám bệnh
+                                            </div>
+                                            <div className="space-y-2 text-base">
+                                                <p>Quy trình đặt lịch thăm khám qua nền tảng EasyMed:</p>
+                                                <ul className="list-none space-y-2 ml-4">
+                                                    <li>
+                                                        Bước 1: Quý bệnh nhân tiến hành chọn thời gian và đặt lịch trong
+                                                        khung "Đặt lịch hẹn".
+                                                    </li>
+                                                    <li>
+                                                        Bước 2: Sau khi hoàn tất đặt lịch, EasyMed sẽ gửi email xác nhận
+                                                        thông tin lịch hẹn khám cho...
+                                                    </li>
+                                                    <li>
+                                                        Bước 3: Bệnh nhân đến phòng khám theo lịch hẹn, đưa email xác
+                                                        nhận cho đội ngũ lễ tân/y tá và tiến hành thăm khám.
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            <div className="text-base font-semibold mb-2 border-l-4 border-blue-400 pl-4 mt-5">
+                                                Hình thức thanh toán
+                                            </div>
+                                            <div className="grid grid-cols-3 gap-4 mt-5">
+                                                <div className="border rounded-lg hover:border-blue-200 transition-colors cursor-pointer p-6 flex flex-col items-center justify-center">
+                                                    <Banknote className="w-8 h-8 text-green-600 mb-2" />
+                                                    <span className="text-sm font-medium">Tiền mặt</span>
                                                 </div>
-                                                <div>
-                                                    <h4 className="font-medium mb-2 flex items-center text-base">
-                                                        <Clock className="mr-2" size={15} />
-                                                        Thời gian làm việc:
-                                                    </h4>
-                                                    <p className="text-gray-600 text-base">Thứ 2 đến thứ 7</p>
-                                                </div>
-                                                <div>
-                                                    <h4 className="font-medium mb-2 flex items-center text-base">
-                                                        <Phone className="mr-2" size={15} />
-                                                        Hỗ trợ đặt khám:
-                                                    </h4>
-                                                    <p className="text-gray-600 text-base">{clinicData.phoneNumber}</p>
-                                                </div>
-                                                <div>
-                                                    <h4 className="font-medium mb-2 flex items-center text-base">
-                                                        <Mail className="mr-2" size={15} />
-                                                        Email liên hệ:
-                                                    </h4>
-                                                    <p className="text-gray-600 text-base">{clinicData.email}</p>
+
+                                                <div className="border rounded-lg hover:border-blue-200 transition-colors cursor-pointer p-6 flex flex-col items-center justify-center">
+                                                    <Smartphone className="w-8 h-8 text-blue-600 mb-2" />
+                                                    <span className="text-sm font-medium">Thanh toán trực tuyến</span>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div className="doctor-description">
-                                            {clinicData.description
-                                                ? parse(clinicData.description)
-                                                : 'Mô tả không có sẵn'}
                                         </div>
                                     </div>
                                     {/* <div className="max-w-6xl mx-8 py-2">
@@ -762,7 +804,7 @@ function ClinicInfo() {
                 </div>
 
                 <div className="w-96 shrink-0 mt-4">
-                    <div className="bg-gray-50 rounded-lg p-4">
+                    <div className="bg-blue-100 rounded-lg p-4">
                         <div className="text-lg font-bold mb-2">Đặt lịch ngay</div>
                         <div className="text-sm text-gray-600 mb-6">
                             Lựa chọn bác sĩ phù hợp, dịch vụ y tế cần khám và tiến hành đặt lịch ngay.

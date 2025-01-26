@@ -46,18 +46,18 @@ function ChangePassword() {
         }
     };
     return (
-        <div>
-            <h3 className="text-5xl font-semibold text-center">Đổi Mật Khẩu</h3>
-            <div className="flex items-center justify-center mt-12">
-                <div className=" ">
+        <div className="mt-20 h-fit overflow-y-auto max-w-xl">
+            <div className="text-2xl font-bold text-left">Đặt mật khẩu</div>
+            <div className="flex items-center justify-start max-w-xl">
+                <div className="mt-5">
                     <div className="mb-4 relative">
-                        <label htmlFor="oldPassword" className="block text-3xl">
+                        <div htmlFor="oldPassword" className="block text-lg text-gray-800 font-semibold">
                             Mật khẩu cũ
-                        </label>
+                        </div>
                         <input
                             type={showPassword ? 'text' : 'password'}
                             id="oldPassword"
-                            className="w-[400px] p-2 border border-gray-300 rounded mt-5"
+                            className="w-[400px] p-2 border border-gray-300 rounded"
                             value={oldPassword}
                             onChange={(e) => setOldPassword(e.target.value)}
                         />
@@ -69,14 +69,14 @@ function ChangePassword() {
                             <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
                         </button>
                     </div>
-                    <div className="mb-4 relative mt-5">
-                        <label htmlFor="newPassword" className="block text-3xl">
+                    <div className="mb-4 relative">
+                        <label htmlFor="newPassword" className="block text-lg text-gray-800 font-semibold">
                             Mật khẩu mới
                         </label>
                         <input
                             type={showPassword_1 ? 'text' : 'password'}
                             id="newPassword"
-                            className="w-full p-2 border border-gray-300 rounded mt-5"
+                            className="w-full p-2 border border-gray-300 rounded"
                             value={newPassword}
                             onChange={(e) => setNewPassword(e.target.value)}
                         />
@@ -88,14 +88,14 @@ function ChangePassword() {
                             <FontAwesomeIcon icon={showPassword_1 ? faEyeSlash : faEye} />
                         </button>
                     </div>
-                    <div className="mb-4 relative mt-5">
-                        <label htmlFor="confirmPassword" className="block text-3xl">
+                    <div className="mb-4 relative">
+                        <label htmlFor="confirmPassword" className="block text-lg text-gray-800 font-semibold">
                             Xác nhận mật khẩu
                         </label>
                         <input
                             type={showPassword_2 ? 'text' : 'password'}
                             id="confirmPassword"
-                            className="w-full p-2 border border-gray-300 rounded mt-5"
+                            className="w-full p-2 border border-gray-300 rounded"
                             value={confirmPassword}
                             onChange={(e) => setConfirmPassword(e.target.value)}
                         />
@@ -111,7 +111,7 @@ function ChangePassword() {
                         <button
                             type="submit"
                             onClick={handleChangePassword}
-                            className="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition duration-200"
+                            className="font-bold w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition duration-200"
                         >
                             Đổi mật khẩu
                         </button>

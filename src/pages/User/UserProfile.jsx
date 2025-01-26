@@ -4,6 +4,8 @@ import { axiosClient, axiosInstance } from '~/api/apiRequest';
 import { UserContext } from '~/context/UserContext';
 import { toast } from 'react-toastify';
 import defaultImage from '../../assets/img/avatar.png';
+import { Camera, Pencil } from 'lucide-react';
+
 function DoctorProfile() {
     const [doctorInfo, setDoctorInfo] = useState({
         name: '',
@@ -25,8 +27,6 @@ function DoctorProfile() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                // console.log('UserId:', user.userId);
-
                 const response = await axiosInstance.get(`/user/${user.userId}`);
                 console.log('Response:', response);
 
@@ -114,15 +114,26 @@ function DoctorProfile() {
     };
 
     return (
-        <div className=" w-150 h-full px-40 border rounded-lg shadow-lg bg-white overflow-y-auto">
+        <div className="mt-20 h-fit overflow-y-auto max-w-xl">
             {/* <h2 className="text-5xl font-bold text-center mb-6">Thông Tin Cá Nhân Bác Sĩ</h2> */}
-
+            <div className="flex items-center justify-between mb-8">
+                <div className="text-3xl font-bold">Hồ sơ</div>
+                {!isEditing && (
+                    <button
+                        className="flex items-center gap-2 text-blue-600 hover:text-blue-700"
+                        onClick={() => setIsEditing(true)}
+                    >
+                        <div className="font-semibold">Chỉnh sửa</div>
+                        <Pencil className="w-4 h-4" />
+                    </button>
+                )}
+            </div>
             {/* Ảnh Avatar */}
-            <div className="top-3 flex justify-center mb-6 relative">
+            <div className=" flex justify-start mb-6 relative">
                 <img
                     src={previewImage || (doctorInfo.image ? `${IMAGE_URL}${doctorInfo.image}` : defaultImage)} // Thay thế URL này bằng link ảnh thực tế của bác sĩ
                     alt="Doctor Avatar"
-                    className="w-48 h-48 rounded-full border-2 border-gray-300"
+                    className="w-32 h-32 rounded-full border-2 border-gray-300"
                 />
                 {isEditing && (
                     <div>
@@ -138,122 +149,121 @@ function DoctorProfile() {
                         />
                     </div>
                 )}
+                <div className="mt-5 ml-5">
+                    <div className="font-bold text-lg">{doctorInfo.name}</div>
+                    <div className="text-base text-blue-500">{doctorInfo.email}</div>
+                </div>
             </div>
-            <div className="flex gap-1 relative top-5">
-                {/* Cột 1 */}
-                <div className="flex-1">
-                    <div className="mb-4">
-                        <label className="block font-semibold">Họ tên</label>
-                        <input
-                            type="text"
-                            name="name"
-                            value={doctorInfo.name}
-                            onChange={handleChange}
-                            disabled={!isEditing}
-                            className={`w-1/2 p-2 border rounded ${isEditing ? 'bg-white' : 'bg-gray-100'}`}
-                        />
-                    </div>
 
-                    <div className="mb-4">
-                        <label className="block font-semibold">Địa chỉ</label>
-                        <input
-                            type="text"
-                            name="address"
-                            value={doctorInfo.address}
-                            onChange={handleChange}
-                            disabled={!isEditing}
-                            className={`w-1/2 p-2 border rounded ${isEditing ? 'bg-white' : 'bg-gray-100'}`}
-                        />
-                    </div>
-
-                    <div className="mb-4">
-                        <label className="block font-semibold">Giới tính</label>
-                        {isEditing ? (
-                            <select
-                                name="gender"
-                                value={doctorInfo.gender}
-                                onChange={handleChange}
-                                className="w-1/2 p-2 border rounded bg-white"
-                            >
-                                <option value="Nam">Nam</option>
-                                <option value="Nữ">Nữ</option>
-                                <option value="Khác">Khác</option>
-                            </select>
-                        ) : (
-                            <input
-                                type="text"
-                                name="gender"
-                                value={doctorInfo.gender}
-                                disabled={!isEditing}
-                                className="w-1/2 p-2 border rounded bg-gray-100"
-                            />
-                        )}
-                    </div>
+            {/* Thông tin cá nhân */}
+            <div
+                className={`space-y-4 px-5 py-5  ${
+                    isEditing ? 'bg-neutral-50' : 'border rounded-lg bg-white shadow-sm'
+                }`}
+            >
+                <div className={` ${isEditing ? '' : 'border-b pb-4'}`}>
+                    <div className="block text-sm font-semibold text-gray-600 mb-1">Họ và tên</div>
+                    <input
+                        type="text"
+                        name="name"
+                        value={doctorInfo.name}
+                        onChange={handleChange}
+                        disabled={!isEditing}
+                        className={` ${isEditing ? 'bg-white w-1/2 p-2 border rounded' : 'bg-white'}`}
+                    />
                 </div>
 
-                {/* Cột 2 */}
-                <div className="flex-1">
-                    <div className="mb-4">
-                        <div className="mb-4">
-                            <label className="block font-semibold">Ngày sinh</label>
-                            <input
-                                type="date"
-                                name="birthdate"
-                                value={doctorInfo.birthdate}
-                                onChange={handleChange}
-                                disabled={!isEditing}
-                                className={`w-1/2 p-2 border rounded ${isEditing ? 'bg-white' : 'bg-gray-100'}`}
-                            />
-                        </div>
+                <div className={` ${isEditing ? '' : 'border-b pb-4'}`}>
+                    <div className="block text-sm font-semibold text-gray-600 mb-1">Email</div>
+                    <input
+                        type="email"
+                        name="email"
+                        value={doctorInfo.email}
+                        onChange={handleChange}
+                        disabled={true}
+                        className={`cursor-not-allowed w-1/2 ${
+                            isEditing ? 'bg-white w-1/2 p-2 border rounded' : 'bg-white'
+                        }`}
+                    />
+                </div>
 
-                        <div className="mb-4">
-                            <label className="block font-semibold">Email</label>
-                            <input
-                                type="email"
-                                name="email"
-                                value={doctorInfo.email}
-                                onChange={handleChange}
-                                disabled={true}
-                                className={`w-1/2 p-2 border rounded ${isEditing ? 'bg-gray-200' : 'bg-gray-100'}`}
-                            />
-                        </div>
+                <div className={` ${isEditing ? '' : 'border-b pb-4'}`}>
+                    <div className="block text-sm font-semibold text-gray-500 mb-1">Ngày sinh</div>
+                    <input
+                        type="date"
+                        name="birthdate"
+                        value={doctorInfo.birthdate}
+                        onChange={handleChange}
+                        disabled={!isEditing}
+                        className={` ${isEditing ? 'bg-white w-1/2 p-2 border rounded' : 'bg-white'}`}
+                    />
+                </div>
 
-                        <label className="block font-semibold">Số điện thoại</label>
+                <div className={` ${isEditing ? '' : 'border-b pb-4'}`}>
+                    <div className="block text-sm font-semibold text-gray-500 mb-1">Giới tính</div>
+                    {isEditing ? (
+                        <select
+                            name="gender"
+                            value={doctorInfo.gender}
+                            onChange={handleChange}
+                            className="bg-white w-1/2 p-2 border rounded"
+                        >
+                            <option value="Nam">Nam</option>
+                            <option value="Nữ">Nữ</option>
+                            <option value="Khác">Khác</option>
+                        </select>
+                    ) : (
                         <input
                             type="text"
-                            name="phone"
-                            value={doctorInfo.phone}
-                            onChange={handleChange}
+                            name="gender"
+                            value={doctorInfo.gender}
                             disabled={!isEditing}
-                            className={`w-1/2 p-2 border rounded ${isEditing ? 'bg-white' : 'bg-gray-100'}`}
+                            className="bg-white"
                         />
-                    </div>
+                    )}
+                </div>
+
+                <div className={` ${isEditing ? '' : 'border-b pb-4'}`}>
+                    <div className="block text-sm font-semibold text-gray-500 mb-1">Số điện thoại</div>
+                    <input
+                        type="text"
+                        name="phone"
+                        value={doctorInfo.phone}
+                        onChange={handleChange}
+                        disabled={!isEditing}
+                        className={` ${isEditing ? 'bg-white w-1/2 p-2 border rounded' : 'bg-white'}`}
+                    />
+                </div>
+
+                <div>
+                    <div className="block text-sm font-semibold text-gray-500 mb-1">Địa chỉ</div>
+                    <input
+                        type="text"
+                        name="address"
+                        value={doctorInfo.address}
+                        onChange={handleChange}
+                        disabled={!isEditing}
+                        className={` ${isEditing ? 'bg-white w-1/2 p-2 border rounded' : 'bg-white'}`}
+                    />
                 </div>
             </div>
 
             {/* Nút Chỉnh sửa và Lưu */}
-            <div className="flex justify-center space-x-4 mt-24">
-                {!isEditing ? (
-                    <button
-                        onClick={() => setIsEditing(true)}
-                        className="px-6 py-4 bg-blue-500 text-white rounded hover:bg-blue-600"
-                    >
-                        Chỉnh sửa
-                    </button>
-                ) : (
-                    <button
-                        onClick={handleSave}
-                        className="px-6 py-4 bg-green-500 text-white rounded hover:bg-green-600"
-                    >
-                        Lưu thông tin
-                    </button>
-                )}
-                {isEditing && (
+            <div className="flex justify-start space-x-4 mb-5 px-5 py-5">
+                {isEditing ? (
                     <button
                         onClick={() => setIsEditing(false)}
-                        className="px-6 py-4 bg-red-500 text-white rounded hover:bg-red-600"
+                        className="px-9 py-0 bg-slate-50 text-blue-500 font-semibold text-lg rounded border-blue-500 border-2 hover:bg-blue-500 hover:text-white"
                     >
                         Hủy
+                    </button>
+                ) : null}
+                {isEditing && (
+                    <button
+                        onClick={handleSave}
+                        className="px-6 py-4 bg-blue-400 text-lg font-semibold text-white rounded hover:bg-blue-500"
+                    >
+                        Lưu thay đổi
                     </button>
                 )}
             </div>
