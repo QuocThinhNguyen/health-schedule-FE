@@ -100,7 +100,7 @@ const Sidebar = ({ selectedTab }) => {
                     <li
                         key={index}
                         onClick={item.onClick ? item.onClick : () => navigate(item.path)}
-                        className={`p-3 cursor-pointer flex items-center rounded-md hover:bg-blue-100 ${
+                        className={`gap-2 p-3 cursor-pointer flex items-center rounded-md hover:bg-blue-100 ${
                             location.pathname === item.path ? 'bg-blue-100 text-blue-600' : 'text-gray-700'
                         }`}
                     >
@@ -110,7 +110,7 @@ const Sidebar = ({ selectedTab }) => {
                 ))}
             </div>
             {isOpen && (
-                <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 bg-opacity-80">
+                <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 bg-opacity-50 z-10">
                     <div className="bg-white rounded-lg w-full max-w-xs">
                         {/* Close button */}
                         <div className="flex justify-end p-2">

@@ -158,7 +158,7 @@ function DoctorProfile() {
             {/* Thông tin cá nhân */}
             <div
                 className={`space-y-4 px-5 py-5  ${
-                    isEditing ? 'bg-neutral-50' : 'border rounded-lg bg-white shadow-sm'
+                    isEditing ? 'bg-[#f8f9fc]' : 'border rounded-lg bg-white shadow-sm'
                 }`}
             >
                 <div className={` ${isEditing ? '' : 'border-b pb-4'}`}>
@@ -169,7 +169,7 @@ function DoctorProfile() {
                         value={doctorInfo.name}
                         onChange={handleChange}
                         disabled={!isEditing}
-                        className={` ${isEditing ? 'bg-white w-1/2 p-2 border rounded' : 'bg-white'}`}
+                        className={` ${isEditing ? 'bg-white w-full p-2 border rounded' : 'bg-white'}`}
                     />
                 </div>
 
@@ -182,7 +182,7 @@ function DoctorProfile() {
                         onChange={handleChange}
                         disabled={true}
                         className={`cursor-not-allowed w-1/2 ${
-                            isEditing ? 'bg-white w-1/2 p-2 border rounded' : 'bg-white'
+                            isEditing ? 'bg-white w-full p-2 border rounded' : 'bg-white'
                         }`}
                     />
                 </div>
@@ -195,7 +195,7 @@ function DoctorProfile() {
                         value={doctorInfo.birthdate}
                         onChange={handleChange}
                         disabled={!isEditing}
-                        className={` ${isEditing ? 'bg-white w-1/2 p-2 border rounded' : 'bg-white'}`}
+                        className={` ${isEditing ? 'bg-white w-full p-2 border rounded' : 'bg-white'}`}
                     />
                 </div>
 
@@ -206,7 +206,7 @@ function DoctorProfile() {
                             name="gender"
                             value={doctorInfo.gender}
                             onChange={handleChange}
-                            className="bg-white w-1/2 p-2 border rounded"
+                            className="bg-white w-full p-2 border rounded"
                         >
                             <option value="Nam">Nam</option>
                             <option value="Nữ">Nữ</option>
@@ -231,7 +231,7 @@ function DoctorProfile() {
                         value={doctorInfo.phone}
                         onChange={handleChange}
                         disabled={!isEditing}
-                        className={` ${isEditing ? 'bg-white w-1/2 p-2 border rounded' : 'bg-white'}`}
+                        className={` ${isEditing ? 'bg-white w-full p-2 border rounded' : 'bg-white'}`}
                     />
                 </div>
 
@@ -243,17 +243,17 @@ function DoctorProfile() {
                         value={doctorInfo.address}
                         onChange={handleChange}
                         disabled={!isEditing}
-                        className={` ${isEditing ? 'bg-white w-1/2 p-2 border rounded' : 'bg-white'}`}
+                        className={` ${isEditing ? 'bg-white w-full p-2 border rounded' : 'bg-white'}`}
                     />
                 </div>
             </div>
 
             {/* Nút Chỉnh sửa và Lưu */}
-            <div className="flex justify-start space-x-4 mb-5 px-5 py-5">
+            <div className="flex justify-start space-x-4 mb-5">
                 {isEditing ? (
                     <button
                         onClick={() => setIsEditing(false)}
-                        className="px-9 py-0 bg-slate-50 text-blue-500 font-semibold text-lg rounded border-blue-500 border-2 hover:bg-blue-500 hover:text-white"
+                        className="px-6 py-0 bg-[#f8f9fc] text-blue-500 font-semibold text-lg rounded border-blue-500 border-2 hover:bg-blue-500 hover:text-white"
                     >
                         Hủy
                     </button>
@@ -261,7 +261,7 @@ function DoctorProfile() {
                 {isEditing && (
                     <button
                         onClick={handleSave}
-                        className="px-6 py-4 bg-blue-400 text-lg font-semibold text-white rounded hover:bg-blue-500"
+                        className="px-4 py-2 bg-blue-400 text-lg font-semibold text-white rounded hover:bg-blue-500"
                     >
                         Lưu thay đổi
                     </button>

@@ -116,7 +116,7 @@ function Header() {
                             <div
                                 className="relative inline-block text-left"
                                 onMouseEnter={() => setIsDropdownOpen(true)}
-                                onMouseLeave={() => setIsDropdownOpen(true)}
+                                onMouseLeave={() => setIsDropdownOpen(false)}
                             >
                                 <div className="flex justify-center items-center cursor-pointer">
                                     <div>
