@@ -25,8 +25,6 @@ function SideBarFilterDoctor() {
             try {
                 const response = await axiosClient.get('/clinic/dropdown');
                 if (response.status === 200) {
-                    console.log('Clinics:', response.data);
-
                     setClinics(response.data);
                 }
             } catch (error) {
@@ -66,11 +64,6 @@ function SideBarFilterDoctor() {
 
     return (
         <div className="w-full bg-[#f8f9fc] border border-[#E4E8EC] rounded-lg p-6 text-sm">
-            <div className="pb-3 border-b mb-4">
-                <h2 className="flex gap-4 items-center justify-start text-xl font-bold border-[#E4E8EC]">
-                    <IoFilter /> Bộ lọc tìm kiếm
-                </h2>
-            </div>
             <div className="h-max">
                 {/* <div className="pb-4 border-b mb-4">
                     <h4 className="text-[#1B3250] font-semibold border-l-[3px] border-[#2d87f3] uppercase leading-4 pl-2 mb-3">
