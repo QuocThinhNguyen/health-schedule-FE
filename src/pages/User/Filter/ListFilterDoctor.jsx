@@ -60,6 +60,13 @@ function ListFilterDoctor({ pagination, setPagination }) {
             }
         };
         filterDoctorAPI();
+
+        const timeoutId = setTimeout(() => {
+            window.scrollTo(0, 0);
+        }, 100); 
+
+        return () => clearTimeout(timeoutId);
+
     }, [keyword, clinicId, specialtyId, sort, pagination.page]);
 
     return (

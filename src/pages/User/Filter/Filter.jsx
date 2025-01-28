@@ -30,8 +30,6 @@ function Filter() {
     };
 
     useEffect(() => {
-        console.log('location.pathname:', location.pathname);
-        console.log('selectedTab:', selectedTab);
         if (location.pathname === '/tat-ca-bac-si' && selectedTab !== 1) {
             setSelectedTab(1);
         } else if (location.pathname === '/tat-ca-benh-vien' && selectedTab !== 0) {

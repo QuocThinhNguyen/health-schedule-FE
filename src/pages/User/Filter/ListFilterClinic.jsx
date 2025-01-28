@@ -39,6 +39,13 @@ function ListFilterClinic({pagination, setPagination }) {
             }
         };
         filterClinicAPI();
+
+        const timeoutId = setTimeout(() => {
+            window.scrollTo(0, 0);
+        }, 100); 
+
+        return () => clearTimeout(timeoutId);
+
     }, [keyword, pagination.page]);
 
     return (
