@@ -117,13 +117,13 @@ function DoctorProfile() {
         <div className="mt-20 h-fit overflow-y-auto max-w-xl">
             {/* <h2 className="text-5xl font-bold text-center mb-6">Thông Tin Cá Nhân Bác Sĩ</h2> */}
             <div className="flex items-center justify-between mb-8">
-                <div className="text-3xl font-bold">Hồ sơ</div>
+                <div className="text-2xl font-bold">Hồ sơ</div>
                 {!isEditing && (
                     <button
                         className="flex items-center gap-2 text-blue-600 hover:text-blue-700"
                         onClick={() => setIsEditing(true)}
                     >
-                        <div className="font-semibold">Chỉnh sửa</div>
+                        <div className="font-bold text-sm text-[#2D87F3]">Chỉnh sửa</div>
                         <Pencil className="w-4 h-4" />
                     </button>
                 )}
