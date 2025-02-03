@@ -54,7 +54,7 @@ const Sidebar = ({ selectedTab }) => {
     }, []);
 
     return (
-        <div className="w-fit h-fit bg-white text-black flex flex-col shadow-lg border rounded-md mt-20 mb-20">
+        <div className="w-fit h-fit bg-white text-black flex flex-col rounded-md mt-20 mb-20">
             <div className="p-4 border-b">
                 <div className="flex items-center gap-3 mb-3">
                     <img
@@ -95,12 +95,12 @@ const Sidebar = ({ selectedTab }) => {
                 <h1 className="text-lg font-semibold mb-1">{userProfile.fullname}</h1>
                 <p className="text-sm text-blue-500">{userProfile.email}</p>
             </div>
-            <div className="space-y-2 mt-4 px-4">
+            <div className="space-y-2 pt-2 pb-4 px-4">
                 {menuItems.map((item, index) => (
                     <li
                         key={index}
                         onClick={item.onClick ? item.onClick : () => navigate(item.path)}
-                        className={`p-3 cursor-pointer flex items-center rounded-md hover:bg-blue-100 ${
+                        className={`gap-2 p-3 cursor-pointer flex items-center rounded-md hover:bg-blue-100 ${
                             location.pathname === item.path ? 'bg-blue-100 text-blue-600' : 'text-gray-700'
                         }`}
                     >
@@ -110,7 +110,7 @@ const Sidebar = ({ selectedTab }) => {
                 ))}
             </div>
             {isOpen && (
-                <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 bg-opacity-80">
+                <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 bg-opacity-50 z-10">
                     <div className="bg-white rounded-lg w-full max-w-xs">
                         {/* Close button */}
                         <div className="flex justify-end p-2">

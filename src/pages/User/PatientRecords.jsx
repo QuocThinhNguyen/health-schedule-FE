@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { User, Calendar, Phone, Users, MapPin, Briefcase, Mail, IdCard } from 'lucide-react';
+import { User, Calendar, Phone, Users, MapPin, Briefcase, Mail, IdCard, Plus } from 'lucide-react';
 import { axiosInstance } from '~/api/apiRequest';
 import { UserContext } from '~/context/UserContext';
 import { Route, Navigate, useNavigate } from 'react-router-dom';
@@ -83,18 +83,22 @@ function PatientRecord() {
         console.log('Dữ liệu đã submit:', formData);
     };
     return (
-        <div>
-            <h1 className="text-5xl font-bold mb-4 text-center">Danh sách hồ sơ bệnh nhân</h1>
-            <div className="flex justify-end mb-4 px-4">
-                <button className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600" onClick={handleAdd}>
-                    Thêm hồ sơ bệnh nhân
+        <div className="w-full max-w mx-auto p-4 mt-20">
+            <h1 className="text-3xl font-bold mb-4 text-start">Danh sách hồ sơ bệnh nhân</h1>
+            <div className="flex justify-end mb-4 px-4 max-w">
+                <button
+                    className="w-fit flex items-center justify-center gap-2 p-3 rounded-lg text-blue-600 text-sm font-medium hover:bg-blue-200 transition-colors"
+                    onClick={handleAdd}
+                >
+                    <Plus className="w-4 h-4" />
+                    Thêm hồ sơ
                 </button>
             </div>
-            <div className="space-y-6 px-4">
+            <div className="space-y-6">
                 {patientData.map((patient) => (
                     <div
                         key={patient.patientRecordId}
-                        className="bg-white shadow-xl border rounded-lg overflow-hidden p-4 w-[650px] border-spacing-3 mt-4"
+                        className="bg-white shadow-xl border rounded-lg overflow-hidden p-4 w-[650px] border-spacing-3 mt-2"
                     >
                         <div className="space-y-4">
                             <div className="flex gap-1 relative top-5">

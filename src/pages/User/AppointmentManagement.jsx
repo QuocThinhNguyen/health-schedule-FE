@@ -157,24 +157,28 @@ const AppointmentManagement = () => {
         navigate(`/bac-si/get?id=${doctorId}`);
     };
     return (
-        <div className="w-full max-w mx-auto p-4">
-            <h1 className="text-5xl font-bold mb-4 text-center">Danh sách phiếu khám bệnh</h1>
+        <div className="w-full max-w mx-auto p-4 mt-20">
+            <h1 className="text-3xl font-bold mb-4 text-start">Lịch sử đặt chỗ</h1>
 
             {/* Tabs */}
-            <div className="flex space-x-2 mt-12">
-                {tabs.map((tab) => (
-                    <button
-                        key={tab.id}
-                        className={`flex-1 py-3 px-4 rounded-full text-2xl font-medium transition-colors ${
-                            activeTab === tab.id
-                                ? 'bg-blue-500 text-white'
-                                : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-                        }`}
-                        onClick={() => setActiveTab(tab.id)}
-                    >
-                        {tab.label}
-                    </button>
-                ))}
+            <div className="border-b-2 mb-6 bg-white w-fit">
+                <div className="flex">
+                    {tabs.map((tab) => (
+                        <button
+                            key={tab.id}
+                            onClick={() => setActiveTab(tab.id)}
+                            className={`text-base text-[#737373] font-semibold px-4 py-2 relative ${
+                                activeTab === tab.id ? 'text-blue-500' : 'text-gray-600 hover:text-blue-500'
+                            }`}
+                        >
+                            {tab.label}
+                            {/* Thêm dòng gạch dưới khi tab đang active */}
+                            {activeTab === tab.id && (
+                                <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-blue-500" />
+                            )}
+                        </button>
+                    ))}
+                </div>
             </div>
 
             {/* Nội dung tab */}
@@ -183,37 +187,27 @@ const AppointmentManagement = () => {
                     <p className="text-red-500">{error}</p>
                 ) : filteredAppointments.length > 0 ? (
                     filteredAppointments.map((appointment) => (
-                        <div key={appointment._id} className="mb-4 p-4 border rounded-md shadow-md w-[600px]">
-                            {/* <h3 className="text-2xl font-semibold">{appointment.patientRecordId.fullname}</h3>
-                            <p>Ngày khám: {new Date(appointment.appointmentDate).toLocaleDateString()}</p>
-                            <p>Giờ khám: {appointment.timeType.valueVi}</p>
-                            <p>Địa chỉ: {appointment.doctorInfo.clinic.address}</p>
-                            <p>Chuyên khoa: {appointment.doctorInfo.specialty.name}</p>
-                            <p>Lý do khám: {appointment.reason}</p>
-                            <p>Trạng thái: {appointment.status.valueVi}</p> */}
-
-                            <div className="flex justify-between items-start mb-4">
+                        <div key={appointment._id} className="mb-4 p-4 border rounded-md shadow-md max-w-xl h-fit">
+                            <div className="flex justify-between items-start mb-2">
                                 <div>
-                                    <h2 className="text-3xl font-bold mt-1 uppercase">
+                                    <div className="text-xl font-bold mt-1 uppercase">
                                         {appointment.patientRecordId.fullname}
-                                    </h2>
+                                    </div>
                                 </div>
 
                                 <div className="flex">
-                                    <span className="text-red-500 font-bold text-3xl">
-                                        {appointment.status.valueVi}
-                                    </span>
+                                    <span className="text-red-500 font-bold text-xl">{appointment.status.valueVi}</span>
                                 </div>
                             </div>
-                            <div className="mt-6">
-                                <h3 className="flex items-center text-3xl font-semibold text-blue-500 mb-4 uppercase">
+                            <div className="mt-2">
+                                <div className="flex items-center text-2xl font-semibold text-blue-500 mb-2 uppercase">
                                     <Stethoscope className="mr-2" size={20} />
                                     BÁC SĨ {appointment.doctorId.fullname}
-                                </h3>
+                                </div>
 
-                                <div className="flex gap-x-9 relative top-5">
+                                <div className="flex gap-x-9 relative">
                                     {/* Cột 1 */}
-                                    <div className="flex flex-col gap-6">
+                                    <div className="flex flex-col gap-3">
                                         <div className="flex">
                                             <span className="mr-2 font-medium">Ngày khám:</span>
                                             <span>{new Date(appointment.appointmentDate).toLocaleDateString()}</span>
@@ -249,7 +243,7 @@ const AppointmentManagement = () => {
                                     </div>
                                 </div>
                                 {/* Nút hành động */}
-                                <div className="mt-20 flex justify-end space-x-4">
+                                <div className="mt-5 flex justify-end space-x-4">
                                     {(appointment.status.valueVi === 'Đã xác nhận' ||
                                         appointment.status.valueVi === 'Đã thanh toán') && (
                                         <button
