@@ -47,8 +47,8 @@ function ChangePassword() {
     };
     return (
         <div className="mt-20 h-fit overflow-y-auto max-w-xl">
-            <div className="text-2xl font-bold text-left">Đặt mật khẩu</div>
-            <div className="flex items-center justify-start max-w-xl">
+            <div className="text-2xl font-bold text-left ml-2">Đặt mật khẩu</div>
+            <div className="flex items-center justify-start max-w-xl ml-2">
                 <div className="mt-5">
                     <div className="mb-4 relative">
                         <div htmlFor="oldPassword" className="block text-lg text-gray-800 font-semibold">
@@ -57,7 +57,8 @@ function ChangePassword() {
                         <input
                             type={showPassword ? 'text' : 'password'}
                             id="oldPassword"
-                            className="w-[400px] p-2 border border-gray-300 rounded"
+                            className="w-[400px] p-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                            // className="w-full p-3 border rounded-lg bg-white focus:ring-2 focus:ring-blue-500 placeholder-gray-400 focus:outline-none"
                             value={oldPassword}
                             onChange={(e) => setOldPassword(e.target.value)}
                         />
@@ -76,7 +77,7 @@ function ChangePassword() {
                         <input
                             type={showPassword_1 ? 'text' : 'password'}
                             id="newPassword"
-                            className="w-full p-2 border border-gray-300 rounded"
+                            className="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 focus:outline-none"
                             value={newPassword}
                             onChange={(e) => setNewPassword(e.target.value)}
                         />
@@ -95,7 +96,7 @@ function ChangePassword() {
                         <input
                             type={showPassword_2 ? 'text' : 'password'}
                             id="confirmPassword"
-                            className="w-full p-2 border border-gray-300 rounded"
+                            className="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 focus:outline-none"
                             value={confirmPassword}
                             onChange={(e) => setConfirmPassword(e.target.value)}
                         />

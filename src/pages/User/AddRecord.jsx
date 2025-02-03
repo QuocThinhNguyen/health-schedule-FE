@@ -66,13 +66,13 @@ function AddRecord() {
     };
 
     return (
-        <div className="max-w-7xl mx-auto p-6 bg-gray-50">
-            <h1 className="text-5xl font-bold text-center text-gray-800 mb-6">Nhập thông tin bệnh nhân</h1>
+        <div className="mt-20 h-fit overflow-y-auto max-w-2xl">
+            <h1 className="text-2xl font-bold text-left text-gray-800 mb-2">Nhập thông tin bệnh nhân</h1>
 
-            <p className="text-red-500 mb-4 mt-20">(*) Thông tin bắt buộc nhập</p>
+            <p className="text-red-500 mb-4 mt-6">(*) Thông tin bắt buộc nhập</p>
 
-            <form onSubmit={handleSubmit} className="space-y-8">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <form onSubmit={handleSubmit} className="space-y-8 mb-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 ml-2 mr-2">
                     {/* Full Name */}
                     <div>
                         <label className="block mb-1 font-medium">
@@ -84,7 +84,7 @@ function AddRecord() {
                             placeholder="Nguyễn Văn A"
                             value={formData.fullname}
                             onChange={handleChange}
-                            className="w-full p-3 border rounded-lg bg-white focus:ring-2 focus:ring-blue-500 placeholder-gray-400"
+                            className="w-full p-3 border rounded-lg bg-white focus:ring-2 focus:ring-blue-500 placeholder-gray-400 focus:outline-none"
                             required
                         />
                     </div>
@@ -99,7 +99,7 @@ function AddRecord() {
                             name="birthDate"
                             value={formData.birthDate}
                             onChange={handleChange}
-                            className="w-full p-3 border rounded-lg bg-white focus:ring-2 focus:ring-blue-500 placeholder-gray-400"
+                            className="w-full p-3 border rounded-lg bg-white focus:ring-2 focus:ring-blue-500 placeholder-gray-400 focus:outline-none"
                             required
                         />
                     </div>
@@ -115,7 +115,7 @@ function AddRecord() {
                             placeholder="Vui lòng nhập số điện thoại ..."
                             value={formData.phoneNumber}
                             onChange={handleChange}
-                            className="w-full p-3 border rounded-lg bg-white focus:ring-2 focus:ring-blue-500 placeholder-gray-400"
+                            className="w-full p-3 border rounded-lg bg-white focus:ring-2 focus:ring-blue-500 placeholder-gray-400 focus:outline-none"
                             required
                         />
                     </div>
@@ -129,7 +129,7 @@ function AddRecord() {
                             name="gender"
                             value={formData.gender === 'Male' ? 'Nam' : formData.gender === 'Female' ? 'Nữ' : ''}
                             onChange={handleChange}
-                            className="w-full p-3 border rounded-lg bg-white focus:ring-2 focus:ring-blue-500"
+                            className="w-full p-3 border rounded-lg bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none"
                             required
                         >
                             <option value="">Chọn giới tính ...</option>
@@ -148,7 +148,8 @@ function AddRecord() {
                             name="job"
                             value={formData.job}
                             onChange={handleChange}
-                            className="w-full p-3 border rounded-lg bg-white focus:ring-2 focus:ring-blue-500 placeholder-gray-400"
+                            className="w-full p-3 border rounded-lg bg-white focus:ring-2 focus:ring-blue-500 placeholder-gray-400 focus:outline-none"
+                            required
                         />
                     </div>
 
@@ -161,7 +162,8 @@ function AddRecord() {
                             placeholder="Vui lòng nhập Số CCCD/Passport"
                             value={formData.CCCD}
                             onChange={handleChange}
-                            className="w-full p-3 border rounded-lg bg-white focus:ring-2 focus:ring-blue-500 placeholder-gray-400"
+                            className="w-full p-3 border rounded-lg bg-white focus:ring-2 focus:ring-blue-500 placeholder-gray-400 focus:outline-none"
+                            required
                         />
                     </div>
 
@@ -174,7 +176,8 @@ function AddRecord() {
                             placeholder="Nhập địa chỉ email để nhận phiếu khám"
                             value={formData.email}
                             onChange={handleChange}
-                            className="w-full p-3 border rounded-lg bg-white focus:ring-2 focus:ring-blue-500 placeholder-gray-400"
+                            className="w-full p-3 border rounded-lg bg-white focus:ring-2 focus:ring-blue-500 placeholder-gray-400 focus:outline-none"
+                            required
                         />
                     </div>
 
@@ -189,13 +192,13 @@ function AddRecord() {
                             placeholder="Nhập địa chỉ hiện tại"
                             value={formData.address}
                             onChange={handleChange}
-                            className="w-full p-3 border rounded-lg bg-white focus:ring-2 focus:ring-blue-500 placeholder-gray-400"
+                            className="w-full p-3 border rounded-lg bg-white focus:ring-2 focus:ring-blue-500 placeholder-gray-400 focus:outline-none"
                             required
                         />
                     </div>
                 </div>
 
-                <div className="flex justify-end gap-4 mt-6">
+                <div className="flex justify-end gap-4 mt-6 mr-2">
                     <button
                         type="button"
                         onClick={handleReset}

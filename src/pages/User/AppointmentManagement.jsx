@@ -156,9 +156,13 @@ const AppointmentManagement = () => {
     const handleReschedule = (doctorId) => {
         navigate(`/bac-si/get?id=${doctorId}`);
     };
+
+    const handleReviewDoctorInfo = (doctorId) => {
+        navigate(`/bac-si/get?id=${doctorId}`);
+    };
     return (
         <div className="w-full max-w mx-auto p-4 mt-20">
-            <h1 className="text-3xl font-bold mb-4 text-start">Lịch sử đặt chỗ</h1>
+            <h1 className="text-2xl font-bold mb-4 text-start">Lịch sử đặt chỗ</h1>
 
             {/* Tabs */}
             <div className="border-b-2 mb-6 bg-white w-fit">
@@ -190,17 +194,17 @@ const AppointmentManagement = () => {
                         <div key={appointment._id} className="mb-4 p-4 border rounded-md shadow-md max-w-xl h-fit">
                             <div className="flex justify-between items-start mb-2">
                                 <div>
-                                    <div className="text-xl font-bold mt-1 uppercase">
+                                    <div className="text-lg font-bold mt-1 uppercase">
                                         {appointment.patientRecordId.fullname}
                                     </div>
                                 </div>
 
                                 <div className="flex">
-                                    <span className="text-red-500 font-bold text-xl">{appointment.status.valueVi}</span>
+                                    <span className="text-red-500 font-bold text-lg">{appointment.status.valueVi}</span>
                                 </div>
                             </div>
                             <div className="mt-2">
-                                <div className="flex items-center text-2xl font-semibold text-blue-500 mb-2 uppercase">
+                                <div className="flex items-center text-xl font-semibold text-blue-500 mb-2 uppercase border-b border-black border-dashed p-1">
                                     <Stethoscope className="mr-2" size={20} />
                                     BÁC SĨ {appointment.doctorId.fullname}
                                 </div>
@@ -247,7 +251,7 @@ const AppointmentManagement = () => {
                                     {(appointment.status.valueVi === 'Đã xác nhận' ||
                                         appointment.status.valueVi === 'Đã thanh toán') && (
                                         <button
-                                            className="px-6 py-3 bg-red-500 text-white font-semibold rounded-lg hover:bg-red-600 transition-colors"
+                                            className="px-4 py-3 bg-red-500 text-white font-semibold rounded-lg hover:bg-red-600 transition-colors"
                                             onClick={() =>
                                                 openModal(appointment.bookingId, appointment.patientRecordId.fullname)
                                             }
@@ -278,21 +282,21 @@ const AppointmentManagement = () => {
                                 {activeTab === 'examined' && (
                                     <div className="flex justify-end space-x-4">
                                         <button
-                                            className="px-6 py-3 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600 transition-colors"
+                                            className="px-4 py-3 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600 transition-colors"
                                             onClick={() => handleReschedule(appointment.doctorId.userId)}
                                         >
                                             Đặt khám lại
                                         </button>
                                         {appointment.feedbackChecked ? (
                                             <button
-                                                className="px-6 py-3 bg-gray-500 text-white font-semibold rounded-lg"
+                                                className="px-4 py-3 bg-gray-500 text-white font-semibold rounded-lg"
                                                 onClick={() => handleReviewDoctorInfo(appointment.doctorId.userId)}
                                             >
                                                 Đã đánh giá
                                             </button>
                                         ) : (
                                             <button
-                                                className="px-6 py-3 bg-green-500 text-white font-semibold rounded-lg hover:bg-green-600 transition-colors"
+                                                className="px-4 py-3 bg-green-500 text-white font-semibold rounded-lg hover:bg-green-600 transition-colors"
                                                 onClick={() =>
                                                     handleReview(
                                                         appointment.patientRecordId.patientRecordId,

@@ -83,9 +83,9 @@ function PatientRecord() {
         console.log('Dữ liệu đã submit:', formData);
     };
     return (
-        <div className="w-full max-w mx-auto p-4 mt-20">
-            <h1 className="text-3xl font-bold mb-4 text-start">Danh sách hồ sơ bệnh nhân</h1>
-            <div className="flex justify-end mb-4 px-4 max-w">
+        <div className="mt-20 h-fit overflow-y-auto max-w-2xl">
+            <h1 className="text-2xl font-bold mb-1 text-start">Danh sách hồ sơ bệnh nhân</h1>
+            <div className="flex justify-end mb-2 px-4 max-w">
                 <button
                     className="w-fit flex items-center justify-center gap-2 p-3 rounded-lg text-blue-600 text-sm font-medium hover:bg-blue-200 transition-colors"
                     onClick={handleAdd}
@@ -94,34 +94,34 @@ function PatientRecord() {
                     Thêm hồ sơ
                 </button>
             </div>
-            <div className="space-y-6">
+            <div className="space-y-6 mb-5">
                 {patientData.map((patient) => (
                     <div
                         key={patient.patientRecordId}
-                        className="bg-white shadow-xl border rounded-lg overflow-hidden p-4 w-[650px] border-spacing-3 mt-2"
+                        className="bg-white shadow-md border rounded-lg overflow-hidden p-4 max-w-2xl border-spacing-3 mt-2"
                     >
                         <div className="space-y-4">
-                            <div className="flex gap-1 relative top-5">
+                            <div className="flex gap-4 relative top-5">
                                 {/* Cột 1 */}
                                 <div className="flex-1">
                                     <div className="space-y-3">
                                         <div className="flex items-center">
-                                            <User className="mr-2 h-6 w-6 text-gray-500" />
-                                            <span className="font-semibold mr-2">Họ và tên:</span> {patient.fullname}
+                                            <img src="/user_1.png" alt={'user_1'} className="h-6 w-6 mr-2" />
+                                            <div className="font-semibold mr-2">Họ và tên:</div> {patient.fullname}
                                         </div>
                                         <div className="flex items-center">
-                                            <Calendar className="mr-2 h-6 w-6 text-gray-500" />
-                                            <span className="font-semibold mr-2">Ngày sinh:</span>{' '}
+                                            <img src="/schedule_1.png" alt={'schedule_1'} className="h-6 w-6 mr-2" />
+                                            <div className="font-semibold mr-2">Ngày sinh:</div>{' '}
                                             {new Date(patient.birthDate).toLocaleDateString()}
                                         </div>
                                         <div className="flex items-center">
-                                            <Phone className="mr-2 h-6 w-6 text-gray-500" />
-                                            <span className="font-semibold mr-2">Số điện thoại:</span>{' '}
+                                            <img src="/telephone.png" alt={'telephone'} className="h-6 w-6 mr-2" />
+                                            <div className="font-semibold mr-2">Số điện thoại:</div>{' '}
                                             {patient.phoneNumber}
                                         </div>
                                         <div className="flex items-center">
-                                            <Users className="mr-2 h-6 w-6 text-gray-500" />
-                                            <span className="font-semibold mr-2">Giới tính:</span>{' '}
+                                            <img src="/gender.png" alt={'telephone'} className="h-6 w-6 mr-2" />
+                                            <div className="font-semibold mr-2">Giới tính:</div>{' '}
                                             {patient.gender === 'Male' ? 'Nam' : 'Nữ'}
                                         </div>
                                     </div>
@@ -131,20 +131,20 @@ function PatientRecord() {
                                 <div className="flex-1">
                                     <div className="space-y-3">
                                         <div className="flex items-center">
-                                            <MapPin className="mr-2 h-6 w-6 text-gray-500" />
-                                            <span className="font-semibold mr-2">Địa chỉ:</span> {patient.address}
+                                            <img src="/location.png" alt={'telephone'} className="h-6 w-6 mr-2" />
+                                            <div className="font-semibold mr-2">Địa chỉ:</div> {patient.address}
                                         </div>
                                         <div className="flex items-center">
-                                            <Briefcase className="mr-2 h-6 w-6 text-gray-500" />
-                                            <span className="font-semibold mr-2">Nghề nghiệp:</span> {patient.job}
+                                            <img src="/briefcase.png" alt={'telephone'} className="h-6 w-6 mr-2" />
+                                            <div className="font-semibold mr-2">Nghề nghiệp:</div> {patient.job}
                                         </div>
                                         <div className="flex items-center">
-                                            <Mail className="mr-2 h-6 w-6 text-gray-500" />
-                                            <span className="font-semibold mr-2">Email:</span> {patient.email}
+                                            <img src="/mail.png" alt={'telephone'} className="h-6 w-6 mr-2" />
+                                            <div className="font-semibold mr-2">Email:</div> {patient.email}
                                         </div>
                                         <div className="flex items-center">
-                                            <IdCard className="mr-2 h-6 w-6 text-gray-500" />
-                                            <span className="font-semibold mr-2">CCCD:</span> {patient.CCCD}
+                                            <img src="/id-card.png" alt={'telephone'} className="h-6 w-6 mr-2" />
+                                            <div className="font-semibold mr-2">CCCD:</div> {patient.CCCD}
                                         </div>
                                     </div>
                                 </div>

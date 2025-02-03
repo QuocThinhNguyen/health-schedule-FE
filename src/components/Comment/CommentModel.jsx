@@ -68,8 +68,8 @@ const CommentModel = () => {
         }
     };
     return (
-        <div className="max-w-6xl mx-auto p-4">
-            <h1 className="text-5xl font-bold mb-6 text-center">Đánh Giá Bác Sĩ</h1>
+        <div className="max-w-6xl mx-auto p-4 mt-20">
+            <h1 className="text-2xl font-bold mb-6 text-left">Đánh Giá Bác Sĩ</h1>
 
             {/* Product Info */}
             <div className="flex gap-4 mb-6 mt-12">
@@ -79,10 +79,10 @@ const CommentModel = () => {
                     className="w-20 h-20 object-cover rounded-lg"
                 />
                 <div>
-                    <h1 className="font-medium">
+                    <div className="font-medium text-lg">
                         {doctorInfo.position} {doctorInfo.fullname}
-                    </h1>
-                    <h3>{doctorInfo.clinicName}</h3>
+                    </div>
+                    <div className="text-base">{doctorInfo.clinicName}</div>
                 </div>
             </div>
 
@@ -99,7 +99,7 @@ const CommentModel = () => {
                                 className="focus:outline-none"
                             >
                                 <Star
-                                    className={`w-8 h-8 ${
+                                    className={`w-6 h-6 ${
                                         star <= rating ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'
                                     }`}
                                 />
@@ -120,7 +120,7 @@ const CommentModel = () => {
                         value={review}
                         onChange={(e) => setReview(e.target.value)}
                         placeholder="Hãy chia sẻ những trải nghiệm của bạn về dịch vụ khám bệnh với bác sĩ này để giúp những bệnh nhân khác nhé."
-                        className="w-full h-32 p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 resize-none"
+                        className="w-full h-32 p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none resize-none"
                     />
                 </div>
 

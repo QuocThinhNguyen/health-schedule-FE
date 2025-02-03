@@ -3,6 +3,7 @@ import Doctor from './Doctor';
 import { FaAngleRight } from 'react-icons/fa';
 import { useEffect, useState } from 'react';
 import { axiosClient } from '~/api/apiRequest';
+import { NavLink } from 'react-router-dom';
 
 function ListDoctor() {
     const [doctors, setDoctors] = useState([]);
@@ -42,11 +43,11 @@ function ListDoctor() {
             <div className="max-w-6xl mx-auto px-4 pt-2 pb-10">
                 <div className="flex items-center justify-between gap-2 mt-8 mb-2 text-2xl text-[#2D87F3]">
                     <div className="flex items-center gap-2">
-                        <FaUserDoctor/>
+                        <FaUserDoctor />
                         <span className="text-xl font-bold">Top Bác sĩ nổi bật</span>
                     </div>
                     <p className="text-sm font-semibold cursor-pointer hover:underline flex items-center gap-1">
-                        <span>Xem tất cả</span>
+                        <NavLink to="/tat-ca-bac-si">Xem tất cả</NavLink>
                         <FaAngleRight className="mt-1" />
                     </p>
                 </div>
