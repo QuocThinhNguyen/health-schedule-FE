@@ -2,6 +2,7 @@ import { FaAngleRight, FaClinicMedical } from 'react-icons/fa';
 import Clinic from './Clinic';
 import { useEffect, useState } from 'react';
 import { axiosClient } from '~/api/apiRequest';
+import { NavLink } from 'react-router-dom';
 
 function ListClinic() {
     const [clinics, setClinics] = useState([]);
@@ -35,11 +36,11 @@ function ListClinic() {
         <div className="max-w-6xl mx-auto px-4 pb-10">
             <div className="flex items-center justify-between gap-2 mt-8 mb-2 text-2xl text-[#2D87F3]">
                 <div className="flex items-center gap-2 ">
-                    <FaClinicMedical/>
+                    <FaClinicMedical />
                     <span className="text-xl font-bold ">Top Bệnh viện nổi bật</span>
                 </div>
                 <p className="text-sm font-semibold cursor-pointer hover:underline flex items-center gap-1">
-                    <span>Xem tất cả</span>
+                    <NavLink to="/tat-ca-benh-vien">Xem tất cả</NavLink>
                     <FaAngleRight className="mt-1" />
                 </p>
             </div>
