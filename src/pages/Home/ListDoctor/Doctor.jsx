@@ -40,6 +40,11 @@ function Doctor(data) {
         // Điều hướng đến trang với ID bác sĩ
         navigate(`/bac-si/get?id=${doctorId}`);
     };
+
+    const formatCurrency = (value) => {
+        return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(value);
+    };
+
     return (
         <div className="w-1/4 px-2 mt-4 group">
             <div className="bg-white rounded-lg shadow-md cursor-pointer border group-hover:border group-hover:border-[rgb(44,116,223)] group-hover:shadow-2xl">
@@ -84,7 +89,7 @@ function Doctor(data) {
                                 </div>
                                 <div className="flex items-start gap-2 text-red-700 font-semibold text-base">
                                     <BsCoin className="mt-1 text-base" />
-                                    {doctor.price.toLocaleString('vi-VN')}đ
+                                    {formatCurrency(doctor.price)}
                                 </div>
                                 <div className="flex items-start gap-2 h-[37.5px]">
                                     <span>

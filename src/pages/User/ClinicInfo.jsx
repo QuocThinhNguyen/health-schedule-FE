@@ -22,7 +22,7 @@ import { NavLink, useNavigate, useLocation } from 'react-router-dom';
 import parse from 'html-react-parser';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
-import { set } from 'date-fns';
+import { set, formatDistanceToNow, parseISO } from 'date-fns';
 import { Input } from 'postcss';
 import Pagination from '~/components/Pagination';
 import { UserContext } from '~/context/UserContext';
@@ -47,12 +47,16 @@ function ClinicInfo() {
     const [currentDate, setCurrentDate] = useState('');
     const [schedule, setSchedule] = useState([]);
     const { user } = useContext(UserContext);
-
+    const [pagination_1, setPagination_1] = useState({ page: 1, limit: 5, totalPages: 1 });
     console.log('STATE', state);
     console.log('clinicData:', clinicData);
     console.log('CHECK', academicRanksAndDegreess);
     console.log('tab', activeTab);
+    const ReviewDate = ({ date }) => {
+        const formattedDate = formatDistanceToNow(parseISO(date), { addSuffix: true });
 
+        return <div className="text-gray-500 text-sm">{formattedDate}</div>;
+    };
     console.log('CHECKK', selectedDoctor);
 
     useEffect(() => {
@@ -193,6 +197,17 @@ function ClinicInfo() {
     const handleLimitChange = async (e) => {
         const newLimit = parseInt(e.target.value, 10);
         setPagination((prev) => ({ ...prev, limit: newLimit, page: 1 }));
+    };
+
+    const handlePageChange_1 = async (newPage) => {
+        if (newPage > 0 && newPage <= pagination_1.totalPages) {
+            setPagination_1((prev) => ({ ...prev, page: newPage }));
+        }
+    };
+    //Đổi số lượng (limit)
+    const handleLimitChange_1 = async (e) => {
+        const newLimit = parseInt(e.target.value, 10);
+        setPagination_1((prev) => ({ ...prev, limit: newLimit, page: 1 }));
     };
 
     // console.log('specialty thiss:', specialty);
@@ -381,6 +396,37 @@ function ClinicInfo() {
         // Điều hướng đến trang với ID bác sĩ
         navigate(`/bac-si/get?id=${doctorId}`);
     };
+
+    const [feedbacks, setFeedbacks] = useState([]);
+    console.log('Feedbacks:', feedbacks);
+
+    useEffect(() => {
+        const fetchFeedbacks = async () => {
+            try {
+                const response = await axiosInstance.get(
+                    `/feedback/clinic/${state.clinicId}?page=${pagination_1.page}&&limit=${pagination_1.limit}`,
+                );
+                console.log('Feedbacksssssss:', response);
+                if (response.status === 200) {
+                    setFeedbacks(response);
+                    if (response.totalPages === 0) {
+                        response.totalPages = 1;
+                    }
+                    if (pagination_1.totalPages !== response.totalPages) {
+                        setPagination_1((prev) => ({
+                            ...prev,
+                            page: 1,
+                            totalPages: response.totalPages,
+                        }));
+                    }
+                }
+            } catch (error) {
+                console.error('Failed to fetch feedbacks: ', error.message);
+            }
+        };
+        fetchFeedbacks();
+    }, [doctorId, pagination_1.page]);
+
     return (
         <div className="min-h-screen bg-white">
             <div className="w-full bg-blue-50">
@@ -635,7 +681,10 @@ function ClinicInfo() {
                                                     <div className="flex items-center gap-3">
                                                         <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
                                                         <span className="font-semibold">
-                                                            {doctor.avgRating.toFixed(1)}/5
+                                                            {doctor.avgRating === 0
+                                                                ? '5.0'
+                                                                : doctor.avgRating.toFixed(1)}
+                                                            /5
                                                         </span>
                                                         <span className="text-gray-500 text-sm underline font-medium">
                                                             {doctor.bookingCount} lượt đặt khám
@@ -703,7 +752,7 @@ function ClinicInfo() {
                                         value={pagination.limit}
                                         onChange={handleLimitChange}
                                     >
-                                        <option value="6">6</option>
+                                        <option value="5">5</option>
                                         <option value="10">10</option>
                                         <option value="15">15</option>
                                     </select>
@@ -732,7 +781,7 @@ function ClinicInfo() {
                                                 <Star key={i} className="w-5 h-5 fill-yellow-400 text-yellow-400" />
                                             ))}
                                         </div>
-                                        <div className="text-gray-500 text-sm">65 đánh giá</div>
+                                        <div className="text-gray-500 text-sm">{feedbacks.totalFeedBacks} đánh giá</div>
                                     </div>
 
                                     <div className="flex-1">
@@ -751,25 +800,28 @@ function ClinicInfo() {
                                 </div>
 
                                 {/* Reviews List */}
-                                <div className="border-t">
+                                <div className="">
                                     <div className="p-4 flex items-center justify-between text-sm">
-                                        <div className="font-medium">65 Đánh Giá</div>
+                                        <div className="font-medium">{feedbacks.totalFeedBacks} Đánh Giá</div>
                                         <button className="text-gray-600 hover:text-gray-900">Đánh giá mới nhất</button>
                                     </div>
 
-                                    {reviews.map((review) => (
-                                        <div key={review.id} className="border-t p-4">
+                                    {feedbacks.data.map((review) => (
+                                        <div key={review._id} className="border-t p-4">
                                             <div className="flex items-start gap-3">
                                                 <div className="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center text-gray-500">
-                                                    {review.author[0]}
+                                                    {review.patientId.fullname[0]}
                                                 </div>
                                                 <div className="flex-1">
                                                     <div className="flex items-start justify-between">
                                                         <div>
-                                                            <div className="font-medium">{review.author}</div>
-                                                            <div className="text-gray-500 text-sm">
-                                                                {review.timeAgo}
+                                                            <div className="font-medium">
+                                                                {review.patientId.fullname}
                                                             </div>
+                                                            <span className="text-cyan-500 text-sm">
+                                                                Đã khám ngày{' '}
+                                                                {new Date(review.date).toLocaleDateString('vi-VN')}
+                                                            </span>
                                                         </div>
                                                         <div className="flex gap-0.5">
                                                             {[...Array(review.rating)].map((_, i) => (
@@ -781,23 +833,42 @@ function ClinicInfo() {
                                                         </div>
                                                     </div>
 
-                                                    <div className="mt-3 p-3 bg-gray-50 rounded-lg">
-                                                        <div className="flex items-center justify-between">
+                                                    <div className="mt-3 py-2 px-2 bg-gray-100 rounded-lg">
+                                                        <div
+                                                            className="flex items-center justify-between cursor-pointer"
+                                                            onClick={() => handleBooking(review.doctorId.userId)}
+                                                        >
                                                             <div className="flex items-center gap-2">
-                                                                <div className="w-8 h-8 bg-gray-200 rounded-full" />
-                                                                <span className="font-medium">{review.doctorName}</span>
+                                                                <img
+                                                                    src={`http://localhost:${
+                                                                        import.meta.env.VITE_BE_PORT
+                                                                    }/uploads/${review.doctorId.image}`}
+                                                                    alt="logo clinic"
+                                                                    className=" h-8 w-8 rounded-full"
+                                                                />
+                                                                <span className="font-medium">
+                                                                    Bác sĩ {review.doctorId.fullname}
+                                                                </span>
                                                             </div>
                                                             <ChevronRight className="w-5 h-5 text-gray-400" />
                                                         </div>
-                                                        <p className="mt-2 text-sm text-gray-600 line-clamp-2">
+                                                        {/* <p className="mt-2 text-sm text-gray-600 line-clamp-2">
                                                             {review.doctorInfo}
-                                                        </p>
+                                                        </p> */}
                                                     </div>
+                                                    <div className="mt-3">{review.comment}</div>
                                                 </div>
                                             </div>
                                         </div>
                                     ))}
                                 </div>
+                            </div>
+                            <div className="text-center">
+                                <Pagination
+                                    currentPage={pagination_1.page}
+                                    totalPages={pagination_1.totalPages}
+                                    onPageChange={handlePageChange_1}
+                                />
                             </div>
                         </div>
                     )}

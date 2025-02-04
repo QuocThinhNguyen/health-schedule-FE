@@ -48,6 +48,7 @@ const CommentModel = () => {
             rating,
             comment: review,
             date: state.appointmentDate,
+            clinicId: state.clinicId,
         };
 
         console.log('Feedback data:', feedbackData);
