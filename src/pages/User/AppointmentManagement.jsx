@@ -25,6 +25,8 @@ const AppointmentManagement = () => {
         { id: 'cancelled', label: 'Đã hủy', keyMap: 'S5' },
     ];
 
+    console.log('CHECK', appointments);
+
     const [isModalOpen, setModalOpen] = useState(false);
     const [selectedBookingId, setSelectedBookingId] = useState(null);
     const [patientName, setPatientName] = useState('');
@@ -142,13 +144,14 @@ const AppointmentManagement = () => {
         }
     };
 
-    const handleReview = (patientRecordId, userId, doctorId, appointmentDate, nameDoctor) => {
+    const handleReview = (patientRecordId, userId, doctorId, appointmentDate, nameDoctor, clinicId) => {
         navigate(`/user/appointments/comment?doctor=${nameDoctor}`, {
             state: {
                 patientRecordId: patientRecordId,
                 userId: userId,
                 doctorId: doctorId,
                 appointmentDate: appointmentDate,
+                clinicId: clinicId,
             },
         });
     };
@@ -304,6 +307,7 @@ const AppointmentManagement = () => {
                                                         appointment.doctorId.userId,
                                                         appointment.appointmentDate,
                                                         appointment.doctorId.fullname,
+                                                        appointment.doctorInfo.clinic.clinicId,
                                                     )
                                                 }
                                             >

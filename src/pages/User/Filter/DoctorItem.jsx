@@ -37,6 +37,10 @@ function DoctorItem(data) {
         getDropdownAcademicRanksAndDegrees();
     }, []);
 
+    const formatCurrency = (value) => {
+        return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(value);
+    };
+
     return (
         <div className="rounded-lg mb-4 border border-[#E4E8EC]">
             <div className="px-4 pt-4 mb-4 flex gap-4">
@@ -76,7 +80,7 @@ function DoctorItem(data) {
                             <BsCoin className="w-4 h-4 font-semibold text-lg text-[#009e5c] mr-2" />
                             <span>Giá</span>
                         </div>
-                        <span className="font-semibold text-[#009e5c] text-lg">{doctor.price} đ</span>
+                        <span className="font-semibold text-[#009e5c] text-lg">{formatCurrency(doctor.price)}</span>
                     </div>
                 </div>
             </div>

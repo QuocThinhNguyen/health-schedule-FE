@@ -6,7 +6,7 @@ import {
     MdKeyboardDoubleArrowRight,
 } from 'react-icons/md';
 
-const Pagination = ({ currentPage =1, totalPages = 6, onPageChange }) => {
+const Pagination = ({ currentPage = 1, totalPages = 6, onPageChange }) => {
     const handlePageChange = (page) => {
         if (page < 1 || page > totalPages) return;
         onPageChange(page);
@@ -58,9 +58,7 @@ const Pagination = ({ currentPage =1, totalPages = 6, onPageChange }) => {
                     key={index}
                     onClick={() => page !== '...' && handlePageChange(page)}
                     className={`min-w-8 h-8 border border-[#E4E8EC] font-normal flex items-center justify-center rounded-md shadow-[0_3px_15px_rgba(116,_157,_206,_0.2)] transition-all duration-200 ease-in-out ${
-                        currentPage === page
-                            ? 'bg-[#2D87F3] text-white '
-                            : 'bg-white text-[#2D87F3] hover:bg-gray-100'
+                        currentPage === page ? 'bg-[#2D87F3] text-white ' : 'bg-white text-[#2D87F3] hover:bg-gray-100'
                     }`}
                 >
                     {page}

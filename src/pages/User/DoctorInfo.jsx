@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { MapPin, Clock, CreditCard, ChevronRight, CheckCircle2, Star } from 'lucide-react';
+import { MapPin, Clock, CreditCard, ChevronRight, Check, Star } from 'lucide-react';
 import { axiosInstance } from '~/api/apiRequest';
 import { NavLink, useSearchParams, useNavigate, useLocation } from 'react-router-dom'; // Dùng để lấy `patientRecordId` từ URL
 import parse from 'html-react-parser';
@@ -7,6 +7,7 @@ import './CSS/DoctorDescription.css';
 import { GrLocation } from 'react-icons/gr';
 import { CiHospital1 } from 'react-icons/ci';
 import { UserContext } from '~/context/UserContext';
+import Pagination from '~/components/Pagination';
 
 function DoctorInfo() {
     const [selectedTime, setSelectedTime] = useState('');
@@ -23,7 +24,19 @@ function DoctorInfo() {
     const navigate = useNavigate();
     const [activeTab, setActiveTab] = useState('info');
     const [doctors, setDoctors] = useState([]);
+    const [pagination, setPagination] = useState({ page: 1, limit: 5, totalPages: 1 });
 
+    const keyPoints = [
+        'Chuyên môn cao, tận tâm với bệnh nhân',
+        'Giữ các vị trí quan trọng tại các bệnh viện lớn',
+        'Luôn cập nhật những phương pháp điều trị tiên tiến nhất',
+    ];
+    const handlePageChange = (page) => {
+        setPagination((prev) => ({
+            ...prev,
+            page: page, // Cập nhật thuộc tính page
+        }));
+    };
     console.log('CHECK', doctorInfo);
     useEffect(() => {
         const fetchDoctorInfo = async () => {
@@ -175,20 +188,34 @@ function DoctorInfo() {
     ];
 
     const [feedbacks, setFeedbacks] = useState([]);
+    console.log('Feedbacks:', feedbacks);
 
     useEffect(() => {
         const fetchFeedbacks = async () => {
             try {
-                const response = await axiosInstance.get(`/feedback/${doctorId}`);
+                const response = await axiosInstance.get(
+                    `/feedback/${doctorId}?page=${pagination.page}&&limit=${pagination.limit}`,
+                );
+                console.log('Feedbacksssssss:', response);
                 if (response.status === 200) {
-                    setFeedbacks(response.data);
+                    setFeedbacks(response);
+                    if (response.totalPages === 0) {
+                        response.totalPages = 1;
+                    }
+                    if (pagination.totalPages !== response.totalPages) {
+                        setPagination((prev) => ({
+                            ...prev,
+                            page: 1,
+                            totalPages: response.totalPages,
+                        }));
+                    }
                 }
             } catch (error) {
                 console.error('Failed to fetch feedbacks: ', error.message);
             }
         };
         fetchFeedbacks();
-    }, [doctorId]);
+    }, [doctorId, pagination.page]);
 
     const tabs = [
         { id: 'info', label: 'Thông tin cơ bản' },
@@ -273,45 +300,39 @@ function DoctorInfo() {
                 <div className="flex-1">
                     <div className="border-b-2 mb-6">
                         <div className="flex-row">
-                            <div className="bg-blue-100 p-6 rounded-lg mb-6">
-                                <h2 className="text-base font-bold mb-4 flex items-center gap-2">
-                                    <div className="w-1 h-6 bg-blue-500 rounded-full"></div>
-                                    Điểm nổi bật nhất
-                                </h2>
-                                <div className="space-y-4">
-                                    <div>
-                                        <p className="font-bold">
-                                            • Chuyên gia đầu ngành về Chấn thương chỉnh hình tại Việt Nam:
-                                        </p>
-                                        <p className="text-gray-600 mt-1 pl-3">
-                                            TS.BS Tăng Hà Nam Anh là người đầu tiên mở đường cho ngành Phẫu thuật nội
-                                            soi khớp tại Việt Nam.
-                                        </p>
-                                    </div>
+                            <div className="max-w-3xl mx-auto p-4 bg-blue-100 rounded-lg">
+                                <div className="space-y-2">
+                                    <h2 className="text-xl font-bold">Đội ngũ bác sĩ hàng đầu trên EasyMed</h2>
+
+                                    <p className="text-gray-600">
+                                        EasyMed tự hào kết nối bạn với đội ngũ bác sĩ uy tín, giàu kinh nghiệm trong
+                                        nhiều chuyên khoa khác nhau. Mỗi bác sĩ trên nền tảng đều là những chuyên gia
+                                        trong lĩnh vực của mình, với nhiều năm kinh nghiệm làm việc tại các bệnh viện
+                                        hàng đầu.
+                                    </p>
 
                                     <div>
-                                        <p className="font-bold">
-                                            • Cố vấn chuyên môn tại Trung tâm Chấn thương chỉnh hình - Bệnh viện Sante:
-                                        </p>
-                                        <p className="text-gray-600 mt-1 pl-3">
-                                            TS.BS Tăng Hà Nam Anh hiện đang đóng vai trò cố vấn chuyên môn các vấn đề về
-                                            Chấn thương chỉnh hình tại Bệnh viện Sante.
-                                        </p>
+                                        <h3 className="font-semibold mb-4">Điểm nổi bật:</h3>
+                                        <ul className="space-y-3">
+                                            {keyPoints.map((point, index) => (
+                                                <li key={index} className="flex items-start gap-3">
+                                                    <div className="flex items-center justify-center">
+                                                        <img src="/check.png" alt={'check'} className="h-5 w-5" />
+                                                    </div>
+                                                    <span className="text-gray-600">{point}</span>
+                                                </li>
+                                            ))}
+                                        </ul>
                                     </div>
 
-                                    <div>
-                                        <p className="font-bold">
-                                            • Nguyên Giám đốc Trung tâm Chấn thương chỉnh hình tại Bệnh viện Đa khoa Tâm
-                                            Anh TP.HCM:
-                                        </p>
-                                        <p className="text-gray-600 mt-1 pl-3">
-                                            Bác sĩ từng giữ nhiều vai trò quan trọng, nguyên là Giám đốc Trung tâm Chấn
-                                            thương chỉnh hình tại Bệnh viện Đa khoa Tâm Anh và Bệnh viện Nguyễn Tri
-                                            Phương
-                                        </p>
-                                    </div>
+                                    <p className="text-gray-600">
+                                        Với EasyMed, bạn có thể dễ dàng tìm kiếm, đặt lịch khám và kết nối trực tiếp với
+                                        bác sĩ phù hợp, giúp quá trình chăm sóc sức khỏe trở nên thuận tiện và hiệu quả
+                                        hơn.
+                                    </p>
                                 </div>
                             </div>
+
                             {tabs.map((tab) => (
                                 <button
                                     key={tab.id}
@@ -349,7 +370,7 @@ function DoctorInfo() {
                                                 <Star key={i} className="w-5 h-5 fill-yellow-400 text-yellow-400" />
                                             ))}
                                         </div>
-                                        <div className="text-gray-500 text-sm">65 đánh giá</div>
+                                        <div className="text-gray-500 text-sm">{feedbacks.totalFeedBacks} đánh giá</div>
                                     </div>
 
                                     <div className="flex-1">
@@ -369,8 +390,8 @@ function DoctorInfo() {
 
                                 {/* Reviews List */}
                                 <div className="space-y-6 mt-10">
-                                    {feedbacks.length > 0 ? (
-                                        feedbacks.map((feedback) => (
+                                    {feedbacks.data.length > 0 ? (
+                                        feedbacks.data.map((feedback) => (
                                             <div key={feedback.id} className="border-b pb-4">
                                                 <div className="flex items-start justify-between mb-2">
                                                     <div className="flex items-center gap-2">
@@ -410,6 +431,13 @@ function DoctorInfo() {
                                         <p>Không có phản hồi nào</p>
                                     )}
                                 </div>
+                            </div>
+                            <div className="text-center">
+                                <Pagination
+                                    currentPage={pagination.page}
+                                    totalPages={pagination.totalPages}
+                                    onPageChange={handlePageChange}
+                                />
                             </div>
                         </div>
                     )}
@@ -465,20 +493,7 @@ function DoctorInfo() {
                                         ))
                                     ) : (
                                         <div className="flex flex-col items-center justify-center p-6 text-center">
-                                            <div className="w-12 h-12 mb-4">
-                                                <svg
-                                                    viewBox="0 0 24 24"
-                                                    fill="none"
-                                                    stroke="currentColor"
-                                                    strokeWidth="2"
-                                                    className="w-full h-full text-blue-500"
-                                                >
-                                                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
-                                                    <line x1="16" y1="2" x2="16" y2="6" />
-                                                    <line x1="8" y1="2" x2="8" y2="6" />
-                                                    <line x1="3" y1="10" x2="21" y2="10" />
-                                                </svg>
-                                            </div>
+                                            <img src="/schedule.png" alt={'schedule'} className="h-20 w-20" />
                                             <h3 className="text-lg font-medium text-gray-900 mb-2">
                                                 Rất tiếc! Bác sĩ của chúng tôi hiện đang bận.
                                             </h3>
@@ -500,8 +515,13 @@ function DoctorInfo() {
 
                                 {/* Nút đặt lịch */}
                                 <button
-                                    className="w-full bg-blue-500 text-white py-2 rounded-lg cursor-pointer"
+                                    className={`w-full py-2 rounded-lg  ${
+                                        schedule.length > 0
+                                            ? 'bg-blue-500 text-white hover:bg-blue-600 cursor-pointer'
+                                            : 'bg-gray-400 text-gray-700 cursor-not-allowed'
+                                    }`}
                                     onClick={() => handleTimeSlotClick(selectedTime)}
+                                    disabled={schedule.length <= 0}
                                 >
                                     TIẾP TỤC ĐẶT LỊCH
                                 </button>
