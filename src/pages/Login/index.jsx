@@ -11,6 +11,7 @@ import { GoogleLogin, useGoogleLogin } from '@react-oauth/google';
 import FacebookLogin from 'react-facebook-login';
 import './CSS/button_facebook.css';
 import './CSS/button_google.css';
+import { IoEye, IoEyeOff } from 'react-icons/io5';
 
 function Login() {
     const [showPassword, setShowPassword] = useState(false);
@@ -163,29 +164,29 @@ function Login() {
 
     return (
         <div className="flex items-center justify-center min-h-screen bg-[#e9ebee]">
-            <div className="w-full max-w-2xl p-8 bg-white shadow-xl border rounded-2xl">
+            <div className="w-full max-w-lg p-6 bg-white shadow-xl border rounded-lg">
                 <div className="mb-6">
-                    <h3 className="text-4xl font-bold text-gray-800 text-center">Đăng nhập</h3>
+                    <h3 className="text-3xl font-bold text-black text-center">Đăng nhập</h3>
                 </div>
                 <div>
-                    <div className="mb-4">
+                    <div className="my-4">
                         <input
                             ref={inputFocus}
                             type="text"
-                            className="w-full !bg-white h-[44px] mt-4 px-3 py-2  border border-gray-300 rounded-xl"
+                            className="w-full px-4 py-3 rounded-md border border-gray-300 focus:outline-blue-500"
                             placeholder="Email"
                             value={email}
                             onChange={handleEmailChange}
                             onBlur={handleEmailBlur}
                             onKeyDown={handleKeyDown}
                         />
-                        {emailError && <span className="text-red-500 mt-1 text-xl">{emailError}</span>}
+                        {emailError && <span className="text-red-500 text-xs">{emailError}</span>}
                     </div>
-                    <div className="mb-4 relative">
+                    <div className="my-4 relative">
                         <div className="relative">
                             <input
                                 type={showPassword ? 'text' : 'password'}
-                                className="w-full !bg-white h-[44px] mt-4 pl-3 pr-12 py-2 border  border-gray-300 rounded-xl"
+                                className="w-full px-4 py-3 rounded-md border border-gray-300 focus:outline-blue-500"
                                 placeholder="Mật khẩu"
                                 value={password}
                                 onChange={handlePasswordChange}
@@ -194,23 +195,23 @@ function Login() {
                             />
                             <button
                                 type="button"
-                                className="absolute top-[63%] right-3 transform -translate-y-1/2 text-gray-500 "
+                                className="absolute top-1/2 right-3 transform -translate-y-1/2 text-gray-500 text-lg"
                                 onClick={toggleShowPassword}
                             >
-                                <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
+                                 {showPassword ? <IoEye /> : <IoEyeOff />}
                             </button>
                         </div>
-                        {passwordError && <span className="text-red-500 mt-1 text-xl">{passwordError}</span>}
+                        {passwordError && <span className="text-red-500 text-xs">{passwordError}</span>}
                     </div>
-                    <div className="text-right my-6 text-xl ">
-                        <NavLink to="/forgot-password" className="text-blue-500 text-2xl">
+                    <div className="text-right my-4">
+                        <NavLink to="/forgot-password" className="text-blue-500 text-base font-semibold">
                             Quên mật khẩu?
                         </NavLink>
                     </div>
                     <div>
                         <button
                             type="button"
-                            className="w-full text-white font-semibold bg-blue-500 py-3 px-6 rounded-lg hover:bg-blue-600"
+                            className="w-full text-white font-semibold bg-blue-500 px-4 py-3 rounded-md hover:bg-blue-600"
                             onClick={handleSubmit}
                         >
                             Đăng nhập
@@ -228,7 +229,7 @@ function Login() {
                             <GoogleLogin onSuccess={handleSuccess} onError={handleError} />
                         </div>
 
-                        <div className="mt-[3px]">
+                        <div className="mt-[3px] w-[214px]">
                             <FacebookLogin
                                 appId={import.meta.env.VITE_APP_FB_CLIENT_ID}
                                 fields="name,email,picture"
@@ -238,7 +239,7 @@ function Login() {
                                     <div className="facebook-button-text">
                                         <span className="facebook-icon"></span>
                                         <span
-                                            className="flex items-center justify-center h-full w-full font-[500]"
+                                            className="flex items-center justify-center h-full w-full font-semibold"
                                             style={{ fontFamily: '"Google Sans", arial, sans-serif' }}
                                         >
                                             Sign in with Facebook
@@ -283,7 +284,7 @@ function Login() {
                         <button onClick={() => login()}>Sign in with Google 🚀</button>;
                     </div> */}
 
-                    <div className="text-center mt-6">
+                    <div className="text-center mt-4">
                         <span className="text-gray-500">Bạn chưa có tài khoản?</span>
                         <NavLink to="/register" className="text-blue-500 ml-1 font-medium">
                             Đăng ký
