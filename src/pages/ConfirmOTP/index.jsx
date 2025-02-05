@@ -70,14 +70,14 @@ function ConfirmOTP() {
     };
     return (
         <div className="min-h-screen flex items-center justify-center bg-[#e9ebee]">
-            <div className="bg-white rounded-lg shadow-md w-[500px]">
+            <div className="bg-white rounded-lg shadow-xl max-w-lg">
                 <div className="text-center">
-                    <h1 className="text-4xl font-semibold px-7 py-5">Nhập mã OTP</h1>
+                    <h1 className="text-3xl text-black font-bold px-7 py-5">Nhập mã OTP</h1>
                 </div>
-
-                <p className="text-xl mb-6 text-center">Mã OTP đã được gửi đến email: {emailRegister}</p>
-
-                <form onSubmit={handleSubmit} className="pb-10 px-16">
+                <p className="mb-6 text-center">
+                    Mã OTP đã được gửi đến email: <span className='font-semibold text-black'>{emailRegister}</span>
+                </p>
+                <form onSubmit={handleSubmit} className="pb-6 px-10">
                     <div className="flex justify-center gap-6 mb-6">
                         {otp.map((digit, index) => (
                             <input
@@ -89,14 +89,14 @@ function ConfirmOTP() {
                                 onChange={(e) => handleChange(index, e.target.value)}
                                 onKeyDown={(e) => handleKeyDown(index, e)}
                                 onPaste={handlePaste}
-                                className="w-20 h-20 text-center border-2 border-gray-300 rounded-lg text-4xl font-medium focus:border-blue-500 focus:outline-none"
+                                className="w-12 h-12 text-center border-2 border-gray-300 rounded-md text-xl font-normal focus:border-blue-500 focus:outline-none"
                             />
                         ))}
                     </div>
 
                     <button
                         type="submit"
-                        className="w-full bg-blue-500 text-white  py-3 rounded-lg font-medium hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                        className="w-full text-white font-semibold bg-blue-500 px-4 py-3 rounded-md hover:bg-blue-600"
                     >
                         Xác nhận
                     </button>

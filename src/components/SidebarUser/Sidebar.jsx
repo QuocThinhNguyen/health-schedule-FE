@@ -56,7 +56,7 @@ const Sidebar = ({ selectedTab }) => {
     return (
         <div className="w-fit h-fit bg-white text-black flex flex-col rounded-md mt-20 mb-20">
             <div className="p-4 border-b">
-                <div className="flex items-center gap-3 mb-3">
+                <div className="flex items-center gap-3 mb-2">
                     <img
                         src={`http://localhost:${import.meta.env.VITE_BE_PORT}/uploads/${userProfile.image}`}
                         alt="logo clinic"
@@ -94,8 +94,8 @@ const Sidebar = ({ selectedTab }) => {
                     </div>
                 </div>
 
-                <h1 className="text-lg font-semibold mb-1">{userProfile.fullname}</h1>
-                <p className="text-sm text-blue-500">{userProfile.email}</p>
+                <p className="text-base font-semibold mb-1">{userProfile.fullname}</p>
+                <p className="text-xs font-normal text-blue-500">{userProfile.email}</p>
             </div>
             <div className="space-y-2 pt-2 pb-4 px-4">
                 {menuItems.map((item, index) => (

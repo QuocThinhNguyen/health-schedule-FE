@@ -165,7 +165,7 @@ const AppointmentManagement = () => {
     };
     return (
         <div className="w-full max-w mx-auto p-4 mt-20">
-            <h1 className="text-2xl font-bold mb-4 text-start">Lịch sử đặt chỗ</h1>
+            <h1 className="text-2xl text-black font-bold mb-4 text-start">Lịch sử đặt chỗ</h1>
 
             {/* Tabs */}
             <div className="border-b-2 mb-6 bg-white w-fit">

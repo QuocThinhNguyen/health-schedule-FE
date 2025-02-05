@@ -84,7 +84,7 @@ function PatientRecord() {
     };
     return (
         <div className="mt-20 h-fit overflow-y-auto max-w-2xl">
-            <h1 className="text-2xl font-bold mb-1 text-start">Danh sách hồ sơ bệnh nhân</h1>
+            <h1 className="text-2xl text-black font-bold mb-1 text-start">Danh sách hồ sơ bệnh nhân</h1>
             <div className="flex justify-end mb-2 px-4 max-w">
                 <button
                     className="w-fit flex items-center justify-center gap-2 p-3 rounded-lg text-blue-600 text-sm font-medium hover:bg-blue-200 transition-colors"
@@ -130,9 +130,9 @@ function PatientRecord() {
                                 {/* Cột 2 */}
                                 <div className="flex-1">
                                     <div className="space-y-3">
-                                        <div className="flex items-center">
+                                        <div className="flex">
                                             <img src="/location.png" alt={'telephone'} className="h-6 w-6 mr-2" />
-                                            <div className="font-semibold mr-2">Địa chỉ:</div> {patient.address}
+                                            <div className="font-semibold whitespace-nowrap mr-2">Địa chỉ:</div> {patient.address}
                                         </div>
                                         <div className="flex items-center">
                                             <img src="/briefcase.png" alt={'telephone'} className="h-6 w-6 mr-2" />

@@ -4,6 +4,7 @@ import { faEye, faEyeSlash } from '@fortawesome/free-regular-svg-icons';
 import { UserContext } from '~/context/UserContext';
 import { toast } from 'react-toastify';
 import { axiosClient, axiosInstance } from '~/api/apiRequest';
+import { IoEye, IoEyeOff } from 'react-icons/io5';
 
 function ChangePassword() {
     const [newPassword, setNewPassword] = useState('');
@@ -47,76 +48,79 @@ function ChangePassword() {
     };
     return (
         <div className="mt-20 h-fit overflow-y-auto max-w-xl">
-            <div className="text-2xl font-bold text-left ml-2">Đặt mật khẩu</div>
-            <div className="flex items-center justify-start max-w-xl ml-2">
-                <div className="mt-5">
-                    <div className="mb-4 relative">
-                        <div htmlFor="oldPassword" className="block text-lg text-gray-800 font-semibold">
-                            Mật khẩu cũ
-                        </div>
+            <div className="text-2xl text-black font-bold text-left ml-2">Đặt mật khẩu</div>
+            <div className="flex flex-col gap-4 mt-5 ml-2">
+                <div>
+                    <label htmlFor="oldPassword" className="block text-sm font-semibold mb-1">
+                        Mật khẩu cũ
+                    </label>
+                    <div className="relative">
                         <input
                             type={showPassword ? 'text' : 'password'}
                             id="oldPassword"
-                            className="w-[400px] p-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                            // className="w-full p-3 border rounded-lg bg-white focus:ring-2 focus:ring-blue-500 placeholder-gray-400 focus:outline-none"
+                            className="w-full px-4 py-3 rounded-md border border-gray-300 focus:outline-blue-500"
                             value={oldPassword}
                             onChange={(e) => setOldPassword(e.target.value)}
                         />
                         <button
                             type="button"
-                            className="absolute top-[70%] right-3 transform -translate-y-1/2 text-gray-500 "
+                            className="absolute top-1/2 right-3 transform -translate-y-1/2 text-gray-500 text-lg"
                             onClick={toggleShowPassword}
                         >
-                            <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
+                            {showPassword ? <IoEye /> : <IoEyeOff />}
                         </button>
                     </div>
-                    <div className="mb-4 relative">
-                        <label htmlFor="newPassword" className="block text-lg text-gray-800 font-semibold">
-                            Mật khẩu mới
-                        </label>
+                </div>
+                <div>
+                    <label htmlFor="newPassword" className="block text-sm font-semibold mb-1">
+                        Mật khẩu mới
+                    </label>
+                    <div className='relative'>
                         <input
                             type={showPassword_1 ? 'text' : 'password'}
                             id="newPassword"
-                            className="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                            className="w-full px-4 py-3 rounded-md border border-gray-300 focus:outline-blue-500"
                             value={newPassword}
                             onChange={(e) => setNewPassword(e.target.value)}
                         />
                         <button
                             type="button"
-                            className="absolute top-[70%] right-3 transform -translate-y-1/2 text-gray-500 "
+                            className="absolute top-1/2 right-3 transform -translate-y-1/2 text-gray-500 text-lg"
                             onClick={toggleShowPassword_1}
                         >
-                            <FontAwesomeIcon icon={showPassword_1 ? faEyeSlash : faEye} />
+                            {showPassword_1 ? <IoEye /> : <IoEyeOff />}
                         </button>
                     </div>
-                    <div className="mb-4 relative">
-                        <label htmlFor="confirmPassword" className="block text-lg text-gray-800 font-semibold">
-                            Xác nhận mật khẩu
-                        </label>
+                </div>
+                <div>
+                    <label htmlFor="confirmPassword" className="block text-sm font-semibold mb-1">
+                        Xác nhận mật khẩu
+                    </label>
+                    <div className='relative'>
                         <input
                             type={showPassword_2 ? 'text' : 'password'}
                             id="confirmPassword"
-                            className="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                            className="w-full px-4 py-3 rounded-md border border-gray-300 focus:outline-blue-500"
                             value={confirmPassword}
                             onChange={(e) => setConfirmPassword(e.target.value)}
                         />
                         <button
                             type="button"
-                            className="absolute top-[70%] right-3 transform -translate-y-1/2 text-gray-500 "
+                            className="absolute top-1/2 right-3 transform -translate-y-1/2 text-gray-500 text-lg"
                             onClick={toggleShowPassword_2}
                         >
-                            <FontAwesomeIcon icon={showPassword_2 ? faEyeSlash : faEye} />
+                            {showPassword_2 ? <IoEye /> : <IoEyeOff />}
                         </button>
                     </div>
-                    <div className="mb-4 relative mt-10">
-                        <button
-                            type="submit"
-                            onClick={handleChangePassword}
-                            className="font-bold w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition duration-200"
-                        >
-                            Đổi mật khẩu
-                        </button>
-                    </div>
+                </div>
+                <div className="relative">
+                    <button
+                        type="submit"
+                        onClick={handleChangePassword}
+                        className="mt-2 font-bold w-full bg-blue-500 text-white px-4 py-3 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition duration-200"
+                    >
+                        Đổi mật khẩu
+                    </button>
                 </div>
             </div>
         </div>
