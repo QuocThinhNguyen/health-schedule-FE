@@ -8,6 +8,9 @@ import { Fragment } from 'react';
 import DoctorInfo from '~/pages/Doctor/DoctorInfo';
 import AppointmentManagement from '~/pages/Doctor/AppointmentManagement';
 import WorkScheduleManagement from '~/pages/Doctor/WorkScheduleManagement';
+import Overview from '~/pages/Doctor/Overview';
+import HealthReport from '~/pages/Doctor/HealthReport';
+import Review from '~/pages/Doctor/Review';
 function DoctorRoutes() {
     const { user } = useContext(UserContext);
 
@@ -23,10 +26,13 @@ function DoctorRoutes() {
             >
                 {/* <Route index element={<DoctorDashBoard />} /> */}
                 {/* <Route path="dashboard" element={<DoctorDashBoard />} /> */}
-                <Route index element={<Navigate to="profile" />} /> {/* Mặc định: Thông tin cá nhân */}
+                <Route index element={<Navigate to="overview" />} /> {/* Mặc định: Thông tin cá nhân */}
                 <Route path="profile" element={<DoctorInfo />} /> {/* Thông tin cá nhân */}
                 <Route path="manage" element={<AppointmentManagement />} /> {/* Quản lý lịch hẹn */}
                 <Route path="schedule" element={<WorkScheduleManagement />} /> {/* Quản lý lịch làm việc */}
+                <Route path="overview" element={<Overview />} />
+                <Route path="health-report" element={<HealthReport />} />
+                <Route path="review" element={<Review />} />
             </Route>
         </Fragment>
     );
