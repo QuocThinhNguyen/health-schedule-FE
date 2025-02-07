@@ -35,6 +35,7 @@ function Header() {
 
     const onConfirm = () => {
         setIsDropdownOpen(false);
+        setIsLogout(false);
         logout();
     };
     useEffect(() => {

@@ -37,7 +37,7 @@ function Help() {
 
     return (
         <div className="max-w-3xl overflow-y-auto mt-20 mb-20">
-            <h1 className="text-2xl font-bold mb-6">Trợ giúp</h1>
+            <h1 className="text-2xl text-black font-bold mb-6">Trợ giúp</h1>
 
             <div className="space-y-4">
                 {faqItems.map((item, index) => (

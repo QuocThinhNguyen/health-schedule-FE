@@ -71,7 +71,7 @@ const DoctorDashboard = () => {
                 {/* Nội dung chính */}
                 <div className="flex-1 overflow-auto p-4">
                     <div className="bg-white border border-gray-300 rounded-lg p-2 shadow-sm">
-                        <header className="w-max">
+                        <header className="w-full">
                             <div className="flex items-center justify-between px-8 py-4 max-h-64">
                                 {/* <h1 className="text-2xl font-semibold">{getTitle()}</h1> */}
                                 <div className="flex items-center gap-2">
@@ -137,7 +137,9 @@ const DoctorDashboard = () => {
                                 </div>
                             </div>
                         </header>
-                        <Outlet />
+                        <div className="overflow-y-auto h-svh">
+                            <Outlet />
+                        </div>
                     </div>
                 </div>
             </div>
