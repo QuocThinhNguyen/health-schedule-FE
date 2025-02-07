@@ -704,7 +704,7 @@ function MakeAnAppointment() {
 
                             <div className="mt-4 space-y-3">
                                 <div
-                                    className={`border rounded-md p-4 flex items-center gap-3 cursor-pointer transition-colors
+                                    className={`border-2 rounded-md p-4 flex items-center gap-3 cursor-pointer transition-colors
                   ${paymentMethod === 'cash' ? 'border-2 border-blue-600' : 'border-gray-200'}`}
                                     onClick={() => setPaymentMethod('cash')}
                                 >
@@ -726,7 +726,7 @@ function MakeAnAppointment() {
                                 </div>
 
                                 <div
-                                    className={`border rounded-md p-4 flex items-center gap-3 cursor-pointer transition-colors
+                                    className={`border-2 rounded-md p-4 flex items-center gap-3 cursor-pointer transition-colors
                   ${paymentMethod === 'online' ? 'border-2 border-blue-600' : 'border-gray-200'}`}
                                     onClick={() => setPaymentMethod('online')}
                                 >

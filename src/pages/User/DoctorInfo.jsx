@@ -518,7 +518,7 @@ function DoctorInfo() {
                                     className={`w-full py-2 rounded-lg  ${
                                         schedule.length > 0
                                             ? 'bg-blue-500 text-white hover:bg-blue-600 cursor-pointer'
-                                            : 'bg-gray-400 text-gray-700 cursor-not-allowed'
+                                            : 'bg-blue-500 text-white opacity-65'
                                     }`}
                                     onClick={() => handleTimeSlotClick(selectedTime)}
                                     disabled={schedule.length <= 0}
