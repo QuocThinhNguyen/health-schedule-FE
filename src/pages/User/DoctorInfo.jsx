@@ -284,9 +284,7 @@ function DoctorInfo() {
                                 <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
                             </svg>
                             <span className="font-semibold">5.0/5</span>
-                            <a href="#" className="text-blue-600 ml-1 underline">
-                                82 lượt đặt khám
-                            </a>
+                            <a className="text-gray-700 ml-1 underline">{feedbacks.totalFeedBacks} đánh giá</a>
                         </div>
                     </div>
                     <div className="flex gap-2 mt-2">
@@ -395,36 +393,40 @@ function DoctorInfo() {
                                             <div key={feedback.id} className="border-b pb-4">
                                                 <div className="flex items-start justify-between mb-2">
                                                     <div className="flex items-center gap-2">
-                                                        <strong className="font-bold text-sm">
-                                                            {feedback.patientId.fullname}
-                                                        </strong>
-                                                        <div className="flex items-center gap-2 mb-2">
-                                                            {[1, 2, 3, 4, 5].map((star) => (
-                                                                <button
-                                                                    key={star}
-                                                                    type="button"
-                                                                    onClick={() => setRating(star)}
-                                                                    className="focus:outline-none"
-                                                                    disabled
-                                                                >
-                                                                    <Star
-                                                                        className={`w-3 h-3 mt-2 ${
-                                                                            star <= feedback.rating
-                                                                                ? 'fill-yellow-400 text-yellow-400'
-                                                                                : 'text-gray-300'
-                                                                        }`}
-                                                                    />
-                                                                </button>
-                                                            ))}
+                                                        <div className="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center text-gray-500">
+                                                            {feedback.patientId.fullname[0]}
+                                                        </div>
+                                                        <div className="flex flex-col">
+                                                            <strong className="font-bold text-base">
+                                                                {feedback.patientId.fullname}
+                                                            </strong>
+                                                            <span className="text-cyan-500 text-sm">
+                                                                {new Date(feedback.date).toLocaleDateString('vi-VN')}
+                                                            </span>
                                                         </div>
                                                     </div>
 
-                                                    <span className="text-cyan-500 text-sm">
-                                                        Đã khám ngày{' '}
-                                                        {new Date(feedback.date).toLocaleDateString('vi-VN')}
-                                                    </span>
+                                                    <div className="flex items-center gap-2 mb-2">
+                                                        {[1, 2, 3, 4, 5].map((star) => (
+                                                            <button
+                                                                key={star}
+                                                                type="button"
+                                                                onClick={() => setRating(star)}
+                                                                className="focus:outline-none"
+                                                                disabled
+                                                            >
+                                                                <Star
+                                                                    className={`w-3 h-3 mt-2 ${
+                                                                        star <= feedback.rating
+                                                                            ? 'fill-yellow-400 text-yellow-400'
+                                                                            : 'text-gray-300'
+                                                                    }`}
+                                                                />
+                                                            </button>
+                                                        ))}
+                                                    </div>
                                                 </div>
-                                                <p className="text-gray-700">{feedback.comment}</p>
+                                                <p className="text-gray-700 text-base">{feedback.comment}</p>
                                             </div>
                                         ))
                                     ) : (

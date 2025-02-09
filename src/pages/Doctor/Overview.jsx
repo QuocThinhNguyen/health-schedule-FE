@@ -77,7 +77,7 @@ function Overview() {
     return (
         <main className="flex-1">
             {/* Dashboard Content */}
-            <div className="p-8">
+            <div className="">
                 {/* Stats Grid */}
                 <div className="grid grid-cols-4 gap-6 mb-8">
                     {stats.map((stat, index) => (
@@ -107,15 +107,13 @@ function Overview() {
                     <div className="space-y-4">
                         {upcomingAppointments.map((appointment, index) => (
                             <div key={index} className="flex items-center justify-between p-4 border rounded-lg">
-                                <div className="flex items-center gap-4">
-                                    <img
-                                        src={appointment.avatar || '/placeholder.svg'}
-                                        alt={appointment.patientName}
-                                        className="w-10 h-10 rounded-full"
-                                    />
+                                <div className="flex items-center gap-2">
+                                    <div className="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center text-gray-500">
+                                        {appointment.patientName[0]}
+                                    </div>
                                     <div>
                                         <h3 className="font-medium">{appointment.patientName}</h3>
-                                        <p className="text-sm text-gray-500">{appointment.type}</p>
+                                        {/* <p className="text-sm text-gray-500">{appointment.type}</p> */}
                                     </div>
                                 </div>
 

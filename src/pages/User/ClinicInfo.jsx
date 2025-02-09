@@ -771,7 +771,7 @@ function ClinicInfo() {
                         <div className="">
                             <div className="max-w-3xl mx-auto bg-white">
                                 {/* Rating Overview */}
-                                <div className="p-4 flex items-start gap-8 max-w-sm bg-gray-50 mb-4">
+                                {/* <div className="p-4 flex items-start gap-8 max-w-sm bg-gray-50 mb-4">
                                     <div>
                                         <div className="text-4xl font-bold">
                                             5.0<span className="text-lg text-gray-500">/5</span>
@@ -797,17 +797,17 @@ function ClinicInfo() {
                                             </div>
                                         ))}
                                     </div>
-                                </div>
+                                </div> */}
 
                                 {/* Reviews List */}
                                 <div className="">
-                                    <div className="p-4 flex items-center justify-between text-sm">
+                                    <div className="flex items-center justify-between text-sm">
                                         <div className="font-medium">{feedbacks.totalFeedBacks} Đánh Giá</div>
                                         <button className="text-gray-600 hover:text-gray-900">Đánh giá mới nhất</button>
                                     </div>
 
                                     {feedbacks.data.map((review) => (
-                                        <div key={review._id} className="border-t p-4">
+                                        <div key={review._id} className=" p-4">
                                             <div className="flex items-start gap-3">
                                                 <div className="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center text-gray-500">
                                                     {review.patientId.fullname[0]}
@@ -819,7 +819,6 @@ function ClinicInfo() {
                                                                 {review.patientId.fullname}
                                                             </div>
                                                             <span className="text-cyan-500 text-sm">
-                                                                Đã khám ngày{' '}
                                                                 {new Date(review.date).toLocaleDateString('vi-VN')}
                                                             </span>
                                                         </div>
@@ -827,7 +826,7 @@ function ClinicInfo() {
                                                             {[...Array(review.rating)].map((_, i) => (
                                                                 <Star
                                                                     key={i}
-                                                                    className="w-4 h-4 fill-yellow-400 text-yellow-400"
+                                                                    className="w-3 h-3 fill-yellow-400 text-yellow-400"
                                                                 />
                                                             ))}
                                                         </div>
@@ -1073,12 +1072,14 @@ function ClinicInfo() {
                                         </button>
                                     </div>
                                 ) : (
-                                    <div className="max-w-md mx-auto bg-gray-50">
-                                        <div className="text-center border-b-2 border-blue-600">
-                                            <h2 className="text-blue-600 font-semibold py-3">Tư vấn trực tiếp</h2>
+                                    <div className="max-w-md mx-auto bg-gray-50 border rounded-lg mt-2">
+                                        <div className="text-center ">
+                                            <h2 className="text-blue-600 font-semibold py-3 border-b-2 border-blue-600">
+                                                Tư vấn trực tiếp
+                                            </h2>
                                         </div>
 
-                                        <div className="p-4 space-y-4 mb-20">
+                                        <div className="p-4 space-y-4">
                                             <p className="text-gray-600 text-sm text-center">
                                                 Vui lòng lựa chọn lịch khám bên dưới
                                             </p>
@@ -1112,27 +1113,11 @@ function ClinicInfo() {
                                                     ))
                                                 ) : (
                                                     <div className="flex flex-col items-center justify-center p-6 text-center">
-                                                        <div className="w-12 h-12 mb-4">
-                                                            <svg
-                                                                viewBox="0 0 24 24"
-                                                                fill="none"
-                                                                stroke="currentColor"
-                                                                strokeWidth="2"
-                                                                className="w-full h-full text-blue-500"
-                                                            >
-                                                                <rect
-                                                                    x="3"
-                                                                    y="4"
-                                                                    width="18"
-                                                                    height="18"
-                                                                    rx="2"
-                                                                    ry="2"
-                                                                />
-                                                                <line x1="16" y1="2" x2="16" y2="6" />
-                                                                <line x1="8" y1="2" x2="8" y2="6" />
-                                                                <line x1="3" y1="10" x2="21" y2="10" />
-                                                            </svg>
-                                                        </div>
+                                                        <img
+                                                            src="/schedule.png"
+                                                            alt={'schedule'}
+                                                            className="h-20 w-20"
+                                                        />
                                                         <h3 className="text-lg font-medium text-gray-900 mb-2">
                                                             Rất tiếc! Bác sĩ của chúng tôi hiện đang bận.
                                                         </h3>
@@ -1146,8 +1131,13 @@ function ClinicInfo() {
 
                                             {/* Nút đặt lịch */}
                                             <button
-                                                className="w-full bg-blue-500 text-white py-2 rounded-lg cursor-pointer"
+                                                className={`w-full py-2 rounded-lg  ${
+                                                    schedule.length > 0
+                                                        ? 'bg-blue-500 text-white hover:bg-blue-600 cursor-pointer'
+                                                        : 'bg-blue-500 text-white opacity-65'
+                                                }`}
                                                 onClick={() => handleTimeSlotClick(selectedTime)}
+                                                disabled={schedule.length <= 0}
                                             >
                                                 Đặt lịch hẹn
                                             </button>
