@@ -2,7 +2,7 @@ import { axiosInstance } from '~/api/apiRequest';
 import ClinicItem from './ClinicItem';
 import { useLocation, useSearchParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-function ListFilterClinic({pagination, setPagination }) {
+function ListFilterClinic({ pagination, setPagination }) {
     const location = useLocation();
     const [searchParams] = new useSearchParams(location.search);
     const keyword = searchParams.get('keyword') || '';
@@ -42,10 +42,9 @@ function ListFilterClinic({pagination, setPagination }) {
 
         const timeoutId = setTimeout(() => {
             window.scrollTo(0, 0);
-        }, 100); 
+        }, 100);
 
         return () => clearTimeout(timeoutId);
-
     }, [keyword, pagination.page]);
 
     return (
@@ -54,9 +53,8 @@ function ListFilterClinic({pagination, setPagination }) {
                 <p className="font-bold text-base">{clinics.length} Bệnh viện</p>
                 <select className="w-max h-10 border border-[#E4E8EC] rounded-lg p-2 text-ellipsis overflow-hidden whitespace-nowrap">
                     <option value="1">Nổi bật</option>
-                    <option value="2">Từ A đến Z Từ A đến Z</option>
-                    <option value="3">Từ A đến Z</option>
-                    <option value="4">Từ A đến Z</option>
+                    <option value="2">Đánh giá từ cao đến thấp</option>
+                    <option value="2">Đánh giá từ thấp đến cao</option>
                 </select>
             </div>
             <div className="mt-6">

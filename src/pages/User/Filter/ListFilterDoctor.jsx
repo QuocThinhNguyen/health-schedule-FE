@@ -1,14 +1,11 @@
 import { axiosClient } from '~/api/apiRequest';
 import { useLocation, useSearchParams } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import DoctorItem from './DoctorItem';
 function ListFilterDoctor({ pagination, setPagination }) {
     const location = useLocation();
-    const [searchParams, setSearchParams] = useSearchParams(location.search);
-    const keyword = searchParams.get('keyword') || '';
-    const clinicId = searchParams.get('clinic') || '';
-    const specialtyId = searchParams.get('speciality') || '';
-    const sort = searchParams.get('sort') || 'noi-bat';
+    const [searchParams, setSearchParams] = useSearchParams();
+
     const [doctors, setDoctors] = useState([]);
     const [totalDoctors, setTotalDoctors] = useState(0);
 
@@ -21,20 +18,27 @@ function ListFilterDoctor({ pagination, setPagination }) {
     };
 
     useEffect(() => {
+        // Update searchParams when location.search changes
+        setSearchParams(new URLSearchParams(location.search));
+    }, [location.search, setSearchParams]);
+
+    const queryParams = useMemo(() => {
+        return {
+            query: searchParams.get('keyword') || '',
+            clinicId: Number(searchParams.get('clinic')) || '',
+            specialtyId: Number(searchParams.get('speciality')) || '',
+            gender: searchParams.get('gender') || '',
+            minPrice: Number(searchParams.get('minPrice')) || '',
+            maxPrice: Number(searchParams.get('maxPrice')) || '',
+            sort: searchParams.get('sort') || 'noi-bat',
+            page: pagination.page,
+            limit: pagination.limit,
+        };
+    }, [searchParams, pagination]);
+
+    useEffect(() => {
         const filterDoctorAPI = async () => {
             try {
-                console.log('keyword:', keyword);
-                console.log('clinicId:', clinicId);
-                console.log('specialtyId:', specialtyId);
-                console.log('sort:', sort);
-                const queryParams = {};
-                if (keyword) queryParams.query = keyword;
-                if (clinicId) queryParams.clinicId = clinicId;
-                if (specialtyId) queryParams.specialtyId = specialtyId;
-                queryParams.sort = sort;
-                queryParams.page = pagination.page;
-                queryParams.limit = pagination.limit;
-
                 const response = await axiosClient.get(`/doctor/?${new URLSearchParams(queryParams).toString()}`);
                 if (response.status === 200) {
                     setDoctors(response.data);
@@ -63,11 +67,9 @@ function ListFilterDoctor({ pagination, setPagination }) {
 
         const timeoutId = setTimeout(() => {
             window.scrollTo(0, 0);
-        }, 100); 
-
+        }, 100);
         return () => clearTimeout(timeoutId);
-
-    }, [keyword, clinicId, specialtyId, sort, pagination.page]);
+    }, [searchParams, pagination]);
 
     return (
         <div>

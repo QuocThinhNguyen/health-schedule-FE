@@ -1,21 +1,46 @@
-import { IoFilter } from 'react-icons/io5';
-import { RiDeleteBin5Line } from 'react-icons/ri';
-import DualRangeSlider from './DualRangeSlider';
-import { useSearchParams } from 'react-router-dom';
+import { useLocation, useSearchParams } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { axiosClient } from '~/api/apiRequest';
+import PriceRangeSlider from './PriceRangeSlider';
+import { MdDeleteForever } from 'react-icons/md';
+
 function SideBarFilterDoctor() {
+    const location = useLocation();
     const [searchParams, setSearchParams] = useSearchParams();
     const [clinics, setClinics] = useState([]);
-    const [selectedClinicId, setSelectedClinicId] = useState('');
+    const [selectedClinicId, setSelectedClinicId] = useState(Number(searchParams.get('clinic')) || '');
     const [specialities, setSpecialities] = useState([]);
-    const [minPrice, setMinPrice] = useState(0);
-    const [maxPrice, setMaxPrice] = useState(0);
+
+    const [genders, setGenders] = useState(searchParams.get('gender') ? searchParams.get('gender').split(',') : []);
+
+    const [minBoundaryValue, setMinBoundaryValue] = useState(0);
+    const [maxBoundaryValue, setMaxBoundaryValue] = useState(0);
+
+    const [priceRange, setPriceRange] = useState({
+        min: searchParams.get('minPrice') ? Number(searchParams.get('minPrice')) : 0,
+        max: searchParams.get('maxPrice') ? Number(searchParams.get('maxPrice')) : 0,
+    });
+
+    useEffect(() => {
+        // Update searchParams when location.search changes
+        setSearchParams(new URLSearchParams(location.search));
+    }, [location.search, setSearchParams]);
+
+    useEffect(() => {
+        setSelectedClinicId(Number(searchParams.get('clinic')) || null);
+        setGenders(searchParams.get('gender') ? searchParams.get('gender').split(',') : []);
+        setPriceRange({
+            min: searchParams.get('minPrice') ? Number(searchParams.get('minPrice')) : Number(minBoundaryValue),
+            max: searchParams.get('maxPrice') ? Number(searchParams.get('maxPrice')) : Number(maxBoundaryValue),
+        });
+    }, [searchParams]);
+
+   
 
     const handleFilterChange = (key, value) => {
         const newParams = { ...Object.fromEntries(searchParams.entries()), [key]: value };
-        if (!value) {
-            delete newParams[key]; 
+        if (value === '' || value === null || value === undefined) {
+            delete newParams[key];
         }
         setSearchParams(newParams);
     };
@@ -41,7 +66,6 @@ function SideBarFilterDoctor() {
             setSelectedClinicId(value);
             handleFilterChange('clinic', value);
         }
-        
     };
 
     useEffect(() => {
@@ -49,7 +73,6 @@ function SideBarFilterDoctor() {
             try {
                 const response = await axiosClient.get(`/specialty/clinicId/${selectedClinicId}`);
                 if (response.status === 200) {
-                    console.log('Specialities:', response.data);
                     setSpecialities(response.data);
                 }
             } catch (error) {
@@ -61,6 +84,65 @@ function SideBarFilterDoctor() {
             fetchSpecialitiesByClinic();
         }
     }, [selectedClinicId]);
+
+    //Gender
+    const handleGenderChange = (e) => {
+        const { value, checked } = e.target;
+        setGenders((prevGenders) => {
+            const newGenders = checked ? [...prevGenders, value] : prevGenders.filter((gender) => gender !== value);
+            handleFilterChange('gender', newGenders.join(','));
+            return newGenders;
+        });
+    };
+
+    //Price
+    useEffect(() => {
+        fetchPriceRange();
+    }, []);
+    const fetchPriceRange = async () => {
+        try {
+            const response = await axiosClient.get('/doctor/price');
+
+            if (response.status === 200) {
+                setMinBoundaryValue(Number(response.data.minPrice));
+                setMaxBoundaryValue(Number(response.data.maxPrice));
+                setPriceRange({
+                    min: searchParams.get('minPrice')
+                        ? Number(searchParams.get('minPrice'))
+                        : Number(response.data.minPrice),
+                    max: searchParams.get('maxPrice')
+                        ? Number(searchParams.get('maxPrice'))
+                        : Number(response.data.maxPrice),
+                });
+            }
+        } catch (error) {
+            console.error('Failed to fetch price range:', error);
+        }
+    };
+
+    const handleRangeChange = (values) => {
+        const { min, max } = values;
+        setSearchParams((prevParams) => {
+            const newParams = { ...Object.fromEntries(prevParams.entries()) };
+            if (min !== undefined && min !== null) {
+                newParams['minPrice'] = min;
+            } else {
+                delete newParams['minPrice'];
+            }
+            if (max !== undefined && max !== null) {
+                newParams['maxPrice'] = max;
+            } else {
+                delete newParams['maxPrice'];
+            }
+            return newParams;
+        });
+    };
+
+    const handleDeleteAll = () => {
+        const keyword = searchParams.get('keyword');
+        const newParams = keyword ? { keyword } : {};
+        setSearchParams(newParams);
+    };
 
     return (
         <div className="w-full bg-[#f8f9fc] border border-[#E4E8EC] rounded-lg p-6 text-sm">
@@ -86,7 +168,7 @@ function SideBarFilterDoctor() {
                     </h4>
                     <select
                         name="clinic"
-                        value={searchParams.get('clinic') || ''}
+                        value={selectedClinicId || ''}
                         onChange={handleFilterClinicChange}
                         className="w-full h-10 border border-[#E4E8EC] rounded-lg p-2 text-ellipsis overflow-hidden whitespace-nowrap"
                     >
@@ -123,11 +205,25 @@ function SideBarFilterDoctor() {
                     <div className="flex flex-col gap-2">
                         <div className="flex items-center justify-between">
                             <p>Nam</p>
-                            <input  className="w-5 h-5" type="checkbox" name="Nam" value="Nam" />
+                            <input
+                                onChange={handleGenderChange}
+                                className="w-5 h-5"
+                                type="checkbox"
+                                name="Nam"
+                                value="Male"
+                                checked={genders.includes('Male')}
+                            />
                         </div>
                         <div className="flex items-center justify-between">
                             <p>Nữ</p>
-                            <input className="w-5 h-5" type="checkbox" name="Nữ" value="Nữ" />
+                            <input
+                                onChange={handleGenderChange}
+                                className="w-5 h-5"
+                                type="checkbox"
+                                name="Nữ"
+                                value="Female"
+                                checked={genders.includes('Female')}
+                            />
                         </div>
                     </div>
                 </div>
@@ -135,29 +231,20 @@ function SideBarFilterDoctor() {
                     <h3 className="font-semibold border-l-[3px] border-[#2d87f3] uppercase leading-4 pl-2 mb-3">
                         Mức giá
                     </h3>
-                    <DualRangeSlider
-                    // minBoundaryValue={minBoundaryValue}
-                    // maxBoundaryValue={maxBoundaryValue}
-                    // minValue={minValue}
-                    // maxValue={maxValue}
-                    // step={1000}
-                    // onChange={handleRangeChange}
-                    />
-                    {/* {minBoundaryValue > 0 && maxBoundaryValue > 0 && minValue > 0 && maxValue > 0 ? (
-        <DualRangeSlider
-            minBoundaryValue={minBoundaryValue}
-            maxBoundaryValue={maxBoundaryValue}
-            minValue={minValue}
-            maxValue={maxValue}
-            step={1000}
-            onChange={handleRangeChange}
-        />
-    ) : (
-        <p>Loading...</p>
-    )} */}
+                    {minBoundaryValue && maxBoundaryValue && (
+                        <PriceRangeSlider
+                            min={minBoundaryValue}
+                            max={maxBoundaryValue}
+                            onChange={handleRangeChange}
+                            values={priceRange}
+                        />
+                    )}
                 </div>
-                <div className="flex gap-2 items-center text-base font-semibold cursor-pointer">
-                    <RiDeleteBin5Line />
+                <div
+                    onClick={handleDeleteAll}
+                    className="flex gap-2 items-center text-base font-semibold cursor-pointer text-[#2d87f3] hover:opacity-80"
+                >
+                    <MdDeleteForever />
                     Xóa tất cả
                 </div>
             </div>
