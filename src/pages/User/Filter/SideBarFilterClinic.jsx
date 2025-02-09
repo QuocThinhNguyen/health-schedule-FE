@@ -1,6 +1,5 @@
-import { IoFilter } from 'react-icons/io5';
+import { MdDeleteForever } from 'react-icons/md';
 import { RiDeleteBin5Line } from 'react-icons/ri';
-import DualRangeSlider from './DualRangeSlider';
 
 function SideBarFilter() {
     return (
@@ -49,8 +48,8 @@ function SideBarFilter() {
             )}
         </div> */}
             </div>
-            <div className="flex gap-2 items-center text-base font-semibold cursor-pointer">
-                <RiDeleteBin5Line />
+            <div className="flex gap-2 items-center text-base font-semibold cursor-pointer text-[#2d87f3] hover:opacity-80">
+                <MdDeleteForever />
                 Xóa tất cả
             </div>
         </div>

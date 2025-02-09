@@ -1,20 +1,37 @@
 import { Star } from 'lucide-react';
+import { useEffect, useState } from 'react';
 import { FaMoneyBillWave } from 'react-icons/fa';
 import { FiPhone } from 'react-icons/fi';
 import { GoLocation } from 'react-icons/go';
 import { IoIosStar } from 'react-icons/io';
 import { useNavigate } from 'react-router-dom';
+import { axiosInstance } from '~/api/apiRequest';
 function ClinicItem(data) {
     const navigate = useNavigate();
     const clinic = data.data;
 
     const IMAGE_URL = `http://localhost:${import.meta.env.VITE_BE_PORT}/uploads/`;
+    const [totalFeedbacks, setTotalFeedbacks] = useState(0);
 
     const handleBooking = (clinicId, clinicName) => {
         navigate(`/benh-vien?name=${clinicName}`, {
             state: { clinicId: clinicId },
         });
     };
+
+    useEffect(() => {
+        const fetchFeedbacks = async () => {
+            try {
+                const response = await axiosInstance.get(`/feedback/clinic/${clinic.clinicId}`);
+                if (response.status === 200) {
+                    setTotalFeedbacks(response.totalFeedBacks);
+                }
+            } catch (error) {
+                console.error('Failed to fetch feedbacks: ', error.message);
+            }
+        };
+        fetchFeedbacks();
+    }, []);
 
     return (
         <div className="rounded-lg mb-4 border border-[#E4E8EC]">
@@ -34,7 +51,7 @@ function ClinicItem(data) {
                                 <IoIosStar className="text-yellow-500" />
                                 <span className="font-semibold text-black text-sm">4.5/5</span>
                             </div>
-                            <span className="underline text-[#595959]">62 đánh giá</span>
+                            <span className="underline text-[#595959]">{totalFeedbacks} đánh giá</span>
                         </div>
                     </div>
                     <div className="flex items-center gap-2 mt-1 mb-[2px] text-sm">
