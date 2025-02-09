@@ -11,6 +11,7 @@ function ClinicItem(data) {
     const clinic = data.data;
 
     const IMAGE_URL = `http://localhost:${import.meta.env.VITE_BE_PORT}/uploads/`;
+    const [avgRating, setAvgRating] = useState(0);
     const [totalFeedbacks, setTotalFeedbacks] = useState(0);
 
     const handleBooking = (clinicId, clinicName) => {
@@ -24,7 +25,8 @@ function ClinicItem(data) {
             try {
                 const response = await axiosInstance.get(`/feedback/clinic/${clinic.clinicId}`);
                 if (response.status === 200) {
-                    setTotalFeedbacks(response.totalFeedBacks);
+                    setAvgRating(response.avgRating);
+                    setTotalFeedbacks(response.totalFeedbacks);
                 }
             } catch (error) {
                 console.error('Failed to fetch feedbacks: ', error.message);
@@ -49,7 +51,7 @@ function ClinicItem(data) {
                         <div className="flex items-center gap-1 text-sm">
                             <div className="flex items-center gap-1 px-2 py-[1px] bg-[#2d87f31a] bg-opacity-10 rounded-full">
                                 <IoIosStar className="text-yellow-500" />
-                                <span className="font-semibold text-black text-sm">4.5/5</span>
+                                <span className="font-semibold text-black text-sm">{avgRating}/5</span>
                             </div>
                             <span className="underline text-[#595959]">{totalFeedbacks} đánh giá</span>
                         </div>
