@@ -9,11 +9,10 @@ function DoctorItem(data) {
     const navigate = useNavigate();
     const [academicRanksAndDegreess, setAcademicRanksAndDegreess] = useState([]);
     const doctor = data.data;
+
     const IMAGE_URL = `http://localhost:${import.meta.env.VITE_BE_PORT}/uploads/`;
 
     const handleBooking = (doctorId) => {
-        console.log('Đã click vào nút Đặt khám ngay');
-
         // Điều hướng đến trang với ID bác sĩ
         navigate(`/bac-si/get?id=${doctorId}`);
     };
@@ -65,7 +64,7 @@ function DoctorItem(data) {
                                 <IoIosStar className="text-yellow-500" />
                                 <span className="font-semibold text-black text-sm">{doctor.avgRating}/5</span>
                             </div>
-                            <span className="underline text-[#595959] text-sm">62 đánh giá</span>
+                            <span className="underline text-[#595959] text-sm">{doctor.countFeedBack} đánh giá</span>
                         </div>
                     </div>
 

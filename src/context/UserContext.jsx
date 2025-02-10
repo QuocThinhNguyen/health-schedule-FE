@@ -92,7 +92,6 @@ const UserProvider = ({ children }) => {
             }
         }
     }, []);
-    console.log('User:', user);
 
     return (
         <UserContext.Provider value={{ user, loginContext, loginContextGoogle, logout }}>
