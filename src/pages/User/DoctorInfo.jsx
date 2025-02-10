@@ -400,7 +400,7 @@ function DoctorInfo() {
                                                             <strong className="font-bold text-base">
                                                                 {feedback.patientId.fullname}
                                                             </strong>
-                                                            <span className="text-cyan-500 text-sm">
+                                                            <span className="text-gray-400 text-sm">
                                                                 {new Date(feedback.date).toLocaleDateString('vi-VN')}
                                                             </span>
                                                         </div>

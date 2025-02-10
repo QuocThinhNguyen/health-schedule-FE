@@ -803,11 +803,11 @@ function ClinicInfo() {
                                 <div className="">
                                     <div className="flex items-center justify-between text-sm">
                                         <div className="font-medium">{feedbacks.totalFeedBacks} Đánh Giá</div>
-                                        <button className="text-gray-600 hover:text-gray-900">Đánh giá mới nhất</button>
+                                        {/* <button className="text-gray-600 hover:text-gray-900">Đánh giá mới nhất</button> */}
                                     </div>
 
                                     {feedbacks.data.map((review) => (
-                                        <div key={review._id} className=" p-4">
+                                        <div key={review._id} className=" px-4 pt-6 pb-4 border-b">
                                             <div className="flex items-start gap-3">
                                                 <div className="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center text-gray-500">
                                                     {review.patientId.fullname[0]}
@@ -818,7 +818,7 @@ function ClinicInfo() {
                                                             <div className="font-medium">
                                                                 {review.patientId.fullname}
                                                             </div>
-                                                            <span className="text-cyan-500 text-sm">
+                                                            <span className="text-gray-400 text-sm">
                                                                 {new Date(review.date).toLocaleDateString('vi-VN')}
                                                             </span>
                                                         </div>
@@ -832,7 +832,7 @@ function ClinicInfo() {
                                                         </div>
                                                     </div>
 
-                                                    <div className="mt-3 py-2 px-2 bg-gray-100 rounded-lg">
+                                                    <div className="mt-2 py-1 px-2 bg-gray-100 rounded-lg">
                                                         <div
                                                             className="flex items-center justify-between cursor-pointer"
                                                             onClick={() => handleBooking(review.doctorId.userId)}
@@ -855,7 +855,7 @@ function ClinicInfo() {
                                                             {review.doctorInfo}
                                                         </p> */}
                                                     </div>
-                                                    <div className="mt-3">{review.comment}</div>
+                                                    <div className="mt-1">{review.comment}</div>
                                                 </div>
                                             </div>
                                         </div>
