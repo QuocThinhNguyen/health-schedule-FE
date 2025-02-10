@@ -105,8 +105,8 @@ const Sidebar = ({ onSelectTab, selectedTab, setCurrentFunction }) => {
     ];
 
     return (
-        <div className="w-fit h-screen bg-[#f8f9fc] text-black flex flex-col">
-            <div className="flex items-center justify-start p-2 gap-1 border-b max-h-64 bg-white">
+        <div className="w-fit h-screen bg-white text-black flex flex-col">
+            <div className="flex items-center justify-start p-2 gap-1 max-h-64">
                 <div className="">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -150,8 +150,8 @@ const Sidebar = ({ onSelectTab, selectedTab, setCurrentFunction }) => {
                                 navigate(item.path);
                             }
                         }}
-                        className={`gap-2 p-3 cursor-pointer flex items-center rounded-2xl hover:bg-blue-200 hover:text-white ${
-                            location.pathname === item.path ? 'bg-blue-300 text-white' : 'text-gray-700'
+                        className={`gap-2 p-3 cursor-pointer flex items-center rounded-2xl  ${
+                            location.pathname === item.path ? 'bg-[#3686ff] text-white' : 'text-gray-700'
                         }`}
                     >
                         <img src={`/${item.image}`} alt={item.label} className="h-6 w-6" />

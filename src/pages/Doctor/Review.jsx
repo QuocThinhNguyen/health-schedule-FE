@@ -78,10 +78,10 @@ function Review() {
     return (
         <main className="flex-1">
             {/* Reviews Content */}
-            <div className="p-8">
+            <div className="">
                 <div className="bg-white rounded-xl shadow-sm p-6">
                     {/* Overall Rating */}
-                    <div className="flex justify-between items-center mb-8">
+                    {/* <div className="flex justify-between items-center mb-8">
                         <div>
                             <h2 className="text-3xl font-bold">{overallRating.toFixed(1)}</h2>
                             <div className="flex items-center mt-2">
@@ -115,7 +115,7 @@ function Review() {
                                     </div>
                                 ))}
                         </div>
-                    </div>
+                    </div> */}
 
                     {/* Reviews List */}
                     <div className="space-y-6">
@@ -138,17 +138,17 @@ function Review() {
                                             <span className="ml-2 text-sm text-gray-500">{review.date}</span>
                                         </div>
                                     </div>
-                                    <div className="flex gap-2">
+                                    {/* <div className="flex gap-2">
                                         <button className="p-1 text-gray-400 hover:text-gray-600">
                                             <ThumbsUp className="w-5 h-5" />
                                         </button>
                                         <button className="p-1 text-gray-400 hover:text-gray-600">
                                             <ThumbsDown className="w-5 h-5" />
                                         </button>
-                                    </div>
+                                    </div> */}
                                 </div>
                                 <p className="mt-2 text-gray-600">{review.comment}</p>
-                                {review.response && (
+                                {/* {review.response && (
                                     <div className="mt-4 pl-4 border-l-4 border-blue-500">
                                         <p className="text-sm font-semibold">Phản hồi của bác sĩ:</p>
                                         <p className="mt-1 text-sm text-gray-600">{review.response}</p>
@@ -162,7 +162,7 @@ function Review() {
                                         <MessageSquare className="w-4 h-4 mr-1" />
                                         Phản hồi
                                     </button>
-                                )}
+                                )} */}
                             </div>
                         ))}
                     </div>

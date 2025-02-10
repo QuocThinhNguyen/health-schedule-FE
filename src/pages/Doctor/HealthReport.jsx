@@ -42,7 +42,7 @@ function HealthReport() {
     return (
         <main className="flex-1">
             {/* Patient Records Content */}
-            <div className="p-8">
+            <div className="">
                 <div className="bg-white rounded-xl shadow-sm p-6">
                     {/* Search and Add Patient */}
                     <div className="flex justify-between mb-6">
@@ -54,10 +54,6 @@ function HealthReport() {
                             />
                             <Search className="absolute left-3 top-2.5 w-5 h-5 text-gray-400" />
                         </div>
-                        <button className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 flex items-center">
-                            <Plus className="w-4 h-4 mr-2" />
-                            Thêm bệnh nhân mới
-                        </button>
                     </div>
 
                     {/* Patient List */}
@@ -88,12 +84,12 @@ function HealthReport() {
                                             >
                                                 Xem chi tiết
                                             </button>
-                                            <button className="text-gray-400 hover:text-gray-600 mr-3">
+                                            {/* <button className="text-gray-400 hover:text-gray-600 mr-3">
                                                 <Edit className="w-5 h-5" />
                                             </button>
                                             <button className="text-gray-400 hover:text-gray-600">
                                                 <Trash2 className="w-5 h-5" />
-                                            </button>
+                                            </button> */}
                                         </td>
                                     </tr>
                                 ))}
@@ -174,14 +170,14 @@ function HealthReport() {
                                 </div>
                             </div>
                         </div>
-                        <div className="mt-8 flex justify-end gap-4">
+                        {/* <div className="mt-8 flex justify-end gap-4">
                             <button className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200">
                                 Chỉnh sửa thông tin
                             </button>
                             <button className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700">
                                 Xem lịch sử khám bệnh
                             </button>
-                        </div>
+                        </div> */}
                     </div>
                 </div>
             )}
