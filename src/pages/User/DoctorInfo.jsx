@@ -358,7 +358,7 @@ function DoctorInfo() {
                         <div className="">
                             <div className=" bg-white">
                                 {/* Rating Overview */}
-                                <div className="p-4 flex items-start gap-8 max-w-sm bg-gray-50 mb-4">
+                                {/* <div className="p-4 flex items-start gap-8 max-w-sm bg-gray-50 mb-4">
                                     <div>
                                         <div className="text-4xl font-bold">
                                             5.0<span className="text-lg text-gray-500">/5</span>
@@ -384,7 +384,7 @@ function DoctorInfo() {
                                             </div>
                                         ))}
                                     </div>
-                                </div>
+                                </div> */}
 
                                 {/* Reviews List */}
                                 <div className="space-y-6 mt-10">

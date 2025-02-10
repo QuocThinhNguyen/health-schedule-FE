@@ -3,6 +3,7 @@ import axios from 'axios';
 import { axiosClient, axiosInstance } from '~/api/apiRequest';
 import { UserContext } from '~/context/UserContext';
 import { toast } from 'react-toastify';
+import { Check } from 'lucide-react';
 
 function DoctorScheduleManagement() {
     const [selectedDoctor, setSelectedDoctor] = useState('');
@@ -103,42 +104,46 @@ function DoctorScheduleManagement() {
 
     return (
         <div className="p-8 w-150 h-full border rounded-lg shadow-lg bg-white overflow-y-auto">
-            <h1 className="text-2xl font-bold text-center mb-8">QUẢN LÝ KẾ HOẠCH KHÁM BỆNH CỦA BÁC SĨ</h1>
+            {/* <h1 className="text-2xl font-bold text-center mb-8">Quản lý lịch làm việc</h1> */}
 
-            <div className="flex justify-center items-center mb-6 space-x-4">
-                {/* Chọn bác sĩ */}
-                <div>
-                    <label className="font-semibold mr-2">Bác sĩ</label>
-                    <input
-                        type="text"
-                        value={selectedDoctor.fullname || ''}
-                        onChange={(e) => setSelectedDoctor(e.target.value)}
-                        className="border p-2 rounded"
-                        disabled={true}
-                    />
-                </div>
+            <div className="">
+                <div className="grid grid-cols-2 mb-6">
+                    {/* Chọn bác sĩ */}
+                    <div className="flex flex-col">
+                        <label className="font-semibold mb-2">Bác sĩ</label>
+                        <input
+                            type="text"
+                            value={selectedDoctor.fullname || ''}
+                            onChange={(e) => setSelectedDoctor(e.target.value)}
+                            className="border p-2 rounded max-w-xs"
+                            disabled={true}
+                        />
+                    </div>
 
-                {/* Chọn ngày */}
-                <div>
-                    <label className="font-semibold mr-2">Chọn ngày</label>
-                    <input
-                        type="date"
-                        value={selectedDate || ''}
-                        min={new Date().toISOString().split('T')[0]}
-                        onChange={(e) => setSelectedDate(e.target.value)}
-                        className="border p-2 rounded"
-                    />
+                    {/* Chọn ngày */}
+                    <div className="flex flex-col">
+                        <label className="font-semibold mb-2">Chọn ngày</label>
+                        <input
+                            type="date"
+                            value={selectedDate || ''}
+                            min={new Date().toISOString().split('T')[0]}
+                            onChange={(e) => setSelectedDate(e.target.value)}
+                            className="border p-2 rounded max-w-xs"
+                        />
+                    </div>
                 </div>
             </div>
 
             {/* Hiển thị các khung giờ */}
-            <div className="flex justify-center space-x-4 mb-6">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 mb-8 mt-10">
                 {timeSlots.map((slot) => (
                     <button
                         key={slot.value}
                         onClick={() => toggleTimeSlot(slot.value)}
-                        className={`p-2 border rounded ${
-                            selectedTimeSlots.includes(slot.value) ? 'bg-yellow-500 text-white' : 'bg-white text-black'
+                        className={`h-12 px-4 rounded-lg border-2 hover:border-green-200 hover:bg-green-50/50 ${
+                            selectedTimeSlots.includes(slot.value)
+                                ? 'border-green-500 bg-green-50 text-green-600'
+                                : 'border-gray-200'
                         }`}
                     >
                         {slot.label}
@@ -151,6 +156,17 @@ function DoctorScheduleManagement() {
                 <button onClick={handleSave} className="bg-blue-500 text-white p-2 rounded">
                     Lưu thông tin
                 </button>
+            </div>
+
+            <div className="absolute bottom-8 right-8 flex justify-end items-center gap-6 mt-8">
+                <div className="flex items-center gap-2">
+                    <div className="w-4 h-4 bg-green-500 rounded"></div>
+                    <span className="text-sm text-gray-600">Đã chọn</span>
+                </div>
+                <div className="flex items-center gap-2">
+                    <div className="w-4 h-4 bg-gray-200 rounded"></div>
+                    <span className="text-sm text-gray-600">Chưa chọn</span>
+                </div>
             </div>
         </div>
     );

@@ -11,6 +11,7 @@ import WorkScheduleManagement from '~/pages/Doctor/WorkScheduleManagement';
 import Overview from '~/pages/Doctor/Overview';
 import HealthReport from '~/pages/Doctor/HealthReport';
 import Review from '~/pages/Doctor/Review';
+import DoctorProfile from '~/pages/Doctor/DoctorProfile';
 function DoctorRoutes() {
     const { user } = useContext(UserContext);
 

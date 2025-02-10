@@ -101,7 +101,7 @@ function Overview() {
                 <div className="bg-white rounded-xl shadow-sm p-6">
                     <div className="flex items-center justify-between mb-6">
                         <h2 className="text-lg font-semibold">Lịch hẹn sắp tới</h2>
-                        <button className="text-sm text-blue-600 hover:text-blue-700">Xem tất cả</button>
+                        {/* <button className="text-sm text-blue-600 hover:text-blue-700">Xem tất cả</button> */}
                     </div>
 
                     <div className="space-y-4">
