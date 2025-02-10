@@ -109,32 +109,7 @@ function DoctorProfile() {
     return (
         <div className=" w-full h-full border rounded-lg shadow-lg bg-white overflow-y-auto px-10">
             {/* <h2 className="text-5xl font-bold text-center mb-6">Thông Tin Cá Nhân Bác Sĩ</h2> */}
-            {/* Nút Chỉnh sửa và Lưu */}
-            <div className="flex justify-end space-x-4 mt-6">
-                {!isEditing ? (
-                    <button
-                        onClick={() => setIsEditing(true)}
-                        className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-                    >
-                        Chỉnh sửa
-                    </button>
-                ) : (
-                    <button
-                        onClick={handleSave}
-                        className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
-                    >
-                        Lưu thông tin
-                    </button>
-                )}
-                {isEditing && (
-                    <button
-                        onClick={() => setIsEditing(false)}
-                        className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
-                    >
-                        Hủy
-                    </button>
-                )}
-            </div>
+
             <div className="flex flex-col md:flex-row gap-8 w-full">
                 {/* Ảnh Avatar */}
                 <div className="top-3 flex justify-center mb-6 relative">
@@ -161,7 +136,7 @@ function DoctorProfile() {
                 <div className="flex flex-1 gap-20 relative top-5">
                     {/* Cột 1 */}
                     <div className="flex-1">
-                        <div className="mb-4">
+                        <div className={` ${isEditing ? '' : 'border-b pb-4'}`}>
                             <label className="block font-semibold">Họ tên</label>
                             <input
                                 type="text"
@@ -169,7 +144,7 @@ function DoctorProfile() {
                                 value={doctorInfo.name}
                                 onChange={handleChange}
                                 disabled={!isEditing}
-                                className={`w-full p-2 border rounded ${isEditing ? 'bg-white' : 'bg-gray-100'}`}
+                                className={` ${isEditing ? 'bg-white w-full p-2 border rounded' : 'bg-white'}`}
                             />
                         </div>
 
@@ -285,6 +260,32 @@ function DoctorProfile() {
                         </div>
                     </div>
                 </div>
+            </div>
+            {/* Nút Chỉnh sửa và Lưu */}
+            <div className="flex justify-end space-x-4 mt-6">
+                {!isEditing ? (
+                    <button
+                        onClick={() => setIsEditing(true)}
+                        className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                    >
+                        Chỉnh sửa
+                    </button>
+                ) : (
+                    <button
+                        onClick={handleSave}
+                        className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
+                    >
+                        Lưu thông tin
+                    </button>
+                )}
+                {isEditing && (
+                    <button
+                        onClick={() => setIsEditing(false)}
+                        className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
+                    >
+                        Hủy
+                    </button>
+                )}
             </div>
         </div>
     );
