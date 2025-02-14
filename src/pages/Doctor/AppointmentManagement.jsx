@@ -72,8 +72,8 @@ function PatientManagement() {
             if (response.status === 200) {
                 const images = response.data.map((item) => item.imageName);
                 if (images.length === 0) {
-                    toast.info('Không có ảnh đính kèm.');
-                    return;
+                    // toast.info('Không có ảnh đính kèm.');
+                    // return;
                 }
                 setSelectedImages(images); // Lưu danh sách ảnh từ API
                 setIsModalOpen1(true); // Mở Modal

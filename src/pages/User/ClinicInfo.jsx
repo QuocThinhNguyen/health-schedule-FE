@@ -42,7 +42,7 @@ function ClinicInfo() {
     const [specialyId, setSpecialtyId] = useState('');
     const [showDoctors, setShowDoctors] = useState(false);
     const [selectedDoctor, setSelectedDoctor] = useState(null);
-    const [pagination, setPagination] = useState({ page: 1, limit: 100, totalPages: 1 });
+    const [pagination, setPagination] = useState({ page: 1, limit: 10, totalPages: 1 });
     const [isDoctorSelected, setIsDoctorSelected] = useState(false);
     const [currentDate, setCurrentDate] = useState('');
     const [schedule, setSchedule] = useState([]);

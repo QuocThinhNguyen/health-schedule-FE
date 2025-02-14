@@ -109,7 +109,7 @@ function DoctorScheduleManagement() {
             <div className="">
                 <div className="grid grid-cols-2 mb-6">
                     {/* Chọn bác sĩ */}
-                    <div className="flex flex-col">
+                    {/* <div className="flex flex-col">
                         <label className="font-semibold mb-2">Bác sĩ</label>
                         <input
                             type="text"
@@ -118,7 +118,7 @@ function DoctorScheduleManagement() {
                             className="border p-2 rounded max-w-xs"
                             disabled={true}
                         />
-                    </div>
+                    </div> */}
 
                     {/* Chọn ngày */}
                     <div className="flex flex-col">
@@ -153,7 +153,7 @@ function DoctorScheduleManagement() {
 
             {/* Nút Lưu thông tin */}
             <div className="flex justify-center">
-                <button onClick={handleSave} className="bg-blue-500 text-white p-2 rounded">
+                <button onClick={handleSave} className="bg-blue-500 text-white py-3 px-4 rounded-lg">
                     Lưu thông tin
                 </button>
             </div>
