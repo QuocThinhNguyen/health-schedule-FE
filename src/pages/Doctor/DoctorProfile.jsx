@@ -22,12 +22,14 @@ import {
     Star,
     Clock,
 } from 'lucide-react';
+import { set } from 'date-fns';
 
 function DoctorProfile() {
     const [activeSection, setActiveSection] = useState('personal');
     const [isEditing, setIsEditing] = useState(false);
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const [previewImage, setPreviewImage] = useState(null); // Thêm trạng thái để lưu trữ URL tạm thời của ảnh
+    const [selectedFile, setSelectedFile] = useState(null); // Thêm trạng thái để lưu trữ tệp ảnh
     const { user } = useContext(UserContext);
     const [doctorInfo, setDoctorInfo] = useState({
         name: '',
@@ -79,9 +81,41 @@ function DoctorProfile() {
         setDoctorInfo((prev) => ({ ...prev, [name]: value }));
     };
 
-    const handleSave = () => {
+    const handleSave = async () => {
         console.log('Saving updated info:', doctorInfo);
         setIsEditing(false);
+        const formData = new FormData();
+        formData.append('fullname', doctorInfo.name);
+        formData.append('address', doctorInfo.address);
+        const genderValue = doctorInfo.gender === 'Nam' ? 'Male' : doctorInfo.gender === 'Nữ' ? 'Female' : 'Other';
+        formData.append('gender', genderValue);
+        formData.append('birthDate', doctorInfo.birthdate);
+        formData.append('phoneNumber', doctorInfo.phone);
+        formData.append('email', doctorInfo.email);
+        if (selectedFile) {
+            formData.append('image', selectedFile); // Thêm tệp ảnh vào FormData
+        }
+
+        try {
+            const response = await axiosInstance.put(`/doctor/${user.userId}`, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
+            console.log('Response:', response);
+            if (response.status === 200) {
+                // Check a success code if the backend provides it
+                toast.success('Cập nhật thông tin thành công');
+                // setTimeout(() => {
+                //     window.location.reload();
+                // }, 2000);
+            } else {
+                toast.warn(response.data.message || 'Đã xảy ra vấn đề');
+            }
+        } catch (error) {
+            // console.error('Error updating doctor data:', error);
+            toast.error('Cập nhật thông tin thất bại');
+        }
     };
 
     const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
@@ -100,6 +134,48 @@ function DoctorProfile() {
     const formatCurrency = (value) => {
         return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(value);
     };
+
+    const [feedbacks, setFeedbacks] = useState([]);
+    console.log('Feedbacks:', feedbacks);
+    const [comments, setComments] = useState([]);
+    console.log('Comments:', comments);
+
+    useEffect(() => {
+        const fetchFeedbacks = async () => {
+            try {
+                const response = await axiosInstance.get(`/feedback/${user.userId}`);
+                if (response.status === 200) {
+                    setFeedbacks(response);
+                    setComments(response.data[0]);
+                }
+            } catch (error) {
+                console.error('Failed to fetch feedbacks: ', error.message);
+            }
+        };
+        fetchFeedbacks();
+    }, []);
+
+    const [statistical, setStatistical] = useState([]);
+    console.log('Statistical:', statistical);
+    useEffect(() => {
+        // Hàm gọi API để lấy dữ liệu lịch hẹn
+        const fetchStatistical = async () => {
+            try {
+                const response = await axiosInstance.get(`/booking/doctor/${user.userId}`);
+                console.log('Statistical check:', response);
+                if (response.status === 200) {
+                    setStatistical(response);
+                } else {
+                    console.error('Failed to fetch data:', response.message);
+                    setStatistical([]);
+                }
+            } catch (error) {
+                console.error('Error fetching appointments:', error);
+                setStatistical([]);
+            }
+        };
+        fetchStatistical();
+    }, []);
     return (
         <div className="max-w-7xl flex">
             {/* Sidebar */}
@@ -240,10 +316,10 @@ function DoctorProfile() {
                                 <div className="flex items-center">
                                     <input
                                         id="dateOfBirth"
-                                        name="dateOfBirth"
+                                        name="birthdate"
                                         type="date"
                                         value={doctorInfo.birthdate}
-                                        onChange={handleInputChange}
+                                        onChange={handleChange}
                                         readOnly={!isEditing}
                                         className={`w-full px-3 py-2 border rounded-md outline-none ${
                                             !isEditing ? 'bg-gray-50' : ''
@@ -403,40 +479,44 @@ function DoctorProfile() {
                         <h3 className="text-lg font-semibold mb-4">Thống kê</h3>
                         <div className="flex justify-between items-center">
                             <div className="text-center">
-                                <p className="text-2xl font-bold">150</p>
+                                <p className="text-2xl font-bold">{statistical.totalPatients}</p>
                                 <p className="text-sm text-gray-500">Bệnh nhân</p>
                             </div>
                             <div className="text-center">
-                                <p className="text-2xl font-bold">45</p>
+                                <p className="text-2xl font-bold">{statistical.totalBooking}</p>
+                                <p className="text-sm text-gray-500">Lượt đặt khám</p>
+                            </div>
+                            <div className="text-center">
+                                <p className="text-2xl font-bold">{feedbacks.totalFeedBacks}</p>
                                 <p className="text-sm text-gray-500">Đánh giá</p>
                             </div>
                             <div className="text-center">
-                                <p className="text-2xl font-bold">4.8</p>
+                                <p className="text-2xl font-bold">{feedbacks.averageRating}</p>
                                 <p className="text-sm text-gray-500">Điểm trung bình</p>
                             </div>
                         </div>
                     </div>
-                    <div className="bg-white shadow-md rounded-lg p-6">
-                        <h3 className="text-lg font-semibold mb-4">Đánh giá gần đây</h3>
-                        <div className="space-y-4">
-                            <div className="flex items-center">
-                                <div className="h-10 w-10 rounded-full bg-gray-300 flex items-center justify-center text-gray-600 font-semibold mr-3">
-                                    NV
-                                </div>
-                                <div>
-                                    <p className="font-semibold">Nguyễn Văn A</p>
-                                    <div className="flex items-center">
-                                        {[...Array(5)].map((_, i) => (
-                                            <Star key={i} className="h-4 w-4 text-yellow-400" fill="currentColor" />
-                                        ))}
+                    {comments?.patientId?.fullname[0] && (
+                        <div className="bg-white shadow-md rounded-lg p-6">
+                            <h3 className="text-lg font-semibold mb-4">Đánh giá gần đây</h3>
+                            <div className="space-y-4">
+                                <div className="flex items-center">
+                                    <div className="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center text-gray-500 mr-3">
+                                        {comments.patientId.fullname[0]}
+                                    </div>
+                                    <div>
+                                        <p className="font-semibold">{comments.patientId.fullname}</p>
+                                        <div className="flex items-center">
+                                            {[...Array(comments.rating)].map((_, i) => (
+                                                <Star key={i} className="h-4 w-4 text-yellow-400" fill="currentColor" />
+                                            ))}
+                                        </div>
                                     </div>
                                 </div>
+                                <p className="text-base text-gray-600">{comments.comment}</p>
                             </div>
-                            <p className="text-sm text-gray-600">
-                                "Bác sĩ rất tận tâm và chuyên nghiệp. Tôi rất hài lòng với dịch vụ."
-                            </p>
                         </div>
-                    </div>
+                    )}
                 </div>
             </main>
         </div>

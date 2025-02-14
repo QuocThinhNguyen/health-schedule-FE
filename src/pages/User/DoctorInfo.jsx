@@ -24,7 +24,7 @@ function DoctorInfo() {
     const navigate = useNavigate();
     const [activeTab, setActiveTab] = useState('info');
     const [doctors, setDoctors] = useState([]);
-    const [pagination, setPagination] = useState({ page: 1, limit: 5, totalPages: 1 });
+    const [pagination, setPagination] = useState({ page: 1, limit: 20, totalPages: 1 });
 
     const keyPoints = [
         'Chuyên môn cao, tận tâm với bệnh nhân',
@@ -283,7 +283,7 @@ function DoctorInfo() {
                             <svg className="w-5 h-5 text-yellow-400 fill-current" viewBox="0 0 24 24">
                                 <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
                             </svg>
-                            <span className="font-semibold">5.0/5</span>
+                            <span className="font-semibold">{feedbacks.averageRating}/5</span>
                             <a className="text-gray-700 ml-1 underline">{feedbacks.totalFeedBacks} đánh giá</a>
                         </div>
                     </div>
@@ -388,7 +388,7 @@ function DoctorInfo() {
 
                                 {/* Reviews List */}
                                 <div className="space-y-6 mt-10">
-                                    {feedbacks.data.length > 0 ? (
+                                    {feedbacks?.data.length > 0 ? (
                                         feedbacks.data.map((feedback) => (
                                             <div key={feedback.id} className="border-b pb-4">
                                                 <div className="flex items-start justify-between mb-2">

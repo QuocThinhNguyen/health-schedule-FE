@@ -73,6 +73,39 @@ function Overview() {
             avatar: '/placeholder.svg?height=32&width=32',
         },
     ];
+    const { user } = useContext(UserContext);
+    const [appointments, setAppointments] = useState([]);
+    const [selectedDate, setSelectedDate] = useState('');
+    console.log('CHECK', `/booking/doctor/${user.userId}?date=${selectedDate}`);
+    console.log('Appointments:', appointments);
+    useEffect(() => {
+        // Đặt ngày mặc định là ngày hiện tại khi component được tải
+        const today = new Date().toISOString().split('T')[0];
+        setSelectedDate(today);
+    }, []);
+
+    useEffect(() => {
+        // Hàm gọi API để lấy dữ liệu lịch hẹn
+        const fetchAppointments = async () => {
+            try {
+                const response = await axiosInstance.get(`/booking/doctor/${user.userId}?date=${selectedDate}`);
+                console.log('ResponseBooking:', response);
+
+                if (response.status === 200) {
+                    setAppointments(response.data);
+                } else {
+                    console.error('Failed to fetch data:', response.message);
+                    setAppointments([]);
+                }
+            } catch (error) {
+                console.error('Error fetching appointments:', error);
+                setAppointments([]);
+            }
+        };
+        if (selectedDate !== '') {
+            fetchAppointments();
+        }
+    }, [selectedDate]);
 
     return (
         <main className="flex-1">
@@ -105,49 +138,63 @@ function Overview() {
                     </div>
 
                     <div className="space-y-4">
-                        {upcomingAppointments.map((appointment, index) => (
-                            <div key={index} className="flex items-center justify-between p-4 border rounded-lg">
-                                <div className="flex items-center gap-2">
-                                    <div className="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center text-gray-500">
-                                        {appointment.patientName[0]}
-                                    </div>
-                                    <div>
-                                        <h3 className="font-medium">{appointment.patientName}</h3>
-                                        {/* <p className="text-sm text-gray-500">{appointment.type}</p> */}
-                                    </div>
-                                </div>
-
-                                <div className="text-right">
-                                    <p className="font-medium">{appointment.time}</p>
-                                    <p className="text-sm text-gray-500">{appointment.date}</p>
-                                </div>
-
-                                <div className="flex items-center gap-2">
-                                    {appointment.status === 'confirmed' ? (
-                                        <CheckCircle className="w-5 h-5 text-green-500" />
-                                    ) : appointment.status === 'pending' ? (
-                                        <AlertCircle className="w-5 h-5 text-yellow-500" />
-                                    ) : (
-                                        <XCircle className="w-5 h-5 text-red-500" />
-                                    )}
-                                    <span
-                                        className={`text-sm ${
-                                            appointment.status === 'confirmed'
-                                                ? 'text-green-500'
-                                                : appointment.status === 'pending'
-                                                ? 'text-yellow-500'
-                                                : 'text-red-500'
-                                        }`}
+                        {selectedDate !== 0 && appointments.length !== 0 ? (
+                            appointments
+                                .filter(
+                                    (appointment) =>
+                                        appointment.status.valueEn === 'Confirmed' ||
+                                        appointment.status.valueEn === 'New' ||
+                                        appointment.status.valueEn === 'Cancel',
+                                )
+                                .map((appointment, index) => (
+                                    <div
+                                        key={index}
+                                        className="flex items-center justify-between p-4 border rounded-lg"
                                     >
-                                        {appointment.status === 'confirmed'
-                                            ? 'Đã xác nhận'
-                                            : appointment.status === 'pending'
-                                            ? 'Chờ xác nhận'
-                                            : 'Đã hủy'}
-                                    </span>
-                                </div>
-                            </div>
-                        ))}
+                                        <div className="flex items-center gap-2">
+                                            <div className="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center text-gray-500">
+                                                {appointment.patientRecordId.fullname[0]}
+                                            </div>
+                                            <div>
+                                                <h3 className="font-medium">{appointment.patientRecordId.fullname}</h3>
+                                                {/* <p className="text-sm text-gray-500">{appointment.type}</p> */}
+                                            </div>
+                                        </div>
+
+                                        <div className="text-right">
+                                            <p className="font-medium">{appointment.timeType.valueVi}</p>
+                                            <p className="text-sm text-gray-500">Hôm nay</p>
+                                        </div>
+
+                                        <div className="flex items-center gap-2">
+                                            {appointment.status.valueEn === 'Confirmed' ? (
+                                                <CheckCircle className="w-5 h-5 text-green-500" />
+                                            ) : appointment.status.valueEn === 'New' ? (
+                                                <AlertCircle className="w-5 h-5 text-yellow-500" />
+                                            ) : (
+                                                <XCircle className="w-5 h-5 text-red-500" />
+                                            )}
+                                            <span
+                                                className={`text-sm ${
+                                                    appointment.status.valueEn === 'Confirmed'
+                                                        ? 'text-green-500'
+                                                        : appointment.status.valueEn === 'New'
+                                                        ? 'text-yellow-500'
+                                                        : 'text-red-500'
+                                                }`}
+                                            >
+                                                {appointment.status.valueEn === 'Confirmed'
+                                                    ? 'Đã xác nhận'
+                                                    : appointment.status.valueEn === 'New'
+                                                    ? 'Chờ xác nhận'
+                                                    : 'Đã hủy'}
+                                            </span>
+                                        </div>
+                                    </div>
+                                ))
+                        ) : (
+                            <p className="text-center text-gray-500">Bạn không có lịch hẹn nào ngày hôm nay</p>
+                        )}
                     </div>
                 </div>
             </div>
