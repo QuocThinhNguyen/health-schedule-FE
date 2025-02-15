@@ -180,7 +180,7 @@ function DoctorProfile() {
         <div className="max-w-7xl flex">
             {/* Sidebar */}
             <aside
-                className={`w-72 bg-white shadow-md rounded-lg p-6 mr-8 transition-all duration-300 ease-in-out ${
+                className={`w-72 bg-white shadow-md rounded-lg p-6 mr-8 transition-all duration-300 ease-in-out  ${
                     isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
                 } lg:translate-x-0 fixed lg:static top-0 left-0 h-full z-40 lg:h-auto overflow-y-auto`}
             >

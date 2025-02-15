@@ -181,7 +181,7 @@ const DoctorDashboard = () => {
                 </div>
             </div>
             {isLogout && (
-                <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 bg-opacity-50 z-10">
+                <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 bg-opacity-50 z-50">
                     <div className="bg-white rounded-lg w-full max-w-xs">
                         {/* Close button */}
                         <div className="flex justify-end p-2">

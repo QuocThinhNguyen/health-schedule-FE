@@ -20,33 +20,6 @@ import {
     AlertCircle,
 } from 'lucide-react';
 function Overview() {
-    const stats = [
-        {
-            title: 'Cuộc hẹn hôm nay',
-            value: '8',
-            change: '+2 so với hôm qua',
-            status: 'increase',
-        },
-        {
-            title: 'Bệnh nhân tuần này',
-            value: '32',
-            change: '+5 so với tuần trước',
-            status: 'increase',
-        },
-        {
-            title: 'Tổng bệnh nhân',
-            value: '891',
-            change: '+12% tháng này',
-            status: 'increase',
-        },
-        {
-            title: 'Đánh giá trung bình',
-            value: '4.8',
-            change: '142 đánh giá',
-            status: 'neutral',
-        },
-    ];
-
     const upcomingAppointments = [
         {
             patientName: 'Nguyễn Văn A',
@@ -75,24 +48,56 @@ function Overview() {
     ];
     const { user } = useContext(UserContext);
     const [appointments, setAppointments] = useState([]);
+    const [appointmentsYesterday, setAppointmentsYesterday] = useState([]);
     const [selectedDate, setSelectedDate] = useState('');
-    console.log('CHECK', `/booking/doctor/${user.userId}?date=${selectedDate}`);
+    console.log('Lengh', appointments.length);
+    // console.log('CHECK', `/booking/doctor/${user.userId}?date=${selectedDate}`);
     console.log('Appointments:', appointments);
+    const [yesterdayDate, setYesterdayDate] = useState('');
+    const [feedbacks, setFeedbacks] = useState([]);
+    const [statistical, setStatistical] = useState([]);
+    const [bookings, setBookings] = useState([]);
+
+    // useEffect(() => {
+    //     // Đặt ngày mặc định là ngày hiện tại khi component được tải
+    //     const today = new Date().toISOString().split('T')[0];
+    //     setSelectedDate(today);
+
+    //     const yesterday = new Date();
+    //     yesterday.setDate(today.getDate() - 1);
+    //     setYesterdayDate(yesterday.toISOString().split('T')[0]);
+    // }, []);
+
     useEffect(() => {
-        // Đặt ngày mặc định là ngày hiện tại khi component được tải
-        const today = new Date().toISOString().split('T')[0];
-        setSelectedDate(today);
+        // Đặt ngày mặc định là ngày hiện tại và ngày hôm qua khi component được tải
+        const today = new Date();
+        const yesterday = new Date();
+        yesterday.setDate(today.getDate() - 1);
+
+        const formattedToday = today.toISOString().split('T')[0];
+        const formattedYesterday = yesterday.toISOString().split('T')[0];
+
+        setSelectedDate(formattedToday);
+        setYesterdayDate(formattedYesterday);
     }, []);
 
+    console.log('SelectedDate:', selectedDate);
+    console.log('YesterdayDate:', yesterdayDate);
     useEffect(() => {
         // Hàm gọi API để lấy dữ liệu lịch hẹn
         const fetchAppointments = async () => {
             try {
                 const response = await axiosInstance.get(`/booking/doctor/${user.userId}?date=${selectedDate}`);
                 console.log('ResponseBooking:', response);
+                const responseYesterday = await axiosInstance.get(
+                    `/booking/doctor/${user.userId}?date=${yesterdayDate}`,
+                );
+                console.log('ResponseBookingYesterday:', responseYesterday);
 
                 if (response.status === 200) {
                     setAppointments(response.data);
+                    setStatistical(response);
+                    setAppointmentsYesterday(responseYesterday.data);
                 } else {
                     console.error('Failed to fetch data:', response.message);
                     setAppointments([]);
@@ -102,10 +107,68 @@ function Overview() {
                 setAppointments([]);
             }
         };
-        if (selectedDate !== '') {
+        if (selectedDate !== '' && yesterdayDate !== '') {
             fetchAppointments();
         }
-    }, [selectedDate]);
+    }, [selectedDate, yesterdayDate]);
+
+    useEffect(() => {
+        const fetchFeedbacks = async () => {
+            try {
+                const response = await axiosInstance.get(`/feedback/${user.userId}`);
+                if (response.status === 200) {
+                    setFeedbacks(response);
+                }
+            } catch (error) {
+                console.error('Failed to fetch feedbacks: ', error.message);
+            }
+        };
+        fetchFeedbacks();
+    }, []);
+
+    const calculateBookingChange = () => {
+        if (statistical.totalBookingLastMonth === 0) return 'N/A';
+        const change =
+            ((statistical.totalBookingThisMonth - statistical.totalBookingLastMonth) /
+                statistical.totalBookingLastMonth) *
+            100;
+        return `${change > 0 ? '+' : ''}${change.toFixed(1)}% so với tháng trước`;
+    };
+
+    const stats = [
+        {
+            title: 'Cuộc hẹn hôm nay',
+            value: appointments.length,
+            change: `${appointments.length >= appointmentsYesterday.length ? '+' : '-'}${
+                appointments.length >= appointmentsYesterday.length
+                    ? appointments.length - appointmentsYesterday.length
+                    : appointmentsYesterday.length - appointments.length
+            } so với hôm qua`,
+            status: appointments.length >= appointmentsYesterday.length ? 'increase' : 'decrease',
+        },
+        {
+            title: 'Bệnh nhân tuần này',
+            value: statistical.totalPatientsInWeek,
+            change: `${statistical.totalPatientsInWeek >= statistical.totalPatientsLastWeek ? '+' : '-'}${
+                statistical.totalPatientsInWeek >= statistical.totalPatientsLastWeek
+                    ? statistical.totalPatientsInWeek - statistical.totalPatientsLastWeek
+                    : statistical.totalPatientsLastWeek - statistical.totalPatientsInWeek
+            } so với tuần trước`,
+            status: 'increase',
+        },
+        {
+            title: 'Lượt đặt khám',
+            value: statistical.totalBookingThisMonth,
+            change: calculateBookingChange(),
+            status: 'increase',
+        },
+        {
+            title: 'Đánh giá trung bình',
+            value: feedbacks.averageRating,
+            change: `${feedbacks.totalFeedBacks} đánh giá`,
+            status: 'neutral',
+        },
+    ];
 
     return (
         <main className="flex-1">
