@@ -3,22 +3,7 @@ import { FaCamera } from 'react-icons/fa';
 import { axiosClient, axiosInstance } from '~/api/apiRequest';
 import { UserContext } from '~/context/UserContext';
 import { toast } from 'react-toastify';
-import {
-    BarChart3,
-    Calendar,
-    Users,
-    FileText,
-    Star,
-    UserCircle,
-    CreditCard,
-    Settings,
-    Bell,
-    ChevronDown,
-    Clock,
-    CheckCircle,
-    XCircle,
-    AlertCircle,
-} from 'lucide-react';
+import { DollarSign, CheckCircle, XCircle, AlertCircle } from 'lucide-react';
 function Overview() {
     const upcomingAppointments = [
         {
@@ -139,6 +124,7 @@ function Overview() {
         {
             title: 'Cuộc hẹn hôm nay',
             value: appointments.length,
+            icon: 'meeting.png',
             change: `${appointments.length >= appointmentsYesterday.length ? '+' : '-'}${
                 appointments.length >= appointmentsYesterday.length
                     ? appointments.length - appointmentsYesterday.length
@@ -149,6 +135,7 @@ function Overview() {
         {
             title: 'Bệnh nhân tuần này',
             value: statistical.totalPatientsInWeek,
+            icon: 'advice.png',
             change: `${statistical.totalPatientsInWeek >= statistical.totalPatientsLastWeek ? '+' : '-'}${
                 statistical.totalPatientsInWeek >= statistical.totalPatientsLastWeek
                     ? statistical.totalPatientsInWeek - statistical.totalPatientsLastWeek
@@ -159,12 +146,14 @@ function Overview() {
         {
             title: 'Lượt đặt khám',
             value: statistical.totalBookingThisMonth,
+            icon: 'booking.png',
             change: calculateBookingChange(),
             status: 'increase',
         },
         {
             title: 'Đánh giá trung bình',
             value: feedbacks.averageRating,
+            icon: 'star.png',
             change: `${feedbacks.totalFeedBacks} đánh giá`,
             status: 'neutral',
         },
@@ -178,7 +167,11 @@ function Overview() {
                 <div className="grid grid-cols-4 gap-6 mb-8">
                     {stats.map((stat, index) => (
                         <div key={index} className="bg-white p-6 rounded-xl shadow-sm">
-                            <p className="text-sm text-gray-600 mb-2">{stat.title}</p>
+                            <div className="flex items-center justify-between">
+                                <p className="text-sm text-gray-600">{stat.title}</p>
+                                <img src={`/${stat.icon}`} alt={stat.title} className="h-6 w-6" />
+                            </div>
+
                             <div className="flex items-center justify-between">
                                 <p className="text-2xl font-bold">{stat.value}</p>
                                 <span
@@ -207,7 +200,9 @@ function Overview() {
                                     (appointment) =>
                                         appointment.status.valueEn === 'Confirmed' ||
                                         appointment.status.valueEn === 'New' ||
-                                        appointment.status.valueEn === 'Cancel',
+                                        appointment.status.valueEn === 'Cancel' ||
+                                        appointment.status.valueEn === 'Paid' ||
+                                        appointment.status.valueEn === 'Done',
                                 )
                                 .map((appointment, index) => (
                                     <div
@@ -234,6 +229,10 @@ function Overview() {
                                                 <CheckCircle className="w-5 h-5 text-green-500" />
                                             ) : appointment.status.valueEn === 'New' ? (
                                                 <AlertCircle className="w-5 h-5 text-yellow-500" />
+                                            ) : appointment.status.valueEn === 'Paid' ? (
+                                                <DollarSign className="w-5 h-5 text-blue-500" />
+                                            ) : appointment.status.valueEn === 'Done' ? (
+                                                <CheckCircle className="w-5 h-5 text-green-600" />
                                             ) : (
                                                 <XCircle className="w-5 h-5 text-red-500" />
                                             )}
@@ -243,6 +242,10 @@ function Overview() {
                                                         ? 'text-green-500'
                                                         : appointment.status.valueEn === 'New'
                                                         ? 'text-yellow-500'
+                                                        : appointment.status.valueEn === 'Paid'
+                                                        ? 'text-blue-500'
+                                                        : appointment.status.valueEn === 'Done'
+                                                        ? 'text-green-600'
                                                         : 'text-red-500'
                                                 }`}
                                             >
@@ -250,6 +253,10 @@ function Overview() {
                                                     ? 'Đã xác nhận'
                                                     : appointment.status.valueEn === 'New'
                                                     ? 'Chờ xác nhận'
+                                                    : appointment.status.valueEn === 'Paid'
+                                                    ? 'Đã thanh toán'
+                                                    : appointment.status.valueEn === 'Done'
+                                                    ? 'Đã khám xong'
                                                     : 'Đã hủy'}
                                             </span>
                                         </div>
