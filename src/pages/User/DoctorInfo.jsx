@@ -8,6 +8,7 @@ import { GrLocation } from 'react-icons/gr';
 import { CiHospital1 } from 'react-icons/ci';
 import { UserContext } from '~/context/UserContext';
 import Pagination from '~/components/Pagination';
+import Modal from 'react-modal';
 
 function DoctorInfo() {
     const [selectedTime, setSelectedTime] = useState('');
@@ -230,6 +231,18 @@ function DoctorInfo() {
         { stars: 1, percentage: 20 },
     ];
 
+    const [selectedMedia, setSelectedMedia] = useState(null);
+    const [isOpen, setIsOpen] = useState(false);
+
+    const openModal = (media) => {
+        setSelectedMedia(media);
+        setIsOpen(true);
+    };
+
+    const closeModal = () => {
+        setIsOpen(false);
+        setSelectedMedia(null);
+    };
     return (
         <div className="min-h-screen bg-white">
             <div className="w-full bg-blue-50">
@@ -387,7 +400,7 @@ function DoctorInfo() {
                                 </div> */}
 
                                 {/* Reviews List */}
-                                <div className="space-y-6 mt-10">
+                                <div className="space-y-6 mt-2">
                                     {feedbacks?.data.length > 0 ? (
                                         feedbacks.data.map((feedback) => (
                                             <div key={feedback.id} className="border-b pb-4">
@@ -427,6 +440,67 @@ function DoctorInfo() {
                                                     </div>
                                                 </div>
                                                 <p className="text-gray-700 text-base">{feedback.comment}</p>
+                                                <div>
+                                                    {/* Danh sách ảnh/video */}
+                                                    <div className="mt-2 flex flex-wrap gap-4">
+                                                        {feedback.mediaNames.map((mediaName, index) => (
+                                                            <div
+                                                                key={index}
+                                                                className="relative group w-16 h-16 border rounded-lg overflow-hidden cursor-pointer"
+                                                                onClick={() => openModal(mediaName)}
+                                                            >
+                                                                {mediaName.endsWith('.png') ||
+                                                                mediaName.endsWith('.jpg') ||
+                                                                mediaName.endsWith('.jpeg') ? (
+                                                                    <img
+                                                                        src={`${IMAGE_URL}${mediaName}`}
+                                                                        alt="Preview"
+                                                                        className="w-full h-full object-cover"
+                                                                    />
+                                                                ) : (
+                                                                    <video
+                                                                        src={`${IMAGE_URL}${mediaName}`}
+                                                                        className="w-full h-full object-cover"
+                                                                    />
+                                                                )}
+                                                            </div>
+                                                        ))}
+                                                    </div>
+
+                                                    {/* Modal hiển thị ảnh/video */}
+                                                    <Modal
+                                                        isOpen={isOpen}
+                                                        onRequestClose={closeModal}
+                                                        contentLabel="Media Preview"
+                                                        className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center"
+                                                        overlayClassName="fixed inset-0 bg-opacity-50 z-50"
+                                                    >
+                                                        <div className="relative max-w-2xl h-fit mt-20 p-4 bg-white rounded-lg">
+                                                            <button
+                                                                onClick={closeModal}
+                                                                className="absolute top-2 right-2 text-red-800 text-4xl font-bold"
+                                                            >
+                                                                &times;
+                                                            </button>
+                                                            {selectedMedia &&
+                                                            (selectedMedia.endsWith('.png') ||
+                                                                selectedMedia.endsWith('.jpg') ||
+                                                                selectedMedia.endsWith('.jpeg')) ? (
+                                                                <img
+                                                                    src={`${IMAGE_URL}${selectedMedia}`}
+                                                                    alt="Full View"
+                                                                    className="w-full h-auto max-h-[80vh] object-contain"
+                                                                />
+                                                            ) : (
+                                                                <video
+                                                                    src={`${IMAGE_URL}${selectedMedia}`}
+                                                                    controls
+                                                                    className="w-full max-h-[80vh] object-contain"
+                                                                />
+                                                            )}
+                                                        </div>
+                                                    </Modal>
+                                                </div>
                                             </div>
                                         ))
                                     ) : (
@@ -518,12 +592,12 @@ function DoctorInfo() {
                                 {/* Nút đặt lịch */}
                                 <button
                                     className={`w-full py-2 rounded-lg  ${
-                                        schedule.length > 0
+                                        schedule.length > 0 && selectedTime
                                             ? 'bg-blue-500 text-white hover:bg-blue-600 cursor-pointer'
                                             : 'bg-blue-500 text-white opacity-65'
                                     }`}
                                     onClick={() => handleTimeSlotClick(selectedTime)}
-                                    disabled={schedule.length <= 0}
+                                    disabled={schedule.length <= 0 || !selectedTime}
                                 >
                                     TIẾP TỤC ĐẶT LỊCH
                                 </button>
