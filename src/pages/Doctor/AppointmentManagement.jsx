@@ -70,7 +70,7 @@ function PatientManagement() {
             // console.log('ResponseImage:', response);
 
             if (response.status === 200) {
-                const images = response.data.map((item) => item.imageName);
+                const images = response.data.map((item) => item.name);
                 if (images.length === 0) {
                     // toast.info('Không có ảnh đính kèm.');
                     // return;
@@ -161,11 +161,11 @@ function PatientManagement() {
             // console.log('ResponseImage:', response);
 
             if (response1.status === 200) {
-                const images = response1.data.map((item) => item.imageName);
-                if (images.length === 0) {
-                    toast.info('Không có ảnh đính kèm.');
-                    return;
-                }
+                const images = response1.data.map((item) => item.name);
+                // if (images.length === 0) {
+                //     toast.info('Không có ảnh đính kèm.');
+                //     return;
+                // }
                 setSelectedImages(images); // Lưu danh sách ảnh từ API
             } else {
                 toast.error('Không thể tải ảnh.');
@@ -434,12 +434,19 @@ function PatientManagement() {
                         <div className="flex flex-wrap gap-4 mt-2 overflow-auto h-full">
                             {selectedImages.map((image, index) => (
                                 <div key={index} className="relative group w-20 h-20 border rounded-lg overflow-hidden">
-                                    {/* Hiển thị ảnh */}
-                                    <img
-                                        src={`${IMAGE_URL}${image}`}
-                                        alt={`Ảnh ${index + 1}`}
-                                        className="w-full h-full object-cover"
-                                    />
+                                    {image.endsWith('.png') || image.endsWith('.jpg') || image.endsWith('.jpeg') ? (
+                                        <img
+                                            src={`${IMAGE_URL}${image}`}
+                                            alt={`Ảnh ${index + 1}`}
+                                            className="w-full h-full object-cover"
+                                        />
+                                    ) : (
+                                        <video
+                                            src={`${IMAGE_URL}${image}`}
+                                            className="w-full h-full object-cover"
+                                            controls
+                                        />
+                                    )}
 
                                     {/* Eye Icon (Zoom) */}
                                     <div

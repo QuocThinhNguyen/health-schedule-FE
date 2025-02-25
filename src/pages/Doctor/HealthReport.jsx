@@ -107,7 +107,7 @@ function HealthReport() {
             // console.log('ResponseImage:', response);
 
             if (response1.status === 200) {
-                const images = response1.data.map((item) => item.imageName);
+                const images = response1.data.map((item) => item.name);
                 if (images.length === 0) {
                     // toast.info('Không có ảnh đính kèm.');
                     // return;

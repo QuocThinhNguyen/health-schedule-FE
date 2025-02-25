@@ -629,13 +629,13 @@ function MakeAnAppointment() {
 
                                         <span className="text-base text-gray-500"> hoặc kéo thả vào đây</span>
                                     </div>
-                                    <p className="text-base text-gray-400 mt-1">.PNG, .JPG tối đa 15MB</p>
+                                    <p className="text-base text-gray-400 mt-1"> tối đa 30MB</p>
                                 </div>
                                 <input
                                     id="file-upload"
                                     type="file"
                                     multiple
-                                    accept=".png,.jpg,.jpeg"
+                                    accept=".png,.jpg,.jpeg,video/*"
                                     className="hidden"
                                     onChange={handleFileChange}
                                 />
@@ -647,12 +647,19 @@ function MakeAnAppointment() {
                                         key={index}
                                         className="relative group w-24 h-24 border rounded-lg overflow-hidden"
                                     >
-                                        {/* Image */}
-                                        <img
-                                            src={URL.createObjectURL(file)}
-                                            alt="Preview"
-                                            className="w-full h-full object-cover"
-                                        />
+                                        {file.type.startsWith('image/') ? (
+                                            <img
+                                                src={URL.createObjectURL(file)}
+                                                alt="Preview"
+                                                className="w-full h-full object-cover"
+                                            />
+                                        ) : (
+                                            <video
+                                                src={URL.createObjectURL(file)}
+                                                className="w-full h-full object-cover"
+                                                controls
+                                            />
+                                        )}
 
                                         {/* Eye Icon (Zoom) */}
                                         <div
