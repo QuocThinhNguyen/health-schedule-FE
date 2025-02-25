@@ -1,21 +1,5 @@
 import React, { useState, useEffect, useRef, useContext } from 'react';
-import {
-    MapPin,
-    Clock,
-    ChevronRight,
-    Mail,
-    Info,
-    Phone,
-    Search,
-    X,
-    Star,
-    DollarSign,
-    Calendar,
-    ChevronLeft,
-    CreditCard,
-    Banknote,
-    Smartphone,
-} from 'lucide-react';
+import { MapPin, Clock, ChevronRight, Mail, Info, Phone, Search, X, Star, Banknote, Smartphone } from 'lucide-react';
 import { FaMoneyBillWave } from 'react-icons/fa';
 import { axiosInstance, axiosClient } from '~/api/apiRequest';
 import { NavLink, useNavigate, useLocation } from 'react-router-dom';
@@ -26,6 +10,7 @@ import { set, formatDistanceToNow, parseISO } from 'date-fns';
 import { Input } from 'postcss';
 import Pagination from '~/components/Pagination';
 import { UserContext } from '~/context/UserContext';
+import Modal from 'react-modal';
 
 function ClinicInfo() {
     const [clinicData, setClinicData] = useState([]); // Trạng thái lưu dữ liệu từ API
@@ -48,6 +33,8 @@ function ClinicInfo() {
     const [schedule, setSchedule] = useState([]);
     const { user } = useContext(UserContext);
     const [pagination_1, setPagination_1] = useState({ page: 1, limit: 5, totalPages: 1 });
+    const IMAGE_URL = `http://localhost:${import.meta.env.VITE_BE_PORT}/uploads/`;
+
     console.log('STATE', state);
     console.log('clinicData:', clinicData);
     console.log('CHECK', academicRanksAndDegreess);
@@ -426,6 +413,19 @@ function ClinicInfo() {
         };
         fetchFeedbacks();
     }, [doctorId, pagination_1.page]);
+
+    const [selectedMedia, setSelectedMedia] = useState(null);
+    const [isOpen, setIsOpen] = useState(false);
+
+    const openModal = (media) => {
+        setSelectedMedia(media);
+        setIsOpen(true);
+    };
+
+    const closeModal = () => {
+        setIsOpen(false);
+        setSelectedMedia(null);
+    };
 
     return (
         <div className="min-h-screen bg-white">
@@ -856,6 +856,67 @@ function ClinicInfo() {
                                                         </p> */}
                                                     </div>
                                                     <div className="mt-1">{review.comment}</div>
+                                                    <div>
+                                                        {/* Danh sách ảnh/video */}
+                                                        <div className="mt-2 flex flex-wrap gap-4">
+                                                            {review.mediaNames.map((mediaName, index) => (
+                                                                <div
+                                                                    key={index}
+                                                                    className="relative group w-16 h-16 border rounded-lg overflow-hidden cursor-pointer"
+                                                                    onClick={() => openModal(mediaName)}
+                                                                >
+                                                                    {mediaName.endsWith('.png') ||
+                                                                    mediaName.endsWith('.jpg') ||
+                                                                    mediaName.endsWith('.jpeg') ? (
+                                                                        <img
+                                                                            src={`${IMAGE_URL}${mediaName}`}
+                                                                            alt="Preview"
+                                                                            className="w-full h-full object-cover"
+                                                                        />
+                                                                    ) : (
+                                                                        <video
+                                                                            src={`${IMAGE_URL}${mediaName}`}
+                                                                            className="w-full h-full object-cover"
+                                                                        />
+                                                                    )}
+                                                                </div>
+                                                            ))}
+                                                        </div>
+
+                                                        {/* Modal hiển thị ảnh/video */}
+                                                        <Modal
+                                                            isOpen={isOpen}
+                                                            onRequestClose={closeModal}
+                                                            contentLabel="Media Preview"
+                                                            className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center"
+                                                            overlayClassName="fixed inset-0 bg-opacity-50 z-50"
+                                                        >
+                                                            <div className="relative max-w-2xl h-fit mt-20 p-4 bg-white rounded-lg">
+                                                                <button
+                                                                    onClick={closeModal}
+                                                                    className="absolute top-2 right-2 text-red-800 text-4xl font-bold"
+                                                                >
+                                                                    &times;
+                                                                </button>
+                                                                {selectedMedia &&
+                                                                (selectedMedia.endsWith('.png') ||
+                                                                    selectedMedia.endsWith('.jpg') ||
+                                                                    selectedMedia.endsWith('.jpeg')) ? (
+                                                                    <img
+                                                                        src={`${IMAGE_URL}${selectedMedia}`}
+                                                                        alt="Full View"
+                                                                        className="w-full h-auto max-h-[80vh] object-contain"
+                                                                    />
+                                                                ) : (
+                                                                    <video
+                                                                        src={`${IMAGE_URL}${selectedMedia}`}
+                                                                        controls
+                                                                        className="w-full max-h-[80vh] object-contain"
+                                                                    />
+                                                                )}
+                                                            </div>
+                                                        </Modal>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -1132,12 +1193,12 @@ function ClinicInfo() {
                                             {/* Nút đặt lịch */}
                                             <button
                                                 className={`w-full py-2 rounded-lg  ${
-                                                    schedule.length > 0
+                                                    schedule.length > 0 && selectedTime
                                                         ? 'bg-blue-500 text-white hover:bg-blue-600 cursor-pointer'
                                                         : 'bg-blue-500 text-white opacity-65'
                                                 }`}
                                                 onClick={() => handleTimeSlotClick(selectedTime)}
-                                                disabled={schedule.length <= 0}
+                                                disabled={schedule.length <= 0 || !selectedTime}
                                             >
                                                 Đặt lịch hẹn
                                             </button>

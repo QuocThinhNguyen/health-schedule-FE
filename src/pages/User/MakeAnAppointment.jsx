@@ -65,6 +65,37 @@ function MakeAnAppointment() {
         address: '',
     });
 
+    const [selectedReasons, setSelectedReasons] = useState([]);
+    const reasons = [
+        'Khám tổng quát',
+        'Ho, sốt',
+        'Đau bụng',
+        'Đau đầu, chóng mặt',
+        'Khó thở',
+        'Đau nhức xương khớp',
+        'Rối loạn tiêu hóa',
+        'Bệnh da liễu',
+        'Tư vấn sức khỏe',
+    ];
+    const handleReasonClick = (reason) => {
+        setSelectedReasons((prev) => {
+            if (prev.includes(reason)) {
+                // Remove reason if already selected
+                const newReasons = prev.filter((r) => r !== reason);
+                setReason(newReasons.join(', '));
+                return newReasons;
+            } else {
+                // Add new reason
+                const newReasons = [...prev, reason];
+                setReason(newReasons.join(', '));
+                return newReasons;
+            }
+        });
+    };
+
+    const handleTextChange = (e) => {
+        setValue(e.target.value);
+    };
     console.log('FORM DATA', formData);
     // const [loading, setLoading] = useState(true);
     // if (loading) return <div>Loading...</div>;
@@ -240,6 +271,8 @@ function MakeAnAppointment() {
             files.forEach((file, index) => {
                 formData.append('images', file);
             });
+
+            console.log('Form data:', formData);
             const response = await axiosInstance.post('/booking/book-appointment-direct', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
@@ -470,14 +503,14 @@ function MakeAnAppointment() {
                                 <div className="w-1 h-6 bg-blue-600"></div>
                                 Người sử dụng dịch vụ
                             </div>
-                            <div className="mt-4 space-y-4">
+                            <div className="mt-2 space-y-4">
                                 <div>
-                                    <div className="text-lg">Bạn đang đặt lịch hẹn cho</div>
+                                    <div className="text-base">Bạn đang đặt lịch hẹn cho</div>
                                     <div className="space-y-2 mt-2">
                                         {patientData.map((patient) => (
                                             <div
                                                 key={patient.patientRecordId}
-                                                className={`cursor-pointer flex items-center gap-4 p-4 bg-white border rounded-lg ${
+                                                className={`cursor-pointer flex items-center gap-4 py-2 px-4 bg-white border rounded-lg ${
                                                     selectedPatientId === patient.patientRecordId
                                                         ? 'border-blue-600'
                                                         : 'border-gray-200'
@@ -537,10 +570,8 @@ function MakeAnAppointment() {
                                     </div>
                                     <p className="text-sm text-slate-500">
                                         Cập nhật thông tin cá nhân trong{' '}
-                                        <a href="#" className="text-blue-600 no-underline hover:underline">
-                                            Hồ sơ người dùng
-                                        </a>{' '}
-                                        hoặc đăng ký tài khoản mới để đặt chỗ.
+                                        <a className="text-blue-600 no-underline">Hồ sơ người dùng</a> hoặc đăng ký tài
+                                        khoản mới để đặt chỗ.
                                     </p>
                                 </div>
                             </div>
@@ -552,10 +583,25 @@ function MakeAnAppointment() {
                                 <div className="w-1 h-6 bg-blue-600"></div>
                                 Lý do khám bệnh
                             </div>
-                            <div className="mt-4">
+                            <div className="flex flex-wrap gap-2 mb-2 mt-2">
+                                {reasons.map((reason) => (
+                                    <button
+                                        key={reason}
+                                        onClick={() => handleReasonClick(reason)}
+                                        className={`px-4 py-2 rounded-full text-sm transition-colors ${
+                                            selectedReasons.includes(reason)
+                                                ? 'bg-blue-100 text-blue-700 border-2 border-blue-200'
+                                                : 'bg-gray-50 hover:bg-gray-100 border border-gray-200'
+                                        }`}
+                                    >
+                                        {reason}
+                                    </button>
+                                ))}
+                            </div>
+                            <div className="mt-2 ">
                                 <textarea
                                     placeholder="Vui lòng mô tả chi tiết triệu chứng của bạn..."
-                                    className="w-full min-h-20 p-2 border rounded-md  focus:border-blue-600 focus:outline-none hover:border-blue-600"
+                                    className="w-full min-h-10 p-2 border rounded-md  focus:border-blue-600 focus:outline-none hover:border-blue-600 text-base"
                                     value={reason}
                                     onChange={(e) => setReason(e.target.value)}
                                 />
@@ -567,7 +613,7 @@ function MakeAnAppointment() {
                                 Tệp đính kèm ({files.length}/5)
                             </div>
                             <div
-                                className={`border-2 rounded-lg p-4 cursor-pointer mt-4 hover:border-blue-300 ${
+                                className={`border-2 rounded-lg py-2 px-4 cursor-pointer mt-4 hover:border-blue-300 ${
                                     isDragging ? 'border-blue-500 bg-blue-100' : 'border-dashed'
                                 }`}
                                 onClick={() => document.getElementById('file-upload').click()}
