@@ -5,6 +5,7 @@ import { UserContext } from '~/context/UserContext';
 import { toast } from 'react-toastify';
 import { Star } from 'lucide-react';
 import Pagination from '~/components/Pagination';
+import Modal from 'react-modal';
 
 function Review() {
     const [selectedReview, setSelectedReview] = useState(null);
@@ -12,6 +13,19 @@ function Review() {
     const [feedbacks, setFeedbacks] = useState([]);
     console.log('Feedbacks:', feedbacks);
     const { user } = useContext(UserContext);
+    const IMAGE_URL = `http://localhost:${import.meta.env.VITE_BE_PORT}/uploads/`;
+    const [isOpen, setIsOpen] = useState(false);
+    const [selectedMedia, setSelectedMedia] = useState(null);
+
+    const openModal = (media) => {
+        setSelectedMedia(media);
+        setIsOpen(true);
+    };
+
+    const closeModal = () => {
+        setIsOpen(false);
+        setSelectedMedia(null);
+    };
 
     const handlePageChange = (page) => {
         setPagination((prev) => ({
@@ -63,10 +77,10 @@ function Review() {
                                                 {feedback.patientId.fullname[0]}
                                             </div>
                                             <div className="flex flex-col">
-                                                <strong className="font-bold text-lg">
+                                                <strong className="font-bold text-base">
                                                     {feedback.patientId.fullname}
                                                 </strong>
-                                                <span className="text-gray-400 text-base">
+                                                <span className="text-gray-400 text-sm">
                                                     {new Date(feedback.date).toLocaleDateString('vi-VN')}
                                                 </span>
                                             </div>
@@ -93,6 +107,67 @@ function Review() {
                                         </div>
                                     </div>
                                     <p className="text-gray-700 text-base">{feedback.comment}</p>
+                                    <div>
+                                        {/* Danh sách ảnh/video */}
+                                        <div className="mt-2 flex flex-wrap gap-4">
+                                            {feedback.mediaNames.map((mediaName, index) => (
+                                                <div
+                                                    key={index}
+                                                    className="relative group w-16 h-16 border rounded-lg overflow-hidden cursor-pointer"
+                                                    onClick={() => openModal(mediaName)}
+                                                >
+                                                    {mediaName.endsWith('.png') ||
+                                                    mediaName.endsWith('.jpg') ||
+                                                    mediaName.endsWith('.jpeg') ? (
+                                                        <img
+                                                            src={`${IMAGE_URL}${mediaName}`}
+                                                            alt="Preview"
+                                                            className="w-full h-full object-cover"
+                                                        />
+                                                    ) : (
+                                                        <video
+                                                            src={`${IMAGE_URL}${mediaName}`}
+                                                            className="w-full h-full object-cover"
+                                                        />
+                                                    )}
+                                                </div>
+                                            ))}
+                                        </div>
+
+                                        {/* Modal hiển thị ảnh/video */}
+                                        <Modal
+                                            isOpen={isOpen}
+                                            onRequestClose={closeModal}
+                                            contentLabel="Media Preview"
+                                            className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center"
+                                            overlayClassName="fixed inset-0 bg-opacity-50 z-50"
+                                        >
+                                            <div className="relative max-w-2xl h-fit mt-20 p-4 bg-white rounded-lg">
+                                                <button
+                                                    onClick={closeModal}
+                                                    className="absolute top-2 right-2 text-red-800 text-4xl font-bold"
+                                                >
+                                                    &times;
+                                                </button>
+                                                {selectedMedia &&
+                                                (selectedMedia.endsWith('.png') ||
+                                                    selectedMedia.endsWith('.jpg') ||
+                                                    selectedMedia.endsWith('.jpeg')) ? (
+                                                    <img
+                                                        src={`${IMAGE_URL}${selectedMedia}`}
+                                                        alt="Full View"
+                                                        className="w-full h-auto max-h-[80vh] object-contain"
+                                                    />
+                                                ) : (
+                                                    <video
+                                                        src={`${IMAGE_URL}${selectedMedia}`}
+                                                        controls
+                                                        className="w-full max-h-[80vh] object-contain"
+                                                    />
+                                                )}
+                                            </div>
+                                        </Modal>
+                                    </div>
                                 </div>
                             ))}
                     </div>

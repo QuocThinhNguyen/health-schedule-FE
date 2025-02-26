@@ -3,38 +3,18 @@ import { FaCamera } from 'react-icons/fa';
 import { axiosClient, axiosInstance } from '~/api/apiRequest';
 import { UserContext } from '~/context/UserContext';
 import { toast } from 'react-toastify';
-import { DollarSign, CheckCircle, XCircle, AlertCircle } from 'lucide-react';
+import { Eye, Phone, Mail, MapPin } from 'lucide-react';
+import ConfirmationModal from '~/components/Confirm/ConfirmationModal';
+import Pagination from '~/components/Pagination';
+
 function Overview() {
-    const upcomingAppointments = [
-        {
-            patientName: 'Nguyễn Văn A',
-            time: '09:00 - 09:30',
-            date: 'Hôm nay',
-            status: 'confirmed',
-            type: 'Khám định kỳ',
-            avatar: '/placeholder.svg?height=32&width=32',
-        },
-        {
-            patientName: 'Trần Thị B',
-            time: '10:00 - 10:30',
-            date: 'Hôm nay',
-            status: 'pending',
-            type: 'Khám lần đầu',
-            avatar: '/placeholder.svg?height=32&width=32',
-        },
-        {
-            patientName: 'Lê Văn C',
-            time: '11:00 - 11:30',
-            date: 'Hôm nay',
-            status: 'confirmed',
-            type: 'Tái khám',
-            avatar: '/placeholder.svg?height=32&width=32',
-        },
-    ];
     const { user } = useContext(UserContext);
     const [appointments, setAppointments] = useState([]);
     const [appointmentsYesterday, setAppointmentsYesterday] = useState([]);
     const [selectedDate, setSelectedDate] = useState('');
+    // lấy ngày hiện tại
+    const [today, setToday] = useState('');
+    const [pagination, setPagination] = useState({ page: 1, limit: 10, totalPages: 1 });
     console.log('Lengh', appointments.length);
     // console.log('CHECK', `/booking/doctor/${user.userId}?date=${selectedDate}`);
     console.log('Appointments:', appointments);
@@ -42,17 +22,13 @@ function Overview() {
     const [feedbacks, setFeedbacks] = useState([]);
     const [statistical, setStatistical] = useState([]);
     const [bookings, setBookings] = useState([]);
-
-    // useEffect(() => {
-    //     // Đặt ngày mặc định là ngày hiện tại khi component được tải
-    //     const today = new Date().toISOString().split('T')[0];
-    //     setSelectedDate(today);
-
-    //     const yesterday = new Date();
-    //     yesterday.setDate(today.getDate() - 1);
-    //     setYesterdayDate(yesterday.toISOString().split('T')[0]);
-    // }, []);
-
+    const IMAGE_URL = 'http://localhost:9000/uploads/';
+    const handlePageChange = (page) => {
+        setPagination((prev) => ({
+            ...prev,
+            page: page, // Cập nhật thuộc tính page
+        }));
+    };
     useEffect(() => {
         // Đặt ngày mặc định là ngày hiện tại và ngày hôm qua khi component được tải
         const today = new Date();
@@ -62,6 +38,7 @@ function Overview() {
         const formattedToday = today.toISOString().split('T')[0];
         const formattedYesterday = yesterday.toISOString().split('T')[0];
 
+        setToday(formattedToday);
         setSelectedDate(formattedToday);
         setYesterdayDate(formattedYesterday);
     }, []);
@@ -72,7 +49,7 @@ function Overview() {
         // Hàm gọi API để lấy dữ liệu lịch hẹn
         const fetchAppointments = async () => {
             try {
-                const response = await axiosInstance.get(`/booking/doctor/${user.userId}?date=${selectedDate}`);
+                const response = await axiosInstance.get(`/booking/doctor/${user.userId}?date=${today}`);
                 console.log('ResponseBooking:', response);
                 const responseYesterday = await axiosInstance.get(
                     `/booking/doctor/${user.userId}?date=${yesterdayDate}`,
@@ -92,10 +69,54 @@ function Overview() {
                 setAppointments([]);
             }
         };
-        if (selectedDate !== '' && yesterdayDate !== '') {
+        if (today !== '' && yesterdayDate !== '') {
             fetchAppointments();
         }
-    }, [selectedDate, yesterdayDate]);
+    }, [today, yesterdayDate]);
+
+    const [getBooking, setGetBooking] = useState([]);
+
+    useEffect(() => {
+        // Hàm gọi API để lấy dữ liệu lịch hẹn
+        const fetchAppointments = async () => {
+            setLoading(true);
+            setError(null);
+
+            try {
+                const response = await axiosInstance.get(
+                    `/booking/doctor/${user.userId}?date=${selectedDate}&page=${pagination.page}&&limit=${pagination.limit}`,
+                );
+                console.log('ResponseBooking:', response);
+
+                if (response.status === 200) {
+                    setGetBooking(response.data);
+                    if (response.totalPages === 0) {
+                        response.totalPages = 1;
+                    }
+                    if (pagination.totalPages !== response.totalPages) {
+                        setPagination((prev) => ({
+                            ...prev,
+                            page: 1,
+                            totalPages: response.totalPages,
+                        }));
+                    }
+                } else {
+                    console.error('Failed to fetch data:', response.message);
+                    setGetBooking([]);
+                }
+            } catch (error) {
+                console.error('Error fetching appointments:', error);
+                setGetBooking([]);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        // Gọi API mỗi khi selectedDate thay đổi
+        if (selectedDate) {
+            fetchAppointments();
+        }
+    }, [selectedDate, pagination.page]);
 
     useEffect(() => {
         const fetchFeedbacks = async () => {
@@ -159,6 +180,76 @@ function Overview() {
         },
     ];
 
+    const handleDateChange = (e) => {
+        setSelectedDate(e.target.value);
+    };
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
+    const [isModalOpen1, setIsModalOpen1] = useState(false);
+    const [selectedPatient, setSelectedPatient] = useState(null);
+    const [isModalOpen, setModalOpen] = useState(false);
+    const [patientName, setPatientName] = useState('');
+    const [isDetail, setIsDetail] = useState([]);
+    const [selectedImages, setSelectedImages] = useState([]);
+
+    const closeModal = () => {
+        setModalOpen(false);
+        setSelectedBookingId(null);
+    };
+
+    const getDetail = async (bookingId) => {
+        try {
+            const response = await axiosInstance.get(`/booking/${bookingId}`);
+            if (response.status === 200) {
+                setIsDetail(response.data);
+            } else {
+                toast.error('Không thể xem.');
+            }
+
+            const response1 = await axiosInstance.get(`/bookingImage/${bookingId}`);
+            // console.log('ResponseImage:', response);
+
+            if (response1.status === 200) {
+                const images = response1.data.map((item) => item.name);
+                // if (images.length === 0) {
+                //     toast.info('Không có ảnh đính kèm.');
+                //     return;
+                // }
+                setSelectedImages(images); // Lưu danh sách ảnh từ API
+            } else {
+                toast.error('Không thể tải ảnh.');
+            }
+
+            setSelectedPatient(bookingId);
+        } catch (error) {
+            console.error('Error fetching detail:', error);
+            toast.error('Có lỗi xảy ra khi xem thông tin chi tiết.');
+        }
+    };
+
+    const calculateAge = (birthDate) => {
+        const today = new Date();
+        const birthDateObj = new Date(birthDate);
+        let age = today.getFullYear() - birthDateObj.getFullYear();
+        const monthDifference = today.getMonth() - birthDateObj.getMonth();
+
+        if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < birthDateObj.getDate())) {
+            age--;
+        }
+
+        return age;
+    };
+
+    const handleViewImage = (image) => {
+        const imageUrl = `${IMAGE_URL}${image}`;
+        window.open(imageUrl, '_blank');
+        console.log('OPEN');
+    };
+
+    const closeModal1 = () => {
+        setIsModalOpen1(false);
+        setSelectedImages([]);
+    };
     return (
         <main className="flex-1">
             {/* Dashboard Content */}
@@ -187,84 +278,280 @@ function Overview() {
                 </div>
 
                 {/* Upcoming Appointments */}
-                <div className="bg-white rounded-xl shadow-sm p-6">
-                    <div className="flex items-center justify-between mb-6">
+                <div className="bg-white rounded-xl shadow-sm px-6 pt-6 h-[400px] w-full">
+                    <div className="flex items-center justify-between mb-2">
                         <h2 className="text-lg font-semibold">Lịch hẹn sắp tới</h2>
                         {/* <button className="text-sm text-blue-600 hover:text-blue-700">Xem tất cả</button> */}
                     </div>
 
-                    <div className="space-y-4">
-                        {selectedDate !== 0 && appointments.length !== 0 ? (
-                            appointments
-                                .filter(
-                                    (appointment) =>
-                                        appointment.status.valueEn === 'Confirmed' ||
-                                        appointment.status.valueEn === 'New' ||
-                                        appointment.status.valueEn === 'Cancel' ||
-                                        appointment.status.valueEn === 'Paid' ||
-                                        appointment.status.valueEn === 'Done',
-                                )
-                                .map((appointment, index) => (
-                                    <div
-                                        key={index}
-                                        className="flex items-center justify-between p-4 border rounded-lg"
-                                    >
-                                        <div className="flex items-center gap-2">
-                                            <div className="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center text-gray-500">
-                                                {appointment.patientRecordId.fullname[0]}
-                                            </div>
-                                            <div>
-                                                <h3 className="font-medium">{appointment.patientRecordId.fullname}</h3>
-                                                {/* <p className="text-sm text-gray-500">{appointment.type}</p> */}
-                                            </div>
-                                        </div>
+                    <div>
+                        <div className="flex items-center space-x-4 mb-4">
+                            <label htmlFor="date" className="font-semibold">
+                                Chọn ngày khám
+                            </label>
+                            <input
+                                type="date"
+                                id="date"
+                                className="border p-2 rounded"
+                                value={selectedDate}
+                                onChange={handleDateChange}
+                            />
+                        </div>
 
-                                        <div className="text-right">
-                                            <p className="font-medium">{appointment.timeType.valueVi}</p>
-                                            <p className="text-sm text-gray-500">Hôm nay</p>
-                                        </div>
+                        {/* Display loading or error message */}
+                        {loading && <div>Loading...</div>}
+                        {error && <div className="text-red-500">{error}</div>}
 
-                                        <div className="flex items-center gap-2">
-                                            {appointment.status.valueEn === 'Confirmed' ? (
-                                                <CheckCircle className="w-5 h-5 text-green-500" />
-                                            ) : appointment.status.valueEn === 'New' ? (
-                                                <AlertCircle className="w-5 h-5 text-yellow-500" />
-                                            ) : appointment.status.valueEn === 'Paid' ? (
-                                                <DollarSign className="w-5 h-5 text-blue-500" />
-                                            ) : appointment.status.valueEn === 'Done' ? (
-                                                <CheckCircle className="w-5 h-5 text-green-600" />
-                                            ) : (
-                                                <XCircle className="w-5 h-5 text-red-500" />
-                                            )}
-                                            <span
-                                                className={`text-sm ${
-                                                    appointment.status.valueEn === 'Confirmed'
-                                                        ? 'text-green-500'
-                                                        : appointment.status.valueEn === 'New'
-                                                        ? 'text-yellow-500'
-                                                        : appointment.status.valueEn === 'Paid'
-                                                        ? 'text-blue-500'
-                                                        : appointment.status.valueEn === 'Done'
-                                                        ? 'text-green-600'
-                                                        : 'text-red-500'
-                                                }`}
+                        {/* Bảng thông tin bệnh nhân */}
+                        <div className="overflow-x-auto rounded-lg border">
+                            <table className="min-w-full divide-y divide-gray-200">
+                                <thead className="bg-gray-200 text-sm">
+                                    <tr className="bg-gray-100">
+                                        <th className="px-2 py-2 font-bold tracking-wider">STT</th>
+                                        <th className="px-2 py-1 font-bold tracking-wider">Tên bệnh nhân</th>
+                                        <th className="px-2 py-1 font-bold tracking-wider">Thời gian khám</th>
+                                        <th className="px-2 py-1 font-bold tracking-wider">Tình trạng bệnh</th>
+                                        <th className="px-2 py-1 font-bold tracking-wider">Trạng thái</th>
+                                        <th className="px-2 py-1 font-bold tracking-wider">Hành động</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {getBooking
+                                        .filter(
+                                            (appointment) =>
+                                                appointment.status.keyMap !== 'S1' &&
+                                                appointment.status.keyMap !== 'S5',
+                                        )
+                                        .map((appointment, index) => (
+                                            <tr
+                                                key={appointment._id}
+                                                className="cursor-pointer hover:bg-blue-100 hover:text-blue-500"
+                                                onClick={() => getDetail(appointment.bookingId)}
                                             >
-                                                {appointment.status.valueEn === 'Confirmed'
-                                                    ? 'Đã xác nhận'
-                                                    : appointment.status.valueEn === 'New'
-                                                    ? 'Chờ xác nhận'
-                                                    : appointment.status.valueEn === 'Paid'
-                                                    ? 'Đã thanh toán'
-                                                    : appointment.status.valueEn === 'Done'
-                                                    ? 'Đã khám xong'
-                                                    : 'Đã hủy'}
-                                            </span>
+                                                <td className="px-4 py-2 text-gray-900 text-center">{index + 1}</td>
+                                                <td className="px-4 py-2 text-gray-900 text-center">
+                                                    {appointment.patientRecordId.fullname}
+                                                </td>
+                                                <td className="px-4 py-2 text-gray-900 text-center">
+                                                    {appointment.timeType.valueVi}
+                                                </td>
+                                                <td className="px-4 py-2 text-gray-900 text-center">
+                                                    {appointment.reason}
+                                                </td>
+                                                <td className="px-4 py-2 text-gray-900 text-center">
+                                                    {appointment.status.valueVi}
+                                                </td>
+                                                <td className="px-4 py-2">
+                                                    <div className="flex items-center justify-center gap-2">
+                                                        <button
+                                                            className={`p-2 rounded ${
+                                                                appointment.status.keyMap === 'S4' ||
+                                                                appointment.status.keyMap === 'S5'
+                                                                    ? 'bg-blue-200 text-gray-500 cursor-not-allowed'
+                                                                    : 'bg-blue-500 text-white'
+                                                            }`}
+                                                            onClick={() => updateStatus(appointment.bookingId, 'S4')}
+                                                            disabled={
+                                                                appointment.status.keyMap === 'S4' ||
+                                                                appointment.status.keyMap === 'S5'
+                                                            }
+                                                        >
+                                                            Hoàn thành
+                                                        </button>
+                                                        <button
+                                                            className={`p-2 rounded ${
+                                                                appointment.status.keyMap === 'S4' ||
+                                                                appointment.status.keyMap === 'S5'
+                                                                    ? 'bg-red-200 text-gray-500 cursor-not-allowed'
+                                                                    : 'bg-red-500 text-white'
+                                                            }`}
+                                                            // onClick={() => updateStatus(appointment.bookingId, 'S5')}
+                                                            onClick={() =>
+                                                                openModal(
+                                                                    appointment.bookingId,
+                                                                    appointment.patientRecordId.fullname,
+                                                                )
+                                                            }
+                                                            disabled={
+                                                                appointment.status.keyMap === 'S4' ||
+                                                                appointment.status.keyMap === 'S5'
+                                                            }
+                                                        >
+                                                            Hủy
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                </tbody>
+                            </table>
+                        </div>
+
+                        {isModalOpen1 && selectedImages.length > 0 && (
+                            <div className="fixed inset-0 bg-black bg-opacity-10 flex items-center justify-center z-50">
+                                <div className="bg-white rounded-lg p-4 w-4/5 h-4/5">
+                                    {/* Tiêu đề và nút đóng */}
+                                    <div className="flex justify-between items-center">
+                                        <h2 className="text-2xl font-bold">Ảnh đính kèm</h2>
+                                        <button
+                                            className="text-red-500 hover:text-red-700 font-bold"
+                                            onClick={closeModal1}
+                                        >
+                                            Đóng
+                                        </button>
+                                    </div>
+
+                                    {/* Danh sách ảnh */}
+                                    <div className="flex flex-wrap gap-4 mt-4 overflow-auto h-full">
+                                        {selectedImages.map((image, index) => (
+                                            <div
+                                                key={index}
+                                                className="relative group w-80 h-80 border rounded-lg overflow-hidden"
+                                            >
+                                                {/* Hiển thị ảnh */}
+                                                <img
+                                                    src={`${IMAGE_URL}${image}`}
+                                                    alt={`Ảnh ${index + 1}`}
+                                                    className="w-full h-full object-cover"
+                                                />
+
+                                                {/* Eye Icon (Zoom) */}
+                                                <div
+                                                    className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"
+                                                    onClick={() => handleViewImage(image)}
+                                                >
+                                                    <Eye className="text-white w-8 h-8" />
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
+                        {selectedPatient && isDetail && (
+                            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                                <div className="bg-white rounded-lg p-8 w-full max-w-2xl">
+                                    <div className="flex justify-between items-center mb-6">
+                                        <h2 className="text-2xl font-semibold">Chi tiết bệnh nhân</h2>
+                                        <button
+                                            onClick={() => setSelectedPatient(null)}
+                                            className="text-gray-500 hover:text-gray-700"
+                                        >
+                                            <svg
+                                                className="w-6 h-6"
+                                                fill="none"
+                                                viewBox="0 0 24 24"
+                                                stroke="currentColor"
+                                            >
+                                                <path
+                                                    strokeLinecap="round"
+                                                    strokeLinejoin="round"
+                                                    strokeWidth={2}
+                                                    d="M6 18L18 6M6 6l12 12"
+                                                />
+                                            </svg>
+                                        </button>
+                                    </div>
+                                    <div className="grid grid-cols-2 gap-6">
+                                        <div>
+                                            <p className="text-gray-500 mb-1">Họ và tên</p>
+                                            <p className="font-medium">{isDetail.patientRecordId.fullname}</p>
+                                        </div>
+                                        <div>
+                                            <p className="text-gray-500 mb-1">Tuổi</p>
+                                            <p className="font-medium">
+                                                {calculateAge(isDetail.patientRecordId.birthDate)}
+                                            </p>
+                                        </div>
+                                        <div>
+                                            <p className="text-gray-500 mb-1">Giới tính</p>
+                                            <p className="font-medium">
+                                                {isDetail.patientRecordId.gender === 'Male' ? 'Nam' : 'Nữ'}
+                                            </p>
+                                        </div>
+                                        <div>
+                                            <p className="text-gray-500 mb-1">Tình trạng</p>
+                                            <p className="font-medium">{isDetail.reason}</p>
+                                        </div>
+
+                                        <div>
+                                            <p className="text-gray-500 mb-1">Nghề nghiệp</p>
+                                            <p className="font-medium">{isDetail.patientRecordId.job}</p>
+                                        </div>
+                                        <div>
+                                            <p className="text-gray-500 mb-1">CCCD</p>
+                                            <p className="font-medium">{isDetail.patientRecordId.CCCD}</p>
+                                        </div>
+
+                                        <div className="col-span-2">
+                                            <p className="text-gray-500 mb-1">Thông tin liên hệ</p>
+                                            <div className="flex items-center gap-10 mt-2">
+                                                <div className="flex items-center gap-2">
+                                                    <Phone className="w-5 h-5 text-gray-400" />
+                                                    <span>{isDetail.patientRecordId.phoneNumber}</span>
+                                                </div>
+                                                <div className="flex items-center gap-2 ml-5">
+                                                    <MapPin className="w-5 h-5 text-gray-400" />
+                                                    <span>{isDetail.patientRecordId.address}</span>
+                                                </div>
+                                                <div className="flex items-center gap-2">
+                                                    <Mail className="w-5 h-5 text-gray-400" />
+                                                    <span>{isDetail.patientRecordId.email}</span>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
-                                ))
-                        ) : (
-                            <p className="text-center text-gray-500">Bạn không có lịch hẹn nào ngày hôm nay</p>
+                                    {/* Danh sách ảnh */}
+                                    <div className="mt-6 text-gray-500"> Ảnh đính kèm</div>
+                                    <div className="flex flex-wrap gap-4 mt-2 overflow-auto h-full">
+                                        {selectedImages.map((image, index) => (
+                                            <div
+                                                key={index}
+                                                className="relative group w-20 h-20 border rounded-lg overflow-hidden"
+                                            >
+                                                {image.endsWith('.png') ||
+                                                image.endsWith('.jpg') ||
+                                                image.endsWith('.jpeg') ? (
+                                                    <img
+                                                        src={`${IMAGE_URL}${image}`}
+                                                        alt={`Ảnh ${index + 1}`}
+                                                        className="w-full h-full object-cover"
+                                                    />
+                                                ) : (
+                                                    <video
+                                                        src={`${IMAGE_URL}${image}`}
+                                                        className="w-full h-full object-cover"
+                                                        controls
+                                                    />
+                                                )}
+
+                                                {/* Eye Icon (Zoom) */}
+                                                <div
+                                                    className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"
+                                                    onClick={() => handleViewImage(image)}
+                                                >
+                                                    <Eye className="text-white w-8 h-8" />
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
                         )}
+                        <ConfirmationModal
+                            isOpen={isModalOpen}
+                            onClose={closeModal}
+                            onConfirm={() => updateStatus(selectedBookingId, 'S5')}
+                            message={`Bạn có chắc chắn muốn hủy lịch hẹn của ${patientName} không?`}
+                        />
+                    </div>
+                    <div className="text-center">
+                        <Pagination
+                            currentPage={pagination.page}
+                            totalPages={pagination.totalPages}
+                            onPageChange={handlePageChange}
+                        />
                     </div>
                 </div>
             </div>
