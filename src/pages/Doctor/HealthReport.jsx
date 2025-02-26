@@ -285,12 +285,20 @@ function HealthReport() {
                                         key={index}
                                         className="relative group w-20 h-20 border rounded-lg overflow-hidden"
                                     >
-                                        {/* Hiển thị ảnh */}
-                                        <img
-                                            src={`${IMAGE_URL}${image}`}
-                                            alt={`Ảnh ${index + 1}`}
-                                            className="w-full h-full object-cover"
-                                        />
+                                        {/* Hiển thị ảnh và video*/}
+                                        {image.endsWith('.png') || image.endsWith('.jpg') || image.endsWith('.jpeg') ? (
+                                            <img
+                                                src={`${IMAGE_URL}${image}`}
+                                                alt={`Ảnh ${index + 1}`}
+                                                className="w-full h-full object-cover"
+                                            />
+                                        ) : (
+                                            <video
+                                                src={`${IMAGE_URL}${image}`}
+                                                className="w-full h-full object-cover"
+                                                controls
+                                            />
+                                        )}
 
                                         {/* Eye Icon (Zoom) */}
                                         <div
