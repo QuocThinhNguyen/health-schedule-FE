@@ -35,8 +35,6 @@ function SideBarFilterDoctor() {
         });
     }, [searchParams]);
 
-   
-
     const handleFilterChange = (key, value) => {
         const newParams = { ...Object.fromEntries(searchParams.entries()), [key]: value };
         if (value === '' || value === null || value === undefined) {
@@ -71,7 +69,12 @@ function SideBarFilterDoctor() {
     useEffect(() => {
         const fetchSpecialitiesByClinic = async () => {
             try {
-                const response = await axiosClient.get(`/specialty/clinicId/${selectedClinicId}`);
+                let response;
+                if (selectedClinicId !== '' && selectedClinicId !== null) {
+                    response = await axiosClient.get(`/specialty/clinicId/${selectedClinicId}`);
+                } else {
+                    response = await axiosClient.get('/specialty/dropdown');
+                }
                 if (response.status === 200) {
                     setSpecialities(response.data);
                 }
@@ -80,9 +83,7 @@ function SideBarFilterDoctor() {
                 setSpecialities([]);
             }
         };
-        if (selectedClinicId) {
-            fetchSpecialitiesByClinic();
-        }
+        fetchSpecialitiesByClinic();
     }, [selectedClinicId]);
 
     //Gender
