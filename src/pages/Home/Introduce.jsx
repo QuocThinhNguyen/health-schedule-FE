@@ -11,7 +11,7 @@ import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
 
 function Introduce() {
     return (
-        <div className="bg-[#F8F9FC] pt-8">
+        <div className="bg-[#E3F2FF] pt-8">
             <div className="max-w-6xl mx-auto px-4 pt-2 pb-10 flex gap-6">
                 <div className="w-2/5">
                     <div className="flex items-center gap-2 text-xl font-bold mb-4 text-[#2D87F3]">

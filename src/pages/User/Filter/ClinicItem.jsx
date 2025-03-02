@@ -71,7 +71,7 @@ function ClinicItem(data) {
                     onClick={() => handleBooking(clinic.clinicId, clinic.name)}
                     className="px-5 h-10 bg-[#2d87f3] hover:bg-[#2c74df] text-white font-semibold rounded-lg"
                 >
-                    Xem bệnh viện
+                    Xem chi tiết
                 </button>
             </div>
         </div>

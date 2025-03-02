@@ -11,7 +11,6 @@ function ListClinic() {
         const fetchClinics = async () => {
             try {
                 const response = await axiosClient.get('/clinic/dropdown');
-
                 if (response.status === 200) {
                     const formattedData = response.data.map((item) => ({
                         clinicId: item.clinicId,
@@ -33,21 +32,23 @@ function ListClinic() {
     }, []);
 
     return (
-        <div className="max-w-6xl mx-auto px-4 pb-10">
-            <div className="flex items-center justify-between gap-2 mt-8 mb-2 text-2xl text-[#2D87F3]">
-                <div className="flex items-center gap-2 ">
-                    <FaClinicMedical />
-                    <span className="text-xl font-bold ">Top Bệnh viện nổi bật</span>
+        <div className="bg-[#E3F2FF]">
+            <div className="max-w-6xl mx-auto px-4 pb-10 pt-8">
+                <div className="flex items-center justify-between gap-2 mb-2 text-2xl text-[#2D87F3]">
+                    <div className="flex items-center gap-2 ">
+                        <FaClinicMedical />
+                        <span className="text-xl font-bold ">Top Bệnh viện nổi bật</span>
+                    </div>
+                    <p className="text-sm font-semibold cursor-pointer hover:underline flex items-center gap-1">
+                        <NavLink to="/tat-ca-benh-vien">Xem tất cả</NavLink>
+                        <FaAngleRight className="mt-1" />
+                    </p>
                 </div>
-                <p className="text-sm font-semibold cursor-pointer hover:underline flex items-center gap-1">
-                    <NavLink to="/tat-ca-benh-vien">Xem tất cả</NavLink>
-                    <FaAngleRight className="mt-1" />
-                </p>
-            </div>
-            <div className="flex flex-wrap">
-                {clinics.slice(0, 8).map((clinic) => (
-                    <Clinic key={clinic.clinicId} data={clinic} />
-                ))}
+                <div className="flex flex-wrap">
+                    {clinics.slice(0, 8).map((clinic) => (
+                        <Clinic key={clinic.clinicId} data={clinic} />
+                    ))}
+                </div>
             </div>
         </div>
     );
