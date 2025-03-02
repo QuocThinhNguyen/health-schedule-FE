@@ -112,7 +112,7 @@ function PatientRecord() {
                                         <div className="flex items-center">
                                             <img src="/schedule_1.png" alt={'schedule_1'} className="h-6 w-6 mr-2" />
                                             <div className="font-semibold mr-2">Ngày sinh:</div>{' '}
-                                            {new Date(patient.birthDate).toLocaleDateString()}
+                                            {new Date(patient.birthDate).toLocaleDateString('vi-VN')}
                                         </div>
                                         <div className="flex items-center">
                                             <img src="/telephone.png" alt={'telephone'} className="h-6 w-6 mr-2" />
@@ -132,7 +132,8 @@ function PatientRecord() {
                                     <div className="space-y-3">
                                         <div className="flex">
                                             <img src="/location.png" alt={'telephone'} className="h-6 w-6 mr-2" />
-                                            <div className="font-semibold whitespace-nowrap mr-2">Địa chỉ:</div> {patient.address}
+                                            <div className="font-semibold whitespace-nowrap mr-2">Địa chỉ:</div>{' '}
+                                            {patient.address}
                                         </div>
                                         <div className="flex items-center">
                                             <img src="/briefcase.png" alt={'telephone'} className="h-6 w-6 mr-2" />

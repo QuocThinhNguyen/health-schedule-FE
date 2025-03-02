@@ -73,7 +73,7 @@ function Review() {
                                 <div key={feedback.id} className="border-b pb-4">
                                     <div className="flex items-start justify-between mb-2">
                                         <div className="flex items-center gap-2">
-                                            <div className="w-11 h-11 bg-gray-200 rounded-full flex items-center justify-center text-gray-500">
+                                            <div className="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center text-gray-500">
                                                 {feedback.patientId.fullname[0]}
                                             </div>
                                             <div className="flex flex-col">
@@ -96,7 +96,7 @@ function Review() {
                                                     disabled
                                                 >
                                                     <Star
-                                                        className={`w-4 h-4 mt-2 ${
+                                                        className={`w-3 h-3 mt-2 ${
                                                             star <= feedback.rating
                                                                 ? 'fill-yellow-400 text-yellow-400'
                                                                 : 'text-gray-300'
@@ -113,7 +113,7 @@ function Review() {
                                             {feedback.mediaNames.map((mediaName, index) => (
                                                 <div
                                                     key={index}
-                                                    className="relative group w-16 h-16 border rounded-lg overflow-hidden cursor-pointer"
+                                                    className="relative group w-12 h-12 border rounded-lg overflow-hidden cursor-pointer"
                                                     onClick={() => openModal(mediaName)}
                                                 >
                                                     {mediaName.endsWith('.png') ||

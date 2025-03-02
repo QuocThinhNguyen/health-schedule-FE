@@ -101,6 +101,7 @@ const Sidebar = ({ onSelectTab, selectedTab, setCurrentFunction }) => {
         // { label: 'Quản lý lịch hẹn', image: 'meeting.png', path: '/doctor/manage' },
         { label: 'Hồ sơ bệnh nhân', image: 'health-report.png', path: '/doctor/health-report' },
         { label: 'Đánh giá', image: 'reviews.png', path: '/doctor/review' },
+        { label: 'Đổi mật khẩu', image: 'reset-password.png', path: '/doctor/reset-password' },
         { label: 'Hồ sơ cá nhân', image: 'user.png', path: '/doctor/profile' },
     ];
 

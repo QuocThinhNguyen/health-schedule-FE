@@ -180,7 +180,7 @@ function DoctorProfile() {
         <div className="max-w-7xl flex">
             {/* Sidebar */}
             <aside
-                className={`w-72 bg-white shadow-md rounded-lg p-6 mr-8 transition-all duration-300 ease-in-out  ${
+                className={`w-fit bg-white shadow-md rounded-lg p-6 mr-6 transition-all duration-300 ease-in-out  ${
                     isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
                 } lg:translate-x-0 fixed lg:static top-0 left-0 h-full z-40 lg:h-auto overflow-y-auto`}
             >
@@ -194,7 +194,7 @@ function DoctorProfile() {
                     <img
                         src={previewImage || `${IMAGE_URL}${doctorInfo.image}`} // Thay thế URL này bằng link ảnh thực tế của bác sĩ
                         alt="Doctor Avatar"
-                        className="w-28 h-28 rounded-full border-2 border-gray-300"
+                        className="w-24 h-24 rounded-full border-2 border-gray-300"
                     />
                     {isEditing && (
                         <label htmlFor="imageUpload" className="cursor-pointer absolute top-0 right-0">
@@ -208,12 +208,12 @@ function DoctorProfile() {
                             />
                         </label>
                     )}
-                    <h2 className="text-2xl font-semibold text-center">{doctorInfo.name}</h2>
-                    <p className="text-xl text-gray-500">{doctorInfo.position}</p>
+                    <h2 className="text-xl font-semibold text-center">{doctorInfo.name}</h2>
+                    <p className="text-lg text-gray-500">{doctorInfo.position}</p>
                 </div>
                 <nav>
                     <button
-                        className={`w-full text-lg text-left py-2 px-2 rounded-md mb-2 flex items-center ${
+                        className={`w-full text-base text-left py-2 px-2 rounded-md mb-2 flex items-center ${
                             activeSection === 'personal'
                                 ? 'bg-blue-100 text-blue-700'
                                 : 'text-gray-700 hover:bg-gray-100'
@@ -224,7 +224,7 @@ function DoctorProfile() {
                         Thông tin cá nhân
                     </button>
                     <button
-                        className={`w-full text-lg text-left py-2 px-2 rounded-md flex items-center ${
+                        className={`w-full text-base text-left py-2 px-2 rounded-md flex items-center ${
                             activeSection === 'professional'
                                 ? 'bg-blue-100 text-blue-700'
                                 : 'text-gray-700 hover:bg-gray-100'
@@ -239,8 +239,8 @@ function DoctorProfile() {
 
             {/* Main Content */}
             <main className="flex-1">
-                <div className="bg-white shadow-md rounded-lg p-6">
-                    <div className="flex justify-between items-center mb-6">
+                <div className="bg-white shadow-md rounded-lg px-6 py-4">
+                    <div className="flex justify-between items-center mb-5">
                         <h2 className="text-xl font-semibold">
                             {activeSection === 'personal' ? 'Thông tin cá nhân' : 'Thông tin chuyên môn'}
                         </h2>
@@ -266,12 +266,12 @@ function DoctorProfile() {
                         )}
                     </div>
                     {activeSection === 'personal' ? (
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div>
-                                <label htmlFor="name" className="block text-lg font-medium text-gray-700 mb-1">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div className="h-full flex flex-col">
+                                <label htmlFor="name" className="block text-base font-medium text-gray-700 mb-1">
                                     Họ và tên
                                 </label>
-                                <div className="flex items-center">
+                                <div className="flex items-center flex-1">
                                     <input
                                         id="name"
                                         name="name"
@@ -284,8 +284,8 @@ function DoctorProfile() {
                                     />
                                 </div>
                             </div>
-                            <div>
-                                <label htmlFor="gender" className="block text-lg font-medium text-gray-700 mb-1">
+                            <div className="h-full flex flex-col">
+                                <label htmlFor="gender" className="block text-base font-medium text-gray-700 mb-1">
                                     Giới tính
                                 </label>
                                 {isEditing ? (
@@ -293,7 +293,7 @@ function DoctorProfile() {
                                         name="gender"
                                         value={doctorInfo.gender}
                                         onChange={handleChange}
-                                        className="w-full p-2 border rounded bg-white"
+                                        className="w-full px-3 py-2 border rounded-md bg-white"
                                     >
                                         <option value="Nam">Nam</option>
                                         <option value="Nữ">Nữ</option>
@@ -305,15 +305,15 @@ function DoctorProfile() {
                                         name="gender"
                                         value={doctorInfo.gender}
                                         disabled={!isEditing}
-                                        className="w-full p-2 border rounded bg-gray-50"
+                                        className="w-full px-3 py-2 border rounded-md bg-gray-50"
                                     />
                                 )}
                             </div>
-                            <div>
-                                <label htmlFor="dateOfBirth" className="block text-lg font-medium text-gray-700 mb-1">
+                            <div className="h-full flex flex-col">
+                                <label htmlFor="dateOfBirth" className="block text-base font-medium text-gray-700 mb-1">
                                     Ngày sinh
                                 </label>
-                                <div className="flex items-center">
+                                <div className="flex items-center flex-1">
                                     <input
                                         id="dateOfBirth"
                                         name="birthdate"
@@ -327,11 +327,11 @@ function DoctorProfile() {
                                     />
                                 </div>
                             </div>
-                            <div>
-                                <label htmlFor="phone" className="block text-lg font-medium text-gray-700 mb-1">
+                            <div className="h-full flex flex-col">
+                                <label htmlFor="phone" className="block text-base font-medium text-gray-700 mb-1">
                                     Số điện thoại
                                 </label>
-                                <div className="flex items-center">
+                                <div className="flex items-center flex-1">
                                     <input
                                         id="phone"
                                         name="phone"
@@ -344,11 +344,11 @@ function DoctorProfile() {
                                     />
                                 </div>
                             </div>
-                            <div>
-                                <label htmlFor="email" className="block text-lg font-medium text-gray-700 mb-1">
+                            <div className="h-full flex flex-col">
+                                <label htmlFor="email" className="block text-base font-medium text-gray-700 mb-1">
                                     Email
                                 </label>
-                                <div className="flex items-center">
+                                <div className="flex items-center flex-1">
                                     <input
                                         id="email"
                                         name="email"
@@ -362,11 +362,11 @@ function DoctorProfile() {
                                     />
                                 </div>
                             </div>
-                            <div>
-                                <label htmlFor="address" className="block text-lg font-medium text-gray-700 mb-1">
+                            <div className="h-full flex flex-col">
+                                <label htmlFor="address" className="block text-base font-medium text-gray-700 mb-1">
                                     Địa chỉ
                                 </label>
-                                <div className="flex items-center">
+                                <div className="flex items-center flex-1">
                                     <input
                                         id="address"
                                         name="address"
@@ -383,11 +383,11 @@ function DoctorProfile() {
                     ) : (
                         <div className="space-y-6">
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div>
-                                    <label htmlFor="title" className="block text-lg font-medium text-gray-700 mb-1">
+                                <div className="h-full flex flex-col">
+                                    <label htmlFor="title" className="block text-base font-medium text-gray-700 mb-1">
                                         Chức danh
                                     </label>
-                                    <div className="flex items-center">
+                                    <div className="flex items-center flex-1">
                                         <input
                                             id="title"
                                             name="title"
@@ -400,11 +400,14 @@ function DoctorProfile() {
                                         />
                                     </div>
                                 </div>
-                                <div>
-                                    <label htmlFor="specialty" className="block text-lg font-medium text-gray-700 mb-1">
+                                <div className="h-full flex flex-col">
+                                    <label
+                                        htmlFor="specialty"
+                                        className="block text-base font-medium text-gray-700 mb-1"
+                                    >
                                         Chuyên khoa
                                     </label>
-                                    <div className="flex items-center">
+                                    <div className="flex items-center flex-1">
                                         <input
                                             id="specialty"
                                             name="specialty"
@@ -417,11 +420,14 @@ function DoctorProfile() {
                                         />
                                     </div>
                                 </div>
-                                <div>
-                                    <label htmlFor="hospital" className="block text-lg font-medium text-gray-700 mb-1">
+                                <div className="h-full flex flex-col">
+                                    <label
+                                        htmlFor="hospital"
+                                        className="block text-base font-medium text-gray-700 mb-1"
+                                    >
                                         Bệnh viện làm việc
                                     </label>
-                                    <div className="flex items-center">
+                                    <div className="flex items-center flex-1">
                                         <input
                                             id="hospital"
                                             name="hospital"
@@ -434,14 +440,14 @@ function DoctorProfile() {
                                         />
                                     </div>
                                 </div>
-                                <div>
+                                <div className="h-full flex flex-col">
                                     <label
                                         htmlFor="consultationFee"
-                                        className="block text-lg font-medium text-gray-700 mb-1"
+                                        className="block text-base font-medium text-gray-700 mb-1"
                                     >
                                         Giá khám bệnh
                                     </label>
-                                    <div className="flex items-center">
+                                    <div className="flex items-center flex-1">
                                         <input
                                             id="consultationFee"
                                             name="consultationFee"
@@ -475,40 +481,40 @@ function DoctorProfile() {
 
                 {/* Additional Cards */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-                    <div className="bg-white shadow-md rounded-lg p-6">
-                        <h3 className="text-lg font-semibold mb-4">Thống kê</h3>
+                    <div className="bg-white shadow-md rounded-lg px-6 py-4">
+                        <h3 className="text-lg font-semibold mb-2">Thống kê</h3>
                         <div className="flex justify-between items-center">
                             <div className="text-center">
-                                <p className="text-2xl font-bold">{statistical.totalPatients}</p>
-                                <p className="text-sm text-gray-500">Bệnh nhân</p>
+                                <p className="text-xl font-bold">{statistical.totalPatients}</p>
+                                <p className="text-base text-gray-500">Bệnh nhân</p>
                             </div>
                             <div className="text-center">
-                                <p className="text-2xl font-bold">{statistical.totalBooking}</p>
+                                <p className="text-xl font-bold">{statistical.totalBooking}</p>
                                 <p className="text-sm text-gray-500">Lượt đặt khám</p>
                             </div>
                             <div className="text-center">
-                                <p className="text-2xl font-bold">{feedbacks.totalFeedBacks}</p>
+                                <p className="text-xl font-bold">{feedbacks.totalFeedBacks}</p>
                                 <p className="text-sm text-gray-500">Đánh giá</p>
                             </div>
                             <div className="text-center">
-                                <p className="text-2xl font-bold">{feedbacks.averageRating}</p>
+                                <p className="text-xl font-bold">{feedbacks.averageRating}</p>
                                 <p className="text-sm text-gray-500">Điểm trung bình</p>
                             </div>
                         </div>
                     </div>
                     {comments?.patientId?.fullname[0] && (
-                        <div className="bg-white shadow-md rounded-lg p-6">
-                            <h3 className="text-lg font-semibold mb-4">Đánh giá gần đây</h3>
-                            <div className="space-y-4">
+                        <div className="bg-white shadow-md rounded-lg px-6 py-4">
+                            <h3 className="text-lg font-semibold mb-2">Đánh giá gần đây</h3>
+                            <div className="space-y-2">
                                 <div className="flex items-center">
                                     <div className="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center text-gray-500 mr-3">
                                         {comments.patientId.fullname[0]}
                                     </div>
                                     <div>
-                                        <p className="font-semibold">{comments.patientId.fullname}</p>
+                                        <p className="font-semibold text-base">{comments.patientId.fullname}</p>
                                         <div className="flex items-center">
                                             {[...Array(comments.rating)].map((_, i) => (
-                                                <Star key={i} className="h-4 w-4 text-yellow-400" fill="currentColor" />
+                                                <Star key={i} className="h-3 w-3 text-yellow-400" fill="currentColor" />
                                             ))}
                                         </div>
                                     </div>
