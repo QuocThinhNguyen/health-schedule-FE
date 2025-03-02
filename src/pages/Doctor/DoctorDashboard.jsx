@@ -129,21 +129,72 @@ const DoctorDashboard = () => {
                                             <ul className="">
                                                 <li className="group px-4 py-3 text-left text-base font-medium hover:bg-slate-100 cursor-pointer flex items-center">
                                                     <NavLink
-                                                        to="/doctor/profile"
+                                                        to="/doctor/overview"
                                                         className={({ isActive }) =>
                                                             isActive
                                                                 ? 'text-blue-500 flex items-center w-full'
                                                                 : 'flex items-center w-full'
                                                         }
                                                     >
-                                                        <img src="/user.png" alt={'profile'} className="h-5 w-5 mr-2" />
-                                                        Hồ sơ cá nhân
+                                                        <img
+                                                            src="/research.png"
+                                                            alt={'research'}
+                                                            className="h-5 w-5 mr-2"
+                                                        />
+                                                        Tổng quan
+                                                    </NavLink>
+                                                </li>
+                                                <li className="group px-4 py-3 text-left text-base font-medium hover:bg-slate-100 cursor-pointer flex items-center">
+                                                    <NavLink
+                                                        to="/doctor/schedule"
+                                                        className={({ isActive }) =>
+                                                            isActive
+                                                                ? 'text-blue-500 flex items-center w-full'
+                                                                : 'flex items-center w-full'
+                                                        }
+                                                    >
+                                                        <img src="/track.png" alt={'track'} className="h-5 w-5 mr-2" />
+                                                        Lịch làm việc
+                                                    </NavLink>
+                                                </li>
+                                                <li className="group px-4 py-3 text-left text-base font-medium hover:bg-slate-100 cursor-pointer flex items-center">
+                                                    <NavLink
+                                                        to="/doctor/health-report"
+                                                        className={({ isActive }) =>
+                                                            isActive
+                                                                ? 'text-blue-500 flex items-center w-full'
+                                                                : 'flex items-center w-full'
+                                                        }
+                                                    >
+                                                        <img
+                                                            src="/health-report.png"
+                                                            alt={'health-report'}
+                                                            className="h-5 w-5 mr-2"
+                                                        />
+                                                        Hồ sơ bệnh nhân
                                                     </NavLink>
                                                 </li>
 
                                                 <li className="group px-4 py-3 text-left text-base font-medium hover:bg-slate-100 cursor-pointer flex items-center">
                                                     <NavLink
-                                                        to="/user/change-password"
+                                                        to="/doctor/review"
+                                                        className={({ isActive }) =>
+                                                            isActive
+                                                                ? 'text-blue-500 flex items-center w-full'
+                                                                : 'flex items-center w-full'
+                                                        }
+                                                    >
+                                                        <img
+                                                            src="/reviews.png"
+                                                            alt={'reviews'}
+                                                            className="h-5 w-5 mr-2"
+                                                        />
+                                                        Đánh giá
+                                                    </NavLink>
+                                                </li>
+                                                <li className="group px-4 py-3 text-left text-base font-medium hover:bg-slate-100 cursor-pointer flex items-center">
+                                                    <NavLink
+                                                        to="/doctor/reset-password"
                                                         className={({ isActive }) =>
                                                             isActive
                                                                 ? 'text-blue-500 flex items-center w-full'
@@ -158,7 +209,19 @@ const DoctorDashboard = () => {
                                                         Đổi mật khẩu
                                                     </NavLink>
                                                 </li>
-
+                                                <li className="group px-4 py-3 text-left text-base font-medium hover:bg-slate-100 cursor-pointer flex items-center">
+                                                    <NavLink
+                                                        to="/doctor/profile"
+                                                        className={({ isActive }) =>
+                                                            isActive
+                                                                ? 'text-blue-500 flex items-center w-full'
+                                                                : 'flex items-center w-full'
+                                                        }
+                                                    >
+                                                        <img src="/user.png" alt={'user'} className="h-5 w-5 mr-2" />
+                                                        Hồ sơ cá nhân
+                                                    </NavLink>
+                                                </li>
                                                 <li
                                                     className="group px-4 py-3 text-left text-base text-[#e74c3c] font-medium hover:bg-slate-100 cursor-pointer flex items-center"
                                                     onClick={handleLogout}
@@ -175,7 +238,7 @@ const DoctorDashboard = () => {
                     </header>
 
                     {/* Outlet có thể cuộn */}
-                    <div className="flex-1 overflow-y-auto p-4">
+                    <div className="flex-1 overflow-y-auto px-6 py-5">
                         <Outlet />
                     </div>
                 </div>

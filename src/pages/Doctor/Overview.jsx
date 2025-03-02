@@ -188,6 +188,7 @@ function Overview() {
     const [isModalOpen1, setIsModalOpen1] = useState(false);
     const [selectedPatient, setSelectedPatient] = useState(null);
     const [isModalOpen, setModalOpen] = useState(false);
+    const [selectedBookingId, setSelectedBookingId] = useState(null);
     const [patientName, setPatientName] = useState('');
     const [isDetail, setIsDetail] = useState([]);
     const [selectedImages, setSelectedImages] = useState([]);
@@ -250,12 +251,52 @@ function Overview() {
         setIsModalOpen1(false);
         setSelectedImages([]);
     };
+
+    const updateStatus = async (appointmentId, statusKey) => {
+        try {
+            const response = await axiosInstance.put(`/booking/${appointmentId}`, { status: statusKey });
+
+            if (response.status === 200) {
+                // Cập nhật trạng thái trực tiếp trên danh sách appointments
+                setGetBooking((prevAppointments) =>
+                    prevAppointments.map((appointment) =>
+                        appointment.bookingId === appointmentId
+                            ? {
+                                  ...appointment,
+                                  status: {
+                                      ...appointment.status,
+                                      keyMap: statusKey,
+                                      valueVi: statusKey === 'S4' ? 'Đã khám xong' : 'Đã hủy',
+                                  },
+                              }
+                            : appointment,
+                    ),
+                );
+                toast.success('Cập nhật trạng thái thành công!');
+            } else {
+                toast.error('Cập nhật trạng thái thất bại.');
+            }
+        } catch (error) {
+            console.error('Error updating status:', error);
+            toast.error('Có lỗi xảy ra khi cập nhật trạng thái.');
+        } finally {
+            closeModal();
+        }
+    };
+
+    const openModal = (bookingId, patientName) => {
+        setSelectedBookingId(bookingId);
+        setPatientName(patientName);
+        setModalOpen(true);
+        console.log('OPEN');
+    };
+
     return (
         <main className="flex-1">
             {/* Dashboard Content */}
             <div className="">
                 {/* Stats Grid */}
-                <div className="grid grid-cols-4 gap-6 mb-8">
+                <div className="grid grid-cols-4 gap-6 mb-6">
                     {stats.map((stat, index) => (
                         <div key={index} className="bg-white p-6 rounded-xl shadow-sm">
                             <div className="flex items-center justify-between">
@@ -278,13 +319,8 @@ function Overview() {
                 </div>
 
                 {/* Upcoming Appointments */}
-                <div className="bg-white rounded-xl shadow-sm px-6 pt-6 h-[400px] w-full">
-                    <div className="flex items-center justify-between mb-2">
-                        <h2 className="text-lg font-semibold">Lịch hẹn sắp tới</h2>
-                        {/* <button className="text-sm text-blue-600 hover:text-blue-700">Xem tất cả</button> */}
-                    </div>
-
-                    <div>
+                <div className="bg-white rounded-xl shadow-sm px-6 pt-4 h-[360px] w-full">
+                    <div className="min-h-60">
                         <div className="flex items-center space-x-4 mb-4">
                             <label htmlFor="date" className="font-semibold">
                                 Chọn ngày khám
@@ -317,11 +353,7 @@ function Overview() {
                                 </thead>
                                 <tbody>
                                     {getBooking
-                                        .filter(
-                                            (appointment) =>
-                                                appointment.status.keyMap !== 'S1' &&
-                                                appointment.status.keyMap !== 'S5',
-                                        )
+                                        .filter((appointment) => appointment.status.keyMap !== 'S1')
                                         .map((appointment, index) => (
                                             <tr
                                                 key={appointment._id}
@@ -348,9 +380,13 @@ function Overview() {
                                                                 appointment.status.keyMap === 'S4' ||
                                                                 appointment.status.keyMap === 'S5'
                                                                     ? 'bg-blue-200 text-gray-500 cursor-not-allowed'
-                                                                    : 'bg-blue-500 text-white'
+                                                                    : 'bg-blue-500 text-white hover:bg-blue-600'
                                                             }`}
-                                                            onClick={() => updateStatus(appointment.bookingId, 'S4')}
+                                                            // onClick={() => updateStatus(appointment.bookingId, 'S4')}
+                                                            onClick={(event) => {
+                                                                event.stopPropagation();
+                                                                updateStatus(appointment.bookingId, 'S4');
+                                                            }}
                                                             disabled={
                                                                 appointment.status.keyMap === 'S4' ||
                                                                 appointment.status.keyMap === 'S5'
@@ -363,15 +399,22 @@ function Overview() {
                                                                 appointment.status.keyMap === 'S4' ||
                                                                 appointment.status.keyMap === 'S5'
                                                                     ? 'bg-red-200 text-gray-500 cursor-not-allowed'
-                                                                    : 'bg-red-500 text-white'
+                                                                    : 'bg-red-500 text-white hover:bg-red-600'
                                                             }`}
                                                             // onClick={() => updateStatus(appointment.bookingId, 'S5')}
-                                                            onClick={() =>
+                                                            // onClick={() =>
+                                                            //     openModal(
+                                                            //         appointment.bookingId,
+                                                            //         appointment.patientRecordId.fullname,
+                                                            //     )
+                                                            // }
+                                                            onClick={(event) => {
+                                                                event.stopPropagation();
                                                                 openModal(
                                                                     appointment.bookingId,
                                                                     appointment.patientRecordId.fullname,
-                                                                )
-                                                            }
+                                                                );
+                                                            }}
                                                             disabled={
                                                                 appointment.status.keyMap === 'S4' ||
                                                                 appointment.status.keyMap === 'S5'
@@ -383,6 +426,13 @@ function Overview() {
                                                 </td>
                                             </tr>
                                         ))}
+                                    {getBooking.length === 0 && (
+                                        <tr>
+                                            <td colSpan="6" className="px-4 py-2 text-center text-gray-500">
+                                                Không có dữ liệu
+                                            </td>
+                                        </tr>
+                                    )}
                                 </tbody>
                             </table>
                         </div>
@@ -486,12 +536,12 @@ function Overview() {
 
                                         <div className="col-span-2">
                                             <p className="text-gray-500 mb-1">Thông tin liên hệ</p>
-                                            <div className="flex items-center gap-10 mt-2">
+                                            <div className="flex items-center gap-12 mt-2">
                                                 <div className="flex items-center gap-2">
                                                     <Phone className="w-5 h-5 text-gray-400" />
                                                     <span>{isDetail.patientRecordId.phoneNumber}</span>
                                                 </div>
-                                                <div className="flex items-center gap-2 ml-5">
+                                                <div className="flex items-center gap-2">
                                                     <MapPin className="w-5 h-5 text-gray-400" />
                                                     <span>{isDetail.patientRecordId.address}</span>
                                                 </div>

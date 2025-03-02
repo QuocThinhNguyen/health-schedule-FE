@@ -217,7 +217,9 @@ const AppointmentManagement = () => {
                                     <div className="flex flex-col gap-3">
                                         <div className="flex">
                                             <span className="mr-2 font-medium">Ngày khám:</span>
-                                            <span>{new Date(appointment.appointmentDate).toLocaleDateString()}</span>
+                                            <span>
+                                                {new Date(appointment.appointmentDate).toLocaleDateString('vi-VN')}
+                                            </span>
                                         </div>
 
                                         <div className="flex">

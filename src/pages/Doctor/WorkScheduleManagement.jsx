@@ -135,12 +135,12 @@ function DoctorScheduleManagement() {
             </div>
 
             {/* Hiển thị các khung giờ */}
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 mb-8 mt-10">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 mb-8 mt-2">
                 {timeSlots.map((slot) => (
                     <button
                         key={slot.value}
                         onClick={() => toggleTimeSlot(slot.value)}
-                        className={`h-12 px-4 rounded-lg border-2 hover:border-green-200 hover:bg-green-50/50 ${
+                        className={`h-12 px-4 rounded-lg border-2 hover:border-green-500 hover:bg-green-50/50 ${
                             selectedTimeSlots.includes(slot.value)
                                 ? 'border-green-500 bg-green-50 text-green-600'
                                 : 'border-gray-200'
@@ -158,7 +158,7 @@ function DoctorScheduleManagement() {
                 </button>
             </div>
 
-            <div className="absolute bottom-8 right-8 flex justify-end items-center gap-6 mt-8">
+            <div className="absolute bottom-10 right-16 flex justify-end items-center gap-6 mt-8">
                 <div className="flex items-center gap-2">
                     <div className="w-4 h-4 bg-green-500 rounded"></div>
                     <span className="text-sm text-gray-600">Đã chọn</span>

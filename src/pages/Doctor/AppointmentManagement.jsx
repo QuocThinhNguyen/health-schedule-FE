@@ -106,6 +106,7 @@ function PatientManagement() {
                             : appointment,
                     ),
                 );
+                console.log('Check update', appointments);
                 toast.success('Cập nhật trạng thái thành công!');
             } else {
                 toast.error('Cập nhật trạng thái thất bại.');
