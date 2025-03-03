@@ -381,8 +381,8 @@ function DoctorProfile() {
                             </div>
                         </div>
                     ) : (
-                        <div className="space-y-6">
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div className="space-y-4">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div className="h-full flex flex-col">
                                     <label htmlFor="title" className="block text-base font-medium text-gray-700 mb-1">
                                         Chức danh
@@ -400,46 +400,7 @@ function DoctorProfile() {
                                         />
                                     </div>
                                 </div>
-                                <div className="h-full flex flex-col">
-                                    <label
-                                        htmlFor="specialty"
-                                        className="block text-base font-medium text-gray-700 mb-1"
-                                    >
-                                        Chuyên khoa
-                                    </label>
-                                    <div className="flex items-center flex-1">
-                                        <input
-                                            id="specialty"
-                                            name="specialty"
-                                            value={doctorInfo.specialty}
-                                            onChange={handleInputChange}
-                                            readOnly={!isEditing}
-                                            className={`w-full px-3 py-2 border rounded-md outline-none ${
-                                                !isEditing ? 'bg-gray-50' : ''
-                                            }`}
-                                        />
-                                    </div>
-                                </div>
-                                <div className="h-full flex flex-col">
-                                    <label
-                                        htmlFor="hospital"
-                                        className="block text-base font-medium text-gray-700 mb-1"
-                                    >
-                                        Bệnh viện làm việc
-                                    </label>
-                                    <div className="flex items-center flex-1">
-                                        <input
-                                            id="hospital"
-                                            name="hospital"
-                                            value={doctorInfo.clinic}
-                                            onChange={handleInputChange}
-                                            readOnly={!isEditing}
-                                            className={`w-full px-3 py-2 border rounded-md outline-none ${
-                                                !isEditing ? 'bg-gray-50' : ''
-                                            }`}
-                                        />
-                                    </div>
-                                </div>
+
                                 <div className="h-full flex flex-col">
                                     <label
                                         htmlFor="consultationFee"
@@ -459,6 +420,40 @@ function DoctorProfile() {
                                             }`}
                                         />
                                     </div>
+                                </div>
+                            </div>
+                            <div className="h-full flex flex-col">
+                                <label htmlFor="hospital" className="block text-base font-medium text-gray-700 mb-1">
+                                    Bệnh viện làm việc
+                                </label>
+                                <div className="flex items-center flex-1">
+                                    <input
+                                        id="hospital"
+                                        name="hospital"
+                                        value={doctorInfo.clinic}
+                                        onChange={handleInputChange}
+                                        readOnly={!isEditing}
+                                        className={`w-full px-3 py-2 border rounded-md outline-none ${
+                                            !isEditing ? 'bg-gray-50' : ''
+                                        }`}
+                                    />
+                                </div>
+                            </div>
+                            <div className="h-full flex flex-col">
+                                <label htmlFor="specialty" className="block text-base font-medium text-gray-700 mb-1">
+                                    Chuyên khoa
+                                </label>
+                                <div className="flex items-center flex-1">
+                                    <input
+                                        id="specialty"
+                                        name="specialty"
+                                        value={doctorInfo.specialty}
+                                        onChange={handleInputChange}
+                                        readOnly={!isEditing}
+                                        className={`w-full px-3 py-2 border rounded-md outline-none ${
+                                            !isEditing ? 'bg-gray-50' : ''
+                                        }`}
+                                    />
                                 </div>
                             </div>
                             {/* <div>
