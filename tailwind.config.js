@@ -2,6 +2,14 @@ export default {
     content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
     theme: {
         extend: {
+            colors: {
+                customGray: '#E4E8EC',
+                customYellow:'#ffb54a',
+                customBlue: '#2d87f3',
+                customDeepNavyBlue: '#003553',
+                custom262626: '#262626',
+                custom404040: '#404040',
+            },
             height: {
                 'screen-minus-20': 'calc(100vh - 3.5rem)',
             },
