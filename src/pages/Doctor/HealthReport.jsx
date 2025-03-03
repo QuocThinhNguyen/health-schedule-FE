@@ -268,7 +268,7 @@ function HealthReport() {
                                 >
                                     {tab.label}
                                     {activeTab === tab.id && (
-                                        <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-blue-500" />
+                                        <div className="absolute bottom-[-2px] left-1/2 transform -translate-x-1/2 right-0 h-0.5 bg-blue-500 mt-10" />
                                     )}
                                 </button>
                             ))}
@@ -371,7 +371,7 @@ function HealthReport() {
                                     .map((appointment, index) => (
                                         <div
                                             key={index}
-                                            className="border rounded-lg shadow-md bg-[#f8f9fc] p-4 space-y-4 mb-2"
+                                            className="border rounded-lg shadow-md bg-[#f8f9fc] p-4 space-y-4 mb-4"
                                         >
                                             <div className="flex justify-between items-start">
                                                 <div className="space-y-2">
