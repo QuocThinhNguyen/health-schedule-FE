@@ -13,6 +13,7 @@ import HealthReport from '~/pages/Doctor/HealthReport';
 import Review from '~/pages/Doctor/Review';
 import DoctorProfile from '~/pages/Doctor/DoctorProfile';
 import ChangePassword from '~/pages/Doctor/ChangePassword';
+import DoctorVideoManagement from '~/pages/Doctor/DoctorVideoManagement';
 function DoctorRoutes() {
     const { user } = useContext(UserContext);
 
@@ -36,6 +37,7 @@ function DoctorRoutes() {
                 <Route path="health-report" element={<HealthReport />} />
                 <Route path="review" element={<Review />} />
                 <Route path="reset-password" element={<ChangePassword />} />
+                <Route path="videos" element={<DoctorVideoManagement />} />
             </Route>
         </Fragment>
     );

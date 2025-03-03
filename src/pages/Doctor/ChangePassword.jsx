@@ -39,6 +39,9 @@ function ChangePassword() {
             // console.log('Response::', response);
             if (response.status === 200) {
                 toast.success('Mật khẩu đã được thay đổi thành công');
+                setOldPassword('');
+                setNewPassword('');
+                setConfirmPassword('');
             } else {
                 toast.error(response.message);
             }
@@ -48,7 +51,7 @@ function ChangePassword() {
     };
     return (
         <div className="h-full p-6 overflow-y-auto w-full border rounded-lg shadow-lg bg-white">
-            <div className="text-2xl text-black font-bold text-left ">Đổi mật khẩu</div>
+            <div className="text-xl text-black font-semibold text-left ">Đổi mật khẩu</div>
             <div className="flex flex-col gap-4 mt-5 pr-[450px]">
                 <div>
                     <label htmlFor="oldPassword" className="block text-sm font-semibold mb-1">
