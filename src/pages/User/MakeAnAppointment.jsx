@@ -813,7 +813,7 @@ function MakeAnAppointment() {
                                 <img
                                     src="https://media.tenor.com/On7kvXhzml4AAAAj/loading-gif.gif"
                                     alt="Loading..."
-                                    className="w-24 h-24"
+                                    className="w-full h-full"
                                 />
                             </div>
                         )}
