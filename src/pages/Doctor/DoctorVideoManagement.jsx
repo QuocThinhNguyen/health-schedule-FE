@@ -499,13 +499,8 @@ function DoctorVideoManagement() {
                         <div className="px-6 pb-6 text-center">
                             {/* Avatar with X icon */}
                             <div className="relative inline-block mb-4">
-                                <div className="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center">
-                                    <svg viewBox="0 0 24 24" className="w-12 h-12 text-blue-500" fill="currentColor">
-                                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3z M12 20c-2.33 0-4.43-.93-6-2.43.67-1.95 2.68-3.57 6-3.57s5.33 1.62 6 3.57c-1.57 1.5-3.67 2.43-6 2.43z" />
-                                    </svg>
-                                </div>
-                                <div className="absolute -bottom-1 -right-1 bg-red-500 rounded-full p-2">
-                                    <X className="w-4 h-4 text-white" />
+                                <div className="w-24 h-24 bg-blue-100 rounded-full flex items-center justify-center">
+                                    <img src="/deleteVideo.png" alt="delete video" className="w-16 h-16" />
                                 </div>
                             </div>
 
