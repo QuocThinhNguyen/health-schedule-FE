@@ -24,7 +24,7 @@ function ListFilterDoctor({ pagination, setPagination }) {
 
     const queryParams = useMemo(() => {
         return {
-            query: searchParams.get('keyword') || '',
+            keyword: searchParams.get('keyword') || '',
             clinicId: Number(searchParams.get('clinic')) || '',
             specialtyId: Number(searchParams.get('speciality')) || '',
             gender: searchParams.get('gender') || '',
@@ -39,9 +39,11 @@ function ListFilterDoctor({ pagination, setPagination }) {
     useEffect(() => {
         const filterDoctorAPI = async () => {
             try {
-                const response = await axiosClient.get(`/doctor/?${new URLSearchParams(queryParams).toString()}`);
+                const response = await axiosClient.get(`/doctor/search?${new URLSearchParams(queryParams).toString()}`);
                 if (response.status === 200) {
                     setDoctors(response.data);
+                    console.log('response', response);
+                    
                     setTotalDoctors(response.totalDoctors);
                     if (response.totalPages === 0) {
                         response.totalPages = 1;
