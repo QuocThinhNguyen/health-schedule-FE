@@ -44,8 +44,8 @@ function DoctorItem(data) {
         <div className="rounded-lg mb-4 border border-[#E4E8EC]">
             <div className="px-4 pt-4 mb-4 flex gap-4">
                 <img
-                    src={`${IMAGE_URL}${doctor.doctorId.image}` || 'https://via.placeholder.com/150'}
-                    alt={doctor.doctorId.fullname}
+                    src={`${IMAGE_URL}${doctor.image}` || 'https://via.placeholder.com/150'}
+                    alt={doctor.fullname}
                     className="w-20 h-20 rounded-full object-cover border border-[#E4E8EC]"
                 />
                 <div className="flex-1">
@@ -55,9 +55,9 @@ function DoctorItem(data) {
                                 {academicRanksAndDegreess.find(
                                     (academicRanksAndDegrees) => academicRanksAndDegrees.keyMap === doctor.position,
                                 )?.valueVi || 'Chưa xác định'}{' '}
-                                {doctor.doctorId.fullname}
+                                {doctor.fullname}
                             </h3>
-                            <p className="">{doctor.specialtyId.name}</p>
+                            <p className="">{doctor.specialtyName}</p>
                         </div>
                         <div className="flex items-center gap-1">
                             <div className="flex items-center gap-1 px-2 py-[1px] bg-[#2d87f31a] bg-opacity-10 rounded-full">
@@ -87,17 +87,17 @@ function DoctorItem(data) {
             <div className="bg-[#F8F9FC] px-4 py-2 flex items-center justify-between w-full">
                 <div className="flex items-center gap-2">
                     <img
-                        src={`${IMAGE_URL}${doctor.clinicId.image}` || 'https://via.placeholder.com/150'}
-                        alt={doctor.clinicId.name}
+                        src={`${IMAGE_URL}${doctor.clinicImage}` || 'https://via.placeholder.com/150'}
+                        alt={doctor.clinicName}
                         className="w-10 h-10 rounded-full object-cover border border-[#E4E8EC]"
                     />
                     <div>
-                        <div className="font-semibold text-sm">{doctor.clinicId.name}</div>
-                        <div className="text-xs text-[#595959]">{doctor.clinicId.address}</div>
+                        <div className="font-semibold text-sm">{doctor.clinicName}</div>
+                        <div className="text-xs text-[#595959]">{doctor.clinicAddress}</div>
                     </div>
                 </div>
                 <div
-                    onClick={() => handleBooking(doctor.doctorId.userId)}
+                    onClick={() => handleBooking(doctor.doctorId)}
                     className=" h-10 bg-blue-500 hover:bg-blue-600 text-white border px-5 py-2 rounded-lg font-semibold cursor-pointer"
                 >
                     Đặt Lịch Hẹn
