@@ -47,7 +47,7 @@ function SearchInput({ initialSearchValue = '' }) {
 
         const fetchSearchDoctors = async () => {
             try {
-                const response = await axiosClient.get(`/doctor?query=${searchValue}&limit=100`);
+                const response = await axiosClient.get(`/doctor/search?keyword=${searchValue}&limit=100`);
                 if (response.status === 200) {
                     setDoctors(response.data);
                 } else {
