@@ -66,6 +66,7 @@ function VideoItem(data) {
                 ref={videoRef}
                 src={`${IMAGE_URL}${data.data.videoName}`}
                 className="w-full h-full object-cover"
+                lazy="loading"
                 muted
                 playsInline
                 preload="metadata"
