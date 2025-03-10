@@ -350,11 +350,11 @@ function DetailVideo() {
                                     </div>
                                 </div>
                             </div>
-                            <div className="w-full absolute border-t py-2 bottom-0 left-0 right-0 flex">
+                            <div className="w-full absolute border-t px-3 py-2  bottom-0 left-0 right-0 flex">
                                 <input
                                     type="text"
-                                    placeholder="Viết bình luận"
-                                    className="flex-1 border-none bg-[#f1f1f2] rounded-xl p-2 outline-none "
+                                    placeholder="Thêm bình luận ..."
+                                    className="flex-1 border-none bg-[#f1f1f2] rounded-lg p-2 h-9 outline-none "
                                 />
                             </div>
                         </div>
