@@ -9,7 +9,7 @@ import Modal from 'react-modal';
 
 function Review() {
     const [selectedReview, setSelectedReview] = useState(null);
-    const [pagination, setPagination] = useState({ page: 1, limit: 10, totalPages: 1 });
+    const [pagination, setPagination] = useState({ page: 1, limit: 12, totalPages: 1 });
     const [feedbacks, setFeedbacks] = useState([]);
     console.log('Feedbacks:', feedbacks);
     const { user } = useContext(UserContext);

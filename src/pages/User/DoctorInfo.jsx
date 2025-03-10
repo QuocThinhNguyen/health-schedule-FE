@@ -9,6 +9,7 @@ import { CiHospital1 } from 'react-icons/ci';
 import { UserContext } from '~/context/UserContext';
 import Pagination from '~/components/Pagination';
 import Modal from 'react-modal';
+import VideoItem from '~/components/Video/VideoItem';
 
 function DoctorInfo() {
     const [selectedTime, setSelectedTime] = useState('');
@@ -17,7 +18,7 @@ function DoctorInfo() {
     const [doctorInfo, setDoctorInfo] = useState([]);
     const { state } = useLocation();
     const { user } = useContext(UserContext);
-
+    const [videos, setVideos] = useState([]);
     const [rating, setRating] = useState(5);
 
     const [searchParams] = useSearchParams();
@@ -218,9 +219,27 @@ function DoctorInfo() {
         fetchFeedbacks();
     }, [doctorId, pagination.page]);
 
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await axiosInstance.get(`/video/${doctorId}`);
+                // console.log('response check', response);
+                if (response.status === 200) {
+                    setVideos(response.data);
+                }
+            } catch (error) {
+                console.error('Error fetching video data:', error);
+            }
+        };
+        fetchData();
+    }, []);
+
+    console.log('videos:', videos);
+
     const tabs = [
         { id: 'info', label: 'Thông tin cơ bản' },
         { id: 'review', label: 'Đánh giá', count: 50 },
+        { id: 'share', label: 'Bác sĩ chia sẻ' },
     ];
 
     const starDistribution = [
@@ -309,7 +328,7 @@ function DoctorInfo() {
             </div>
             <div className="flex flex-col lg:flex-row gap-8 max-w-6xl mt-2 mx-auto">
                 <div className="flex-1">
-                    <div className="border-b-2 mb-6">
+                    <div className="border-b-2 mb-2">
                         <div className="flex-row">
                             <div className="max-w-3xl mx-auto p-4 bg-blue-100 rounded-lg">
                                 <div className="space-y-2">
@@ -515,6 +534,13 @@ function DoctorInfo() {
                                     onPageChange={handlePageChange}
                                 />
                             </div>
+                        </div>
+                    )}
+                    {activeTab === 'share' && (
+                        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 p-4">
+                            {videos.map((video) => (
+                                <VideoItem key={video.videoId} data={video} />
+                            ))}
                         </div>
                     )}
                 </div>

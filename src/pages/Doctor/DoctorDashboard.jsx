@@ -127,7 +127,7 @@ const DoctorDashboard = () => {
                                             onMouseLeave={() => setShowProfileMenu(false)}
                                         >
                                             <ul className="">
-                                                <li className="group px-4 py-3 text-left text-base font-medium hover:bg-slate-100 cursor-pointer flex items-center">
+                                                {/* <li className="group px-4 py-3 text-left text-base font-medium hover:bg-slate-100 cursor-pointer flex items-center">
                                                     <NavLink
                                                         to="/doctor/overview"
                                                         className={({ isActive }) =>
@@ -208,7 +208,7 @@ const DoctorDashboard = () => {
                                                         />
                                                         Đổi mật khẩu
                                                     </NavLink>
-                                                </li>
+                                                </li> */}
                                                 <li className="group px-4 py-3 text-left text-base font-medium hover:bg-slate-100 cursor-pointer flex items-center">
                                                     <NavLink
                                                         to="/doctor/profile"
