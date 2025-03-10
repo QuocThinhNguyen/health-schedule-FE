@@ -166,7 +166,7 @@ function DetailVideo() {
                         </button>
                     </div>
                     <div
-                        className="absolute right-0 top-1/3 z-10 flex flex-col gap-2"
+                        className="absolute right-4 top-1/3 z-10 flex flex-col gap-2"
                         onClick={(e) => e.stopPropagation()}
                     >
                         <button className="border rounded-full bg-[#3a3a3a] border-none p-2 hover:bg-[#2a2a2a]">
@@ -196,7 +196,7 @@ function DetailVideo() {
 
                     {/* Nút âm lượng + Thanh trượt */}
                     <div
-                        className="absolute bottom-8 right-0 flex flex-col items-center bg-black/60 rounded-lg"
+                        className="absolute bottom-4 right-4 flex flex-col items-center bg-black/60 rounded-lg"
                         onClick={(e) => e.stopPropagation()} // Ngăn click ảnh hưởng tới togglePlay
                         onMouseEnter={() => setShowVolumeControl(true)}
                         onMouseLeave={() => setShowVolumeControl(false)}
@@ -309,7 +309,46 @@ function DetailVideo() {
                 <div className="w-full flex-grow overflow-y-hidden">
                     {activeTab === 'comments' && (
                         <div className="pt-4 w-full h-full relative">
-                            <div className="">
+                            <div className="overflow-y-auto h-full">
+                                <div className="flex items-center justify-start gap-2">
+                                    <img src="/mail.png" alt="avatar" className="w-10 h-10 rounded-full border-2" />
+                                    <div className="w-full">
+                                        <div className="font-semibold text-sm">Nguyễn Thị Hương</div>
+                                        <div className="items-center justify-start flex w-full">
+                                            <div className="text-base max-w-80">
+                                                em ho bữa giờ không hết, uống thuốc quài không đỡ càng ho nhiều hơn
+                                            </div>
+                                            <div className="flex flex-col items-center ml-auto">
+                                                <Heart className="w-5 h-5 text-black " />
+                                                <span>1</span>
+                                            </div>
+                                        </div>
+                                        <span className="text-[#9fa0a5] text-sm mr-2">2025-01-05</span>
+                                        <span className="text-[#9fa0a5] text-sm cursor-pointer">Trả lời</span>
+                                    </div>
+                                </div>
+                                <div className="flex items-center justify-start gap-2 pl-10 mt-2">
+                                    <img src="/mail.png" alt="avatar" className="w-8 h-8 rounded-full border-2" />
+                                    <div className="w-full">
+                                        <div className="flex items-center justify-start gap-1">
+                                            <div className="font-semibold text-sm">Phạm Duy Kiên</div>
+                                            <div>·</div>
+                                            <div className="font-semibold text-sm text-[#FE2C55]">Bác sĩ</div>
+                                        </div>
+
+                                        <div className="items-center justify-start flex w-full">
+                                            <div className="text-base max-w-80">
+                                                Bạn nên đến bệnh viện để được tư vấn cụ thể hơn
+                                            </div>
+                                            <div className="flex flex-col items-center ml-auto">
+                                                <Heart className="w-5 h-5 text-black " />
+                                                <span>1</span>
+                                            </div>
+                                        </div>
+                                        <span className="text-[#9fa0a5] text-sm mr-2">2025-01-06</span>
+                                        <span className="text-[#9fa0a5] text-sm cursor-pointer">Trả lời</span>
+                                    </div>
+                                </div>
                                 <div className="flex items-center justify-start gap-2">
                                     <img src="/mail.png" alt="avatar" className="w-10 h-10 rounded-full border-2" />
                                     <div className="w-full">
