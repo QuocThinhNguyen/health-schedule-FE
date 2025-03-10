@@ -3,8 +3,6 @@ import { axiosInstance } from '~/api/apiRequest';
 import { NavLink, useSearchParams, useNavigate, useLocation, useParams } from 'react-router-dom';
 import {
     Heart,
-    MessageCircle,
-    Bookmark,
     Share2,
     Music2,
     Volume2,
@@ -20,7 +18,9 @@ import {
 import e from 'cors';
 import VideoItem from '~/components/Video/VideoItem';
 import { toast } from 'react-toastify';
-import { set } from 'date-fns';
+import { IoIosHeart } from 'react-icons/io';
+import { BiSolidMessageRoundedDots } from 'react-icons/bi';
+import { RxBookmarkFilled } from 'react-icons/rx';
 
 function DetailVideo() {
     const { videoId } = useParams();
@@ -149,7 +149,7 @@ function DetailVideo() {
     return (
         <div className="w-full flex bg-white h-screen-minus-20">
             {/* Cột bên trái */}
-            <div className="w-3/5 h-full bg-black items-center justify-center flex">
+            <div className="flex-1 h-full bg-black items-center justify-center flex">
                 <div className="relative px-40 cursor-pointer w-full h-full" onClick={togglePlay}>
                     <div
                         className="absolute top-0 left-0 z-10 flex items-center justify-between p-4"
@@ -231,183 +231,348 @@ function DetailVideo() {
                 </div>
             </div>
             {/* Cột bên phải */}
-            <div className="w-2/5 h-full pt-4 px-4 flex flex-col">
-                <div className="border border-none bg-[#f8f8f8] rounded-xl p-4 space-y-2">
-                    <div className="flex items-center justify-start gap-2">
-                        <img
-                            src={`${IMAGE_URL}${doctorInfo.image}`}
-                            alt="avatar"
-                            className="rounded-full w-10 h-10 object-cover"
-                        />
-                        <div className="w-full">
-                            <div className="flex items-center justify-start w-full">
-                                <div className="text-lg font-bold">
-                                    {doctorInfo.position} {doctorInfo.fullname}
+            <div className="w-[544px] h-full flex flex-col relative ">
+                <div className="flex-grow flex flex-col overflow-y-scroll">
+                    <div className="ml-5 mt-6 border border-none bg-[#16182308] rounded-xl p-4 space-y-2">
+                        <div className="flex items-center justify-start gap-2">
+                            <img
+                                src={`${IMAGE_URL}${doctorInfo.image}`}
+                                alt="avatar"
+                                className="rounded-full w-10 h-10 object-cover"
+                            />
+                            <div className="w-full">
+                                <div className="flex items-center justify-start w-full">
+                                    <div className="text-lg font-bold">
+                                        {doctorInfo.position} {doctorInfo.fullname}
+                                    </div>
+                                    <span className="text-sm ml-auto text-blue-700">
+                                        {new Date(detailVideo.createAt).toLocaleDateString('vi-VN')}
+                                    </span>
                                 </div>
-                                <span className="text-sm ml-auto text-blue-700">
-                                    {new Date(detailVideo.createAt).toLocaleDateString('vi-VN')}
-                                </span>
-                            </div>
 
-                            <div className="items-center justify-start flex gap-2">
-                                <div className="text-sm uppercase">{doctorInfo.clinicName}</div>
-                                <div className="text-sm">•</div>
-                                <div className="text-sm uppercase">{doctorInfo.specialtyName}</div>
+                                <div className="items-center justify-start flex gap-2">
+                                    <div className="text-sm uppercase">{doctorInfo.clinicName}</div>
+                                    <div className="text-sm">•</div>
+                                    <div className="text-sm uppercase">{doctorInfo.specialtyName}</div>
+                                </div>
                             </div>
                         </div>
+                        <div className="text-base font-normal">{detailVideo.videoTitle}</div>
                     </div>
-                    <div className="text-base font-normal">{detailVideo.videoTitle}</div>
-                </div>
-                <div className="flex items-center justify-start gap-10 p-4">
-                    <div className="flex items-center justify-start gap-2">
-                        <button className="bg-[#f1f1f2] p-2 rounded-full">
-                            <Heart className="w-5 h-5 text-black" />
-                        </button>
-                        <span className="text-xs font-bold">5256</span>
+                    <div className="flex items-center justify-start gap-5 ml-5 p-4">
+                        <div className="flex items-center justify-start gap-2">
+                            <button className="bg-[#f1f1f2] p-[6px] rounded-full">
+                                <IoIosHeart className="w-5 h-5 text-black" />
+                            </button>
+                            <span className="text-xs font-bold text-[#161823BF]">5256</span>
+                        </div>
+                        <div className="flex items-center justify-start gap-2">
+                            <button className="bg-[#f1f1f2] p-[6px] rounded-full">
+                                <BiSolidMessageRoundedDots className="w-5 h-5 text-black" />
+                            </button>
+                            <span className="text-xs font-bold text-[#161823BF]">1010</span>
+                        </div>
+                        <div className="flex items-center justify-start gap-2">
+                            <button className="bg-[#f1f1f2] p-[6px] rounded-full">
+                                <RxBookmarkFilled className="w-5 h-5 text-black" />
+                            </button>
+                            <span className="text-xs font-bold text-[#161823BF]">500</span>
+                        </div>
                     </div>
-                    <div className="flex items-center justify-start gap-2">
-                        <button className="bg-[#f1f1f2] p-2 rounded-full">
-                            <MessageCircle className="w-5 h-5 text-black" />
-                        </button>
-                        <span className="text-xs font-bold">1010</span>
-                    </div>
-                    <div className="flex items-center justify-start gap-2">
-                        <button className="bg-[#f1f1f2] p-2 rounded-full">
-                            <Bookmark className="w-5 h-5" />
-                        </button>
-                        <span className="text-xs font-bold">500</span>
-                    </div>
-                </div>
-                <div className="items-center justify-start flex gap-2 px-4 py-1 w-full bg-[#f1f1f2] rounded-lg">
-                    <div className="truncate max-w-80 overflow-hidden text-ellipsis whitespace-nowrap text-sm">
-                        {`http://localhost:5173/video?idVideo=${idVideo}&&idDoctor=${idDoctor}`}
-                    </div>
-                    <div className="text-sm font-bold ml-auto cursor-pointer" onClick={copyToClipboard}>
-                        Sao chép liên kết
-                    </div>
-                </div>
-
-                <div className="flex justify-center border-b pt-4">
-                    {tabs.map((tab) => (
-                        <button
-                            key={tab.id}
-                            onClick={() => setActiveTab(tab.id)}
-                            className={`text-base text-[#737373] font-semibold px-4 relative flex justify-center items-center w-full ${
-                                activeTab === tab.id
-                                    ? 'text-black font-bold'
-                                    : 'text-[#959fa5] font-semibold hover:text-black'
-                            }`}
+                    <div className="items-center justify-start flex mx-8 bg-[#1618230f] rounded-lg border">
+                        <div className="truncate text-sm pl-3 pb-2 pt-[6px]">
+                            {`http://localhost:5173/video?idVideo=${idVideo}&&idDoctor=${idDoctor}`}
+                        </div>
+                        <div
+                            className="px-4 pb-2 pt-[6px] text-sm font-bold cursor-pointer whitespace-nowrap"
+                            onClick={copyToClipboard}
                         >
-                            {tab.label}
-                            {activeTab === tab.id && (
-                                <div className="absolute bottom-[-0.5px] left-1/2 transform -translate-x-1/2 right-0 h-0.5 bg-black mt-10" />
+                            Sao chép liên kết
+                        </div>
+                    </div>
+                    <div>
+                        <div className="sticky top-0 z-10 bg-white flex justify-center border-b pt-4">
+                            {tabs.map((tab) => (
+                                <button
+                                    key={tab.id}
+                                    onClick={() => setActiveTab(tab.id)}
+                                    className={`pb-2 text-base text-[#737373] font-semibold px-4 relative flex justify-center items-center w-full ${
+                                        activeTab === tab.id
+                                            ? 'text-black font-bold'
+                                            : 'text-[#959fa5] font-semibold hover:text-black'
+                                    }`}
+                                >
+                                    {tab.label}
+                                    {activeTab === tab.id && (
+                                        <div className="absolute bottom-[-0.5px] left-1/2 transform -translate-x-1/2 right-0 h-0.5 bg-black mt-10" />
+                                    )}
+                                </button>
+                            ))}
+                        </div>
+
+                        <div className="w-full flex-grow overflow-y-hidden">
+                            {activeTab === 'comments' && (
+                                <div className="mt-4 mx-8  relative flex flex-col">
+                                    <div className="flex items-center justify-start gap-2">
+                                        <img src="/mail.png" alt="avatar" className="w-10 h-10 rounded-full border-2" />
+                                        <div className="w-full">
+                                            <div className="font-semibold text-sm">Nguyễn Thị Hương</div>
+                                            <div className="items-center justify-start flex w-full">
+                                                <div className="text-base max-w-80">
+                                                    em ho bữa giờ không hết, uống thuốc quài không đỡ càng ho nhiều hơn
+                                                </div>
+                                                <div className="flex flex-col items-center ml-auto">
+                                                    <Heart className="w-5 h-5 text-black " />
+                                                    <span>1</span>
+                                                </div>
+                                            </div>
+                                            <span className="text-[#9fa0a5] text-sm mr-2">2025-01-05</span>
+                                            <span className="text-[#9fa0a5] text-sm cursor-pointer">Trả lời</span>
+                                        </div>
+                                    </div>
+                                    <div className="flex items-center justify-start gap-2 pl-10 mt-2">
+                                        <img src="/mail.png" alt="avatar" className="w-8 h-8 rounded-full border-2" />
+                                        <div className="w-full">
+                                            <div className="flex items-center justify-start gap-1">
+                                                <div className="font-semibold text-sm">Phạm Duy Kiên</div>
+                                                <div>·</div>
+                                                <div className="font-semibold text-sm text-[#FE2C55]">Bác sĩ</div>
+                                            </div>
+
+                                            <div className="items-center justify-start flex w-full">
+                                                <div className="text-base max-w-80">
+                                                    Bạn nên đến bệnh viện để được tư vấn cụ thể hơn
+                                                </div>
+                                                <div className="flex flex-col items-center ml-auto">
+                                                    <Heart className="w-5 h-5 text-black " />
+                                                    <span>1</span>
+                                                </div>
+                                            </div>
+                                            <span className="text-[#9fa0a5] text-sm mr-2">2025-01-06</span>
+                                            <span className="text-[#9fa0a5] text-sm cursor-pointer">Trả lời</span>
+                                        </div>
+                                    </div>
+                                    <div className="flex items-center justify-start gap-2">
+                                        <img src="/mail.png" alt="avatar" className="w-10 h-10 rounded-full border-2" />
+                                        <div className="w-full">
+                                            <div className="font-semibold text-sm">Nguyễn Thị Hương</div>
+                                            <div className="items-center justify-start flex w-full">
+                                                <div className="text-base max-w-80">
+                                                    em ho bữa giờ không hết, uống thuốc quài không đỡ càng ho nhiều hơn
+                                                </div>
+                                                <div className="flex flex-col items-center ml-auto">
+                                                    <Heart className="w-5 h-5 text-black " />
+                                                    <span>1</span>
+                                                </div>
+                                            </div>
+                                            <span className="text-[#9fa0a5] text-sm mr-2">2025-01-05</span>
+                                            <span className="text-[#9fa0a5] text-sm cursor-pointer">Trả lời</span>
+                                        </div>
+                                    </div>
+                                    <div className="flex items-center justify-start gap-2 pl-10 mt-2">
+                                        <img src="/mail.png" alt="avatar" className="w-8 h-8 rounded-full border-2" />
+                                        <div className="w-full">
+                                            <div className="flex items-center justify-start gap-1">
+                                                <div className="font-semibold text-sm">Phạm Duy Kiên</div>
+                                                <div>·</div>
+                                                <div className="font-semibold text-sm text-[#FE2C55]">Bác sĩ</div>
+                                            </div>
+
+                                            <div className="items-center justify-start flex w-full">
+                                                <div className="text-base max-w-80">
+                                                    Bạn nên đến bệnh viện để được tư vấn cụ thể hơn
+                                                </div>
+                                                <div className="flex flex-col items-center ml-auto">
+                                                    <Heart className="w-5 h-5 text-black " />
+                                                    <span>1</span>
+                                                </div>
+                                            </div>
+                                            <span className="text-[#9fa0a5] text-sm mr-2">2025-01-06</span>
+                                            <span className="text-[#9fa0a5] text-sm cursor-pointer">Trả lời</span>
+                                        </div>
+                                    </div>
+
+                                    <div className="flex items-center justify-start gap-2">
+                                        <img src="/mail.png" alt="avatar" className="w-10 h-10 rounded-full border-2" />
+                                        <div className="w-full">
+                                            <div className="font-semibold text-sm">Nguyễn Thị Hương</div>
+                                            <div className="items-center justify-start flex w-full">
+                                                <div className="text-base max-w-80">
+                                                    em ho bữa giờ không hết, uống thuốc quài không đỡ càng ho nhiều hơn
+                                                </div>
+                                                <div className="flex flex-col items-center ml-auto">
+                                                    <Heart className="w-5 h-5 text-black " />
+                                                    <span>1</span>
+                                                </div>
+                                            </div>
+                                            <span className="text-[#9fa0a5] text-sm mr-2">2025-01-05</span>
+                                            <span className="text-[#9fa0a5] text-sm cursor-pointer">Trả lời</span>
+                                        </div>
+                                    </div>
+                                    <div className="flex items-center justify-start gap-2 pl-10 mt-2">
+                                        <img src="/mail.png" alt="avatar" className="w-8 h-8 rounded-full border-2" />
+                                        <div className="w-full">
+                                            <div className="flex items-center justify-start gap-1">
+                                                <div className="font-semibold text-sm">Phạm Duy Kiên</div>
+                                                <div>·</div>
+                                                <div className="font-semibold text-sm text-[#FE2C55]">Bác sĩ</div>
+                                            </div>
+
+                                            <div className="items-center justify-start flex w-full">
+                                                <div className="text-base max-w-80">
+                                                    Bạn nên đến bệnh viện để được tư vấn cụ thể hơn
+                                                </div>
+                                                <div className="flex flex-col items-center ml-auto">
+                                                    <Heart className="w-5 h-5 text-black " />
+                                                    <span>1</span>
+                                                </div>
+                                            </div>
+                                            <span className="text-[#9fa0a5] text-sm mr-2">2025-01-06</span>
+                                            <span className="text-[#9fa0a5] text-sm cursor-pointer">Trả lời</span>
+                                        </div>
+                                    </div>
+                                    <div className="flex items-center justify-start gap-2">
+                                        <img src="/mail.png" alt="avatar" className="w-10 h-10 rounded-full border-2" />
+                                        <div className="w-full">
+                                            <div className="font-semibold text-sm">Nguyễn Thị Hương</div>
+                                            <div className="items-center justify-start flex w-full">
+                                                <div className="text-base max-w-80">
+                                                    em ho bữa giờ không hết, uống thuốc quài không đỡ càng ho nhiều hơn
+                                                </div>
+                                                <div className="flex flex-col items-center ml-auto">
+                                                    <Heart className="w-5 h-5 text-black " />
+                                                    <span>1</span>
+                                                </div>
+                                            </div>
+                                            <span className="text-[#9fa0a5] text-sm mr-2">2025-01-05</span>
+                                            <span className="text-[#9fa0a5] text-sm cursor-pointer">Trả lời</span>
+                                        </div>
+                                    </div>
+                                    <div className="flex items-center justify-start gap-2 pl-10 mt-2">
+                                        <img src="/mail.png" alt="avatar" className="w-8 h-8 rounded-full border-2" />
+                                        <div className="w-full">
+                                            <div className="flex items-center justify-start gap-1">
+                                                <div className="font-semibold text-sm">Phạm Duy Kiên</div>
+                                                <div>·</div>
+                                                <div className="font-semibold text-sm text-[#FE2C55]">Bác sĩ</div>
+                                            </div>
+
+                                            <div className="items-center justify-start flex w-full">
+                                                <div className="text-base max-w-80">
+                                                    Bạn nên đến bệnh viện để được tư vấn cụ thể hơn
+                                                </div>
+                                                <div className="flex flex-col items-center ml-auto">
+                                                    <Heart className="w-5 h-5 text-black " />
+                                                    <span>1</span>
+                                                </div>
+                                            </div>
+                                            <span className="text-[#9fa0a5] text-sm mr-2">2025-01-06</span>
+                                            <span className="text-[#9fa0a5] text-sm cursor-pointer">Trả lời</span>
+                                        </div>
+                                    </div>
+
+                                    <div className="flex items-center justify-start gap-2">
+                                        <img src="/mail.png" alt="avatar" className="w-10 h-10 rounded-full border-2" />
+                                        <div className="w-full">
+                                            <div className="font-semibold text-sm">Nguyễn Thị Hương</div>
+                                            <div className="items-center justify-start flex w-full">
+                                                <div className="text-base max-w-80">
+                                                    em ho bữa giờ không hết, uống thuốc quài không đỡ càng ho nhiều hơn
+                                                </div>
+                                                <div className="flex flex-col items-center ml-auto">
+                                                    <Heart className="w-5 h-5 text-black " />
+                                                    <span>1</span>
+                                                </div>
+                                            </div>
+                                            <span className="text-[#9fa0a5] text-sm mr-2">2025-01-05</span>
+                                            <span className="text-[#9fa0a5] text-sm cursor-pointer">Trả lời</span>
+                                        </div>
+                                    </div>
+                                    <div className="flex items-center justify-start gap-2 pl-10 mt-2">
+                                        <img src="/mail.png" alt="avatar" className="w-8 h-8 rounded-full border-2" />
+                                        <div className="w-full">
+                                            <div className="flex items-center justify-start gap-1">
+                                                <div className="font-semibold text-sm">Phạm Duy Kiên</div>
+                                                <div>·</div>
+                                                <div className="font-semibold text-sm text-[#FE2C55]">Bác sĩ</div>
+                                            </div>
+
+                                            <div className="items-center justify-start flex w-full">
+                                                <div className="text-base max-w-80">
+                                                    Bạn nên đến bệnh viện để được tư vấn cụ thể hơn
+                                                </div>
+                                                <div className="flex flex-col items-center ml-auto">
+                                                    <Heart className="w-5 h-5 text-black " />
+                                                    <span>1</span>
+                                                </div>
+                                            </div>
+                                            <span className="text-[#9fa0a5] text-sm mr-2">2025-01-06</span>
+                                            <span className="text-[#9fa0a5] text-sm cursor-pointer">Trả lời</span>
+                                        </div>
+                                    </div>
+
+                                    <div className="flex items-center justify-start gap-2">
+                                        <img src="/mail.png" alt="avatar" className="w-10 h-10 rounded-full border-2" />
+                                        <div className="w-full">
+                                            <div className="font-semibold text-sm">Nguyễn Thị Hương</div>
+                                            <div className="items-center justify-start flex w-full">
+                                                <div className="text-base max-w-80">
+                                                    em ho bữa giờ không hết, uống thuốc quài không đỡ càng ho nhiều hơn
+                                                </div>
+                                                <div className="flex flex-col items-center ml-auto">
+                                                    <Heart className="w-5 h-5 text-black " />
+                                                    <span>1</span>
+                                                </div>
+                                            </div>
+                                            <span className="text-[#9fa0a5] text-sm mr-2">2025-01-05</span>
+                                            <span className="text-[#9fa0a5] text-sm cursor-pointer">Trả lời</span>
+                                        </div>
+                                    </div>
+                                    <div className="flex items-center justify-start gap-2 pl-10 mt-2">
+                                        <img src="/mail.png" alt="avatar" className="w-8 h-8 rounded-full border-2" />
+                                        <div className="w-full">
+                                            <div className="flex items-center justify-start gap-1">
+                                                <div className="font-semibold text-sm">Phạm Duy Kiên</div>
+                                                <div>·</div>
+                                                <div className="font-semibold text-sm text-[#FE2C55]">Bác sĩ</div>
+                                            </div>
+
+                                            <div className="items-center justify-start flex w-full">
+                                                <div className="text-base max-w-80">
+                                                    Bạn nên đến bệnh viện để được tư vấn cụ thể hơn
+                                                </div>
+                                                <div className="flex flex-col items-center ml-auto">
+                                                    <Heart className="w-5 h-5 text-black " />
+                                                    <span>1</span>
+                                                </div>
+                                            </div>
+                                            <span className="text-[#9fa0a5] text-sm mr-2">2025-01-06</span>
+                                            <span className="text-[#9fa0a5] text-sm cursor-pointer">Trả lời</span>
+                                        </div>
+                                    </div>
+                                </div>
                             )}
-                        </button>
-                    ))}
-                </div>
-
-                <div className="w-full flex-grow overflow-y-hidden">
-                    {activeTab === 'comments' && (
-                        <div className="pt-2 w-full h-full relative flex flex-col">
-                            <div className="overflow-y-auto flex-grow">
-                                <div className="flex items-center justify-start gap-2">
-                                    <img src="/mail.png" alt="avatar" className="w-10 h-10 rounded-full border-2" />
-                                    <div className="w-full">
-                                        <div className="font-semibold text-sm">Nguyễn Thị Hương</div>
-                                        <div className="items-center justify-start flex w-full">
-                                            <div className="text-base max-w-80">
-                                                em ho bữa giờ không hết, uống thuốc quài không đỡ càng ho nhiều hơn
-                                            </div>
-                                            <div className="flex flex-col items-center ml-auto">
-                                                <Heart className="w-5 h-5 text-black " />
-                                                <span>1</span>
-                                            </div>
-                                        </div>
-                                        <span className="text-[#9fa0a5] text-sm mr-2">2025-01-05</span>
-                                        <span className="text-[#9fa0a5] text-sm cursor-pointer">Trả lời</span>
+                            {activeTab === 'videos' && (
+                                <div className="overflow-y-auto h-full">
+                                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4">
+                                        {videos.map((video) => (
+                                            <VideoItem key={video.videoId} data={video} onClick={handleVideoClick} />
+                                        ))}
                                     </div>
                                 </div>
-                                <div className="flex items-center justify-start gap-2 pl-10 mt-2">
-                                    <img src="/mail.png" alt="avatar" className="w-8 h-8 rounded-full border-2" />
-                                    <div className="w-full">
-                                        <div className="flex items-center justify-start gap-1">
-                                            <div className="font-semibold text-sm">Phạm Duy Kiên</div>
-                                            <div>·</div>
-                                            <div className="font-semibold text-sm text-[#FE2C55]">Bác sĩ</div>
-                                        </div>
-
-                                        <div className="items-center justify-start flex w-full">
-                                            <div className="text-base max-w-80">
-                                                Bạn nên đến bệnh viện để được tư vấn cụ thể hơn
-                                            </div>
-                                            <div className="flex flex-col items-center ml-auto">
-                                                <Heart className="w-5 h-5 text-black " />
-                                                <span>1</span>
-                                            </div>
-                                        </div>
-                                        <span className="text-[#9fa0a5] text-sm mr-2">2025-01-06</span>
-                                        <span className="text-[#9fa0a5] text-sm cursor-pointer">Trả lời</span>
-                                    </div>
-                                </div>
-                                <div className="flex items-center justify-start gap-2">
-                                    <img src="/mail.png" alt="avatar" className="w-10 h-10 rounded-full border-2" />
-                                    <div className="w-full">
-                                        <div className="font-semibold text-sm">Nguyễn Thị Hương</div>
-                                        <div className="items-center justify-start flex w-full">
-                                            <div className="text-base max-w-80">
-                                                em ho bữa giờ không hết, uống thuốc quài không đỡ càng ho nhiều hơn
-                                            </div>
-                                            <div className="flex flex-col items-center ml-auto">
-                                                <Heart className="w-5 h-5 text-black " />
-                                                <span>1</span>
-                                            </div>
-                                        </div>
-                                        <span className="text-[#9fa0a5] text-sm mr-2">2025-01-05</span>
-                                        <span className="text-[#9fa0a5] text-sm cursor-pointer">Trả lời</span>
-                                    </div>
-                                </div>
-                                <div className="flex items-center justify-start gap-2 pl-10 mt-2">
-                                    <img src="/mail.png" alt="avatar" className="w-8 h-8 rounded-full border-2" />
-                                    <div className="w-full">
-                                        <div className="flex items-center justify-start gap-1">
-                                            <div className="font-semibold text-sm">Phạm Duy Kiên</div>
-                                            <div>·</div>
-                                            <div className="font-semibold text-sm text-[#FE2C55]">Bác sĩ</div>
-                                        </div>
-
-                                        <div className="items-center justify-start flex w-full">
-                                            <div className="text-base max-w-80">
-                                                Bạn nên đến bệnh viện để được tư vấn cụ thể hơn
-                                            </div>
-                                            <div className="flex flex-col items-center ml-auto">
-                                                <Heart className="w-5 h-5 text-black " />
-                                                <span>1</span>
-                                            </div>
-                                        </div>
-                                        <span className="text-[#9fa0a5] text-sm mr-2">2025-01-06</span>
-                                        <span className="text-[#9fa0a5] text-sm cursor-pointer">Trả lời</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="w-full border-t px-3 py-2 flex">
-                                <input
-                                    type="text"
-                                    placeholder="Thêm bình luận ..."
-                                    className="flex-1 border-none bg-[#f1f1f2] rounded-lg p-2 h-9 outline-none "
-                                />
-                            </div>
+                            )}
                         </div>
-                    )}
-                    {activeTab === 'videos' && (
-                        <div className="overflow-y-auto h-full">
-                            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4">
-                                {videos.map((video) => (
-                                    <VideoItem key={video.videoId} data={video} onClick={handleVideoClick} />
-                                ))}
-                            </div>
-                        </div>
-                    )}
+                    </div>
                 </div>
+                {activeTab === 'comments' && (
+                    <div className="absolute bg-white bottom-0 left-0 right-0 z-10 border-t px-8 py-5 flex">
+                        <input
+                            type="text"
+                            placeholder="Thêm bình luận ..."
+                            className="flex-1 border-none bg-[#f1f1f2] rounded-lg p-2 h-10 outline-none "
+                        />
+                    </div>
+                )}
             </div>
         </div>
     );
