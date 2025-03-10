@@ -308,7 +308,7 @@ function DetailVideo() {
 
                 <div className="w-full flex-grow overflow-y-hidden">
                     {activeTab === 'comments' && (
-                        <div className="pt-4 px-4">
+                        <div className="pt-4 w-full h-full relative">
                             <div className="">
                                 <div className="flex items-center justify-start gap-2">
                                     <img src="/mail.png" alt="avatar" className="w-10 h-10 rounded-full border-2" />
@@ -350,11 +350,11 @@ function DetailVideo() {
                                     </div>
                                 </div>
                             </div>
-                            <div className="absolute border-t px-4 pt-2 bottom-0 flex">
+                            <div className="w-full absolute border-t py-2 bottom-0 left-0 right-0 flex">
                                 <input
                                     type="text"
                                     placeholder="Viết bình luận"
-                                    className="flex-1 border-none bg-[#f1f1f2] rounded-lg p-2 outline-none "
+                                    className="flex-1 border-none bg-[#f1f1f2] rounded-xl p-2 outline-none "
                                 />
                             </div>
                         </div>
