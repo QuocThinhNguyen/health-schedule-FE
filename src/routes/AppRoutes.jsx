@@ -48,7 +48,7 @@ function AppRoutes() {
                     <Route path="/tin-tuc/:title" element={<NewsDetail />} />
                     <Route path="/tat-ca-benh-vien" element={<Filter />} />
                     <Route path="/tat-ca-bac-si" element={<Filter />} />
-                    <Route path="/video/:videoId" element={<DetailVideo />} />
+                    <Route path="/video" element={<DetailVideo />} />
                 </Route>
                 {AdminRoutes()}
                 {DoctorRoutes()}

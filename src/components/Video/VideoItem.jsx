@@ -52,7 +52,7 @@ function VideoItem(data) {
 
     const getVideo = (videoId) => {
         console.log('get videoId:', videoId);
-        navigate(`/video/${videoId}`);
+        navigate(`/video?idVideo=${videoId}&&idDoctor=${data.data.doctorId}`);
     };
 
     return (
@@ -73,16 +73,6 @@ function VideoItem(data) {
             {/* Gradient Overlay */}
             {/* <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/50 pointer-events-none" /> */}
 
-            {/* <div className="absolute bottom-5 left-3 right-3 w-28">
-                <div>
-                    <img
-                        src={`${IMAGE_URL}${doctorInfo.image}`} // Thay thế URL này bằng link ảnh thực tế của bác sĩ
-                        alt="Doctor profile"
-                        className="rounded-full w-5 h-5 object-cover border-4 border-white shadow-lg"
-                    />
-                </div>
-            </div> */}
-
             <div className="absolute bottom-4 left-3 right-3">
                 <div className="relative">
                     {/* <div className="flex items-center justify-center gap-2">
@@ -94,7 +84,7 @@ function VideoItem(data) {
                         <div className="text-sm font-bold text-white">{doctorInfo.fullname}</div>
                     </div> */}
                     <div
-                        className={`text-white text-sm font-medium drop-shadow-md transition-all duration-300 w-28
+                        className={`text-white text-sm font-medium drop-shadow-md transition-all duration-300 w-24
                             ${isExpanded ? '' : 'line-clamp-2'}`}
                     >
                         {data.data.videoTitle}
@@ -104,7 +94,7 @@ function VideoItem(data) {
                     {data.data.videoTitle.length > 25 && (
                         <button
                             onClick={toggleExpand}
-                            className="absolute -bottom-4 right-0 text-white  rounded-full p-0.5 text-sm
+                            className="absolute -bottom-4 right-4 text-white  rounded-full p-0.5 text-sm
                                         transition-colors z-10"
                         >
                             {isExpanded ? 'ẩn bớt' : 'thêm'}
