@@ -88,6 +88,9 @@ function DoctorVideoManagement() {
             if (response.status === 200) {
                 toast.success('Thêm video thành công');
                 closeModal();
+                setTimeout(() => {
+                    window.location.reload();
+                }, 2000);
             } else {
                 toast.error('Thêm video thất bại');
             }
@@ -256,7 +259,7 @@ function DoctorVideoManagement() {
                                 />
                             </div>
                             <div className="p-2 space-y-2">
-                                <div className="text-base font-medium h-12">{video.videoTitle}</div>
+                                <div className="text-base font-medium h-12 line-clamp-2">{video.videoTitle}</div>
                                 <div className="flex items-center justify-between w-full">
                                     {/* Action buttons group */}
                                     <div className="flex items-center gap-4">
