@@ -1,17 +1,45 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Bookmark } from 'lucide-react';
+import { axiosClient, axiosInstance } from '~/api/apiRequest';
 
-const AnimatedBookmarkButton = () => {
-    const [saved, setSaved] = useState(false);
-    const [saveCount, setSaveCount] = useState(500);
+const AnimatedBookmarkButton = ({ totalBookMark, checkBookmark, videoId, userId }) => {
+    const [saved, setSaved] = useState(checkBookmark);
+    const [saveCount, setSaveCount] = useState(totalBookMark || 0);
     const [isAnimating, setIsAnimating] = useState(false);
 
-    const handleSave = () => {
+    useEffect(() => {
+        setSaveCount(totalBookMark);
+        setSaved(checkBookmark);
+    }, [totalBookMark, checkBookmark]);
+
+    const handleSave = async () => {
         setSaved(!saved);
         setSaveCount((prev) => (saved ? prev - 1 : prev + 1));
         setIsAnimating(true);
         setTimeout(() => setIsAnimating(false), 700);
+
+        try {
+            const checkBookmark = !saved;
+            console.log('checkBookmark:', checkBookmark);
+            if (checkBookmark) {
+                const responseBookMark = await axiosInstance.post(`/bookmark/${videoId}/${userId}`);
+                if (responseBookMark.status === 200) {
+                    // toast.success('Like video thành công');
+                } else {
+                    toast.error('Bookmark video thất bại');
+                }
+            } else {
+                const responseBookMark = await axiosInstance.delete(`/bookmark/${videoId}/${userId}`);
+                if (responseBookMark.status === 200) {
+                    // toast.success('Unlike video thành công');
+                } else {
+                    toast.error('UnBookmark video thất bại');
+                }
+            }
+        } catch (error) {
+            console.error('Failed to save video: ', error.message);
+        }
     };
 
     return (

@@ -26,8 +26,11 @@ import AnimatedHeartButton from '../Animation/AnimatedHeartButton';
 import AnimatedBookmarkButton from '../Animation/AnimatedBookmarkButton';
 import AnimatedCommentButton from '../Animation/AnimatedCommentButton';
 import { motion } from 'framer-motion';
+import { UserContext } from '~/context/UserContext';
 
 function DetailVideo() {
+    const { user } = useContext(UserContext);
+    const userId = user.userId;
     const { videoId } = useParams();
     const navigate = useNavigate();
     const [isPlaying, setIsPlaying] = useState(false);
@@ -43,6 +46,8 @@ function DetailVideo() {
     const IMAGE_URL = `http://localhost:${import.meta.env.VITE_BE_PORT}/uploads/`;
     const [detailVideo, setDetailVideo] = useState([]);
     const [doctorInfo, setDoctorInfo] = useState([]);
+
+    console.log('Check type', typeof detailVideo.likes);
 
     const togglePlay = () => {
         console.log('Play');
@@ -243,6 +248,54 @@ function DetailVideo() {
         const seconds = Math.floor(time % 60);
         return `${minutes}:${seconds.toString().padStart(2, '0')}`;
     };
+
+    const [liked, setLiked] = useState(false);
+
+    useEffect(() => {
+        const checkUserLikeVideo = async () => {
+            try {
+                const response = await axiosInstance.get(`/video/like/${idVideo}/${userId}`);
+                if (response.status === 200) {
+                    setLiked(response.data);
+                }
+            } catch (error) {
+                console.error('Error checking user like video:', error);
+            }
+        };
+        checkUserLikeVideo();
+    }, [idVideo, userId]);
+
+    const [bookMark, setBookMark] = useState([]);
+    const [totalBookMark, setTotalBookMark] = useState(0);
+
+    useEffect(() => {
+        const checkUserBookmarkVideo = async () => {
+            try {
+                const response = await axiosInstance.get(`/bookmark/${idVideo}/${userId}`);
+                if (response.status === 200) {
+                    setBookMark(response.data);
+                }
+            } catch (error) {
+                console.error('Error checking user like video:', error);
+            }
+        };
+        checkUserBookmarkVideo();
+    }, [idVideo, userId]);
+
+    useEffect(() => {
+        const fetchBookmark = async () => {
+            try {
+                const response = await axiosInstance.get(`/bookmark/video/${idVideo}`);
+                if (response.status === 200) {
+                    setTotalBookMark(response.data);
+                }
+            } catch (error) {
+                console.error('Error fetching bookmark:', error);
+            }
+        };
+        fetchBookmark();
+    }, [idVideo]);
+
     return (
         <div className="w-full flex bg-white h-screen-minus-20">
             {/* Cột bên trái */}
@@ -398,9 +451,17 @@ function DetailVideo() {
                         </div>
                         <div className="text-base font-normal">{detailVideo.videoTitle}</div>
                     </div>
+
                     <div className="flex items-center justify-start gap-5 ml-5 p-4">
                         <div className="flex items-center justify-start gap-2">
-                            <AnimatedHeartButton />
+                            {detailVideo && detailVideo.likes !== undefined && (
+                                <AnimatedHeartButton
+                                    likes={detailVideo.likes}
+                                    videoId={detailVideo.videoId}
+                                    checkLike={liked}
+                                    userId={userId}
+                                />
+                            )}
 
                             {/* <span className="text-xs font-bold text-[#161823BF]">5256</span> */}
                         </div>
@@ -409,10 +470,16 @@ function DetailVideo() {
                             {/* <span className="text-xs font-bold text-[#161823BF]">1010</span> */}
                         </div>
                         <div className="flex items-center justify-start gap-2">
-                            <AnimatedBookmarkButton />
+                            <AnimatedBookmarkButton
+                                totalBookMark={totalBookMark}
+                                checkBookmark={bookMark}
+                                videoId={detailVideo.videoId}
+                                userId={userId}
+                            />
                             {/* <span className="text-xs font-bold text-[#161823BF]">500</span> */}
                         </div>
                     </div>
+
                     <div className="items-center justify-start flex mx-8 bg-[#1618230f] rounded-lg border">
                         <div className="truncate text-sm pl-3 pb-2 pt-[6px]">
                             {`http://localhost:5173/video?idVideo=${idVideo}&&idDoctor=${idDoctor}`}

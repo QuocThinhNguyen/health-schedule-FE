@@ -1,18 +1,59 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Heart } from 'lucide-react';
+import { axiosClient, axiosInstance } from '~/api/apiRequest';
+import { toast } from 'react-toastify';
 
-const AnimatedHeartButton = () => {
-    const [liked, setLiked] = useState(false);
-    const [likeCount, setLikeCount] = useState(5256);
+const AnimatedHeartButton = ({ likes, videoId, checkLike, userId }) => {
+    const [liked, setLiked] = useState(checkLike);
+    const [likeCount, setLikeCount] = useState(likes || 0);
     const [isAnimating, setIsAnimating] = useState(false);
 
-    const handleLike = () => {
+    const handleLike = async () => {
         setLiked(!liked);
         setLikeCount((prev) => (liked ? prev - 1 : prev + 1));
         setIsAnimating(true);
         setTimeout(() => setIsAnimating(false), 700);
+
+        try {
+            const updatedLikes = liked ? likeCount - 1 : likeCount + 1;
+            const response = await axiosInstance.put(`/video/${videoId}`, {
+                likes: updatedLikes,
+            });
+
+            if (response.status === 200) {
+                // toast.success('Cập nhật video thành công');
+            } else {
+                toast.error('Cập nhật video thất bại');
+            }
+
+            const checkLike = !liked;
+
+            if (checkLike) {
+                const responseLike = await axiosInstance.post(`/video/like/${videoId}/${userId}`);
+                if (responseLike.status === 200) {
+                    // toast.success('Like video thành công');
+                } else {
+                    toast.error('Like video thất bại');
+                }
+            } else {
+                const responseLike = await axiosInstance.delete(`/video/like/${videoId}/${userId}`);
+                if (responseLike.status === 200) {
+                    // toast.success('Unlike video thành công');
+                } else {
+                    toast.error('Unlike video thất bại');
+                }
+            }
+        } catch (error) {
+            console.error('Failed to like video: ', error.message);
+        }
     };
+
+    useEffect(() => {
+        setLikeCount(likes);
+        // setLiked(false);
+        setLiked(checkLike);
+    }, [likes, checkLike]);
     return (
         <div className="flex items-center gap-2">
             <button
