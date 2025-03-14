@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MessageCircle } from 'lucide-react';
+import { use } from 'react';
 
-const AnimatedCommentButton = () => {
-    const [commentCount] = useState(1010);
+const AnimatedCommentButton = ({ totalComment }) => {
+    const [commentCount, setCommentCount] = useState(totalComment || 0);
     const [isAnimating, setIsAnimating] = useState(false);
 
     const handleClick = () => {
@@ -11,6 +12,10 @@ const AnimatedCommentButton = () => {
         setTimeout(() => setIsAnimating(false), 700);
         // In a real app, this would open the comment section or dialog
     };
+
+    useEffect(() => {
+        setCommentCount(totalComment);
+    }, [totalComment]);
 
     return (
         <div className="flex items-center gap-2">

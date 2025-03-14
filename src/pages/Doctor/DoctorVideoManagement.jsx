@@ -6,6 +6,7 @@ import { Plus, Edit, Trash, MessageCircle, Send, Play, Heart, X } from 'lucide-r
 import e from 'cors';
 import { set } from 'date-fns';
 import Pagination from '~/components/Pagination';
+import { useNavigate } from 'react-router-dom';
 
 function DoctorVideoManagement() {
     const { user } = useContext(UserContext);
@@ -21,26 +22,6 @@ function DoctorVideoManagement() {
     const videoInputRef = useRef(null);
     const [videos, setVideos] = useState([]);
     const IMAGE_URL = `http://localhost:${import.meta.env.VITE_BE_PORT}/uploads/`;
-    const [comments, setComments] = useState([
-        {
-            id: 1,
-            videoId: 1,
-            user: 'Nguyễn Văn A',
-            content: 'Video rất hữu ích, cảm ơn bác sĩ!',
-            reply: '',
-            likes: 0,
-            isLiked: false,
-        },
-        {
-            id: 2,
-            videoId: 1,
-            user: 'Trần Thị B',
-            content: 'Tôi có thêm câu hỏi về cách điều trị, bác sĩ có thể giải thích thêm được không?',
-            reply: '',
-            likes: 2,
-            isLiked: true,
-        },
-    ]);
     const [pagination, setPagination] = useState({ page: 1, limit: 1, totalPages: 1 });
     const [detailVideo, setDetailVideo] = useState({});
     const [comfirmDelete, setComfirmDelete] = useState(false);
@@ -236,6 +217,15 @@ function DoctorVideoManagement() {
             console.error('Error delete video:', error);
         }
     };
+
+    const [comments, setComments] = useState([]);
+    const navigate = useNavigate();
+
+    const getVideo = (videoId) => {
+        console.log('get videoId:', videoId);
+        navigate(`/video?idVideo=${videoId}&&idDoctor=${user.userId}`);
+    };
+
     return (
         <div className="p-6 w-150 h-full border rounded-lg shadow-lg bg-white overflow-y-auto">
             <div className="flex justify-between items-center">
@@ -277,7 +267,7 @@ function DoctorVideoManagement() {
                                         </button>
                                         <button
                                             className="text-green-500 hover:text-green-600"
-                                            onClick={() => setShowComment(true)}
+                                            onClick={() => getVideo(video.videoId)}
                                         >
                                             <MessageCircle className="w-5 h-5" />
                                         </button>

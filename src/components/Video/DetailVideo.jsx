@@ -335,6 +335,74 @@ function DetailVideo() {
         fetchComment();
     });
 
+    const [replyingTo, setReplyingTo] = useState(null); // Lưu commentId đang trả lời
+    const [replyText, setReplyText] = useState(''); // Nội dung trả lời
+
+    const handleReplyClick = (commentId) => {
+        setReplyingTo(replyingTo === commentId ? null : commentId); // Nếu đã mở thì đóng
+        setReplyText(''); // Reset nội dung
+    };
+
+    const sendReply = async (parentId) => {
+        if (!replyText.trim()) return; // Không gửi nếu input rỗng
+
+        console.log(`Gửi phản hồi cho commentId ${parentId}:`, replyText);
+
+        try {
+            const response = await axiosInstance.post(`/comment`, {
+                userId: userId,
+                videoId: idVideo,
+                comment: replyText,
+                createdAt: currentDate,
+                parentId: parentId,
+            });
+            if (response.status === 200) {
+                console.log('Send comment success:', response);
+                toast.success('Bạn đã bình luận thành công');
+                getComment('');
+            }
+        } catch (error) {
+            console.error('Error sending comment:', error);
+        }
+
+        // Gửi API hoặc xử lý logic thêm bình luận tại đây
+        setReplyingTo(null); // Ẩn ô nhập sau khi gửi
+        setReplyText('');
+    };
+
+    const closeReply = () => {
+        setReplyingTo(null);
+        setReplyText('');
+    };
+
+    const [checkLiked, setCheckLiked] = useState(false);
+    const [numberLike, setNumberLike] = useState(0);
+
+    const handleLikeClick = () => {
+        if (checkLiked) {
+            setNumberLike(checkLiked - 1); // Nếu đã like thì bỏ like
+        } else {
+            setNumberLike(checkLiked + 1); // Nếu chưa like thì tăng số lượt thích
+        }
+        setCheckLiked(!liked);
+    };
+
+    const [totalComment, setTotalComment] = useState(0);
+
+    useEffect(() => {
+        const fetchTotalComment = async () => {
+            try {
+                const response = await axiosInstance.get(`/comment/${idVideo}`);
+                if (response.status === 200) {
+                    setTotalComment(response.data);
+                }
+            } catch (error) {
+                console.error('Error fetching total comment:', error);
+            }
+        };
+        fetchTotalComment();
+    });
+
     return (
         <div className="w-full flex bg-white h-screen-minus-20">
             {/* Cột bên trái */}
@@ -505,7 +573,7 @@ function DetailVideo() {
                             {/* <span className="text-xs font-bold text-[#161823BF]">5256</span> */}
                         </div>
                         <div className="flex items-center justify-start gap-2">
-                            <AnimatedCommentButton />
+                            <AnimatedCommentButton totalComment={totalComment} />
                             {/* <span className="text-xs font-bold text-[#161823BF]">1010</span> */}
                         </div>
                         <div className="flex items-center justify-start gap-2">
@@ -556,81 +624,150 @@ function DetailVideo() {
                                 <div className="mt-4 mx-8 relative flex flex-col">
                                     {comments.map((comment) => (
                                         <div key={comment._id}>
-                                            <div className="flex items-center justify-start gap-2 mb-2">
-                                                <div className="flex items-center justify-start gap-2">
-                                                    <img
-                                                        src={`${IMAGE_URL}${comment.userId.image}`}
-                                                        alt="avatar"
-                                                        className="w-10 h-10 rounded-full border-2"
-                                                    />
-                                                    <div className="w-full">
-                                                        <div className="font-semibold text-sm">
-                                                            {comment.userId.fullname}
+                                            <div>
+                                                <div className="flex items-start justify-start gap-2 mb-2">
+                                                    <div className="flex items-start justify-center gap-2">
+                                                        <img
+                                                            src={`${IMAGE_URL}${comment.userId.image}`}
+                                                            alt="avatar"
+                                                            className="w-10 h-10 rounded-full border-2"
+                                                        />
+                                                        <div className="w-full">
+                                                            <div className="font-semibold text-sm">
+                                                                {comment.userId.fullname}
+                                                            </div>
+                                                            <div className="items-center justify-start flex w-full">
+                                                                <div className="text-base max-w-80">
+                                                                    {comment.comment}
+                                                                </div>
+                                                            </div>
+                                                            <span className="text-[#9fa0a5] text-sm mr-2">
+                                                                {new Date(comment.createdAt).toLocaleDateString(
+                                                                    'vi-VN',
+                                                                )}
+                                                            </span>
+                                                            <span
+                                                                className="text-[#9fa0a5] text-sm cursor-pointer"
+                                                                onClick={() => handleReplyClick(comment.commentId)}
+                                                            >
+                                                                Trả lời
+                                                            </span>
                                                         </div>
-                                                        <div className="items-center justify-start flex w-full">
-                                                            <div className="text-base max-w-80">{comment.comment}</div>
-                                                        </div>
-                                                        <span className="text-[#9fa0a5] text-sm mr-2">
-                                                            {new Date(comment.createdAt).toLocaleDateString('vi-VN')}
-                                                        </span>
-                                                        <span className="text-[#9fa0a5] text-sm cursor-pointer">
-                                                            Trả lời
-                                                        </span>
+                                                    </div>
+                                                    <div className="flex flex-col items-center ml-auto">
+                                                        <Heart
+                                                            className={`w-5 h-5  cursor-pointer ${
+                                                                checkLiked ? 'text-[#FE2C55]' : 'text-black'
+                                                            }`}
+                                                            onClick={handleLikeClick}
+                                                        />
+                                                        <span>1</span>
                                                     </div>
                                                 </div>
-                                                <div className="flex flex-col items-center ml-auto">
-                                                    <Heart className="w-5 h-5 text-black " />
-                                                    <span>1</span>
-                                                </div>
+                                                {/* Input nhập bình luận khi bấm trả lời */}
+                                                {replyingTo === comment.commentId && (
+                                                    <div className="w-full flex items-center justify-center gap-3 mt-2 mb-2 pl-12">
+                                                        <input
+                                                            type="text"
+                                                            placeholder="Thêm câu trả lời..."
+                                                            value={replyText}
+                                                            onChange={(e) => setReplyText(e.target.value)}
+                                                            className="flex-1 border bg-[#f1f1f2] rounded-lg p-2 h-10 outline-none"
+                                                        />
+                                                        <div
+                                                            className={`cursor-pointer ${
+                                                                replyText ? 'text-[#FE2C55]' : 'text-gray-400'
+                                                            } text-sm font-semibold`}
+                                                            onClick={() => sendReply(comment.commentId)}
+                                                        >
+                                                            Đăng
+                                                        </div>
+                                                        <button onClick={closeReply}>
+                                                            <X className="w-5 h-5 font-medium text-black" />
+                                                        </button>
+                                                    </div>
+                                                )}
                                             </div>
 
                                             {comment.replies.length > 0 && (
-                                                <div className="flex items-center justify-start gap-2 pl-10 mb-2">
+                                                <div>
                                                     {comment.replies.map((reply) => (
-                                                        <div className="flex items-center justify-start gap-2 w-full">
-                                                            <div
-                                                                key={reply._id}
-                                                                className="flex items-center justify-start gap-2 w-full"
-                                                            >
-                                                                <img
-                                                                    src={`${IMAGE_URL}${reply.userId.image}`}
-                                                                    alt="avatar"
-                                                                    className="w-8 h-8 rounded-full border-2"
-                                                                />
-                                                                <div className="w-full">
-                                                                    <div className="flex items-center justify-start gap-1">
-                                                                        <div className="font-semibold text-sm">
-                                                                            {reply.userId.fullname}
-                                                                        </div>
-                                                                        {reply.userId.roleId === 'R2' && (
-                                                                            <div className="flex items-center gap-1 justify-center">
-                                                                                <div>·</div>
-                                                                                <div className="font-semibold text-sm text-[#FE2C55]">
-                                                                                    Bác sĩ
-                                                                                </div>
+                                                        <div>
+                                                            <div className="flex items-start justify-start gap-2 w-full pl-10 mb-2">
+                                                                <div
+                                                                    key={reply._id}
+                                                                    className="flex items-start justify-start gap-2 w-full"
+                                                                >
+                                                                    <img
+                                                                        src={`${IMAGE_URL}${reply.userId.image}`}
+                                                                        alt="avatar"
+                                                                        className="w-8 h-8 rounded-full border-2"
+                                                                    />
+                                                                    <div className="w-full">
+                                                                        <div className="flex items-center justify-start gap-1">
+                                                                            <div className="font-semibold text-sm">
+                                                                                {reply.userId.fullname}
                                                                             </div>
-                                                                        )}
-                                                                    </div>
-
-                                                                    <div className="items-center justify-start flex w-full">
-                                                                        <div className="text-base max-w-80">
-                                                                            {reply.comment}
+                                                                            {reply.userId.roleId === 'R2' && (
+                                                                                <div className="flex items-center gap-1 justify-center">
+                                                                                    <div>·</div>
+                                                                                    <div className="font-semibold text-sm text-[#FE2C55]">
+                                                                                        Bác sĩ
+                                                                                    </div>
+                                                                                </div>
+                                                                            )}
                                                                         </div>
+
+                                                                        <div className="items-center justify-start flex w-full">
+                                                                            <div className="text-base max-w-80">
+                                                                                {reply.comment}
+                                                                            </div>
+                                                                        </div>
+                                                                        <span className="text-[#9fa0a5] text-sm mr-2">
+                                                                            {new Date(
+                                                                                reply.createdAt,
+                                                                            ).toLocaleDateString('vi-VN')}
+                                                                        </span>
+                                                                        <span
+                                                                            className="text-[#9fa0a5] text-sm cursor-pointer"
+                                                                            onClick={() =>
+                                                                                handleReplyClick(reply.commentId)
+                                                                            }
+                                                                        >
+                                                                            Trả lời
+                                                                        </span>
                                                                     </div>
-                                                                    <span className="text-[#9fa0a5] text-sm mr-2">
-                                                                        {new Date(reply.createdAt).toLocaleDateString(
-                                                                            'vi-VN',
-                                                                        )}
-                                                                    </span>
-                                                                    <span className="text-[#9fa0a5] text-sm cursor-pointer">
-                                                                        Trả lời
-                                                                    </span>
+                                                                </div>
+                                                                <div className="flex flex-col items-center ml-auto">
+                                                                    <Heart className="w-5 h-5 text-black " />
+                                                                    <span>1</span>
                                                                 </div>
                                                             </div>
-                                                            <div className="flex flex-col items-center ml-auto">
-                                                                <Heart className="w-5 h-5 text-black " />
-                                                                <span>1</span>
-                                                            </div>
+                                                            {/* Input nhập bình luận khi bấm trả lời */}
+                                                            {replyingTo === reply.commentId && (
+                                                                <div className="w-full flex items-center justify-center gap-3 mt-2 mb-2 pl-20">
+                                                                    <input
+                                                                        type="text"
+                                                                        placeholder="Thêm câu trả lời..."
+                                                                        value={replyText}
+                                                                        onChange={(e) => setReplyText(e.target.value)}
+                                                                        className="flex-1 border bg-[#f1f1f2] rounded-lg p-2 h-10 outline-none"
+                                                                    />
+                                                                    <div
+                                                                        className={`cursor-pointer ${
+                                                                            replyText
+                                                                                ? 'text-[#FE2C55]'
+                                                                                : 'text-gray-400'
+                                                                        } text-sm font-semibold`}
+                                                                        onClick={() => sendReply(comment.commentId)}
+                                                                    >
+                                                                        Đăng
+                                                                    </div>
+                                                                    <button onClick={closeReply}>
+                                                                        <X className="w-5 h-5 font-medium text-black" />
+                                                                    </button>
+                                                                </div>
+                                                            )}
                                                         </div>
                                                     ))}
                                                 </div>
