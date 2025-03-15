@@ -10,6 +10,10 @@ const AnimatedHeartButton = ({ likes, videoId, checkLike, userId }) => {
     const [isAnimating, setIsAnimating] = useState(false);
 
     const handleLike = async () => {
+        if (!userId) {
+            toast.info('Bạn cần đăng nhập để sử dụng chức năng này');
+            return;
+        }
         setLiked(!liked);
         setLikeCount((prev) => (liked ? prev - 1 : prev + 1));
         setIsAnimating(true);

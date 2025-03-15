@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Bookmark } from 'lucide-react';
 import { axiosClient, axiosInstance } from '~/api/apiRequest';
+import { toast } from 'react-toastify';
 
 const AnimatedBookmarkButton = ({ totalBookMark, checkBookmark, videoId, userId }) => {
     const [saved, setSaved] = useState(checkBookmark);
@@ -14,6 +15,10 @@ const AnimatedBookmarkButton = ({ totalBookMark, checkBookmark, videoId, userId 
     }, [totalBookMark, checkBookmark]);
 
     const handleSave = async () => {
+        if (!userId) {
+            toast.info('Bạn cần đăng nhập để sử dụng chức năng này');
+            return;
+        }
         setSaved(!saved);
         setSaveCount((prev) => (saved ? prev - 1 : prev + 1));
         setIsAnimating(true);

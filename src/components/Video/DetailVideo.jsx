@@ -15,6 +15,8 @@ import {
     ChevronUp,
     Play,
     Pause,
+    Edit,
+    Pen,
 } from 'lucide-react';
 import e from 'cors';
 import VideoItem from '~/components/Video/VideoItem';
@@ -46,11 +48,25 @@ function DetailVideo() {
     const IMAGE_URL = `http://localhost:${import.meta.env.VITE_BE_PORT}/uploads/`;
     const [detailVideo, setDetailVideo] = useState([]);
     const [doctorInfo, setDoctorInfo] = useState([]);
+    const [checkDoctor, setCheckDoctor] = useState([]);
 
-    console.log('Check type', typeof detailVideo.likes);
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await axiosInstance.get(`/user/${userId}`);
+                if (response.status === 200) {
+                    setCheckDoctor(response.data);
+                }
+            } catch (error) {
+                console.error('Error fetching doctor info:', error);
+            }
+        };
+        fetchData();
+    }, [userId]);
+    // console.log('Check type', typeof detailVideo.likes);
 
     const togglePlay = () => {
-        console.log('Play');
+        // console.log('Play');
         if (videoRef.current) {
             if (isPlaying) {
                 videoRef.current.pause();
@@ -67,13 +83,13 @@ function DetailVideo() {
             videoRef.current.muted = newMutedState;
             setIsMuted(newMutedState);
             setVolume(newMutedState ? 0 : 1); // Cập nhật volume để UI hiển thị đúng
-            console.log('Mute:', newMutedState);
+            // console.log('Mute:', newMutedState);
         }
     };
 
     const handleVolumeChange = (e) => {
         const newVolume = parseFloat(e.target.value);
-        console.log(newVolume);
+        // console.log(newVolume);
         if (videoRef.current) {
             videoRef.current.volume = newVolume;
         }
@@ -129,6 +145,7 @@ function DetailVideo() {
                 const response = await axiosInstance.get(`/video/detail/${idVideo}`);
                 if (response.status === 200) {
                     setDetailVideo(response.data);
+                    setTitle(response.data.videoTitle);
                 }
             } catch (error) {
                 console.error('Error fetching video data:', error);
@@ -265,7 +282,7 @@ function DetailVideo() {
         checkUserLikeVideo();
     }, [idVideo, userId]);
 
-    const [bookMark, setBookMark] = useState([]);
+    const [bookMark, setBookMark] = useState(false);
     const [totalBookMark, setTotalBookMark] = useState(0);
 
     useEffect(() => {
@@ -282,6 +299,7 @@ function DetailVideo() {
         checkUserBookmarkVideo();
     }, [idVideo, userId]);
 
+    console.log('Check bookmark:', bookMark);
     useEffect(() => {
         const fetchBookmark = async () => {
             try {
@@ -310,7 +328,7 @@ function DetailVideo() {
                 createdAt: currentDate,
             });
             if (response.status === 200) {
-                console.log('Send comment success:', response);
+                // console.log('Send comment success:', response);
                 toast.success('Bạn đã bình luận thành công');
                 getComment('');
             }
@@ -320,7 +338,7 @@ function DetailVideo() {
     };
 
     const [comments, setComments] = useState([]);
-    console.log('Check comments:', comments);
+    // console.log('Check comments:', comments);
     useEffect(() => {
         const fetchComment = async () => {
             try {
@@ -339,14 +357,22 @@ function DetailVideo() {
     const [replyText, setReplyText] = useState(''); // Nội dung trả lời
 
     const handleReplyClick = (commentId) => {
+        if (!userId) {
+            toast.info('Bạn cần đăng nhập để sử dụng chức năng này');
+            return;
+        }
         setReplyingTo(replyingTo === commentId ? null : commentId); // Nếu đã mở thì đóng
         setReplyText(''); // Reset nội dung
     };
 
     const sendReply = async (parentId) => {
+        if (!userId) {
+            toast.info('Bạn cần đăng nhập để sử dụng chức năng này');
+            return;
+        }
         if (!replyText.trim()) return; // Không gửi nếu input rỗng
 
-        console.log(`Gửi phản hồi cho commentId ${parentId}:`, replyText);
+        // console.log(`Gửi phản hồi cho commentId ${parentId}:`, replyText);
 
         try {
             const response = await axiosInstance.post(`/comment`, {
@@ -357,7 +383,7 @@ function DetailVideo() {
                 parentId: parentId,
             });
             if (response.status === 200) {
-                console.log('Send comment success:', response);
+                // console.log('Send comment success:', response);
                 toast.success('Bạn đã bình luận thành công');
                 getComment('');
             }
@@ -402,6 +428,30 @@ function DetailVideo() {
         };
         fetchTotalComment();
     });
+
+    const [isEditing, setIsEditing] = useState(false);
+    const [title, setTitle] = useState('');
+
+    const handleEdit = () => {
+        setIsEditing(true);
+    };
+
+    const handleSave = async () => {
+        try {
+            const response = await axiosInstance.put(`/video/${idVideo}`, {
+                videoTitle: title,
+            });
+
+            if (response.status === 200) {
+                toast.success('Cập nhật video thành công');
+                setIsEditing(false);
+            } else {
+                toast.error('Cập nhật video thất bại');
+            }
+        } catch (error) {
+            console.error('Error update video data:', error);
+        }
+    };
 
     return (
         <div className="w-full flex bg-white h-screen-minus-20">
@@ -556,7 +606,31 @@ function DetailVideo() {
                                 </div>
                             </div>
                         </div>
-                        <div className="text-base font-normal">{detailVideo.videoTitle}</div>
+                        <div className="flex items-center justify-start gap-2">
+                            {isEditing ? (
+                                <div className="flex items-center justify-start gap-2 w-full">
+                                    <input
+                                        type="text"
+                                        className="w-full px-3 py-2 border rounded-md outline-none"
+                                        value={title}
+                                        onChange={(e) => setTitle(e.target.value)}
+                                        autoFocus
+                                    />
+                                    <button className="ml-auto" onClick={handleSave}>
+                                        <img src="/save.png" className="w-5 h-5" />
+                                    </button>
+                                </div>
+                            ) : (
+                                <div className="flex items-center justify-start gap-2 w-full">
+                                    <div className="text-base font-normal">{title}</div>
+                                    {checkDoctor.roleId === 'R2' && (
+                                        <button className="ml-auto" onClick={handleEdit}>
+                                            <img src="/edit.png" className="w-5 h-5" />
+                                        </button>
+                                    )}
+                                </div>
+                            )}
+                        </div>
                     </div>
 
                     <div className="flex items-center justify-start gap-5 ml-5 p-4">
@@ -797,6 +871,7 @@ function DetailVideo() {
                                 value={comment}
                                 onChange={(e) => getComment(e.target.value)}
                                 className="flex-1 border-none bg-[#f1f1f2] rounded-lg p-2 h-10 outline-none w-full"
+                                disabled={!userId}
                             />
                             <div
                                 className={`cursor-pointer ${
