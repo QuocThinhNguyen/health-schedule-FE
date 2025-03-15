@@ -4,7 +4,7 @@ export default {
         extend: {
             colors: {
                 customGray: '#E4E8EC',
-                customYellow:'#ffb54a',
+                customYellow: '#ffb54a',
                 customBlue: '#2d87f3',
                 customDeepNavyBlue: '#003553',
                 custom262626: '#262626',
