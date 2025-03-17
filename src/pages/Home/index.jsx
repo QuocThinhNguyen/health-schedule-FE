@@ -5,6 +5,7 @@ import ListDoctor from './ListDoctor/ListDoctor';
 import SearchInput from './Search/Search';
 import Statistics from './Statistics';
 import News from './News/News';
+import ListService from './ListService/ListService';
 
 function Home() {
     const images = [
@@ -71,6 +72,9 @@ function Home() {
 
             {/* Bac si */}
             <ListDoctor />
+
+            {/* Dich vu */}
+            <ListService/>
 
             {/* Binh luan */}
             <Introduce />

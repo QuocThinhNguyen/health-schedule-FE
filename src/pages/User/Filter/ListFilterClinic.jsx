@@ -50,7 +50,7 @@ function ListFilterClinic({ pagination, setPagination }) {
     return (
         <div>
             <div className="flex items-center justify-between">
-                <p className="font-bold text-base">{clinics.length} Bệnh viện</p>
+                <p className="font-bold text-base text-black">{clinics.length} Bệnh viện</p>
                 <select className="w-max h-10 border border-[#E4E8EC] rounded-lg p-2 text-ellipsis overflow-hidden whitespace-nowrap">
                     <option value="1">Nổi bật</option>
                     <option value="2">Đánh giá từ cao đến thấp</option>
