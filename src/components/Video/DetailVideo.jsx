@@ -299,7 +299,7 @@ function DetailVideo() {
         checkUserBookmarkVideo();
     }, [idVideo, userId]);
 
-    console.log('Check bookmark:', bookMark);
+    // console.log('Check bookmark:', bookMark);
     useEffect(() => {
         const fetchBookmark = async () => {
             try {
@@ -312,6 +312,7 @@ function DetailVideo() {
             }
         };
         fetchBookmark();
+        console.log('Check total bookmark:', totalBookMark);
     }, [idVideo]);
 
     const [comment, getComment] = useState('');
@@ -453,6 +454,27 @@ function DetailVideo() {
         }
     };
 
+    const [viewed, setViewed] = useState(false);
+
+    const handleViewed = async () => {
+        const video = videoRef.current;
+        if (!video) return;
+        const currentTime = video.currentTime; // thời gian hiện tại
+        const duration = video.duration; // tổng thời lượng video
+
+        if (currentTime >= (2 / 3) * duration && !viewed) {
+            setViewed(true);
+            console.log('Đã xem hết video');
+            try {
+                const response = await axiosInstance.put(`/video/view/${idVideo}`);
+                if (response.status === 200) {
+                    console.log('Update viewed success');
+                }
+            } catch (error) {
+                console.error('Error update viewed:', error);
+            }
+        }
+    };
     return (
         <div className="w-full flex bg-white h-screen-minus-20">
             {/* Cột bên trái */}
@@ -501,6 +523,7 @@ function DetailVideo() {
                             className="w-ful h-full object-contain"
                             loop
                             playsInline
+                            onTimeUpdate={handleViewed}
                         />
                         {/* Controls Overlay */}
                         <div
@@ -623,11 +646,12 @@ function DetailVideo() {
                             ) : (
                                 <div className="flex items-center justify-start gap-2 w-full">
                                     <div className="text-base font-normal">{title}</div>
-                                    {checkDoctor.roleId === 'R2' && (
-                                        <button className="ml-auto" onClick={handleEdit}>
-                                            <img src="/edit.png" className="w-5 h-5" />
-                                        </button>
-                                    )}
+                                    {checkDoctor.roleId === 'R2' &&
+                                        checkDoctor.userId === detailVideo.doctorId.userId && (
+                                            <button className="ml-auto" onClick={handleEdit}>
+                                                <img src="/edit.png" className="w-5 h-5" />
+                                            </button>
+                                        )}
                                 </div>
                             )}
                         </div>
