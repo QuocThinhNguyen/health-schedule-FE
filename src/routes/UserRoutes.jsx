@@ -14,6 +14,7 @@ import UpdateRecord from '~/pages/User/UpdateRecord';
 import AddRecord from '~/pages/User/AddRecord';
 import CommentModel from '~/components/Comment/CommentModel';
 import Help from '~/pages/User/Help';
+import VideoBookmark from '~/pages/User/VideoBookmark';
 const UserRoutes = () => {
     const { user } = useContext(UserContext);
 
@@ -36,6 +37,7 @@ const UserRoutes = () => {
                 <Route path="records/update" element={<UpdateRecord />}></Route>
                 <Route path="change-password" element={<ChangePassword />} />
                 <Route path="help" element={<Help />} />
+                <Route path="video" element={<VideoBookmark />} />
             </Route>
         </Fragment>
     );

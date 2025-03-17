@@ -6,6 +6,8 @@ import { Plus, Edit, Trash, MessageCircle, Send, Play, Heart, X } from 'lucide-r
 import e from 'cors';
 import { set } from 'date-fns';
 import Pagination from '~/components/Pagination';
+import { useNavigate } from 'react-router-dom';
+import VideoItem from '~/components/Video/VideoItem';
 
 function DoctorVideoManagement() {
     const { user } = useContext(UserContext);
@@ -21,27 +23,7 @@ function DoctorVideoManagement() {
     const videoInputRef = useRef(null);
     const [videos, setVideos] = useState([]);
     const IMAGE_URL = `http://localhost:${import.meta.env.VITE_BE_PORT}/uploads/`;
-    const [comments, setComments] = useState([
-        {
-            id: 1,
-            videoId: 1,
-            user: 'Nguyễn Văn A',
-            content: 'Video rất hữu ích, cảm ơn bác sĩ!',
-            reply: '',
-            likes: 0,
-            isLiked: false,
-        },
-        {
-            id: 2,
-            videoId: 1,
-            user: 'Trần Thị B',
-            content: 'Tôi có thêm câu hỏi về cách điều trị, bác sĩ có thể giải thích thêm được không?',
-            reply: '',
-            likes: 2,
-            isLiked: true,
-        },
-    ]);
-    const [pagination, setPagination] = useState({ page: 1, limit: 1, totalPages: 1 });
+    const [pagination, setPagination] = useState({ page: 1, limit: 15, totalPages: 1 });
     const [detailVideo, setDetailVideo] = useState({});
     const [comfirmDelete, setComfirmDelete] = useState(false);
     const [idDelete, setIdDelete] = useState(null);
@@ -88,6 +70,9 @@ function DoctorVideoManagement() {
             if (response.status === 200) {
                 toast.success('Thêm video thành công');
                 closeModal();
+                setTimeout(() => {
+                    window.location.reload();
+                }, 2000);
             } else {
                 toast.error('Thêm video thất bại');
             }
@@ -137,7 +122,9 @@ function DoctorVideoManagement() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axiosInstance.get(`/video/${user.userId}`);
+                const response = await axiosInstance.get(
+                    `/video/${user.userId}?page=${pagination.page}&limit=${pagination.limit}`,
+                );
                 // console.log('response check', response);
                 if (response.status === 200) {
                     setVideos(response.data);
@@ -233,6 +220,15 @@ function DoctorVideoManagement() {
             console.error('Error delete video:', error);
         }
     };
+
+    const [comments, setComments] = useState([]);
+    const navigate = useNavigate();
+
+    const getVideo = (videoId) => {
+        console.log('get videoId:', videoId);
+        navigate(`/video?idVideo=${videoId}&&idDoctor=${user.userId}`);
+    };
+
     return (
         <div className="p-6 w-150 h-full border rounded-lg shadow-lg bg-white overflow-y-auto">
             <div className="flex justify-between items-center">
@@ -245,55 +241,56 @@ function DoctorVideoManagement() {
                 </button>
             </div>
             <div className="mt-10">
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-4 p-4">
+                <div className="grid grid-cols-1 md:grid-cols-5 gap-4 p-4">
                     {videos.map((video) => (
-                        <div className="border rounded-lg shadow-lg w-fit bg-[#f9f8fc]" key={video._id}>
-                            <div className="w-full aspect-auto border rounded-md overflow-hidden">
-                                <video
-                                    src={`${IMAGE_URL}${video.videoName}`}
-                                    className="w-full h-full object-cover"
-                                    controls
-                                />
-                            </div>
-                            <div className="p-2 space-y-2">
-                                <div className="text-base font-medium h-12">{video.videoTitle}</div>
-                                <div className="flex items-center justify-between w-full">
-                                    {/* Action buttons group */}
-                                    <div className="flex items-center gap-4">
-                                        <button
-                                            className="text-blue-500 hover:text-blue-600"
-                                            onClick={() => getDetailVideo(video.videoId)}
-                                        >
-                                            <Edit className="w-5 h-5" />
-                                        </button>
-                                        <button
-                                            className="text-gray-500 hover:text-red-600"
-                                            onClick={() => deleteVideo(video.videoId)}
-                                        >
-                                            <Trash className="w-5 h-5" />
-                                        </button>
-                                        <button
-                                            className="text-green-500 hover:text-green-600"
-                                            onClick={() => setShowComment(true)}
-                                        >
-                                            <MessageCircle className="w-5 h-5" />
-                                        </button>
-                                    </div>
+                        // <div className="border rounded-lg shadow-lg w-fit bg-[#f9f8fc]" key={video._id}>
+                        //     <div className="w-full aspect-auto border rounded-md overflow-hidden">
+                        //         <video
+                        //             src={`${IMAGE_URL}${video.videoName}`}
+                        //             className="w-full h-full object-cover"
+                        //             controls
+                        //         />
+                        //     </div>
+                        //     <div className="p-2 space-y-2">
+                        //         <div className="text-base font-medium h-12 line-clamp-2">{video.videoTitle}</div>
+                        //         <div className="flex items-center justify-between w-full">
+                        //             {/* Action buttons group */}
+                        //             <div className="flex items-center gap-4">
+                        //                 <button
+                        //                     className="text-blue-500 hover:text-blue-600"
+                        //                     onClick={() => getDetailVideo(video.videoId)}
+                        //                 >
+                        //                     <Edit className="w-5 h-5" />
+                        //                 </button>
+                        //                 <button
+                        //                     className="text-gray-500 hover:text-red-600"
+                        //                     onClick={() => deleteVideo(video.videoId)}
+                        //                 >
+                        //                     <Trash className="w-5 h-5" />
+                        //                 </button>
+                        //                 <button
+                        //                     className="text-green-500 hover:text-green-600"
+                        //                     onClick={() => getVideo(video.videoId)}
+                        //                 >
+                        //                     <MessageCircle className="w-5 h-5" />
+                        //                 </button>
+                        //             </div>
 
-                                    {/* Stats group */}
-                                    <div className="flex items-center gap-4">
-                                        <div className="flex items-center gap-1 text-red-500">
-                                            <Heart className="w-5 h-5" />
-                                            <span>{video.likes}</span>
-                                        </div>
-                                        <div className="flex items-center gap-1 text-yellow-500">
-                                            <Play className="w-5 h-5" />
-                                            <span>{video.views}</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        //             {/* Stats group */}
+                        //             <div className="flex items-center gap-4">
+                        //                 <div className="flex items-center gap-1 text-red-500">
+                        //                     <Heart className="w-5 h-5" />
+                        //                     <span>{video.likes}</span>
+                        //                 </div>
+                        //                 <div className="flex items-center gap-1 text-yellow-500">
+                        //                     <Play className="w-5 h-5" />
+                        //                     <span>{video.views}</span>
+                        //                 </div>
+                        //             </div>
+                        //         </div>
+                        //     </div>
+                        // </div>
+                        <VideoItem key={video.videoId} data={video} />
                     ))}
                 </div>
             </div>

@@ -26,6 +26,7 @@
         "date-fns": "^4.1.0",
         "dotenv": "^16.4.5",
         "fortawesome": "^0.0.1-security",
+        "framer-motion": "^12.4.11",
         "html-react-parser": "^5.1.18",
         "jwt-decode": "^4.0.0",
         "lib-utils-ts": "^0.0.0-test",

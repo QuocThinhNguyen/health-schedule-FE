@@ -14,6 +14,9 @@ import {
     ChevronDown,
     ChevronUp,
     Play,
+    Pause,
+    Edit,
+    Pen,
 } from 'lucide-react';
 import e from 'cors';
 import VideoItem from '~/components/Video/VideoItem';
@@ -21,9 +24,15 @@ import { toast } from 'react-toastify';
 import { IoIosHeart } from 'react-icons/io';
 import { BiSolidMessageRoundedDots } from 'react-icons/bi';
 import { RxBookmarkFilled } from 'react-icons/rx';
-import Test from './Test';
+import AnimatedHeartButton from '../Animation/AnimatedHeartButton';
+import AnimatedBookmarkButton from '../Animation/AnimatedBookmarkButton';
+import AnimatedCommentButton from '../Animation/AnimatedCommentButton';
+import { motion } from 'framer-motion';
+import { UserContext } from '~/context/UserContext';
 
 function DetailVideo() {
+    const { user } = useContext(UserContext);
+    const userId = user.userId;
     const { videoId } = useParams();
     const navigate = useNavigate();
     const [isPlaying, setIsPlaying] = useState(false);
@@ -35,14 +44,29 @@ function DetailVideo() {
     const [searchParams] = useSearchParams();
     const idDoctor = searchParams.get('idDoctor');
     const idVideo = searchParams.get('idVideo');
-
     const [currentIndex, setCurrentIndex] = useState();
     const IMAGE_URL = `http://localhost:${import.meta.env.VITE_BE_PORT}/uploads/`;
     const [detailVideo, setDetailVideo] = useState([]);
     const [doctorInfo, setDoctorInfo] = useState([]);
+    const [checkDoctor, setCheckDoctor] = useState([]);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await axiosInstance.get(`/user/${userId}`);
+                if (response.status === 200) {
+                    setCheckDoctor(response.data);
+                }
+            } catch (error) {
+                console.error('Error fetching doctor info:', error);
+            }
+        };
+        fetchData();
+    }, [userId]);
+    // console.log('Check type', typeof detailVideo.likes);
 
     const togglePlay = () => {
-        console.log('Play');
+        // console.log('Play');
         if (videoRef.current) {
             if (isPlaying) {
                 videoRef.current.pause();
@@ -59,13 +83,13 @@ function DetailVideo() {
             videoRef.current.muted = newMutedState;
             setIsMuted(newMutedState);
             setVolume(newMutedState ? 0 : 1); // Cập nhật volume để UI hiển thị đúng
-            console.log('Mute:', newMutedState);
+            // console.log('Mute:', newMutedState);
         }
     };
 
     const handleVolumeChange = (e) => {
         const newVolume = parseFloat(e.target.value);
-        console.log(newVolume);
+        // console.log(newVolume);
         if (videoRef.current) {
             videoRef.current.volume = newVolume;
         }
@@ -95,7 +119,25 @@ function DetailVideo() {
     }, []);
 
     const videoIds = videos.map((video) => video.videoId);
-    console.log('data video:', videoIds);
+    // console.log('data video:', videoIds);
+    // console.log('check id', idVideo);
+    // console.log('type of id', typeof idVideo);
+    // console.log('current index', videoIds.indexOf(Number(idVideo)));
+    // console.log('videoId:', videoIds[0]);
+
+    const handleNextVideo = () => {
+        const currentIndex = videoIds.indexOf(Number(idVideo));
+        const nextIndex = (currentIndex + 1) % videoIds.length; // Lặp lại từ đầu nếu đến cuối
+        setIsPlaying(false);
+        navigate(`/video?idVideo=${videoIds[nextIndex]}&&idDoctor=${idDoctor}`);
+    };
+
+    const handlePreviousVideo = () => {
+        const currentIndex = videoIds.indexOf(Number(idVideo));
+        const previousIndex = (currentIndex - 1 + videoIds.length) % videoIds.length; // Xử lý vòng lặp về cuối mảng nếu ở đầu
+        setIsPlaying(false);
+        navigate(`/video?idVideo=${videoIds[previousIndex]}&&idDoctor=${idDoctor}`);
+    };
 
     useEffect(() => {
         const fetchVideo = async () => {
@@ -103,6 +145,7 @@ function DetailVideo() {
                 const response = await axiosInstance.get(`/video/detail/${idVideo}`);
                 if (response.status === 200) {
                     setDetailVideo(response.data);
+                    setTitle(response.data.videoTitle);
                 }
             } catch (error) {
                 console.error('Error fetching video data:', error);
@@ -147,21 +190,303 @@ function DetailVideo() {
         console.log('Previous page');
     };
 
+    const [showControls, setShowControls] = useState(true);
+    const progressRef = useRef(null);
+    const [progress, setProgress] = useState(0);
+    const [currentTime, setCurrentTime] = useState(0);
+    const [duration, setDuration] = useState(0);
+    const controlsTimeoutRef = useRef(null);
+    const [isDragging, setIsDragging] = useState(false);
+    useEffect(() => {
+        const video = videoRef.current;
+        if (!video) return;
+
+        const handleTimeUpdate = () => {
+            if (!isDragging) {
+                setProgress((video.currentTime / video.duration) * 100);
+                setCurrentTime(video.currentTime);
+            }
+        };
+
+        const handleLoadedMetadata = () => {
+            setDuration(video.duration);
+        };
+
+        video.addEventListener('timeupdate', handleTimeUpdate);
+        video.addEventListener('loadedmetadata', handleLoadedMetadata);
+
+        return () => {
+            video.removeEventListener('timeupdate', handleTimeUpdate);
+            video.removeEventListener('loadedmetadata', handleLoadedMetadata);
+        };
+    }, [isDragging]);
+
+    useEffect(() => {
+        const handleMouseMove = () => {
+            setShowControls(true);
+            if (controlsTimeoutRef.current) {
+                clearTimeout(controlsTimeoutRef.current);
+            }
+            controlsTimeoutRef.current = setTimeout(() => {
+                if (isPlaying) {
+                    setShowControls(false);
+                }
+            }, 2000);
+        };
+
+        // window.addEventListener('mousemove', handleMouseMove);
+        // return () => window.removeEventListener('mousemove', handleMouseMove);
+        // Lắng nghe sự kiện **chỉ trong container**
+        const videoContainer = videoRef.current?.parentElement;
+        if (videoContainer) {
+            videoContainer.addEventListener('mousemove', handleMouseMove);
+        }
+
+        return () => {
+            if (videoContainer) {
+                videoContainer.removeEventListener('mousemove', handleMouseMove);
+            }
+        };
+    }, [isPlaying]);
+
+    const handleProgressClick = (e) => {
+        const progressBar = progressRef.current;
+        if (progressBar && videoRef.current) {
+            const rect = progressBar.getBoundingClientRect();
+            const percent = (e.clientX - rect.left) / rect.width;
+            const time = percent * videoRef.current.duration;
+            videoRef.current.currentTime = time;
+            setProgress(percent * 100);
+        }
+    };
+
+    const formatTime = (time) => {
+        const minutes = Math.floor(time / 60);
+        const seconds = Math.floor(time % 60);
+        return `${minutes}:${seconds.toString().padStart(2, '0')}`;
+    };
+
+    const [liked, setLiked] = useState(false);
+
+    useEffect(() => {
+        const checkUserLikeVideo = async () => {
+            try {
+                const response = await axiosInstance.get(`/video/like/${idVideo}/${userId}`);
+                if (response.status === 200) {
+                    setLiked(response.data);
+                }
+            } catch (error) {
+                console.error('Error checking user like video:', error);
+            }
+        };
+        checkUserLikeVideo();
+    }, [idVideo, userId]);
+
+    const [bookMark, setBookMark] = useState(false);
+    const [totalBookMark, setTotalBookMark] = useState(0);
+
+    useEffect(() => {
+        const checkUserBookmarkVideo = async () => {
+            try {
+                const response = await axiosInstance.get(`/bookmark/${idVideo}/${userId}`);
+                if (response.status === 200) {
+                    setBookMark(response.data);
+                }
+            } catch (error) {
+                console.error('Error checking user like video:', error);
+            }
+        };
+        checkUserBookmarkVideo();
+    }, [idVideo, userId]);
+
+    // console.log('Check bookmark:', bookMark);
+    useEffect(() => {
+        const fetchBookmark = async () => {
+            try {
+                const response = await axiosInstance.get(`/bookmark/video/${idVideo}`);
+                if (response.status === 200) {
+                    setTotalBookMark(response.data);
+                }
+            } catch (error) {
+                console.error('Error fetching bookmark:', error);
+            }
+        };
+        fetchBookmark();
+        console.log('Check total bookmark:', totalBookMark);
+    }, [idVideo]);
+
+    const [comment, getComment] = useState('');
+
+    // console.log('Check comment:', comment);
+    const currentDate = new Date().toISOString().slice(0, 10);
+
+    const sendComment = async () => {
+        try {
+            const response = await axiosInstance.post(`/comment`, {
+                userId: userId,
+                videoId: idVideo,
+                comment: comment,
+                createdAt: currentDate,
+            });
+            if (response.status === 200) {
+                // console.log('Send comment success:', response);
+                toast.success('Bạn đã bình luận thành công');
+                getComment('');
+            }
+        } catch (error) {
+            console.error('Error sending comment:', error);
+        }
+    };
+
+    const [comments, setComments] = useState([]);
+    // console.log('Check comments:', comments);
+    useEffect(() => {
+        const fetchComment = async () => {
+            try {
+                const response = await axiosInstance.get(`/comment/all/${idVideo}`);
+                if (response.status === 200) {
+                    setComments(response.data);
+                }
+            } catch (error) {
+                console.error('Error fetching comment:', error);
+            }
+        };
+        fetchComment();
+    });
+
+    const [replyingTo, setReplyingTo] = useState(null); // Lưu commentId đang trả lời
+    const [replyText, setReplyText] = useState(''); // Nội dung trả lời
+
+    const handleReplyClick = (commentId) => {
+        if (!userId) {
+            toast.info('Bạn cần đăng nhập để sử dụng chức năng này');
+            return;
+        }
+        setReplyingTo(replyingTo === commentId ? null : commentId); // Nếu đã mở thì đóng
+        setReplyText(''); // Reset nội dung
+    };
+
+    const sendReply = async (parentId) => {
+        if (!userId) {
+            toast.info('Bạn cần đăng nhập để sử dụng chức năng này');
+            return;
+        }
+        if (!replyText.trim()) return; // Không gửi nếu input rỗng
+
+        // console.log(`Gửi phản hồi cho commentId ${parentId}:`, replyText);
+
+        try {
+            const response = await axiosInstance.post(`/comment`, {
+                userId: userId,
+                videoId: idVideo,
+                comment: replyText,
+                createdAt: currentDate,
+                parentId: parentId,
+            });
+            if (response.status === 200) {
+                // console.log('Send comment success:', response);
+                toast.success('Bạn đã bình luận thành công');
+                getComment('');
+            }
+        } catch (error) {
+            console.error('Error sending comment:', error);
+        }
+
+        // Gửi API hoặc xử lý logic thêm bình luận tại đây
+        setReplyingTo(null); // Ẩn ô nhập sau khi gửi
+        setReplyText('');
+    };
+
+    const closeReply = () => {
+        setReplyingTo(null);
+        setReplyText('');
+    };
+
+    const [checkLiked, setCheckLiked] = useState(false);
+    const [numberLike, setNumberLike] = useState(0);
+
+    const handleLikeClick = () => {
+        if (checkLiked) {
+            setNumberLike(checkLiked - 1); // Nếu đã like thì bỏ like
+        } else {
+            setNumberLike(checkLiked + 1); // Nếu chưa like thì tăng số lượt thích
+        }
+        setCheckLiked(!liked);
+    };
+
+    const [totalComment, setTotalComment] = useState(0);
+
+    useEffect(() => {
+        const fetchTotalComment = async () => {
+            try {
+                const response = await axiosInstance.get(`/comment/${idVideo}`);
+                if (response.status === 200) {
+                    setTotalComment(response.data);
+                }
+            } catch (error) {
+                console.error('Error fetching total comment:', error);
+            }
+        };
+        fetchTotalComment();
+    });
+
+    const [isEditing, setIsEditing] = useState(false);
+    const [title, setTitle] = useState('');
+
+    const handleEdit = () => {
+        setIsEditing(true);
+    };
+
+    const handleSave = async () => {
+        try {
+            const response = await axiosInstance.put(`/video/${idVideo}`, {
+                videoTitle: title,
+            });
+
+            if (response.status === 200) {
+                toast.success('Cập nhật video thành công');
+                setIsEditing(false);
+            } else {
+                toast.error('Cập nhật video thất bại');
+            }
+        } catch (error) {
+            console.error('Error update video data:', error);
+        }
+    };
+
+    const [viewed, setViewed] = useState(false);
+
+    const handleViewed = async () => {
+        const video = videoRef.current;
+        if (!video) return;
+        const currentTime = video.currentTime; // thời gian hiện tại
+        const duration = video.duration; // tổng thời lượng video
+
+        if (currentTime >= (2 / 3) * duration && !viewed) {
+            setViewed(true);
+            console.log('Đã xem hết video');
+            try {
+                const response = await axiosInstance.put(`/video/view/${idVideo}`);
+                if (response.status === 200) {
+                    console.log('Update viewed success');
+                }
+            } catch (error) {
+                console.error('Error update viewed:', error);
+            }
+        }
+    };
     return (
         <div className="w-full flex bg-white h-screen-minus-20">
             {/* Cột bên trái */}
             <div className="flex-1 h-full bg-black items-center justify-center flex">
                 <div className="relative px-40 cursor-pointer w-full h-full" onClick={togglePlay}>
                     <div
-                        className="absolute top-0 left-0 z-10 flex items-center justify-between p-4"
+                        className="absolute top-4 left-4 z-10 flex items-center justify-between"
                         onClick={(e) => e.stopPropagation()}
                     >
                         <button
                             className=" border rounded-full bg-[#3a3a3a] border-none p-1 hover:bg-[#2a2a2a]"
-                            onClick={(e) => {
-                                e.stopPropagation();
-                                previousPage();
-                            }}
+                            onClick={previousPage}
                         >
                             <X className="w-6 h-6 font-bold text-white" />
                         </button>
@@ -170,10 +495,16 @@ function DetailVideo() {
                         className="absolute right-4 top-1/3 z-10 flex flex-col gap-2"
                         onClick={(e) => e.stopPropagation()}
                     >
-                        <button className="border rounded-full bg-[#3a3a3a] border-none p-2 hover:bg-[#2a2a2a]">
+                        <button
+                            className="border rounded-full bg-[#3a3a3a] border-none p-2 hover:bg-[#2a2a2a]"
+                            onClick={handlePreviousVideo}
+                        >
                             <ChevronUp className="w-6 h-6 text-white" />
                         </button>
-                        <button className="border rounded-full bg-[#3a3a3a] border-none p-2 hover:bg-[#2a2a2a]">
+                        <button
+                            className="border rounded-full bg-[#3a3a3a] border-none p-2 hover:bg-[#2a2a2a]"
+                            onClick={handleNextVideo}
+                        >
                             <ChevronDown className="w-6 h-6 text-white" />
                         </button>
                     </div>
@@ -192,12 +523,52 @@ function DetailVideo() {
                             className="w-ful h-full object-contain"
                             loop
                             playsInline
+                            onTimeUpdate={handleViewed}
                         />
+                        {/* Controls Overlay */}
+                        <div
+                            className={`absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-4 transition-opacity duration-300 ${
+                                showControls ? 'opacity-100' : 'opacity-0'
+                            }`}
+                            onClick={(e) => e.stopPropagation()}
+                        >
+                            {/* Progress Bar */}
+                            <div
+                                ref={progressRef}
+                                className="relative h-1 bg-white/30 rounded-full mb-4 cursor-pointer"
+                                onClick={handleProgressClick}
+                            >
+                                <motion.div
+                                    className="absolute left-0 top-0 bottom-0 bg-white rounded-full"
+                                    style={{ width: `${progress}%` }}
+                                />
+                            </div>
+
+                            <div className="flex items-center justify-between">
+                                <div className="flex items-center gap-4">
+                                    {/* Play/Pause Button */}
+                                    <button onClick={togglePlay}>
+                                        {isPlaying ? (
+                                            <Pause className="w-6 h-6 text-white" />
+                                        ) : (
+                                            <Play className="w-6 h-6 text-white" />
+                                        )}
+                                    </button>
+
+                                    {/* Time Display */}
+                                    <div className="text-white text-sm">
+                                        {formatTime(currentTime)} / {formatTime(duration)}
+                                    </div>
+                                </div>
+
+                                {/* Fullscreen Button */}
+                            </div>
+                        </div>
                     </div>
 
                     {/* Nút âm lượng + Thanh trượt */}
                     <div
-                        className="absolute bottom-4 right-4 flex flex-col items-center bg-black/60 rounded-lg"
+                        className="absolute bottom-2 right-4 flex flex-col items-center bg-black/60 rounded-lg"
                         onClick={(e) => e.stopPropagation()} // Ngăn click ảnh hưởng tới togglePlay
                         onMouseEnter={() => setShowVolumeControl(true)}
                         onMouseLeave={() => setShowVolumeControl(false)}
@@ -258,28 +629,62 @@ function DetailVideo() {
                                 </div>
                             </div>
                         </div>
-                        <div className="text-base font-normal">{detailVideo.videoTitle}</div>
+                        <div className="flex items-center justify-start gap-2">
+                            {isEditing ? (
+                                <div className="flex items-center justify-start gap-2 w-full">
+                                    <input
+                                        type="text"
+                                        className="w-full px-3 py-2 border rounded-md outline-none"
+                                        value={title}
+                                        onChange={(e) => setTitle(e.target.value)}
+                                        autoFocus
+                                    />
+                                    <button className="ml-auto" onClick={handleSave}>
+                                        <img src="/save.png" className="w-5 h-5" />
+                                    </button>
+                                </div>
+                            ) : (
+                                <div className="flex items-center justify-start gap-2 w-full">
+                                    <div className="text-base font-normal">{title}</div>
+                                    {checkDoctor.roleId === 'R2' &&
+                                        checkDoctor.userId === detailVideo.doctorId.userId && (
+                                            <button className="ml-auto" onClick={handleEdit}>
+                                                <img src="/edit.png" className="w-5 h-5" />
+                                            </button>
+                                        )}
+                                </div>
+                            )}
+                        </div>
                     </div>
+
                     <div className="flex items-center justify-start gap-5 ml-5 p-4">
                         <div className="flex items-center justify-start gap-2">
-                            <button className="bg-[#f1f1f2] p-[6px] rounded-full">
-                                <IoIosHeart className="w-5 h-5 text-black" />
-                            </button>
-                            <span className="text-xs font-bold text-[#161823BF]">5256</span>
+                            {detailVideo && detailVideo.likes !== undefined && (
+                                <AnimatedHeartButton
+                                    likes={detailVideo.likes}
+                                    videoId={detailVideo.videoId}
+                                    checkLike={liked}
+                                    userId={userId}
+                                />
+                            )}
+
+                            {/* <span className="text-xs font-bold text-[#161823BF]">5256</span> */}
                         </div>
                         <div className="flex items-center justify-start gap-2">
-                            <button className="bg-[#f1f1f2] p-[6px] rounded-full">
-                                <BiSolidMessageRoundedDots className="w-5 h-5 text-black" />
-                            </button>
-                            <span className="text-xs font-bold text-[#161823BF]">1010</span>
+                            <AnimatedCommentButton totalComment={totalComment} />
+                            {/* <span className="text-xs font-bold text-[#161823BF]">1010</span> */}
                         </div>
                         <div className="flex items-center justify-start gap-2">
-                            <button className="bg-[#f1f1f2] p-[6px] rounded-full">
-                                <RxBookmarkFilled className="w-5 h-5 text-black" />
-                            </button>
-                            <span className="text-xs font-bold text-[#161823BF]">500</span>
+                            <AnimatedBookmarkButton
+                                totalBookMark={totalBookMark}
+                                checkBookmark={bookMark}
+                                videoId={detailVideo.videoId}
+                                userId={userId}
+                            />
+                            {/* <span className="text-xs font-bold text-[#161823BF]">500</span> */}
                         </div>
                     </div>
+
                     <div className="items-center justify-start flex mx-8 bg-[#1618230f] rounded-lg border">
                         <div className="truncate text-sm pl-3 pb-2 pt-[6px]">
                             {`http://localhost:5173/video?idVideo=${idVideo}&&idDoctor=${idDoctor}`}
@@ -313,24 +718,164 @@ function DetailVideo() {
 
                         <div className="w-full flex-grow overflow-y-hidden">
                             {activeTab === 'comments' && (
-                                <div className="mt-4 mx-8 flex flex-col">
-                                    <Test />
-                                    <Test />
-                                    <Test />
-                                    <Test />
-                                    <Test />
-                                    <Test />
-                                    <Test />
-                                    <Test />
-                                    <Test />
-                                    <Test />
-                                    <Test />
-                                    <Test />
-                                    <Test />
+                                // nội dung bình luận
+                                <div className="mt-4 mx-8 relative flex flex-col">
+                                    {comments.map((comment) => (
+                                        <div key={comment._id}>
+                                            <div>
+                                                <div className="flex items-start justify-start gap-2 mb-2">
+                                                    <div className="flex items-start justify-center gap-2">
+                                                        <img
+                                                            src={`${IMAGE_URL}${comment.userId.image}`}
+                                                            alt="avatar"
+                                                            className="w-10 h-10 rounded-full border-2"
+                                                        />
+                                                        <div className="w-full">
+                                                            <div className="font-semibold text-sm">
+                                                                {comment.userId.fullname}
+                                                            </div>
+                                                            <div className="items-center justify-start flex w-full">
+                                                                <div className="text-base max-w-80">
+                                                                    {comment.comment}
+                                                                </div>
+                                                            </div>
+                                                            <span className="text-[#9fa0a5] text-sm mr-2">
+                                                                {new Date(comment.createdAt).toLocaleDateString(
+                                                                    'vi-VN',
+                                                                )}
+                                                            </span>
+                                                            <span
+                                                                className="text-[#9fa0a5] text-sm cursor-pointer"
+                                                                onClick={() => handleReplyClick(comment.commentId)}
+                                                            >
+                                                                Trả lời
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                    <div className="flex flex-col items-center ml-auto">
+                                                        <Heart
+                                                            className={`w-5 h-5  cursor-pointer ${
+                                                                checkLiked ? 'text-[#FE2C55]' : 'text-black'
+                                                            }`}
+                                                            onClick={handleLikeClick}
+                                                        />
+                                                        <span>1</span>
+                                                    </div>
+                                                </div>
+                                                {/* Input nhập bình luận khi bấm trả lời */}
+                                                {replyingTo === comment.commentId && (
+                                                    <div className="w-full flex items-center justify-center gap-3 mt-2 mb-2 pl-12">
+                                                        <input
+                                                            type="text"
+                                                            placeholder="Thêm câu trả lời..."
+                                                            value={replyText}
+                                                            onChange={(e) => setReplyText(e.target.value)}
+                                                            className="flex-1 border bg-[#f1f1f2] rounded-lg p-2 h-10 outline-none"
+                                                        />
+                                                        <div
+                                                            className={`cursor-pointer ${
+                                                                replyText ? 'text-[#FE2C55]' : 'text-gray-400'
+                                                            } text-sm font-semibold`}
+                                                            onClick={() => sendReply(comment.commentId)}
+                                                        >
+                                                            Đăng
+                                                        </div>
+                                                        <button onClick={closeReply}>
+                                                            <X className="w-5 h-5 font-medium text-black" />
+                                                        </button>
+                                                    </div>
+                                                )}
+                                            </div>
+
+                                            {comment.replies.length > 0 && (
+                                                <div>
+                                                    {comment.replies.map((reply) => (
+                                                        <div>
+                                                            <div className="flex items-start justify-start gap-2 w-full pl-10 mb-2">
+                                                                <div
+                                                                    key={reply._id}
+                                                                    className="flex items-start justify-start gap-2 w-full"
+                                                                >
+                                                                    <img
+                                                                        src={`${IMAGE_URL}${reply.userId.image}`}
+                                                                        alt="avatar"
+                                                                        className="w-8 h-8 rounded-full border-2"
+                                                                    />
+                                                                    <div className="w-full">
+                                                                        <div className="flex items-center justify-start gap-1">
+                                                                            <div className="font-semibold text-sm">
+                                                                                {reply.userId.fullname}
+                                                                            </div>
+                                                                            {reply.userId.roleId === 'R2' && (
+                                                                                <div className="flex items-center gap-1 justify-center">
+                                                                                    <div>·</div>
+                                                                                    <div className="font-semibold text-sm text-[#FE2C55]">
+                                                                                        Bác sĩ
+                                                                                    </div>
+                                                                                </div>
+                                                                            )}
+                                                                        </div>
+
+                                                                        <div className="items-center justify-start flex w-full">
+                                                                            <div className="text-base max-w-80">
+                                                                                {reply.comment}
+                                                                            </div>
+                                                                        </div>
+                                                                        <span className="text-[#9fa0a5] text-sm mr-2">
+                                                                            {new Date(
+                                                                                reply.createdAt,
+                                                                            ).toLocaleDateString('vi-VN')}
+                                                                        </span>
+                                                                        <span
+                                                                            className="text-[#9fa0a5] text-sm cursor-pointer"
+                                                                            onClick={() =>
+                                                                                handleReplyClick(reply.commentId)
+                                                                            }
+                                                                        >
+                                                                            Trả lời
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
+                                                                <div className="flex flex-col items-center ml-auto">
+                                                                    <Heart className="w-5 h-5 text-black " />
+                                                                    <span>1</span>
+                                                                </div>
+                                                            </div>
+                                                            {/* Input nhập bình luận khi bấm trả lời */}
+                                                            {replyingTo === reply.commentId && (
+                                                                <div className="w-full flex items-center justify-center gap-3 mt-2 mb-2 pl-20">
+                                                                    <input
+                                                                        type="text"
+                                                                        placeholder="Thêm câu trả lời..."
+                                                                        value={replyText}
+                                                                        onChange={(e) => setReplyText(e.target.value)}
+                                                                        className="flex-1 border bg-[#f1f1f2] rounded-lg p-2 h-10 outline-none"
+                                                                    />
+                                                                    <div
+                                                                        className={`cursor-pointer ${
+                                                                            replyText
+                                                                                ? 'text-[#FE2C55]'
+                                                                                : 'text-gray-400'
+                                                                        } text-sm font-semibold`}
+                                                                        onClick={() => sendReply(comment.commentId)}
+                                                                    >
+                                                                        Đăng
+                                                                    </div>
+                                                                    <button onClick={closeReply}>
+                                                                        <X className="w-5 h-5 font-medium text-black" />
+                                                                    </button>
+                                                                </div>
+                                                            )}
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            )}
+                                        </div>
+                                    ))}
                                 </div>
                             )}
                             {activeTab === 'videos' && (
-                                <div className="">
+                                <div className="overflow-y-auto h-full">
                                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4">
                                         {videos.map((video) => (
                                             <VideoItem key={video.videoId} data={video} onClick={handleVideoClick} />
@@ -342,12 +887,25 @@ function DetailVideo() {
                     </div>
                 </div>
                 {activeTab === 'comments' && (
-                    <div className="bg-white bottom-0 left-0 right-0 z-10 border-t px-8 py-5 flex">
-                        <input
-                            type="text"
-                            placeholder="Thêm bình luận ..."
-                            className="flex-1 border-none bg-[#f1f1f2] rounded-lg p-2 h-10 outline-none "
-                        />
+                    <div className="bg-white bottom-0 left-0 right-0 z-10 border-t px-6 py-5 flex">
+                        <div className="w-full flex items-center justify-center gap-3">
+                            <input
+                                type="text"
+                                placeholder="Thêm bình luận ..."
+                                value={comment}
+                                onChange={(e) => getComment(e.target.value)}
+                                className="flex-1 border-none bg-[#f1f1f2] rounded-lg p-2 h-10 outline-none w-full"
+                                disabled={!userId}
+                            />
+                            <div
+                                className={`cursor-pointer ${
+                                    comment ? 'text-[#FE2C55]' : 'text-gray-400'
+                                } text-sm font-semibold`}
+                                onClick={sendComment}
+                            >
+                                Đăng
+                            </div>
+                        </div>
                     </div>
                 )}
             </div>

@@ -29,6 +29,7 @@ const Sidebar = ({ selectedTab }) => {
         { label: 'Hồ sơ cá nhân', path: '/user/profile', image: 'user.png' },
         { label: 'Lịch sử đặt lịch khám', path: '/user/appointments', image: 'schedule.png' },
         { label: 'Hồ sơ bệnh nhân', path: '/user/records', image: 'health-report.png' },
+        { label: 'Video đã lưu', path: '/user/video', image: 'video_icon.png' },
         { label: 'Đổi mật khẩu', path: '/user/change-password', image: 'reset-password.png' },
         { label: 'Trợ giúp', path: '/user/help', image: 'question.png' },
         { label: 'Đăng xuất', onClick: handleLogout, image: 'logout.png' },

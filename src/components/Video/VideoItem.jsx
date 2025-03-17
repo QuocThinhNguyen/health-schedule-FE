@@ -95,7 +95,7 @@ function VideoItem(data) {
                     {data.data.videoTitle.length > 25 && (
                         <button
                             onClick={toggleExpand}
-                            className="absolute -bottom-4 right-4 text-white  rounded-full p-0.5 text-sm
+                            className="absolute -bottom-4 right-6 text-white  rounded-full p-0.5 text-sm
                                         transition-colors z-10"
                         >
                             {isExpanded ? 'ẩn bớt' : 'thêm'}
