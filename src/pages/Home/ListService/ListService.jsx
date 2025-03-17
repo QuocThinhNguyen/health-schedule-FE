@@ -4,7 +4,6 @@ import { NavLink } from 'react-router-dom';
 import Doctor from '../ListDoctor/Doctor';
 import Service from './Service';
 import { RiServiceFill } from 'react-icons/ri';
-import Service1 from './Service1';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
