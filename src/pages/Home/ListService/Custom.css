@@ -1,0 +1,20 @@
+.slick-prev, .slick-next {
+    @apply text-black bg-white shadow-lg z-10  rounded-full w-8 h-8 p-2
+}
+
+.slick-prev:hover, .slick-next:hover {
+    @apply text-black bg-white opacity-50 
+}
+
+.slick-prev {
+    @apply left-[-41px]
+}
+
+.slick-next {
+    @apply right-[-41px]
+}
+
+.slick-prev.slick-disabled,
+.slick-next.slick-disabled {
+    @apply opacity-50 pointer-events-none
+}

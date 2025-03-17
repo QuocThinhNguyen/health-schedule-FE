@@ -36,7 +36,7 @@ function Clinic(data) {
     return (
         <div className="w-1/4 px-2 mt-4 group">
             <div className="bg-white rounded-lg shadow cursor-pointer border group-hover:border group-hover:border-[rgb(44,116,223)] group-hover:shadow-2xl">
-                <div className="px-2 pt-4 pb-2 flex flex-col items-center gap-4">
+                <div className="px-2 pt-4 pb-2 flex flex-col items-center gap-3">
                     <div className="flex justify-center items-center h-28 w-28  overflow-hidden ">
                         <img
                             src={`${IMAGE_URL}${clinic.image}`}
@@ -45,15 +45,15 @@ function Clinic(data) {
                         />
                     </div>
 
-                    <div className="flex flex-col justify-between gap-4 w-full">
+                    <div className="flex flex-col justify-between gap-1 w-full">
                         <h3 className="text-lg text-center font-semibold text-custom262626 h-14">{clinic.name}</h3>
-                        <div className="bg-[#2d87f3] bg-opacity-5 group-hover:bg-opacity-20 px-2 py-2 rounded-lg flex flex-col gap-4">
+                        <div className="bg-customBlue bg-opacity-5 group-hover:bg-opacity-20 px-2 py-2 rounded-lg flex flex-col gap-4">
                             <div className="flex flex-col gap-2">
-                                <div className="flex items-start gap-1 text-custom404040 font-normal">
+                                <div className="flex items-start gap-1 text-custom404040 font-normal text-sm">
                                     <span>
-                                        <CiLocationOn className="text-base  mt-1" />
+                                        <CiLocationOn className="mt-1" />
                                     </span>
-                                    <span className="text-sm line-clamp-2">{clinic.address}</span>
+                                    <span className="line-clamp-2">{clinic.address}</span>
                                 </div>
                                 <div className="flex items-center  leading-[18px] text-customYellow font-normal">
                                     <span className="text-base leading-none translate-y-[-1px]">({avgRating})</span>
@@ -61,7 +61,7 @@ function Clinic(data) {
                                 </div>
                             </div>
                             <div
-                                className="w-full text-center bg-white group-hover:bg-[rgb(44,116,223)] border border-gray-300 group-hover:border-[#00B5F1] group-hover:text-white  font-semibold py-2 px-3 rounded-lg "
+                                className="w-full text-center bg-white group-hover:bg-[rgb(44,116,223)] border border-gray-300 group-hover:border-[#00B5F1] group-hover:text-white  font-semibold px-3 h-10 leading-9 rounded-lg "
                                 onClick={() => handleBooking(clinic.clinicId, clinic.name)}
                             >
                                 Đặt khám ngay

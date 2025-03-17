@@ -10,6 +10,7 @@ import { UserContext } from '~/context/UserContext';
 import Pagination from '~/components/Pagination';
 import Modal from 'react-modal';
 import VideoItem from '~/components/Video/VideoItem';
+import { BsCoin } from 'react-icons/bs';
 
 function DoctorInfo() {
     const [selectedTime, setSelectedTime] = useState('');
@@ -570,7 +571,7 @@ function DoctorInfo() {
                                     value={currentDate}
                                     onChange={handleDateChange}
                                     min={new Date().toISOString().split('T')[0]}
-                                    className="w-full p-1 border rounded-lg cursor-pointer mb-20"
+                                    className="w-full px-4 h-10 border rounded-lg cursor-pointer mb-20"
                                 />
                                 <div
                                     className={`${
@@ -584,10 +585,10 @@ function DoctorInfo() {
                                             <button
                                                 key={index}
                                                 onClick={() => setSelectedTime(value)}
-                                                className={`py-2 px-1 font-semibold text-xs border rounded-lg transition-colors ${
+                                                className={`py-2 px-1 font-semibold text-xs border rounded-lg border-customBlue ${
                                                     selectedTime === value
-                                                        ? 'bg-blue-500 border-blue-200 text-white'
-                                                        : 'text-blue-500 hover:bg-blue-100'
+                                                        ? ' text-white bg-customBlue'
+                                                        : 'text-customBlue hover:bg-blue-100'
                                                 }`}
                                             >
                                                 {label}
@@ -606,14 +607,12 @@ function DoctorInfo() {
                                     )}
                                 </div>
 
-                                <div className="flex items-center gap-2">
-                                    <CreditCard className="w-5 h-5 text-gray-500" />
-                                    <div className="font-semibold text-sm">Giá khám: </div>
-                                    <div className="font-semibold text-lg text-[#009E5C]">
+                                <p className="flex items-center gap-x-2 mt-4">
+                                    <BsCoin className="mt-[2px] " />
+                                    <span className="text-customYellow text-lg font-medium">
                                         {formatCurrency(doctorInfo.price)}
-                                    </div>
-                                    {/* {doctorInfo.price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })} */}
-                                </div>
+                                    </span>
+                                </p>
 
                                 {/* Nút đặt lịch */}
                                 <button

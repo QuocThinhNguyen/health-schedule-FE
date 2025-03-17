@@ -1,6 +1,7 @@
 import { MdDeleteForever } from 'react-icons/md';
 import { RiDeleteBin5Line } from 'react-icons/ri';
-
+import React from 'react';
+import Select from 'react-select';
 function SideBarFilter() {
     return (
         <div className="w-full bg-[#f8f9fc] border border-[#E4E8EC] rounded-lg p-6 text-sm">
@@ -9,21 +10,26 @@ function SideBarFilter() {
                     <h4 className="text-[#1B3250] font-semibold border-l-[3px] border-[#2d87f3] uppercase leading-4 pl-2 mb-3">
                         Tỉnh/Thành phố
                     </h4>
-                    <select
-                        name="province"
-                        id="province"
-                        // onChange={handleProvinceChange}
-                        className="w-full h-10 border border-[#E4E8EC] rounded-lg p-2"
-                    >
-                        <option value="">Tất cả</option>
-                        <option value="">Tất cả</option>
-                        <option value="">A</option>
-                        {/* {provinces.map((item, index) => ( */}
-                        {/* <option key={index} value={item}>
-                    {item}
-                </option> */}
-                        {/* ))} */}
-                    </select>
+                    <Select
+                        options={[
+                            { value: 'suc-khoe', label: 'Bình định' },
+                            { value: 'xet-nghiem', label: 'TP. HCM' },
+                            { value: 'tiem-chung', label: 'Bình Dương' },
+                        ]}
+                        
+                        placeholder="Tất cả tỉnh/thành phố"
+                        // onChange={handleChange}
+                        className="z-20"
+                        isSearchable
+                        isClearable
+                        styles={{
+                            control: (provided) => ({
+                                ...provided,
+                                border: '0.8px solid #E4E8EC !important',
+                                borderRadius: '4px !important',
+                            }),
+                        }}
+                    />
                 </div>
                 {/* <div>
             {districts.length > 0 && (

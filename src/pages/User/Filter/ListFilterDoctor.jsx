@@ -76,7 +76,7 @@ function ListFilterDoctor({ pagination, setPagination }) {
     return (
         <div>
             <div className="flex items-center justify-between">
-                <p className="font-bold text-base">{totalDoctors} Bác sĩ</p>
+                <p className="font-bold text-base text-black">{totalDoctors} Bác sĩ</p>
                 <select
                     name="sort"
                     id="sort"
@@ -84,8 +84,8 @@ function ListFilterDoctor({ pagination, setPagination }) {
                     className="w-max h-10 border border-[#E4E8EC] rounded-lg p-2 text-ellipsis overflow-hidden whitespace-nowrap"
                 >
                     <option value="noi-bat">Nổi bật</option>
-                    <option value="danh-gia-cao-den-thap">Đánh giá cao đến thấp</option>
-                    <option value="danh-gia-thap-den-cao">Đánh giá thấp đến cao</option>
+                    <option value="danh-gia-cao-den-thap">Đánh giá từ cao đến thấp</option>
+                    <option value="danh-gia-thap-den-cao">Đánh giá từ thấp đến cao</option>
                     <option value="gia-cao-den-thap">Giá cao nhất</option>
                     <option value="gia-thap-den-cao">Giá thấp nhất</option>
                 </select>

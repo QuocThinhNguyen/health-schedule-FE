@@ -60,7 +60,7 @@ function NewsDetail() {
     return (
         <div className="min-h-screen bg-white">
             <div className="bg-[#e3f2ff]">
-                <ul className=" max-w-6xl mx-auto  flex items-center gap-1 px-4 py-3 text-sm font-semibold">
+                <ul className=" max-w-6xl mx-auto  flex items-center gap-1 px-4 py-[10px] text-sm font-semibold">
                     <li>
                         <NavLink to="/">Trang chủ</NavLink>
                     </li>

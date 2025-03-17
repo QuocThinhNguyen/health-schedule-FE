@@ -50,7 +50,7 @@ function Doctor(data) {
     return (
         <div className="w-1/4 px-2 mt-4 group">
             <div className="bg-white rounded-lg shadow cursor-pointer border group-hover:border group-hover:border-[rgb(44,116,223)] group-hover:shadow-2xl">
-                <div className="pt-4 pb-2 gap-4 flex flex-col items-center">
+                <div className="pt-4 pb-2 gap-3 flex flex-col items-center">
                     <div className="flex justify-center items-center h-28 w-28 mt-4 rounded-full overflow-hidden border border-customGray">
                         <img
                             src={`${IMAGE_URL}${doctor.image}`}
@@ -85,23 +85,23 @@ function Doctor(data) {
                             </div>
 
                             <div className="flex flex-col leading-[20px] text-sm">
-                                <div className="flex items-start gap-2 ">
-                                    <LiaStethoscopeSolid className="mt-[2px] text-base" />
+                                <div className="flex items-center gap-x-2 ">
+                                    <LiaStethoscopeSolid className="mt-[2px]" />
                                     {doctor.specialtyName}
                                 </div>
-                                <div className="flex items-start gap-2  font-medium text-base">
-                                    <BsCoin className="mt-1 text-base" />
-                                    <span className="text-customYellow">{formatCurrency(doctor.price)}</span>
+                                <div className="flex items-center gap-x-2  font-medium ">
+                                    <BsCoin className="mt-[2px]" />
+                                    <span className="text-customYellow text-base">{formatCurrency(doctor.price)}</span>
                                 </div>
-                                <div className="flex items-start gap-2 h-[37.5px]">
+                                <div className="flex items-start gap-x-2 h-[37.5px]">
                                     <span>
-                                        <CiHospital1 className="mt-[2px] text-base" />
+                                        <CiHospital1 className="mt-1" />
                                     </span>
                                     {doctor.clinicName}
                                 </div>
                             </div>
                             <div
-                                className="w-full text-center bg-white group-hover:bg-[rgb(44,116,223)] border border-gray-300 group-hover:border-[#00B5F1] group-hover:text-white  font-semibold py-2 px-3 rounded-lg"
+                                className="w-full text-center bg-white group-hover:bg-[rgb(44,116,223)] border border-gray-300 group-hover:border-[#00B5F1] group-hover:text-white  font-semibold px-3 h-10 leading-9 rounded-lg"
                                 onClick={() => handleBooking(doctor.userId)}
                             >
                                 Đặt khám ngay

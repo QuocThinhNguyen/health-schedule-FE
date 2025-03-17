@@ -11,6 +11,8 @@ import ListFilterDoctor from './ListFilterDoctor';
 import { NavLink, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { MdKeyboardArrowRight } from 'react-icons/md';
+import SideBarFilterServie from './SideBarFilterService';
+import ListFilterService from './ListFilterService';
 
 function Filter() {
     const location = useLocation();
@@ -18,7 +20,15 @@ function Filter() {
     const keyword = searchParams.get('keyword') || '';
 
     const navigate = useNavigate();
-    const [selectedTab, setSelectedTab] = useState(location.pathname.startsWith('/tat-ca-bac-si') ? 1 : 0);
+    const [selectedTab, setSelectedTab] = useState(() => {
+        if (location.pathname.startsWith('/tat-ca-bac-si')) {
+            return 1;
+        } else if (location.pathname.startsWith('/tat-ca-dich-vu')) {
+            return 2;
+        } else {
+            return 0;
+        }
+    });
 
     const [pagination, setPagination] = useState({ page: 1, limit: 10, totalPages: 1 });
 
@@ -30,10 +40,12 @@ function Filter() {
     };
 
     useEffect(() => {
-        if (location.pathname === '/tat-ca-bac-si' && selectedTab !== 1) {
+        if (location.pathname === '/tat-ca-benh-vien' && selectedTab !== 0) {
             setSelectedTab(1);
-        } else if (location.pathname === '/tat-ca-benh-vien' && selectedTab !== 0) {
+        } else if (location.pathname === '/tat-ca-bac-si' && selectedTab !== 1) {
             setSelectedTab(0);
+        } else if (location.pathname === '/tat-ca-dich-vu' && selectedTab !== 2) {
+            setSelectedTab(2);
         }
     }, [location.pathname]);
 
@@ -42,6 +54,8 @@ function Filter() {
             navigate(`/tat-ca-benh-vien/?keyword=${encodeURIComponent(keyword.trim())}`);
         } else if (selectedTab === 1 && location.pathname !== '/tat-ca-bac-si') {
             navigate(`/tat-ca-bac-si/?keyword=${encodeURIComponent(keyword.trim())}`);
+        } else if (selectedTab === 2 && location.pathname !== '/tat-ca-dich-vu') {
+            navigate(`/tat-ca-dich-vu/?keyword=${encodeURIComponent(keyword.trim())}`);
         }
     }, [selectedTab, keyword, navigate, location.pathname]);
 
@@ -73,11 +87,23 @@ function Filter() {
                 <div className="px-4 mb-8">
                     <Tabs selectedIndex={selectedTab} onSelect={(index) => setSelectedTab(index)}>
                         <TabList className="flex items-center gap-4 text-[rgb(140,140,140)] font-bold text-base border-b border-[#BFBFBF] mb-10">
-                            <Tab className="pb-2 cursor-pointer outline-none border-b-2 border-transparent aria-selected:text-[rgb(45,135,243)] aria-selected:border-b-2 aria-selected:border-[rgb(45,135,243)] ">
+                            <Tab
+                                className="pb-2 cursor-pointer outline-none border-b-2 border-transparent transition-colors"
+                                selectedClassName="text-customBlue border-b-2 !border-customBlue"
+                            >
                                 Bệnh viện
                             </Tab>
-                            <Tab className="pb-2 cursor-pointer outline-none border-b-2 border-transparent aria-selected:text-[rgb(45,135,243)] aria-selected:border-b-2 aria-selected:border-[rgb(45,135,243)]">
+                            <Tab
+                                className="pb-2 cursor-pointer outline-none border-b-2 border-transparent transition-colors"
+                                selectedClassName="text-customBlue border-b-2 !border-customBlue"
+                            >
                                 Bác sĩ
+                            </Tab>
+                            <Tab
+                                className="pb-2 cursor-pointer outline-none border-b-2 border-transparent transition-colors"
+                                selectedClassName="text-customBlue border-b-2 !border-customBlue"
+                            >
+                                Dịch vụ
                             </Tab>
                         </TabList>
                         <TabPanel>
@@ -97,6 +123,16 @@ function Filter() {
                                 </div>
                                 <div className="flex-[5]">
                                     <ListFilterDoctor pagination={pagination} setPagination={setPagination} />
+                                </div>
+                            </div>
+                        </TabPanel>
+                        <TabPanel>
+                            <div className="flex items-start gap-6 mt-5">
+                                <div className="flex-[1] min-w-72">
+                                    <SideBarFilterServie />
+                                </div>
+                                <div className="flex-[5]">
+                                    <ListFilterService pagination={pagination} setPagination={setPagination} />
                                 </div>
                             </div>
                         </TabPanel>

@@ -29,7 +29,7 @@ body {
         sans-serif;
     font-size: 16px;
     font-weight: 400;
-    line-height: 20px;
+    line-height: 24px;
     text-rendering: optimizeSpeed;
     color: var(--text-color);
 }
