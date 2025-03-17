@@ -28,8 +28,8 @@
 
 .news-content ul,
 .news-content p {
-    margin-top: 0;
-    margin-bottom: 1em;
+    margin-top: 8px;
+    margin-bottom: 16px;
 }
 
 .news-content ul {

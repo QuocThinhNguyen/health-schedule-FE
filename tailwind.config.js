@@ -1,3 +1,5 @@
+import { c } from 'vite/dist/node/types.d-aGj9QkWt';
+
 export default {
     content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
     theme: {
@@ -6,9 +8,13 @@ export default {
                 customGray: '#E4E8EC',
                 customYellow: '#ffb54a',
                 customBlue: '#2d87f3',
+                customLightBlue: '#e3f2ff',
                 customDeepNavyBlue: '#003553',
                 custom262626: '#262626',
                 custom404040: '#404040',
+                custom8C8C8C: '#8C8C8C',
+                custom284a75: '#284a75',
+                customTitle: '#262626',
             },
             height: {
                 'screen-minus-20': 'calc(100vh - 3.5rem)',
