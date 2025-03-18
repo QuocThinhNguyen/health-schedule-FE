@@ -402,17 +402,115 @@ function DetailVideo() {
         setReplyText('');
     };
 
-    const [checkLiked, setCheckLiked] = useState(false);
-    const [numberLike, setNumberLike] = useState(0);
+    const [likedComments, setLikedComments] = useState({}); // Lưu trạng thái thả tim của từng comment
+    const [likeCounts, setLikeCounts] = useState({}); // Lưu số lượt thích của từng comment
 
-    const handleLikeClick = () => {
-        if (checkLiked) {
-            setNumberLike(checkLiked - 1); // Nếu đã like thì bỏ like
-        } else {
-            setNumberLike(checkLiked + 1); // Nếu chưa like thì tăng số lượt thích
+    // useEffect(() => {
+    //     const fetchLikeComment = async () => {
+    //         const updateLikedComments = {};
+    //         const updateLikeCounts = {};
+
+    //         const fetchLikeData = async (comment) => {
+    //             try {
+    //                 const checkResponse = await axiosInstance.get(`/comment/check/${userId}/${comment.commentId}`);
+    //                 if (checkResponse.status === 200) {
+    //                     updateLikedComments[comment.commentId] = checkResponse.data;
+    //                 }
+
+    //                 const totalResponse = await axiosInstance.get(`/comment/total/${comment.commentId}`);
+    //                 if (totalResponse.status === 200) {
+    //                     updateLikeCounts[comment.commentId] = totalResponse.data;
+    //                 }
+    //             } catch (error) {
+    //                 console.error('Error fetching like comment:', error);
+    //             }
+
+    //             // Đệ quy gọi tiếp cho replies
+    //             if (comment.replies && comment.replies.length > 0) {
+    //                 for (const reply of comment.replies) {
+    //                     await fetchLikeData(reply);
+    //                 }
+    //             }
+    //         };
+
+    //         // Lặp qua tất cả comment để lấy dữ liệu
+    //         for (const comment of comments) {
+    //             await fetchLikeData(comment);
+    //         }
+
+    //         // Cập nhật state
+    //         setLikedComments(updateLikedComments);
+    //         setLikeCounts(updateLikeCounts);
+    //     };
+
+    //     if (comments.length > 0) {
+    //         fetchLikeComment();
+    //     }
+    // }, [comments]);
+
+    const handleLikeClick = async (commentId, isReply = false, parentCommentId = null) => {
+        try {
+            setComments((prevComments) =>
+                prevComments.map((comment) => {
+                    if (!isReply && comment.commentId === commentId) {
+                        const isLiked = comment.likedUsers.some((user) => user.userId === userId);
+
+                        return {
+                            ...comment,
+                            likedUsers: isLiked
+                                ? comment.likedUsers.filter((user) => user.userId !== userId) // Unlike
+                                : [...comment.likedUsers, { userId }], // Like
+                            totalLikes: isLiked ? comment.totalLikes - 1 : comment.totalLikes + 1,
+                        };
+                    }
+
+                    if (isReply && comment.commentId === parentCommentId) {
+                        return {
+                            ...comment,
+                            replies: comment.replies.map((reply) =>
+                                reply.commentId === commentId
+                                    ? {
+                                          ...reply,
+                                          likedUsers: reply.likedUsers.some((user) => user.userId === userId)
+                                              ? reply.likedUsers.filter((user) => user.userId !== userId) // Unlike
+                                              : [...reply.likedUsers, { userId }], // Like
+                                          totalLikes: reply.likedUsers.some((user) => user.userId === userId)
+                                              ? reply.totalLikes - 1
+                                              : reply.totalLikes + 1,
+                                      }
+                                    : reply,
+                            ),
+                        };
+                    }
+
+                    return comment;
+                }),
+            );
+
+            // **Xác định Like hay Unlike**
+            const comment = comments.find((c) => c.commentId === (isReply ? parentCommentId : commentId));
+            const targetComment = isReply ? comment?.replies.find((r) => r.commentId === commentId) : comment;
+            const isLiked = targetComment?.likedUsers.some((user) => user.userId === userId);
+
+            console.log('isLiked:', isLiked);
+
+            if (isLiked) {
+                const response = await axiosInstance.delete(`/comment/like/${userId}/${commentId}`);
+                if (response.status === 200) {
+                    console.log('Delete like comment success');
+                }
+            } else {
+                const response = await axiosInstance.post(`/comment/like/${userId}/${commentId}`);
+                if (response.status === 200) {
+                    console.log('Like comment success');
+                }
+            }
+        } catch (error) {
+            console.error('Error updating like status:', error);
         }
-        setCheckLiked(!liked);
     };
+
+    // console.log('Check liked:', checkLiked);
 
     const [totalComment, setTotalComment] = useState(0);
 
@@ -753,13 +851,18 @@ function DetailVideo() {
                                                         </div>
                                                     </div>
                                                     <div className="flex flex-col items-center ml-auto">
-                                                        <Heart
-                                                            className={`w-5 h-5  cursor-pointer ${
-                                                                checkLiked ? 'text-[#FE2C55]' : 'text-black'
-                                                            }`}
-                                                            onClick={handleLikeClick}
-                                                        />
-                                                        <span>1</span>
+                                                        <button onClick={() => handleLikeClick(comment.commentId)}>
+                                                            <Heart
+                                                                className={`w-5 h-5  ${
+                                                                    comment.likedUsers?.some(
+                                                                        (user) => user.userId === userId,
+                                                                    )
+                                                                        ? 'fill-red-500 stroke-red-500'
+                                                                        : 'stroke-gray-700'
+                                                                }`}
+                                                            />
+                                                        </button>
+                                                        <span>{comment.totalLikes || 0}</span>
                                                     </div>
                                                 </div>
                                                 {/* Input nhập bình luận khi bấm trả lời */}
@@ -837,8 +940,26 @@ function DetailVideo() {
                                                                     </div>
                                                                 </div>
                                                                 <div className="flex flex-col items-center ml-auto">
-                                                                    <Heart className="w-5 h-5 text-black " />
-                                                                    <span>1</span>
+                                                                    <button
+                                                                        onClick={() =>
+                                                                            handleLikeClick(
+                                                                                reply.commentId,
+                                                                                true,
+                                                                                comment.commentId,
+                                                                            )
+                                                                        }
+                                                                    >
+                                                                        <Heart
+                                                                            className={`w-5 h-5  ${
+                                                                                reply.likedUsers?.some(
+                                                                                    (user) => user.userId === userId,
+                                                                                )
+                                                                                    ? 'fill-red-500 stroke-red-500'
+                                                                                    : 'stroke-gray-700'
+                                                                            }`}
+                                                                        />
+                                                                    </button>
+                                                                    <span>{reply.totalLikes || 0}</span>
                                                                 </div>
                                                             </div>
                                                             {/* Input nhập bình luận khi bấm trả lời */}
