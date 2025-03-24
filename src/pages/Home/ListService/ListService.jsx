@@ -9,6 +9,9 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import './Custom.css';
 import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
+import { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
+import { axiosClient } from '~/api/apiRequest';
 
 function ListService() {
     var settings = {
@@ -19,8 +22,60 @@ function ListService() {
         slidesToScroll: 4,
         initialSlide: 0,
         infinite: false,
+        centerMode: false,
         prevArrow: <IoIosArrowBack className="slick_prev" />,
         nextArrow: <IoIosArrowForward className="swiper-button-next" />,
+    };
+
+    const [servceCategorys, setServiceCategorys] = useState([]);
+    const [selectedCategory, setSelectedCategory] = useState(0);
+    const [services, setServices] = useState([]);
+    const [pagination, setPagination] = useState({ page: 1, limit: 20, totalPages: 1 });
+
+    useEffect(() => {
+        const fetchServiceCategory = async () => {
+            try {
+                setServiceCategorys([]);
+                const response = await axiosClient.get(`/service-category/dropdown`);
+                if (response.status === 200) {
+                    setServiceCategorys(response.data);
+                    if (response.data.length > 0) {
+                        setSelectedCategory(response.data[0]);
+                    }
+                } else {
+                    toast.error('No service category are found:', response.message);
+                    setServiceCategorys([]);
+                }
+            } catch (error) {
+                toast.error('Failed to get service category:', error);
+                setServiceCategorys([]);
+            }
+        };
+        fetchServiceCategory();
+    }, []);
+
+    useEffect(() => {
+        const fetchService = async () => {
+            try {
+                const response = await axiosClient.get(
+                    `/service/?serviceCategoryId=${selectedCategory.serviceCategoryId}&&pageNo=${pagination.page}&&pageSize=${pagination.limit}`,
+                );
+                if (response.status === 200) {
+                    setServices(response.data);
+                } else {
+                    toast.error('No service  are found:', response.message);
+                    setServices([]);
+                }
+            } catch (error) {
+                toast.error('Failed to get service :', error);
+                setServices([]);
+            }
+        };
+        fetchService();
+    }, [selectedCategory]);
+
+    const handleServiceCategoryClick = (serviceCategory) => {
+        setSelectedCategory(serviceCategory);
     };
 
     return (
@@ -38,33 +93,24 @@ function ListService() {
                 </div>
                 <div className="mt-6 mb-2">
                     <ul className="flex text-sm gap-2">
-                        <li className="border border-transparent bg-customLightBlue text-customBlue px-[12px] py-[7px] cursor-pointer rounded-[60px]">
-                            Sức khỏe
-                        </li>
-                        <li className="border border-customGray  px-[12px] py-[7px] cursor-pointer rounded-[60px] hover:border-transparent hover:bg-customLightBlue hover:text-customBlue">
-                            Xét nghiệm
-                        </li>
-                        <li className="border border-customGray  px-[12px] py-[7px] cursor-pointer rounded-[60px] hover:border-transparent hover:bg-customLightBlue hover:text-customBlue">
-                            Tiêm chủng
-                        </li>
+                        {servceCategorys.map((serviceCategory, index) => (
+                            <li
+                                key={index}
+                                className={`border px-[12px] py-[7px] cursor-pointer rounded-[60px] hover:border-transparent ${
+                                    selectedCategory === serviceCategory
+                                        ? 'border-transparent bg-customLightBlue text-customBlue'
+                                        : 'border-customGray hover:bg-customLightBlue hover:text-customBlue'
+                                }`}
+                                onClick={() => handleServiceCategoryClick(serviceCategory)}
+                            >
+                                {serviceCategory.name}
+                            </li>
+                        ))}
                     </ul>
                 </div>
                 <div></div>
-                {/* <div className="flex flex-wrap">
-                    <Service />
-                    <Service1 />
-                    <Service />
-                    <Service />
-
-                </div> */}
                 <Slider {...settings}>
-                    <Service />
-                    <Service />
-                    <Service />
-                    <Service />
-
-                    <Service />
-                    <Service />
+                    {services.length > 0 && services.map((service, index) => <Service key={index} data={service} />)}
                 </Slider>
             </div>
         </div>
