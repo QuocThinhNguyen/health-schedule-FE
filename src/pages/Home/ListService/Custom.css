@@ -18,3 +18,7 @@
 .slick-next.slick-disabled {
     @apply opacity-50 pointer-events-none
 }
+
+.slick-track {
+    @apply mx-0
+}
