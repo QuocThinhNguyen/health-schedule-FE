@@ -1,9 +1,16 @@
 import { BsCoin } from 'react-icons/bs';
 import { CiHospital1, CiLocationOn } from 'react-icons/ci';
+import { useNavigate } from 'react-router-dom';
+import { formatTitleForUrl } from '~/utils/formatTitleForUrl';
 
 function Service({ data }) {
+    const navigate = useNavigate();
     const formatCurrency = (value) => {
         return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(value);
+    };
+
+    const handleClickService = () => {
+        navigate(`/dich-vu/${formatTitleForUrl(data.name)}-${data.serviceId}`);
     };
 
     return (
@@ -47,7 +54,10 @@ function Service({ data }) {
                             </p>
                         </div>
 
-                        <div className="w-full text-center bg-white group-hover:bg-[rgb(44,116,223)] border border-gray-300 group-hover:border-[#00B5F1] group-hover:text-white  font-semibold px-3 h-10 leading-9  rounded-lg ">
+                        <div
+                            onClick={handleClickService}
+                            className="w-full text-center bg-white group-hover:bg-[rgb(44,116,223)] border border-gray-300 group-hover:border-[#00B5F1] group-hover:text-white  font-semibold px-3 h-10 leading-9  rounded-lg "
+                        >
                             Đặt lịch dịch vụ
                         </div>
                     </div>

@@ -1,8 +1,20 @@
+import { useNavigate } from 'react-router-dom';
 import { BsCoin } from 'react-icons/bs';
+import { formatTitleForUrl } from '~/utils/formatTitleForUrl';
 
-function ServiceItem() {
+function ServiceItem({ data }) {
+
+    const navigate = useNavigate();
+
     const formatCurrency = (value) => {
         return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(value);
+    };
+
+    const handleClickService = () => {
+        console.log("url", `/dich-vu/${formatTitleForUrl(data.name)}-${data.serviceId}`);
+        // Chuyển hướng đến trang chi tiết dịch vụ
+        
+        navigate(`/dich-vu/${formatTitleForUrl(data.name)}-${data.serviceId}`);
     };
     return (
         <div className="rounded-lg mb-4 border border-[#E4E8EC]">
@@ -10,16 +22,14 @@ function ServiceItem() {
                 <div className="flex-1">
                     <div className="flex justify-between items-start">
                         <div>
-                            <h3 className="text-lg font-bold text-customTitle">
-                                Tiêm vắc xin Priorix 3 trong 1 phòng Sởi – Quai bị – Rubella
-                            </h3>
+                            <h3 className="text-lg font-bold text-customTitle">{data?.name || 'Chưa xác định'}</h3>
                         </div>
                     </div>
 
                     <p className="flex items-center gap-x-2 mb-2">
                         <BsCoin className="mt-[2px] " />
                         <span>Giá</span>
-                        <span className="text-customYellow text-lg font-medium">{formatCurrency(4100000)}</span>
+                        <span className="text-customYellow text-lg font-medium">{formatCurrency(data?.price)}</span>
                     </p>
                 </div>
             </div>
@@ -28,20 +38,16 @@ function ServiceItem() {
                 <div className="flex items-center gap-2">
                     <img
                         src="https://cdn-healthcare.hellohealthgroup.com/hospitals/vn/1wnumG7SuolmS0_-DxFqUbtmTfRFRmBtp.png?w=48&q=75"
-                        alt="Phòng khám Nhi đồng 315 và Tiêm Chủng - Chi nhánh Lê Văn Quới - Bình Tân"
+                        alt={data?.name || 'Chưa xác định'}
                         className="w-10 h-10 rounded-full object-cover border border-[#E4E8EC]"
                     />
                     <div>
-                        <div className="font-semibold text-sm">
-                            Phòng khám Nhi đồng 315 và Tiêm Chủng - Chi nhánh Lê Văn Quới - Bình Tân
-                        </div>
-                        <div className="text-xs text-[#595959]">
-                            482 Lê Văn Quới, Phường Bình Hưng Hòa A, Quận Bình Tân, Thành phố Hồ Chí Minh
-                        </div>
+                        <div className="font-semibold text-sm">{data?.clinicId?.name || 'Chưa xác định'}</div>
+                        <div className="text-xs text-[#595959]">{data?.clinicId?.address || 'Chưa xác định'}</div>
                     </div>
                 </div>
                 <div
-                    // onClick={() => handleBooking(doctor.doctorId)}
+                    onClick={handleClickService}
                     className=" h-10 bg-customBlue hover:bg-blue-600 text-white border px-5 py-2 rounded-lg font-semibold cursor-pointer"
                 >
                     Đặt Lịch Hẹn

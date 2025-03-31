@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useRef } from 'react';
 import {
     ChevronRight,
     X,
@@ -21,14 +21,37 @@ import { UserContext } from '~/context/UserContext';
 import { NavLink, useNavigate, useLocation } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import ConfirmationModal from '~/components/Confirm/ConfirmationModal';
+import { formatTitleForUrl } from '~/utils/formatTitleForUrl';
 
-function MakeAnAppointment() {
+function MakeAServiceAppointment() {
+    const location = useLocation();
+    const navigate = useNavigate();
 
-    const location =  useLocation();
-    const queryParams = new URLSearchParams(location.search);
-    const doctorId = queryParams.get('doctorId');
-    const currentDate = queryParams.get('currentDate');
-    const timeSlot = queryParams.get('timeSlot');
+    const [appointmentData, setAppointmentData] = useState(() => {
+        const params = new URLSearchParams(location.search);
+        return {
+            serviceId: params.get('serviceId'),
+            currentDate: params.get('currentDate'),
+            timeSlot: params.get('timeSlot'),
+            currentUrl: location.pathname + location.search,
+        };
+    });
+
+    useEffect(() => {
+        if (!appointmentData.serviceId || !appointmentData.currentDate || !appointmentData.timeSlot) {
+            navigate('/404', { replace: true });
+            return;
+        }
+
+        
+        console.log('appointmentData:', appointmentData);
+        console.log('correctUrl:', appointmentData.currentUrl);
+        console.log('location.pathname + location.search:', location.pathname + location.search);
+
+        if (location.pathname + location.search !== appointmentData.currentUrl) {
+            navigate( appointmentData.currentUrl, { replace: true });
+        }
+    }, [location.pathname, location.search, navigate]);
 
     const [userType, setUserType] = useState('self');
     const [paymentMethod, setPaymentMethod] = useState('cash');
@@ -37,8 +60,8 @@ function MakeAnAppointment() {
     const [files, setFiles] = useState([]);
     const [selectedPatientId, setSelectedPatientId] = useState(1);
     const { state } = useLocation();
-    const [doctorInfo, setDoctorInfo] = useState([]);
-    const navigate = useNavigate();
+    const [serviceData, setServiceData] = useState(null);
+
     const IMAGE_URL = `http://localhost:${import.meta.env.VITE_BE_PORT}/uploads/`;
     const [self, setSelf] = useState([]);
     const { user } = useContext(UserContext);
@@ -71,40 +94,6 @@ function MakeAnAppointment() {
         email: '',
         address: '',
     });
-
-    const [selectedReasons, setSelectedReasons] = useState([]);
-    const reasons = [
-        'Khám tổng quát',
-        'Ho, sốt',
-        'Đau bụng',
-        'Đau đầu, chóng mặt',
-        'Khó thở',
-        'Đau nhức xương khớp',
-        'Rối loạn tiêu hóa',
-        'Bệnh da liễu',
-        'Tư vấn sức khỏe',
-    ];
-    const handleReasonClick = (reason) => {
-        setSelectedReasons((prev) => {
-            if (prev.includes(reason)) {
-                // Remove reason if already selected
-                const newReasons = prev.filter((r) => r !== reason);
-                setReason(newReasons.join(', '));
-                return newReasons;
-            } else {
-                // Add new reason
-                const newReasons = [...prev, reason];
-                setReason(newReasons.join(', '));
-                return newReasons;
-            }
-        });
-    };
-
-    const handleTextChange = (e) => {
-        setValue(e.target.value);
-    };
-    // const [loading, setLoading] = useState(true);
-    // if (loading) return <div>Loading...</div>;
 
     const handleFileChange = (event) => {
         const selectedFiles = Array.from(event.target.files);
@@ -150,37 +139,19 @@ function MakeAnAppointment() {
         setIsDragging(false);
     };
 
-    const patients = [
-        {
-            id: 1,
-            name: 'Nguyễn Thị B',
-            relation: 'Mẹ',
-            gender: 'Nữ',
-            dob: '4/1/1997',
-            selected: true,
-        },
-        {
-            id: 2,
-            name: 'Nguyễn Văn A',
-            relation: 'Bố',
-            gender: 'Nam',
-            dob: '3/1/1998',
-            selected: false,
-        },
-    ];
-
     useEffect(() => {
-        const fetchDoctorInfo = async () => {
+        const fetchSerivceInfo = async () => {
             try {
-                const response = await axiosInstance.get(`/doctor/${doctorId}`);
+                const response = await axiosInstance.get(`/service/${appointmentData.serviceId}`);
+                console.log('data:', response.data);
                 if (response.status === 200) {
-                    setDoctorInfo(response.data);
+                    setServiceData(response.data);
                 }
             } catch (error) {
-                console.error('Failed to fetch doctor info: ', error.message);
+                console.error('Failed to fetch service info: ', error.message);
             }
         };
-        fetchDoctorInfo();
+        fetchSerivceInfo();
     }, []);
 
     const handleClickClinic = (clinicId, clinicName) => {
@@ -189,22 +160,20 @@ function MakeAnAppointment() {
         });
     };
 
-    const handleClickDoctor = (doctorId) => {
-        navigate(`/bac-si/get?id=${doctorId}`);
+    const handleClickService = (serviceId, serviceName) => {
+        navigate(`/dich-vu/${formatTitleForUrl(serviceName)}-${serviceId}`);
     };
 
-    const timeSlots = [
-        { label: '8:00 - 9:00', value: 'T1' },
-        { label: '9:00 - 10:00', value: 'T2' },
-        { label: '10:00 - 11:00', value: 'T3' },
-        { label: '11:00 - 12:00', value: 'T4' },
-        { label: '13:00 - 14:00', value: 'T5' },
-        { label: '14:00 - 15:00', value: 'T6' },
-        { label: '15:00 - 16:00', value: 'T7' },
-        { label: '16:00 - 17:00', value: 'T8' },
-    ];
-
-    const selectedTimeSlot = timeSlots.find((slot) => slot.value === timeSlot);
+    const timeSlotMapping = {
+        T1: '8:00 - 9:00',
+        T2: '9:00 - 10:00',
+        T3: '10:00 - 11:00',
+        T4: '11:00 - 12:00',
+        T5: '13:00 - 14:00',
+        T6: '14:00 - 15:00',
+        T7: '15:00 - 16:00',
+        T8: '16:00 - 17:00',
+    };
 
     const formatCurrency = (value) => {
         return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(value);
@@ -230,7 +199,7 @@ function MakeAnAppointment() {
             try {
                 const response = await axiosInstance.get(`/patientrecord/patient/${user.userId}`);
                 if (response.status === 200) {
-                    setPatientData(response.data); // Lưu toàn bộ mảng bệnh nhân vào state
+                    setPatientData(response.data);
                 } else {
                     setError('Không thể lấy dữ liệu');
                 }
@@ -262,11 +231,11 @@ function MakeAnAppointment() {
     const handlePaymentDirect = async () => {
         try {
             const formData = new FormData();
-            formData.append('doctorId', doctorId);
+            formData.append('serviceId', appointmentData.serviceId);
             formData.append('patientRecordId', selectedPatientId);
-            formData.append('appointmentDate', currentDate);
-            formData.append('timeType', timeSlot);
-            formData.append('price', doctorInfo.price);
+            formData.append('appointmentDate', appointmentData.currentDate);
+            formData.append('timeType', appointmentData.timeSlot);
+            formData.append('price', serviceData?.price);
             formData.append('reason', reason || '');
 
             files.forEach((file, index) => {
@@ -293,11 +262,11 @@ function MakeAnAppointment() {
     const handlePaymentOnline = async () => {
         try {
             const formData = new FormData();
-            formData.append('doctorId', doctorId);
+            formData.append('serviceId', appointmentData.serviceId);
             formData.append('patientRecordId', selectedPatientId);
-            formData.append('appointmentDate', currentDate);
-            formData.append('timeType', timeSlot);
-            formData.append('price', doctorInfo.price);
+            formData.append('appointmentDate', appointmentData.currentDate);
+            formData.append('timeType', appointmentData.timeSlot);
+            formData.append('price', serviceData.price);
             formData.append('reason', reason || '');
 
             files.forEach((file, index) => {
@@ -342,7 +311,6 @@ function MakeAnAppointment() {
                 }
             } catch (error) {
                 toast.error('Đã xảy ra lỗi khi lấy dữ liệu hồ sơ bệnh nhân');
-
             }
         };
         fetchRecordData();
@@ -412,14 +380,13 @@ function MakeAnAppointment() {
             const response = await axiosInstance.post('/patientrecord', formAddData);
 
             if (response.status === 200) {
-                toast.success(response.message); // Thông báo thành công
-                // navigate('/user/records');
+                toast.success(response.message);
                 setShowAddModel(false);
                 setTimeout(() => {
                     window.location.reload();
                 }, 1500);
             } else {
-                toast.error('Tạo mới thất bại: ' + response.message); // Thông báo lỗi
+                toast.error('Tạo mới thất bại: ' + response.message);
             }
         } catch (error) {
             console.error('Error creating record:', error);
@@ -428,7 +395,7 @@ function MakeAnAppointment() {
     };
 
     return (
-        <div className="min-h-screen bg-white">
+        <div className="min-h-screen bg-white mb-4">
             <div className="w-full bg-blue-50">
                 <div className="max-w-6xl py-2">
                     <div className="flex items-center gap-2 text-sm ml-12">
@@ -447,16 +414,18 @@ function MakeAnAppointment() {
                         <ChevronRight className="w-4 h-4 text-gray-400" />
                         <div
                             className=" cursor-pointer font-semibold"
-                            onClick={() => handleClickClinic(doctorInfo.clinicId, doctorInfo.clinicName)}
+                            onClick={() =>
+                                handleClickClinic(serviceData?.clinicId?.clinicId, serviceData?.clinicId?.name)
+                            }
                         >
-                            {doctorInfo.clinicName}
+                            {serviceData?.clinicId?.name}
                         </div>
                         <ChevronRight className="w-4 h-4 text-gray-400" />
                         <div
                             className=" cursor-pointer font-semibold"
-                            onClick={() => handleClickDoctor(doctorInfo.doctorId)}
+                            onClick={() => handleClickService(serviceData?.serviceId, serviceData?.name)}
                         >
-                            {doctorInfo.position} {doctorInfo.fullname}
+                            {serviceData?.name}
                         </div>
                         <ChevronRight className="w-4 h-4 text-gray-400" />
                         <div className="text-blue-600 cursor-pointer font-semibold">Đặt lịch hẹn</div>
@@ -486,7 +455,7 @@ function MakeAnAppointment() {
                     </div>
                 )}
 
-                <div className="flex flex-col lg:flex-row gap-8 max-w-6xl mt-2 mx-auto">
+                <div className="flex flex-col lg:flex-row gap-8 max-w-6xl mx-auto">
                     {/* Left Column */}
                     <div className="flex-1 lg:w-2/5 border rounded-xl px-6 py-6 h-fit mt-4">
                         {/* User Information */}
@@ -574,21 +543,6 @@ function MakeAnAppointment() {
                             <div className="flex items-center gap-2 text-base font-bold text-blue-900">
                                 <div className="w-1 h-6 bg-blue-600"></div>
                                 Lý do khám bệnh
-                            </div>
-                            <div className="flex flex-wrap gap-2 mb-2 mt-2">
-                                {reasons.map((reason) => (
-                                    <button
-                                        key={reason}
-                                        onClick={() => handleReasonClick(reason)}
-                                        className={`px-4 py-2 rounded-full text-sm transition-colors ${
-                                            selectedReasons.includes(reason)
-                                                ? 'bg-blue-100 text-blue-700 border-2 border-blue-200'
-                                                : 'bg-gray-50 hover:bg-gray-100 border border-gray-200'
-                                        }`}
-                                    >
-                                        {reason}
-                                    </button>
-                                ))}
                             </div>
                             <div className="mt-2 ">
                                 <textarea
@@ -684,55 +638,54 @@ function MakeAnAppointment() {
                             </div>
 
                             <div className="mt-4 p-4 space-y-4">
-                                <div className="flex items-start gap-3">
+                                <div className="flex items-center gap-3">
                                     <img
-                                        src={`${IMAGE_URL}${doctorInfo.image}`} // Thay thế URL này bằng link ảnh thực tế của bác sĩ
+                                        src="https://cdn-healthcare.hellohealthgroup.com/services/Specialty.png"
                                         alt="Doctor profile"
-                                        className="rounded-full w-16 h-16 object-cover border-4 border-white shadow-lg"
+                                        className="rounded-full w-16 h-16 object-cover shadow-lg"
                                     />
                                     <div>
-                                        <h3 className="font-semibold">
-                                            {doctorInfo.position} {doctorInfo.fullname}
-                                        </h3>
-                                        <p className="text-sm text-gray-500">{doctorInfo.specialtyName}</p>
+                                        <h3 className="font-semibold text-lg">{serviceData?.name}</h3>
                                     </div>
                                 </div>
 
                                 <div className="text-gray-500 font-semibold text-sm">THÔNG TIN LỊCH HẸN</div>
 
                                 <div className="space-y-3 bg-blue-50 rounded-md p-4">
-                                    <div className="flex items-center gap-2 ">
-                                        <Clock className="w-5 h-5" />
+                                    <div className="flex items-start gap-2 ">
+                                        <Clock className="w-5 h-5 mt-[2px]" />
                                         <div>
                                             <div className="font-semibold text-base">
                                                 Lịch hẹn:{' '}
-                                                {selectedTimeSlot
-                                                    ? selectedTimeSlot.label
+                                                {appointmentData.timeSlot
+                                                    ? timeSlotMapping[appointmentData.timeSlot]
                                                     : 'Không có thời gian phù hợp'}
+                                                ;
                                             </div>
                                             <div className="text-sm text-gray-500">
                                                 {' '}
-                                                {new Date(currentDate).toLocaleDateString('vi-VN')}
+                                                {new Date(appointmentData.currentDate).toLocaleDateString('vi-VN')}
                                             </div>
                                         </div>
                                     </div>
 
                                     <div className="flex items-start gap-2">
-                                        <MapPin className="w-5 h-5 mt-1" />
+                                        <MapPin className="w-5 h-5 mt-[2px]" />
                                         <div>
-                                            <div className="font-semibold text-base">{doctorInfo.clinicName}</div>
-                                            <div className="text-sm text-gray-500">{doctorInfo.addressClinic}</div>
-                                            {/* <button className="text-blue-600 text-sm hover:underline">Chỉ đường</button> */}
+                                            <div className="font-semibold text-base">{serviceData?.clinicId?.name}</div>
+                                            <div className="text-sm text-gray-500">
+                                                {serviceData?.clinicId?.address}
+                                            </div>
                                         </div>
                                     </div>
 
                                     <div className="flex items-start gap-2">
-                                        <BsCoin className="w-5 h-5 mt-1" />
+                                        <BsCoin className="w-5 h-5 mt-[2px]" />
                                         <div>
                                             <div className="text-base font-semibold ">Mức phí</div>
                                             <div className="text-red-600 font-medium text-lg">
                                                 {' '}
-                                                {formatCurrency(doctorInfo.price)}
+                                                {formatCurrency(serviceData?.price)}
                                             </div>
                                         </div>
                                     </div>
@@ -1206,4 +1159,4 @@ function MakeAnAppointment() {
     );
 }
 
-export default MakeAnAppointment;
+export default MakeAServiceAppointment;

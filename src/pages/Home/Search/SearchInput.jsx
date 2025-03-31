@@ -5,6 +5,7 @@ import { axiosClient } from '~/api/apiRequest';
 import SearchClinic from './SearchClinic';
 import SearchDoctor from './SearchDoctor';
 import { useNavigate } from 'react-router-dom';
+import SearchService from './SearchService';
 
 function SearchInput({ initialSearchValue = '' }) {
     const [isOpenHistory, setIsOpenHistory] = useState(false);
@@ -15,6 +16,7 @@ function SearchInput({ initialSearchValue = '' }) {
 
     const [clinics, setClinics] = useState([]);
     const [doctors, setDoctors] = useState([]);
+    const [services, setServices] = useState([]);
 
     useEffect(() => {
         const handleClickOutside = (e) => {
@@ -32,7 +34,7 @@ function SearchInput({ initialSearchValue = '' }) {
     useEffect(() => {
         const fetchSearchClinics = async () => {
             try {
-                const response = await axiosClient.get(`/clinic?query=${searchValue}&limit=100`);
+                const response = await axiosClient.get(`/clinic?query=${searchValue}&limit=20`);
                 if (response.status === 200) {
                     setClinics(response.data);
                 } else {
@@ -46,23 +48,41 @@ function SearchInput({ initialSearchValue = '' }) {
         };
 
         const fetchSearchDoctors = async () => {
+            // try {
+            //     const response = await axiosClient.get(`/doctor/search?keyword=${searchValue}&limit=20`);
+            //     if (response.status === 200) {
+            //         setDoctors(response.data);
+            //     } else {
+            //         toast.error(response.message);
+            //         setDoctors([]);
+            //     }
+            // } catch (error) {
+            //     toast.error(error);
+            //     setDoctors([]);
+            // }
+        };
+
+        const fetchSearchServices = async () => {
             try {
-                const response = await axiosClient.get(`/doctor/search?keyword=${searchValue}&limit=100`);
+                const response = await axiosClient.get(`/service?keyword=${searchValue}&pageSize=20`);
+                console.log("response sẻvice", response.data);
+                
                 if (response.status === 200) {
-                    setDoctors(response.data);
+                    setServices(response.data);
                 } else {
                     toast.error(response.message);
-                    setDoctors([]);
+                    setServices([]);
                 }
             } catch (error) {
                 toast.error(error);
-                setDoctors([]);
+                setServices([]);
             }
         };
 
         if (searchValue !== '') {
             fetchSearchClinics();
             fetchSearchDoctors();
+            fetchSearchServices();
         }
     }, [searchValue]);
 
@@ -93,6 +113,14 @@ function SearchInput({ initialSearchValue = '' }) {
         }
     };
 
+    const handleAllService = () => {
+        const trimmedSearchValue = searchValue.trim();
+        if (trimmedSearchValue) {
+            navigate(`/tat-ca-dich-vu/?keyword=${encodeURIComponent(trimmedSearchValue)}`);
+        } else {
+            navigate(`/tat-ca-dich-vu`);
+        }
+    }
     return (
         <div className="px-4 py-6 w-full flex-1 ">
             <div className="flex items-start justify-center gap-2">
@@ -110,7 +138,7 @@ function SearchInput({ initialSearchValue = '' }) {
                         />
                     </div>
                     {isOpenHistory && searchValue && (
-                        <div className="w-full shadow-2xl rounded-lg max-h-96 overflow-auto absolute bg-white top-14 left-0 right-0 z-10">
+                        <div className="w-full shadow-2xl rounded-lg max-h-96 overflow-auto absolute bg-white top-14 left-0 right-0 z-50">
                             {/* benh vien */}
                             {clinics.length > 0 && (
                                 <div>
@@ -142,6 +170,24 @@ function SearchInput({ initialSearchValue = '' }) {
                                         {/* list benh vien */}
                                         {doctors.map((doctor, index) => (
                                             <SearchDoctor key={index} data={doctor} />
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* dich vu */}
+                            {services.length > 0 && (
+                                <div>
+                                    <div className="px-6 py-2 rounded-tl-lg rounded-tr-lg font-semibold text-[rgb(38,38,38)] bg-[#e6f2ff] flex justify-between items-center">
+                                        <p>Dịch vụ</p>
+                                        <p onClick={handleAllService} className="text-[rgb(45,135,243)] cursor-pointer font-normal hover:underline">
+                                            Xem tất cả
+                                        </p>
+                                    </div>
+                                    <div>
+                                        {/* list benh vien */}
+                                        {services.map((service, index) => (
+                                            <SearchService key={index} data={service} />
                                         ))}
                                     </div>
                                 </div>
