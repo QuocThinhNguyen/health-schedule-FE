@@ -25,6 +25,7 @@ import MakeAServiceAppointment from '~/pages/User/MakeAServiceAppointment';
 import DetailVideo from '~/components/Video/DetailVideo';
 import Filter from '~/pages/User/Filter/Filter';
 import ServiceDetail from '~/pages/User/ServiceDetail';
+import ChatBot from '~/pages/User/ChatBot';
 
 function AppRoutes() {
     return (
@@ -54,6 +55,7 @@ function AppRoutes() {
                     <Route path="/tat-ca-dich-vu" element={<Filter />} />
                     <Route path="/video" element={<DetailVideo />} />
                     <Route path="/dich-vu/:title" element={<ServiceDetail />} />
+                    <Route path="/chatbot" element={<ChatBot />} />
                 </Route>
                 {AdminRoutes()}
                 {DoctorRoutes()}
