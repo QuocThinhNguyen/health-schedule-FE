@@ -1,28 +1,105 @@
-import {
-    Banknote,
-    Smartphone,
-} from 'lucide-react';
+import { Banknote, Smartphone } from 'lucide-react';
 import { BsCoin } from 'react-icons/bs';
 import { MdKeyboardArrowRight } from 'react-icons/md';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate, useParams } from 'react-router-dom';
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
 import '../User/News/NewsDetail.css';
 import { CiHospital1, CiLocationOn } from 'react-icons/ci';
+import { useContext, useEffect, useMemo, useState } from 'react';
+import { toast } from 'react-toastify';
+import { axiosClient } from '~/api/apiRequest';
+import { UserContext } from '~/context/UserContext';
+import parse from 'html-react-parser';
 
 function ServiceDetail() {
+    const IMAGE_URL = `http://localhost:${import.meta.env.VITE_BE_PORT}/uploads/`;
+    const { title } = useParams();
+    const { user } = useContext(UserContext);
+    const navigate = useNavigate();
+
+    const extractIdFromSlug = (slug) => {
+        const match = slug.match(/-(\d+)$/);
+        return match ? parseInt(match[1], 10) : null;
+    };
+    const serviceId = extractIdFromSlug(title);
+    const [service, setService] = useState();
+    const [currentDate, setCurrentDates] = useState(new Date().toISOString().split('T')[0]);
+    const [timeTypes, setTimeTypes] = useState([]);
+    const [selectedTime, setSelectedTime] = useState('');
+
+    useEffect(() => {
+        const fetchService = async () => {
+            try {
+                const response = await axiosClient.get(`/service/${serviceId}`);
+                if (response.status === 200) {
+                    setService(response.data);
+                } else {
+                    toast.error('No service  are found:', response.message);
+                    setService([]);
+                }
+            } catch (error) {
+                toast.error('Failed to get service :', error);
+                setService([]);
+            }
+        };
+        fetchService();
+    }, [serviceId]);
+
+    useEffect(() => {
+        const fetchServiceSchedule = async () => {
+            try {
+                console.log('serviceId', serviceId);
+                console.log('serviceSchedule', currentDate);
+
+                const response = await axiosClient.get(`/service-schedule/${serviceId}?scheduleDate=${currentDate}`);
+                console.log('response', response);
+
+                if (response.status === 200) {
+                    console.log('response.data.timeTypes', response.data.timeTypes);
+
+                    setTimeTypes(response.data.timeTypes);
+                } else {
+                    toast.error('No service  are found:', response.message);
+                    setTimeTypes([]);
+                }
+            } catch (error) {
+                toast.error('Failed to get service :', error);
+                setTimeTypes([]);
+            }
+        };
+        fetchServiceSchedule();
+    }, [serviceId, currentDate]);
+
+    const timeSlotMapping = {
+        T1: '8:00 - 9:00',
+        T2: '9:00 - 10:00',
+        T3: '10:00 - 11:00',
+        T4: '11:00 - 12:00',
+        T5: '13:00 - 14:00',
+        T6: '14:00 - 15:00',
+        T7: '15:00 - 16:00',
+        T8: '16:00 - 17:00',
+    };
+
+    const mappedTimeSlots = useMemo(() => {
+        return timeTypes?.map((timeType) => ({
+            value: timeType,
+            label: timeSlotMapping[timeType] || 'Thời gian không xác định',
+        }));
+    }, [timeTypes]);
+
     const formatCurrency = (value) => {
         return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(value);
     };
-    const timeSlots = [
-        { label: '8:00 - 9:00', value: 'T1' },
-        { label: '9:00 - 10:00', value: 'T2' },
-        { label: '10:00 - 11:00', value: 'T3' },
-        { label: '11:00 - 12:00', value: 'T4' },
-        { label: '13:00 - 14:00', value: 'T5' },
-        { label: '14:00 - 15:00', value: 'T6' },
-        { label: '15:00 - 16:00', value: 'T7' },
-        { label: '16:00 - 17:00', value: 'T8' },
-    ];
+
+    const handleTimeSlotClick = (timeSlot) => {
+        if (!user.auth) {
+            return navigate('/login');
+        }
+        setSelectedTime(timeSlot);
+        navigate(`/dich-vu/booking/?serviceId=${serviceId}&currentDate=${currentDate}&timeSlot=${timeSlot}`);
+    };
+
     return (
         <div className="min-h-screen bg-white">
             <div className="bg-[#e3f2ff]">
@@ -31,16 +108,14 @@ function ServiceDetail() {
                         <NavLink to="/">Trang chủ</NavLink>
                     </li>
                     <li>
-                        <NavLink to="/tin-tuc" className="flex items-center">
+                        <NavLink to="/dich-vu" className="flex items-center">
                             <MdKeyboardArrowRight className="mt-1" />
                             Dịch vụ
                         </NavLink>
                     </li>
                     <li className="flex items-center cursor-pointer">
                         <MdKeyboardArrowRight className="mt-1" />
-                        <span className="text-[#2D87F3]">
-                            Tiêm vắc xin MMR II 3 trong 1 phòng Sởi – Quai bị – Rubella
-                        </span>
+                        <span className="text-[#2D87F3]">{service?.name || 'Dịch vụ không xác định'}</span>
                     </li>
                 </ul>
             </div>
@@ -49,7 +124,10 @@ function ServiceDetail() {
                 <div className="relative rounded-xl overflow-hidden mt-5 flex justify-center items-center border-none outline-none">
                     <img
                         className="relative w-full  px-4 max-w-6xl h-96 rounded-lg overflow-hidden bg-cover bg-center"
-                        src="https://cdn-healthcare.hellohealthgroup.com/banners/vn/1EzL38IbPN1vyH13yRj4_mreG80vWE5c-.png"
+                        src={
+                            'https://cdn-healthcare.hellohealthgroup.com/banners/vn/1EzL38IbPN1vyH13yRj4_mreG80vWE5c-.png'
+                        }
+                        // alt={service?.clinicId?.name || 'Bệnh viện không xác định'}
                     />
                 </div>
 
@@ -59,16 +137,16 @@ function ServiceDetail() {
                         <div className="flex items-center gap-5">
                             <img
                                 src="https://cdn-healthcare.hellohealthgroup.com/services/Specialty.png"
-                                alt="Tiêm vaccine HPV Gardasil 9"
+                                alt={service?.name || 'Dịch vụ không xác định'}
                                 className=" h-36 w-36 rounded-full border-white shadow-lg"
                             />
 
                             <div className="mt-8">
-                                <h1 className="text-[22px] font-bold">Tiêm vaccine HPV Gardasil 9</h1>
+                                <h1 className="text-[22px] font-bold">{service?.name || 'Dịch vụ không xác định'}</h1>
                                 <p className="flex items-center gap-x-2 mt-2">
                                     <BsCoin className="mt-[2px] " />
                                     <span className="text-customYellow text-lg font-medium">
-                                        {formatCurrency(4100000)}
+                                        {formatCurrency(service?.price) || 'Không xác định'}
                                     </span>
                                 </p>
                             </div>
@@ -86,7 +164,6 @@ function ServiceDetail() {
                             <Tab
                                 className="pb-2 cursor-pointer outline-none border-b-2"
                                 selectedClassName="text-customBlue border-b-2 border-customBlue"
-                                
                             >
                                 Thông tin cơ bản
                             </Tab>
@@ -97,7 +174,7 @@ function ServiceDetail() {
                                     Về dịch vụ
                                 </h2>
                                 <div className="news-content">
-                                    <p>
+                                    {/* <p>
                                         Vaccine Gardasil 9 được sản xuất bởi Tập đoàn Dược phẩm và Chế phẩm sinh học
                                         Merck Sharp &amp; Dohme (MSD – Mỹ), phòng 9 tuýp virus HPV 6, 11, 16, 18, 31,
                                         33, 45, 52 và 58.
@@ -110,26 +187,31 @@ function ServiceDetail() {
                                     <p>
                                         Vaccine được chỉ định tiêm cho đối tượng từ 9 - 27 tuổi với lộ trình bao gồm 3
                                         mũi (Người từ 9 - 15 tuổi có phác đồ tiêm 2 mũi).
-                                    </p>
+                                    </p> */}
+                                    {service?.description ? parse(service.description) : 'Nội dung không có sẵn'}
                                 </div>
                                 <h2 className="text-lg font-semibold mb-2 text-custom284a75  border-l-4 leading-[18px] border-customBlue pl-3">
                                     Quá trình chuẩn bị
                                 </h2>
                                 <div className="news-content">
-                                    <p>
+                                    {service?.preparationProcess
+                                        ? parse(service.preparationProcess)
+                                        : 'Nội dung không có sẵn'}
+                                    {/* <p>
                                         • Vaccine được tiêm cho đối tượng từ 9 - 27 tuổi, kể cả trường hợp bạn đã hay
                                         chưa quan hệ tình dục.
                                     </p>
                                     <p>
                                         • Sau 27 tuổi, vaccine HPV có thể không phát huy tối đa tác dụng. Do đó, nếu
                                         quyết định tiêm, bạn nên nhận thêm sự tư vấn từ các chuyên gia.
-                                    </p>
+                                    </p> */}
                                 </div>
                                 <h2 className="text-lg font-semibold mb-2 text-custom284a75  border-l-4 leading-[18px] border-customBlue pl-3">
                                     Chi tiết dịch vụ
                                 </h2>
                                 <div className="news-content">
-                                    <p>
+                                    {service?.serviceDetail ? parse(service.serviceDetail) : 'Nội dung không có sẵn'}
+                                    {/* <p>
                                         • Phác đồ tiêm chủng cho bé từ tròn 9 tuổi đến dưới 15 tuổi tại thời điểm tiêm
                                         lần đầu tiên: Phác đồ 2 mũi: + Mũi 1: lần tiêm đầu tiên trong độ tuổi + Mũi 2:
                                         cách mũi 1 từ 6 - 12 tháng. Nếu mũi 2 tiêm cách mũi 1 5 tháng, cần tiêm mũi 3
@@ -141,7 +223,7 @@ function ServiceDetail() {
                                         đầu tiên trong độ tuổi. Mũi 2: cách mũi 1 ít nhất 1 tháng Mũi 3: cách mũi 2 ít
                                         nhất 3 tháng. Giá Vắc-xin Gardasil 9 (1 mũi): 2,970,000 VNĐ Phí bác sĩ khám sàng
                                         lọc trước tiêm ngừa: 100,000 VNĐ/ 1 lượt
-                                    </p>
+                                    </p> */}
                                 </div>
                                 <h2 className="text-lg font-semibold mb-2 text-custom284a75  border-l-4 leading-[18px] border-customBlue pl-3">
                                     Phương thức thanh toán
@@ -168,14 +250,14 @@ function ServiceDetail() {
                             <div className="text-lg font-bold mb-1">Đặt lịch ngay</div>
                             <p className="flex items-center gap-x-2">
                                 <CiHospital1 className="mt-[2px] text-base" />
-                                Bệnh viện Quốc Tế Vinmec
+                                {service?.clinicId?.name || 'Bệnh viện không xác định'}
                             </p>
                             <p className="flex items-start gap-x-2">
                                 <span>
                                     <CiLocationOn className="mt-1 text-base" />
                                 </span>
                                 <span className="line-clamp-2">
-                                    435/80F, nguyễn An Ninh, Bình Dương, thành phố bình dươngViệt nam
+                                    {service?.clinicId?.address || 'Địa chỉ không xác định'}
                                 </span>
                             </p>
                         </div>
@@ -188,47 +270,61 @@ function ServiceDetail() {
                                 <p className="text-gray-600 text-sm text-center">
                                     Vui lòng lựa chọn lịch khám bên dưới
                                 </p>
-                                <input type="date" className="w-full px-4 h-10 border rounded-lg cursor-pointer mt-2" />
-                                <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mt-4 h-full">
-                                    {timeSlots.length > 0 &&
-                                        timeSlots.map((timeSlot, index) => (
+                                <input
+                                    type="date"
+                                    value={currentDate}
+                                    min={new Date().toISOString().split('T')[0]}
+                                    onChange={(e) => setCurrentDates(e.target.value)}
+                                    className="w-full px-4 h-10 border rounded-lg cursor-pointer mt-2"
+                                />
+
+                                {timeTypes?.length > 0 ? (
+                                    <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mt-4 h-full">
+                                        {mappedTimeSlots.map((timeSlot, index) => (
                                             <button
                                                 key={index}
                                                 value={timeSlot.value}
-                                                className="py-2 px-1 font-semibold text-xs border rounded-lg border-customBlue text-customBlue hover:bg-blue-100"
+                                                onClick={() => setSelectedTime(timeSlot.value)}
+                                                className={`py-2 px-1 font-semibold text-xs border rounded-lg border-customBlue text-customBlue ${
+                                                    selectedTime === timeSlot.value
+                                                        ? ' text-white bg-customBlue'
+                                                        : 'text-customBlue hover:bg-blue-100'
+                                                } `}
                                             >
                                                 {timeSlot.label}
                                             </button>
                                         ))}
-                                </div>
-
-                                {/* <div
-                                    className=""
-                                            
-                                >
-                                    <div className="flex flex-col items-center justify-center p-2 text-center">
-                                        <img src="/schedule.png" alt="sf" className="h-20 w-20" />
-                                        <h3 className="text-lg font-medium text-gray-900 mb-2">
-                                            Rất tiếc! Bác sĩ của chúng tôi hiện đang bận.
-                                        </h3>
-                                        <p className="text-gray-600">
-                                            Xin vui lòng quay lại vào ngày mai hoặc đặt lịch với bác sĩ khác.
-                                        </p>
                                     </div>
-                                </div> */}
+                                ) : (
+                                    <div className="">
+                                        <div className="flex flex-col items-center justify-center p-2 text-center">
+                                            <img src="/schedule.png" alt="sf" className="h-20 w-20" />
+                                            <h3 className="text-lg font-medium text-gray-900 mb-2">
+                                                Rất tiếc! Bác sĩ của chúng tôi hiện đang bận.
+                                            </h3>
+                                            <p className="text-gray-600">
+                                                Xin vui lòng quay lại vào ngày mai hoặc đặt lịch với bác sĩ khác.
+                                            </p>
+                                        </div>
+                                    </div>
+                                )}
 
                                 <p className="flex items-center gap-x-2 mt-4">
                                     <BsCoin className="mt-[2px] " />
                                     <span className="text-customYellow text-lg font-medium">
-                                        {formatCurrency(4100000)}
+                                        {formatCurrency(service?.price) || 'Không xác định'}
                                     </span>
                                 </p>
 
                                 {/* Nút đặt lịch */}
                                 <button
-                                    className="w-full py-2 rounded-lg mt-1 bg-customBlue text-white hover:bg-blue-600 cursor-pointer"
-                                    // onClick={() => handleTimeSlotClick(selectedTime)}
-                                    // disabled={schedule.length <= 0 || !selectedTime}
+                                    className={`w-full py-2 rounded-lg mt-1 bg-customBlue text-white ${
+                                        mappedTimeSlots?.length > 0 && selectedTime
+                                            ? ' hover:bg-blue-600 cursor-pointer'
+                                            : 'opacity-65'
+                                    }`}
+                                    onClick={() => handleTimeSlotClick(selectedTime)}
+                                    disabled={mappedTimeSlots?.length <= 0 || !selectedTime}
                                 >
                                     TIẾP TỤC ĐẶT LỊCH
                                 </button>

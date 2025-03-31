@@ -7,7 +7,7 @@ function SearchDoctor(data) {
     const navigate = useNavigate();
 
     const doctor = data.data;
-    
+
     const IMAGE_URL = `http://localhost:${import.meta.env.VITE_BE_PORT}/uploads/`;
     const [academicRanksAndDegreess, setAcademicRanksAndDegreess] = useState([]);
 
@@ -39,9 +39,9 @@ function SearchDoctor(data) {
 
     return (
         <div
-        onClick={() => {
-            handleBooking(doctor.doctorId);
-        }}
+            onClick={() => {
+                handleBooking(doctor.doctorId);
+            }}
             className="px-6 py-2 hover:shadow-xl flex items-center gap-4 hover:bg-[rgba(227,242,255,0.3)] cursor-pointer border-b-2 border-transparent hover:border-b-2 hover:border-blue-400"
         >
             <div>

@@ -131,14 +131,15 @@ function DoctorInfo() {
             return navigate('/login');
         }
         setSelectedTime(timeSlot);
-        navigate('/bac-si/booking', {
-            state: {
-                doctorId,
-                currentDate,
-                timeSlot,
-            },
-        });
+        navigate(`/bac-si/booking/?doctorId=${doctorId}&currentDate=${currentDate}&timeSlot=${timeSlot}`);
     };
+    //, {
+    //     state: {
+    //         doctorId,
+    //         currentDate,
+    //         timeSlot,
+    //     },
+    // }
 
     // const customDescription = doctorInfo.description;
 

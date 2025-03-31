@@ -14,9 +14,10 @@ function NewsDetail() {
     const navigate = useNavigate();
     const [post, setPost] = useState({});
     const [posts, setPosts] = useState([]);
+
     const { title } = useParams();
     const extractIdFromSlug = (slug) => {
-        const match = slug.match(/-(\d+)$/); // Tìm số cuối cùng sau dấu '-'
+        const match = slug.match(/-(\d+)$/);
         return match ? parseInt(match[1], 10) : null;
     };
     const postId = extractIdFromSlug(title);
@@ -40,7 +41,6 @@ function NewsDetail() {
             getAllPostsAndFilter();
         }
     }, [postId]);
-    console.log('post:', post);
 
     const getAllPostsAndFilter = async () => {
         try {
@@ -97,6 +97,7 @@ function NewsDetail() {
                         </div>
                         <div className="mt-8 news-content">
                             {post.content ? parse(post.content) : 'Nội dung không có sẵn'}
+                            {/* <ReactMarkdown>{post.content}</ReactMarkdown> */}
                         </div>
                     </div>
                 </div>
@@ -121,7 +122,6 @@ function NewsDetail() {
                                         to={`/tin-tuc/${formatTitleForUrl(post.title)}-${post.postId}`}
                                         className="cursor-pointer p-3 border border-transparent group-hover:boder group-hover:border-[#00B5F1] rounded-2xl group-hover:shadow-lg block"
                                     >
-                                        {console.log('postId', post.postId)}
                                         <div className="flex flex-col">
                                             <div className="w-full h-40 overflow-hidden">
                                                 <img
