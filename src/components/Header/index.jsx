@@ -99,12 +99,12 @@ function Header() {
                         >
                             Bác sĩ
                         </NavLink>
-                        {/* <NavLink
-                            to="/chuyen-khoa"
+                        <NavLink
+                            to="/tat-ca-dich-vu"
                             className="inline-flex items-center px-1 text-base font-bold hover:opacity-80"
                         >
-                            Chuyên khoa
-                        </NavLink> */}
+                            Dịch vụ
+                        </NavLink>
                         <NavLink
                             to="/tin-tuc"
                             className="inline-flex items-center px-1 text-base font-bold hover:opacity-80"
@@ -286,22 +286,22 @@ function Header() {
                 <div className="sm:hidden">
                     <div className="pt-2 pb-3 space-y-1">
                         <NavLink
-                            to="#"
+                            to="/tat-ca-benh-vien"
                             className="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-500 hover:text-gray-700 hover:bg-gray-50 hover:border-gray-300"
                         >
                             Bệnh viện
                         </NavLink>
                         <NavLink
-                            to="#"
+                            to="/tat-ca-bac-si"
                             className="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-500 hover:text-gray-700 hover:bg-gray-50 hover:border-gray-300"
                         >
                             Bác sĩ
                         </NavLink>
                         <NavLink
-                            to="#"
+                            to="/tat-ca-dich-vu"
                             className="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-500 hover:text-gray-700 hover:bg-gray-50 hover:border-gray-300"
                         >
-                            Chuyên khoa
+                            Dịch vụ
                         </NavLink>
                     </div>
                     <div className="pb-3 border-t border-gray-200">

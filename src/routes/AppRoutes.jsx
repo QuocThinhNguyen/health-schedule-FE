@@ -21,6 +21,7 @@ import AllNews from '~/pages/User/News/AllNews';
 import NewsDetail from '~/pages/User/News/NewsDetail';
 import FilterLayoutDoctor from '~/pages/User/AllDoctor/FilterLayoutDoctor';
 import MakeAnAppointment from '~/pages/User/MakeAnAppointment';
+import MakeAServiceAppointment from '~/pages/User/MakeAServiceAppointment';
 import DetailVideo from '~/components/Video/DetailVideo';
 import Filter from '~/pages/User/Filter/Filter';
 import ServiceDetail from '~/pages/User/ServiceDetail';
@@ -41,6 +42,7 @@ function AppRoutes() {
                     <Route path="/bac-si-filter" element={<FilterLayoutDoctor />} />
                     <Route path="/bac-si/get" element={<DoctorInfo />} />
                     <Route path="/bac-si/booking" element={<MakeAnAppointment />} />
+                    <Route path="/dich-vu/booking" element={<MakeAServiceAppointment />} />
                     <Route path="/bac-si/get/record" element={<ChoosePatientRecord />} />
                     <Route path="/bac-si/get/record/confirm" element={<ConfirmInfomation />} />
                     <Route path="/benh-vien" element={<ClinicInfo />} />
@@ -52,7 +54,7 @@ function AppRoutes() {
                     <Route path="/tat-ca-bac-si" element={<Filter />} />
                     <Route path="/tat-ca-dich-vu" element={<Filter />} />
                     <Route path="/video" element={<DetailVideo />} />
-                    <Route path="/dich-vu" element={<ServiceDetail />} />
+                    <Route path="/dich-vu/:title" element={<ServiceDetail />} />
                     <Route path="/chatbot" element={<ChatBot />} />
                 </Route>
                 {AdminRoutes()}
