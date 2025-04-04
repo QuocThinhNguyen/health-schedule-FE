@@ -63,8 +63,6 @@ const Sidebar = ({ onSelectTab, selectedTab, setCurrentFunction }) => {
         logout();
     };
 
-    console.log('Doctor Info:', doctorInfo);
-
     const handleChangePassword = async () => {
         if (newPassword === confirmPassword) {
             // Gửi yêu cầu PUT tới API để thay đổi mật khẩu
@@ -74,7 +72,6 @@ const Sidebar = ({ onSelectTab, selectedTab, setCurrentFunction }) => {
                 newPassword: newPassword,
                 confirmPassword: confirmPassword,
             });
-            // console.log('Response::', response);
             if (response.status === 200) {
                 toast.success('Mật khẩu đã được thay đổi thành công');
                 setShowChangePasswordModal(false);

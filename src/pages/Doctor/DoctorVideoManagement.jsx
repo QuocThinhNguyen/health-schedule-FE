@@ -52,7 +52,6 @@ function DoctorVideoManagement() {
         //     doctorId,
         //     currentDate,
         // };
-        // console.log('get data: ', data);
 
         const formData = new FormData();
         formData.append('video', videoFile);
@@ -104,7 +103,6 @@ function DoctorVideoManagement() {
                 const response = await axiosInstance.get(
                     `/doctor/${user.userId}?page=${pagination.page}&&limit=${pagination.limit}`,
                 );
-                console.log('response', response);
                 if (response.status === 200) {
                     setDoctorInfo(response.data);
                     setSpecialty(response.data.specialtyId);
@@ -117,15 +115,12 @@ function DoctorVideoManagement() {
         fetchData();
     }, []);
 
-    // console.log('data video', videos);
-
     useEffect(() => {
         const fetchData = async () => {
             try {
                 const response = await axiosInstance.get(
                     `/video/${user.userId}?page=${pagination.page}&limit=${pagination.limit}`,
                 );
-                // console.log('response check', response);
                 if (response.status === 200) {
                     setVideos(response.data);
                     if (response.totalPages === 0) {
@@ -149,7 +144,6 @@ function DoctorVideoManagement() {
     const getDetailVideo = async (videoId) => {
         try {
             const response = await axiosInstance.get(`/video/detail/${videoId}`);
-            console.log('Detail video:', response);
             if (response.status === 200) {
                 setDetailVideo(response.data);
                 setTitle(response.data.videoTitle);
@@ -158,14 +152,10 @@ function DoctorVideoManagement() {
             console.error('Error fetching video data:', error);
         }
         setEditVideo(true);
-        console.log('name', detailVideo.videoName);
     };
 
     const updateVideo = async (videoId) => {
         try {
-            console.log('videoId', videoId);
-            console.log('update', title);
-
             const response = await axiosInstance.put(`/video/${videoId}`, {
                 videoTitle: title,
             });
@@ -193,7 +183,6 @@ function DoctorVideoManagement() {
     const deleteVideo = async (videoId) => {
         try {
             const response = await axiosInstance.get(`/video/detail/${videoId}`);
-            console.log('Detail video:', response);
             if (response.status === 200) {
                 setTitle(response.data.videoTitle);
                 setIdDelete(response.data.videoId);
@@ -225,7 +214,6 @@ function DoctorVideoManagement() {
     const navigate = useNavigate();
 
     const getVideo = (videoId) => {
-        console.log('get videoId:', videoId);
         navigate(`/video?idVideo=${videoId}&&idDoctor=${user.userId}`);
     };
 

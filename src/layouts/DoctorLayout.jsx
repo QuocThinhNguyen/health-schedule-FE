@@ -4,7 +4,6 @@ import { UserContext } from '~/context/UserContext';
 import DoctorDashboard from '~/pages/Doctor/DoctorDashboard';
 
 function DoctorLayout() {
-    console.log('đi vào DoctorLayout');
     const { logout } = useContext(UserContext);
     const handleLogout = () => {
         logout();

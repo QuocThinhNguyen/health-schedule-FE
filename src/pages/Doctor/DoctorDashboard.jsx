@@ -30,7 +30,6 @@ const DoctorDashboard = () => {
     };
 
     const [doctorInfo, setDoctorInfo] = useState('');
-    console.log(doctorInfo);
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -64,7 +63,6 @@ const DoctorDashboard = () => {
 
     const handleLogout = () => {
         setIsLogout(true);
-        console.log('Logout');
     };
 
     const onClose = () => {

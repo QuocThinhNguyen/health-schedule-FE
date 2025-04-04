@@ -21,8 +21,6 @@ function PatientManagement() {
     const [selectedPatient, setSelectedPatient] = useState(null);
     const [isDetail, setIsDetail] = useState([]);
 
-    console.log('detail:', isDetail);
-    console.log('Image', selectedImages);
     useEffect(() => {
         // Đặt ngày mặc định là ngày hiện tại khi component được tải
         const today = new Date().toISOString().split('T')[0];
@@ -37,7 +35,6 @@ function PatientManagement() {
 
             try {
                 const response = await axiosInstance.get(`/booking/doctor/${user.userId}?date=${selectedDate}`);
-                console.log('ResponseBooking:', response);
 
                 if (response.status === 200) {
                     setAppointments(response.data);
@@ -106,7 +103,6 @@ function PatientManagement() {
                             : appointment,
                     ),
                 );
-                console.log('Check update', appointments);
                 toast.success('Cập nhật trạng thái thành công!');
             } else {
                 toast.error('Cập nhật trạng thái thất bại.');
@@ -146,7 +142,6 @@ function PatientManagement() {
     const handleViewImage = (image) => {
         const imageUrl = `${IMAGE_URL}${image}`;
         window.open(imageUrl, '_blank');
-        console.log('OPEN');
     };
 
     const getDetail = async (bookingId) => {

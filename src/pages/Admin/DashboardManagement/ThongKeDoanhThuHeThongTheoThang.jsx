@@ -10,14 +10,16 @@ import {
     Legend,
     PointElement,
 } from 'chart.js';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { Bar } from 'react-chartjs-2';
 import { axiosInstance } from '~/api/apiRequest';
+import { ThemeContext } from '~/context/ThemeProvider';
 Chart.register(ArcElement, BarElement, LineElement, CategoryScale, LinearScale, Title, Tooltip, Legend, PointElement);
 
 function ThongKeDoanhThuHeThongTheoThang() {
     const [labels, setLabels] = useState([]);
     const [values, setValues] = useState([]);
+    const { isDark} = useContext(ThemeContext);
 
     useEffect(() => {
         const fetchRevenueChart = async () => {
@@ -62,6 +64,7 @@ function ThongKeDoanhThuHeThongTheoThang() {
                     title: {
                         display: true,
                         text: 'Biểu đồ doanh thu hệ thống theo tháng',
+                        color: isDark ? '#ffffffe6' : '#262626',
                     },
                 },
                 maintainAspectRatio: false,
@@ -70,6 +73,20 @@ function ThongKeDoanhThuHeThongTheoThang() {
                         title: {
                             display: true,
                             text: 'VNĐ',
+                            color: isDark ? '#ffffffe6' : '#262626',
+                        },
+                        ticks: {
+                            color: isDark ? '#ffffffe6' : '#262626',
+                        },
+                    },
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Tháng',
+                            color: isDark ? '#ffffffe6' : '#262626',
+                        },
+                        ticks: {
+                            color: isDark ? '#ffffffe6' : '#262626',
                         },
                     },
                 },

@@ -14,6 +14,7 @@ import WorktimeManagement from '~/pages/Admin/WorktimeManagement';
 import NewsManagement from '~/pages/Admin/NewsManagement';
 import CommentManagement from '~/pages/Admin/CommentManagement';
 import DashboardManagement from '~/pages/Admin/DashboardManagement';
+import CreateClinic from '~/pages/Admin/ClinicManagement/CreateClinic';
 
 
 function AdminRoutes() {
@@ -32,6 +33,7 @@ function AdminRoutes() {
                 <Route index element={<Navigate to="dashboard" />} />
                 <Route path="dashboard" element={<DashboardManagement />} />
                 <Route path="clinic" element={<ClinicManagement />} />
+                <Route path='clinic/create-clinic' element={<CreateClinic />} />
                 <Route path="doctor" element={<DoctorManagement />} />
                 <Route path="user" element={<UserManagement />} />
                 <Route path="specialty" element={<SpecialtyManagement />} />

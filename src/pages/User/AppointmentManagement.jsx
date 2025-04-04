@@ -24,9 +24,6 @@ const AppointmentManagement = () => {
         { id: 'examined', label: 'Đã khám', keyMap: 'S4' },
         { id: 'cancelled', label: 'Đã hủy', keyMap: 'S5' },
     ];
-
-    console.log('CHECK', appointments);
-
     const [isModalOpen, setModalOpen] = useState(false);
     const [selectedBookingId, setSelectedBookingId] = useState(null);
     const [patientName, setPatientName] = useState('');
@@ -96,12 +93,9 @@ const AppointmentManagement = () => {
                                 appointment.appointmentDate,
                             );
                             return { ...appointment, feedbackChecked };
-
-                            console.log('Feedback checked:', feedbackChecked);
                         }),
                     );
                     setAppointments(updatedAppointments);
-                    console.log('Appointments:', updatedAppointments);
                 } else {
                     setError('Không thể tải dữ liệu.');
                 }
@@ -124,8 +118,6 @@ const AppointmentManagement = () => {
             const response = await axiosInstance.put(`/booking/${selectedBookingId}`, {
                 status: 'S5',
             });
-
-            console.log('Responsese:', response);
 
             if (response.status === 200) {
                 toast.success('Hủy lịch hẹn thành công.');

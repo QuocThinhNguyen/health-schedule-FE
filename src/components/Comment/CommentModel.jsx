@@ -9,16 +9,12 @@ const CommentModel = () => {
     const [showGuide, setShowGuide] = useState(false);
     const navigate = useNavigate();
     const { state } = useLocation();
-    // console.log('TESSSST', state);
     const [doctorInfo, setDoctorInfo] = useState([]);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const imageInputRef = useRef(null);
     const videoInputRef = useRef(null);
     const [mediaFiles, setMediaFiles] = useState([]);
     const [previews, setPreviews] = useState([]);
-
-    // console.log('Media files:', mediaFiles);
-    // console.log('Previews:', previews);
 
     useEffect(() => {
         const fetchDoctorInfo = async () => {
@@ -56,7 +52,6 @@ const CommentModel = () => {
     //         clinicId: state.clinicId,
     //     };
 
-    //     console.log('Feedback data:', feedbackData);
     //     try {
     //         setIsSubmitting(true);
     //         const response = await axiosInstance.post('/feedback', feedbackData);
@@ -96,14 +91,12 @@ const CommentModel = () => {
         });
 
         try {
-            console.log('11');
             setIsSubmitting(true);
             const response = await axiosInstance.post('/feedback', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
             });
-            console.log('Response check:', response);
             if (response.status === 200) {
                 toast.success('Đánh giá đã được gửi thành công!');
                 navigate('/user/appointments');
