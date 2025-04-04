@@ -12,15 +12,11 @@ const ThemeProvider = ({ children }) => {
     });
 
     useEffect(() => {
-        console.log("Theme changed:", isDark);
         localStorage.setItem('theme', isDark ? 'dark' : 'light');
-        document.body.classList.toggle('dark', isDark);
     }, [isDark]);
 
     const toggleTheme = () => {
-        console.log("Toggling theme:", isDark);
         setIsDark(prev => {
-            console.log("Toggle theme:", !prev);
             return !prev;
         });
     };
