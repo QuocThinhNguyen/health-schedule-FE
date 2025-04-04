@@ -9,6 +9,12 @@ import { UserContext } from '~/context/UserContext';
 import CustomTinyMCE from '~/components/CustomTinyMCE';
 import { Edit2, Trash2, Search, XCircle } from 'lucide-react';
 import defaultImage from '../../../assets/img/addImage.png';
+import { CiEdit } from 'react-icons/ci';
+import { MdDeleteOutline } from 'react-icons/md';
+import Title from '../components/Tittle';
+import { IoIosAdd, IoIosSearch } from 'react-icons/io';
+import Table from '~/components/Table';
+import AdvancePagination from '~/components/AdvancePagination';
 
 function NewsManagement() {
     const [posts, setPosts] = useState([]);
@@ -81,8 +87,6 @@ function NewsManagement() {
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        console.log('name change:', name);
-        console.log('value change:', value);
         setPost({ ...post, [name]: value });
         setValidationErrors({ ...validationErrors, [name]: '' });
     };
@@ -95,8 +99,6 @@ function NewsManagement() {
 
     const handleBlur = (e) => {
         const { name, value } = e.target;
-        console.log('name blur:', name);
-        console.log('value blur:', value);
 
         if (value.trim() === '') {
             // Nếu trường nhập trống, hiển thị lỗi
@@ -127,8 +129,6 @@ function NewsManagement() {
                 image: '', // Xóa thông báo lỗi khi có hình ảnh hợp lệ
             }));
         }
-        console.log('selectedFile:', selectedFile);
-        console.log('file:', file);
 
         setSelectedFile(file);
     };
@@ -166,6 +166,8 @@ function NewsManagement() {
                 `/post?query=${filterValue}&page=${pagination.page}&limit=${pagination.limit}`,
             );
             if (response.status === 200) {
+                console.log('Posts:', response);
+
                 setPosts(response.data);
                 if (response.totalPages === 0) {
                     response.totalPages = 1;
@@ -189,12 +191,9 @@ function NewsManagement() {
 
     const createPostAPI = async (formData) => {
         try {
-            console.log('Form Data:', formData);
-
             const response = await axiosInstance.post('/post', formData, {
                 headers: { 'Content-Type': 'multipart/form-data' },
             });
-            console.log('Create post response:', response);
 
             if (response.status === 200) {
                 await getAllPostsAndFilter();
@@ -214,8 +213,6 @@ function NewsManagement() {
         try {
             const response = await axiosInstance.get(`/post/${postId}`);
             if (response.status === 200) {
-                console.log('Update post:', response.data);
-
                 setUpdatePost(response.data);
             } else {
                 console.error('No post found:', response.message);
@@ -281,7 +278,6 @@ function NewsManagement() {
         toast.success('Thêm bài viết thành công!');
         setValidationErrors(errors);
         setSelectedFile(null);
-        console.log('New Post Info:', post);
         handleCloseModal();
     };
 
@@ -310,145 +306,62 @@ function NewsManagement() {
         toast.success('Cập nhật bài viết thành công!');
         setValidationErrors(errors);
         setSelectedFile(null);
-        console.log('Updated Post Info:', updatePost);
         handleCloseUpdateModal();
     };
 
+    const processedPosts = posts.map((post) => ({
+        ...post,
+        createAt: format(new Date(post.createAt), 'dd-MM-yyyy'),
+        updateAt: format(new Date(post.updateAt), 'dd-MM-yyyy'),
+    }));
+    console.log('Posts:-------------', processedPosts);
+    
+
+    const columns = [
+        { key: 'title', label: 'Tiêu đề' },
+        { key: 'userId.fullname', label: 'Tác giả' },
+        { key: 'createAt', label: 'Ngày đăng' },
+        { key: 'updateAt', label: 'Ngày cập nhật' },
+    ];
+
+    const actions = [
+        { icon: <CiEdit />, onClick: (post) => getDetailPostAPI(post.postId) },
+        { icon: <MdDeleteOutline />, onClick: (post) => handleDeleteClick(post.postId) },
+    ];
+
     return (
-        <div className="p-8">
-            <h2 className="text-center text-3xl font-bold mb-4">QUẢN LÝ TIN TỨC</h2>
-
-            <div className="flex items-center justify-between mb-4">
-                {/* <div className="flex items-center space-x-2">
-                    <input
-                        type="text"
-                        placeholder="Tìm kiếm"
-                        value={filterValue}
-                        onChange={(e) => setFilterValue(e.target.value)}
-                        className="border border-gray-400 rounded px-3 py-2 w-96"
-                    />
+        <div className="px-3 mb-6">
+            <Title>Quản lý tin tức</Title>
+            <div className="p-4 rounded bg-[var(--bg-primary)] border border-[var(--border-primary)]">
+                <div className="flex items-center justify-between mb-3">
+                    <div className="relative flex-1 max-w-md">
+                        <IoIosSearch className="absolute left-2 top-1/2 transform -translate-y-1/2 text-lg" />
+                        <input
+                            type="text"
+                            placeholder="Tìm kiếm..."
+                            value={filterValue}
+                            onChange={(e) => setFilterValue(e.target.value)}
+                            className="w-full pl-8 pr-4 py-2 h-10 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-[var(--bg-primary)] border-[var(--border-primary)]"
+                        />
+                    </div>
                     <button
-                        className="bg-gray-200 border border-gray-400 px-4 py-2 rounded"
-                        onClick={() => getAllPostsAndFilter()}
+                        className="flex justify-center items-center gap-2 px-4 py-2 h-10 bg-[rgba(var(--bg-active-rgb),0.15)] text-[rgb(var(--bg-active-rgb))] hover:bg-[var(--bg-active)] hover:text-[var(--text-active)] rounded-md  border border-[var(--border-primary)]"
+                        onClick={handleOpenModal}
                     >
-                        🔍
+                        <span>Thêm</span>
+                        <span>
+                            <IoIosAdd className="text-lg" />
+                        </span>
                     </button>
-                </div> */}
-                <div className="relative flex-1 max-w-md">
-                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-600 w-6 h-6" />
-                    <input
-                        type="text"
-                        placeholder="Tìm kiếm"
-                        value={filterValue}
-                        onChange={(e) => setFilterValue(e.target.value)}
-                        className="w-full pl-10 pr-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    />
                 </div>
-
-                {/* <button
-                    className="flex items-center space-x-2 bg-gray-200 border border-gray-400 px-4 py-2 rounded"
-                    onClick={handleOpenModal}
-                >
-                    <span>Thêm</span>
-                    <span>
-                        <FontAwesomeIcon icon={faPlus} />
-                    </span>
-                </button> */}
-                <button
-                    // className="flex items-center space-x-2 bg-gray-200 border border-gray-400 px-4 py-2 rounded"
-                    className="flex items-center gap-2 px-4 py-2 text-blue-600 bg-blue-50 rounded-md hover:bg-blue-100 border border-blue-600"
-                    onClick={handleOpenModal}
-                >
-                    <span>Thêm</span>
-                    <span>
-                        <FontAwesomeIcon icon={faPlus} />
-                    </span>
-                </button>
-            </div>
-
-            <div className="overflow-x-auto rounded-lg border">
-                <table className="min-w-full divide-y divide-gray-200">
-                    <thead className="bg-gray-200">
-                        <tr>
-                            <th className="px-4 py-2 font-bold uppercase tracking-wider w-1">STT</th>
-                            <th className="px-4 py-2 font-bold uppercase tracking-wider w-72">Tiêu đề</th>
-                            <th className="px-4 py-2 font-bold uppercase tracking-wider w-36">Tác giả</th>
-                            <th className="px-4 py-2 font-bold uppercase tracking-wider w-14">Ngày đăng</th>
-                            <th className="px-4 py-2 font-bold uppercase tracking-wider w-14">Ngày cập nhật</th>
-                            <th className="px-4 py-2 font-bold uppercase tracking-wider w-10">Thao tác</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {posts.map((post, index) => (
-                            <tr key={post.postId} className={index % 2 === 0 ? 'bg-white' : 'bg-gray-100'}>
-                                <td className="px-4 py-2 text-gray-900 text-center">
-                                    {index + 1 + pagination.limit * (pagination.page - 1)}
-                                </td>
-                                <td className="px-4 py-2 text-gray-900 text-center">{post.title}</td>
-                                <td className="px-4 py-2 text-gray-900 text-center">{post.userId.fullname}</td>
-                                <td className="px-4 py-2 text-gray-900 text-center">
-                                    {' '}
-                                    {format(new Date(post.createAt), 'dd-MM-yyyy')}
-                                </td>
-                                <td className="px-4 py-2 text-gray-900 text-center">
-                                    {format(new Date(post.updateAt), 'dd-MM-yyyy')}
-                                </td>
-                                <td className="px-4 py-2">
-                                    <div className="flex items-center justify-center gap-3">
-                                        <button
-                                            className="text-blue-500 text-2xl hover:text-blue-700"
-                                            onClick={() => getDetailPostAPI(post.postId)}
-                                        >
-                                            <Edit2 className="w-7 h-7" />
-                                        </button>
-                                        <button
-                                            className="text-red-500 text-2xl hover:text-red-700"
-                                            onClick={() => handleDeleteClick(post.postId)}
-                                        >
-                                            <Trash2 className="w-7 h-7" />
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-            </div>
-
-            <div className="flex justify-end items-center space-x-4 mt-4">
-                <select
-                    className="border border-gray-400"
-                    name="number"
-                    value={pagination.limit}
-                    onChange={handleLimitChange}
-                >
-                    <option value="7">7</option>
-                    <option value="14">14</option>
-                    <option value="21">21</option>
-                </select>
-            </div>
-            <div className="flex justify-end items-center space-x-4 mt-4">
-                <button
-                    className={`${pagination.page === 1 ? 'font-normal text-gray-500' : 'font-bold text-blue-500'}`}
-                    onClick={() => handlePageChange(pagination.page - 1)}
-                    disabled={pagination.page === 1}
-                >
-                    Previous
-                </button>
-                <span>
-                    Page {pagination.page} of {pagination.totalPages}
-                </span>
-                <button
-                    className={`${
-                        pagination.page === pagination.totalPages
-                            ? 'font-normal text-gray-500'
-                            : 'font-bold text-blue-500'
-                    }`}
-                    onClick={() => handlePageChange(pagination.page + 1)}
-                    disabled={pagination.page === pagination.totalPages}
-                >
-                    Next
-                </button>
+                <Table columns={columns} data={processedPosts} pagination={pagination} actions={actions} />
+                <AdvancePagination
+                    pagination={pagination}
+                    totalElements="10"
+                    onPageChange={handlePageChange}
+                    selects={[10, 15, 20]}
+                    onSlectChange={handleLimitChange}
+                />
             </div>
 
             {isModalOpen && (

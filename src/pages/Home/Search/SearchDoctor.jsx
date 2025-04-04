@@ -31,8 +31,6 @@ function SearchDoctor(data) {
     }, []);
 
     const handleBooking = (doctorId) => {
-        console.log('Đã click vào nút Đặt khám ngay');
-
         // Điều hướng đến trang với ID bác sĩ
         navigate(`/bac-si/get?id=${doctorId}`);
     };

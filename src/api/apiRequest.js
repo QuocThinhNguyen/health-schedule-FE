@@ -34,7 +34,6 @@ axiosClient.interceptors.response.use(
 const refreshToken = async () => {
     try {
         const response = await axiosClient.post('/refresh_token');
-        console.log('refresh_token:', response);
 
         if (response.status === 200) {
             return response.access_token;

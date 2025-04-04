@@ -15,9 +15,6 @@ function Overview() {
     // lấy ngày hiện tại
     const [today, setToday] = useState('');
     const [pagination, setPagination] = useState({ page: 1, limit: 10, totalPages: 1 });
-    console.log('Lengh', appointments.length);
-    // console.log('CHECK', `/booking/doctor/${user.userId}?date=${selectedDate}`);
-    console.log('Appointments:', appointments);
     const [yesterdayDate, setYesterdayDate] = useState('');
     const [feedbacks, setFeedbacks] = useState([]);
     const [statistical, setStatistical] = useState([]);
@@ -43,18 +40,14 @@ function Overview() {
         setYesterdayDate(formattedYesterday);
     }, []);
 
-    console.log('SelectedDate:', selectedDate);
-    console.log('YesterdayDate:', yesterdayDate);
     useEffect(() => {
         // Hàm gọi API để lấy dữ liệu lịch hẹn
         const fetchAppointments = async () => {
             try {
                 const response = await axiosInstance.get(`/booking/doctor/${user.userId}?date=${today}`);
-                console.log('ResponseBooking:', response);
                 const responseYesterday = await axiosInstance.get(
                     `/booking/doctor/${user.userId}?date=${yesterdayDate}`,
                 );
-                console.log('ResponseBookingYesterday:', responseYesterday);
 
                 if (response.status === 200) {
                     setAppointments(response.data);
@@ -86,8 +79,6 @@ function Overview() {
                 const response = await axiosInstance.get(
                     `/booking/doctor/${user.userId}?date=${selectedDate}&page=${pagination.page}&&limit=${pagination.limit}`,
                 );
-                console.log('ResponseBooking:', response);
-
                 if (response.status === 200) {
                     setGetBooking(response.data);
                     if (response.totalPages === 0) {
@@ -208,7 +199,6 @@ function Overview() {
             }
 
             const response1 = await axiosInstance.get(`/bookingImage/${bookingId}`);
-            // console.log('ResponseImage:', response);
 
             if (response1.status === 200) {
                 const images = response1.data.map((item) => item.name);
@@ -244,7 +234,6 @@ function Overview() {
     const handleViewImage = (image) => {
         const imageUrl = `${IMAGE_URL}${image}`;
         window.open(imageUrl, '_blank');
-        console.log('OPEN');
     };
 
     const closeModal1 = () => {
@@ -288,7 +277,6 @@ function Overview() {
         setSelectedBookingId(bookingId);
         setPatientName(patientName);
         setModalOpen(true);
-        console.log('OPEN');
     };
 
     return (

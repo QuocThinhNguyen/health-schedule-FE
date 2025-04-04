@@ -11,7 +11,6 @@ function Review() {
     const [selectedReview, setSelectedReview] = useState(null);
     const [pagination, setPagination] = useState({ page: 1, limit: 12, totalPages: 1 });
     const [feedbacks, setFeedbacks] = useState([]);
-    console.log('Feedbacks:', feedbacks);
     const { user } = useContext(UserContext);
     const IMAGE_URL = `http://localhost:${import.meta.env.VITE_BE_PORT}/uploads/`;
     const [isOpen, setIsOpen] = useState(false);
@@ -39,7 +38,6 @@ function Review() {
                 const response = await axiosInstance.get(
                     `/feedback/${user.userId}?page=${pagination.page}&&limit=${pagination.limit}`,
                 );
-                console.log('Feedbacksssssss:', response);
                 if (response.status === 200) {
                     setFeedbacks(response);
                     if (response.totalPages === 0) {

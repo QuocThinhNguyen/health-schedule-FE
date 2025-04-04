@@ -65,8 +65,6 @@ function SearchInput({ initialSearchValue = '' }) {
         const fetchSearchServices = async () => {
             try {
                 const response = await axiosClient.get(`/service?keyword=${searchValue}&pageSize=20`);
-                console.log("response sẻvice", response.data);
-                
                 if (response.status === 200) {
                     setServices(response.data);
                 } else {

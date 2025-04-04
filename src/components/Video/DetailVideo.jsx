@@ -63,10 +63,8 @@ function DetailVideo() {
         };
         fetchData();
     }, [userId]);
-    // console.log('Check type', typeof detailVideo.likes);
 
     const togglePlay = () => {
-        // console.log('Play');
         if (videoRef.current) {
             if (isPlaying) {
                 videoRef.current.pause();
@@ -83,13 +81,11 @@ function DetailVideo() {
             videoRef.current.muted = newMutedState;
             setIsMuted(newMutedState);
             setVolume(newMutedState ? 0 : 1); // Cập nhật volume để UI hiển thị đúng
-            // console.log('Mute:', newMutedState);
         }
     };
 
     const handleVolumeChange = (e) => {
         const newVolume = parseFloat(e.target.value);
-        // console.log(newVolume);
         if (videoRef.current) {
             videoRef.current.volume = newVolume;
         }
@@ -187,7 +183,6 @@ function DetailVideo() {
 
     const previousPage = () => {
         navigate(`/bac-si/get?id=${idDoctor}`);
-        console.log('Previous page');
     };
 
     const [showControls, setShowControls] = useState(true);
@@ -312,7 +307,6 @@ function DetailVideo() {
             }
         };
         fetchBookmark();
-        console.log('Check total bookmark:', totalBookMark);
     }, [idVideo]);
 
     const [comment, getComment] = useState('');
@@ -492,8 +486,6 @@ function DetailVideo() {
             const targetComment = isReply ? comment?.replies.find((r) => r.commentId === commentId) : comment;
             const isLiked = targetComment?.likedUsers.some((user) => user.userId === userId);
 
-            console.log('isLiked:', isLiked);
-
             if (isLiked) {
                 const response = await axiosInstance.delete(`/comment/like/${userId}/${commentId}`);
                 if (response.status === 200) {
@@ -562,7 +554,6 @@ function DetailVideo() {
 
         if (currentTime >= (2 / 3) * duration && !viewed) {
             setViewed(true);
-            console.log('Đã xem hết video');
             try {
                 const response = await axiosInstance.put(`/video/view/${idVideo}`);
                 if (response.status === 200) {

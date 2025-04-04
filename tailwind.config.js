@@ -1,6 +1,8 @@
+import { text } from '@fortawesome/fontawesome-svg-core';
 import { c } from 'vite/dist/node/types.d-aGj9QkWt';
 
 export default {
+    darkMode: 'class',
     content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
     theme: {
         extend: {
@@ -18,6 +20,7 @@ export default {
             },
             height: {
                 'screen-minus-20': 'calc(100vh - 3.5rem)',
+                'screen-admin': 'calc(100vh - 68px)',
             },
             minHeight: {
                 'screen-minus-20': 'calc(100vh - 3.5rem)',

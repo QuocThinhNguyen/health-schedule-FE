@@ -45,13 +45,8 @@ function AddRecord() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
-        console.log('Form submitted:', formData);
         try {
-            console.log('Form submitted:', formData);
             const response = await axiosInstance.post('/patientrecord', formData);
-            console.log('API Response:', response);
-
             if (response.status === 200) {
                 toast.success(response.message); // Thông báo thành công
                 navigate('/user/records');

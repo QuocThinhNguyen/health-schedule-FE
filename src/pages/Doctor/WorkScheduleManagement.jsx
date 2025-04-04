@@ -57,7 +57,6 @@ function DoctorScheduleManagement() {
         const fetchDoctorInfo = async () => {
             try {
                 const response = await axiosInstance.get(`/doctor/${user.userId}`);
-                console.log('Doctor infooo:', response);
                 if (response.status === 200) {
                     setSelectedDoctor(response.data);
                 } else {
@@ -85,8 +84,6 @@ function DoctorScheduleManagement() {
             scheduleDate: selectedDate,
             timeTypes: selectedTimeSlots,
         };
-
-        console.log('Request data:', requestData);
         try {
             const response = await axiosInstance.put(`/schedule/${user.userId}`, requestData);
             if (response.status === 200) {

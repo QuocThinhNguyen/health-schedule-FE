@@ -45,14 +45,10 @@ function DoctorProfile() {
         price: '',
     });
 
-    console.log('check', doctorInfo);
-
-    console.log(doctorInfo);
     useEffect(() => {
         const fetchData = async () => {
             try {
                 const response = await axiosInstance.get(`/doctor/${user.userId}`);
-                console.log('response', response);
                 if (response.status === 200) {
                     setDoctorInfo({
                         name: response.data.fullname,
@@ -82,7 +78,6 @@ function DoctorProfile() {
     };
 
     const handleSave = async () => {
-        console.log('Saving updated info:', doctorInfo);
         setIsEditing(false);
         const formData = new FormData();
         formData.append('fullname', doctorInfo.name);
@@ -102,7 +97,6 @@ function DoctorProfile() {
                     'Content-Type': 'multipart/form-data',
                 },
             });
-            console.log('Response:', response);
             if (response.status === 200) {
                 // Check a success code if the backend provides it
                 toast.success('Cập nhật thông tin thành công');
@@ -136,9 +130,7 @@ function DoctorProfile() {
     };
 
     const [feedbacks, setFeedbacks] = useState([]);
-    console.log('Feedbacks:', feedbacks);
     const [comments, setComments] = useState([]);
-    console.log('Comments:', comments);
 
     useEffect(() => {
         const fetchFeedbacks = async () => {
@@ -156,13 +148,11 @@ function DoctorProfile() {
     }, []);
 
     const [statistical, setStatistical] = useState([]);
-    console.log('Statistical:', statistical);
     useEffect(() => {
         // Hàm gọi API để lấy dữ liệu lịch hẹn
         const fetchStatistical = async () => {
             try {
                 const response = await axiosInstance.get(`/booking/doctor/${user.userId}`);
-                console.log('Statistical check:', response);
                 if (response.status === 200) {
                     setStatistical(response);
                 } else {

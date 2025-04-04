@@ -26,7 +26,6 @@ function Header() {
 
     const handleLogout = () => {
         setIsLogout(true);
-        console.log('Logout');
     };
 
     const onClose = () => {
