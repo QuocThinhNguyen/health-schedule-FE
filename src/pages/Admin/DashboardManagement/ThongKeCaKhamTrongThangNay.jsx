@@ -10,34 +10,14 @@ import {
     Legend,
     PointElement,
 } from 'chart.js';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { Doughnut } from 'react-chartjs-2';
 import { axiosInstance } from '~/api/apiRequest';
-
-const centerTextPlugin = {
-    id: 'centerText',
-    beforeDraw: (chart) => {
-        if (chart.config.type !== 'doughnut') return;
-        const { ctx, width, height } = chart;
-        ctx.restore();
-        const fontSize = (height / 200).toFixed(2);
-        ctx.font = `${fontSize}em sans-serif`;
-        ctx.textBaseline = 'middle';
-
-        const total = chart.data.datasets[0].data.reduce((acc, value) => acc + value, 0);
-        const text = total.toString();
-        const textX = Math.round((width - ctx.measureText(text).width) / 2);
-        const textY = height / 2.2;
-
-        ctx.fillText(text, textX, textY);
-        ctx.save();
-    },
-};
+import { ThemeContext } from '~/context/ThemeProvider';
 
 Chart.register(
     ArcElement,
     BarElement,
-    centerTextPlugin,
     LineElement,
     CategoryScale,
     LinearScale,
@@ -50,6 +30,7 @@ Chart.register(
 function ThongKeCaKhamTrongThangNay() {
     const [labels, setLabels] = useState([]);
     const [values, setValues] = useState([]);
+    const { isDark} = useContext(ThemeContext);
 
     useEffect(() => {
         const fetchStatusBookingChart = async () => {
@@ -71,6 +52,31 @@ function ThongKeCaKhamTrongThangNay() {
         };
         fetchStatusBookingChart();
     }, []);
+
+    useEffect(() => {
+        const centerTextPlugin = {
+            id: 'centerText',
+            beforeDraw: (chart) => {
+                if (chart.config.type !== 'doughnut') return;
+                const { ctx, width, height } = chart;
+                ctx.restore();
+                const fontSize = (height / 200).toFixed(2);
+                ctx.font = `${fontSize}em sans-serif`;
+                ctx.fillStyle = isDark ? '#ffffffe6' : '#262626';
+                ctx.textBaseline = 'middle';
+                const total = chart.data.datasets[0].data.reduce((acc, value) => acc + value, 0);
+                const text = total.toString();
+                const textX = Math.round((width - ctx.measureText(text).width) / 2);
+                const textY = height / 2.2;
+                ctx.fillText(text, textX, textY);
+                ctx.save();
+            },
+        };
+        Chart.register(centerTextPlugin);
+        return () => {
+            Chart.unregister(centerTextPlugin);
+        };
+    }, [isDark]);
 
     return (
         <Doughnut
@@ -94,12 +100,14 @@ function ThongKeCaKhamTrongThangNay() {
                             usePointStyle: true,
                             boxWidth: 7,
                             boxHeight: 7,
+                            color: isDark ? '#ffffffe6' : '#262626',
                         },
                         align: 'start',
                     },
                     title: {
                         display: true,
                         text: 'Biểu đồ ca khám trong tháng',
+                        color: isDark ? '#ffffffe6' : '#262626',
                     },
                     tooltip: {
                         callbacks: {

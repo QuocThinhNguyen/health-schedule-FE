@@ -27,9 +27,6 @@ function AllSpecialty() {
         const newLimit = parseInt(e.target.value, 10);
         setPagination((prev) => ({ ...prev, limit: newLimit, page: 1 }));
     };
-
-    console.log('STATEEEE', state);
-
     let getClinicId = '';
     let getSpecialtyId = '';
 
@@ -62,9 +59,6 @@ function AllSpecialty() {
                 const response = await axiosInstance.get(
                     `/specialty?query=${searchQuery}&page=${pagination.page}&limit=${pagination.limit}`,
                 );
-                console.log('page', pagination.page);
-                console.log(pagination.limit);
-                console.log('response:', response);
                 if (response.status === 200) {
                     setSpecialties(response.data);
                     if (response.totalPages === 0) {
@@ -85,9 +79,6 @@ function AllSpecialty() {
 
         fetchSpecialties();
     }, [pagination, searchQuery]);
-
-    console.log('alldoctors:', allSpecialties);
-    console.log('specialties:', specialties);
 
     // const filteredDoctors = specialties.filter((doctor) => doctor.name.toLowerCase().includes(searchQuery.toLowerCase()));
 

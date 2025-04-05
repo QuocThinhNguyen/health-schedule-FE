@@ -8,6 +8,7 @@ import { FaUserDoctor } from 'react-icons/fa6';
 import { FaHospital, FaUser } from 'react-icons/fa';
 import { AiOutlineSchedule } from 'react-icons/ai';
 import { axiosClient, axiosInstance } from '~/api/apiRequest';
+import Title from '../components/Tittle';
 
 function Dashboard() {
     const [count, setCounts] = useState({
@@ -46,28 +47,32 @@ function Dashboard() {
                 id: 1,
                 key: 'Tổng số bệnh viện',
                 value: count.countClinic,
-                backgroundColor: 'bg-[linear-gradient(45deg,_rgb(88,86,214)_0%,_rgb(111,103,219)_100%)]',
+                backgroundColor: 'bg-[rgba(115,93,255,0.15)]',
+                textColor: 'text-[rgb(115,93,255)]',
                 icon: <FaUserDoctor />,
             },
             {
                 id: 2,
                 key: 'Tổng số bác sĩ',
                 value: count.countDoctor,
-                backgroundColor: 'bg-[linear-gradient(45deg,_rgb(51,153,255)_0%,_rgb(41,130,204)_100%)]',
+                backgroundColor: 'bg-[rgba(255,90,41,0.15)]',
+                textColor: 'text-[rgb(255,90,41)]',
                 icon: <FaHospital />,
             },
             {
                 id: 3,
                 key: 'Người dùng mới tháng này',
                 value: count.countUser,
-                backgroundColor: 'bg-[linear-gradient(45deg,_rgb(249,177,21)_0%,_rgb(246,150,11)_100%)]',
+                backgroundColor: 'bg-[rgba(12,199,99,0.15)]',
+                textColor: 'text-[rgb(12,199,99)]',
                 icon: <FaUser />,
             },
             {
                 id: 4,
                 key: 'Số ca khám tháng này',
                 value: count.countBooking,
-                backgroundColor: 'bg-[linear-gradient(45deg,_rgb(229,83,83)_0%,_rgb(217,55,55)_100%)]',
+                backgroundColor: 'bg-[rgba(12,156,252,0.15)]',
+                textColor: 'text-[rgb(12,156,252)]',
                 icon: <AiOutlineSchedule />,
             },
         ],
@@ -76,37 +81,38 @@ function Dashboard() {
 
     return (
         <>
-            <div className="p-8">
-                <h1 className="text-3xl font-bold text-center">BẢNG THỐNG KÊ</h1>
-
-                <div className="flex flex-wrap justify-between h-36 gap-6 mt-8 text-white">
+            <div className="px-3">
+                <Title>Bảng thống kê</Title>
+                <div className="flex flex-wrap justify-between min-h-28 gap-6">
                     {ITEMS.map((item) => (
                         <div
                             key={item.id}
-                            className={`${item.backgroundColor} rounded-lg flex-1 px-8 flex items-center gap-6`}
+                            className="bg-[var(--bg-primary)] rounded-[4px] flex-1 p-4 flex justify-between items-start"
                         >
-                            <span className="text-6xl">{item.icon}</span>
                             <div>
-                                <p>{item.key}</p>
-                                <p className="text-[24px] font-bold">{item.value}</p>
+                                <p className="mb-4 text-[var(--text-secondary)]">{item.key}</p>
+                                <p className="text-[28px] text-[var(--text-color)] font-semibold">{item.value}</p>
+                            </div>
+                            <div className={`p-3 rounded-[4px] ${item.backgroundColor}`}>
+                                <span className={`text-2xl ${item.textColor}`}>{item.icon}</span>
                             </div>
                         </div>
                     ))}
                 </div>
 
-                <div className="flex flex-nowrap gap-6 mt-8">
-                    <div className="flex-1 bg-white rounded-lg shadow h-[350px]">
+                <div className="flex flex-nowrap gap-6 mt-6">
+                    <div className="flex-1 bg-[var(--bg-primary)] rounded-[4px] shadow h-[350px]">
                         <ThongKeDoanhThuHeThongTheoThang />
                     </div>
-                    <div className="bg-white max-w-md w-full rounded-lg shadow">
+                    <div className="bg-[var(--bg-primary)] max-w-72 w-full rounded-[4px] shadow">
                         <ThongKeCaKhamTrongThangNay />
                     </div>
                 </div>
-                <div className="flex flex-nowrap gap-6 mt-8">
-                    <div className="flex-1 bg-white rounded-lg shadow h-[350px]">
+                <div className="flex flex-nowrap gap-6 my-6">
+                    <div className="flex-1 bg-[var(--bg-primary)] rounded-[4px] shadow h-[350px]">
                         <ThongKeLuotDatKhamNgayTrongThang />
                     </div>
-                    <div className="flex-1 bg-white rounded-lg shadow  h-[350px]">
+                    <div className="flex-1 bg-[var(--bg-primary)] rounded-[4px] shadow  h-[350px]">
                         <ThongKeLuotDatKhamThangTrongNam />
                     </div>
                 </div>

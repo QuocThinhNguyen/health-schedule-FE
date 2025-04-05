@@ -37,13 +37,10 @@ const Sidebar = ({ selectedTab }) => {
     ];
 
     const [userProfile, setUserProfile] = useState([]);
-    console.log('CHECK', userProfile);
-    console.log('CHECK 1', user.userId);
     useEffect(() => {
         const fetchData = async () => {
             try {
                 const response = await axiosInstance.get(`/user/${user.userId}`);
-                console.log('CHECK 2', response);
                 if (response.status === 200) {
                     setUserProfile(response.data);
                 }

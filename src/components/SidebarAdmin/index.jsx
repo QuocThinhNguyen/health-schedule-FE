@@ -1,13 +1,14 @@
 import { useState } from 'react';
-import { IoMenu, IoNewspaperOutline} from 'react-icons/io5';
-import { useNavigate } from 'react-router-dom';
-import { LuLayoutDashboard } from "react-icons/lu";
+import { IoMenu, IoNewspaperOutline } from 'react-icons/io5';
+import { useNavigate, NavLink } from 'react-router-dom';
+import { LuLayoutDashboard } from 'react-icons/lu';
 import { CiHospital1 } from 'react-icons/ci';
 import { FaUserDoctor } from 'react-icons/fa6';
 import { FaRegUser } from 'react-icons/fa';
 import { LiaStethoscopeSolid } from 'react-icons/lia';
 import { SlCalender } from 'react-icons/sl';
 import { MdOutlineAccessTime, MdOutlineComment } from 'react-icons/md';
+import Logo from '../Logo';
 
 function SidebarAdmin() {
     const [isExpanded, setIsExpanded] = useState(true);
@@ -25,25 +26,27 @@ function SidebarAdmin() {
         { path: '/admin/worktime', label: 'Quản lý thời gian làm việc', icon: <MdOutlineAccessTime /> },
         { path: '/admin/news', label: 'Quản lý tin tức', icon: <IoNewspaperOutline /> },
         { path: '/admin/comment', label: 'Quản lý bình luận', icon: <MdOutlineComment /> },
-
     ];
 
     return (
-        <div className={`bg-white border-r transition-all duration-300 ${isExpanded ? 'w-[300px]' : 'w-[16px]'}`}>
-            <ul className="space-y-2 mt-4">
+        <div className="fixed top-0 bottom-0 w-60 border-r border-[var(--border-primary)] transition-all duration-300 z-50">
+            <div className="px-4 py-3 w-full h-[68px] border-b border-[var(--border-primary)] flex justify-center items-center">
+                <Logo />
+            </div>
+            <ul className="w-full py-2">
                 {/* Menu items */}
                 {menuItems.map((item) => (
-                    <li
-                        key={item.path}
-                        className={`cursor-pointer flex items-center px-3 py-3 rounded ${
-                            location.pathname === item.path
-                                ? 'bg-pink-500 text-white' // Nền hồng cho mục hiện tại
-                                : 'hover:bg-gray-200' // Hover hiệu ứng cho mục khác
-                        } ${isExpanded ? 'justify-start' : 'justify-center'}`}
-                        onClick={() => navigate(item.path)}
-                    >
-                        <span className="text-2xl">{item.icon}</span>
-                        {isExpanded && <span className="ml-4">{item.label}</span>}
+                    <li key={item.path} className="px-4" onClick={() => navigate(item.path)}>
+                        <NavLink
+                            className={`my-1 px-3 py-[11px] rounded flex justify-start items-center border border-transparent ${
+                                location.pathname === item.path
+                                    ? 'text-[var(--text-active)]  bg-[var(--bg-active)]'
+                                    : 'text-[var(--text-secondary)] hover:text-[var(--text-active)] hover:bg-[rgba(var(--bg-active-rgb),0.9)]'
+                            }`}
+                        >
+                            <span className="text-lg mr-3">{item.icon}</span>
+                            <span className="text-sm leading-[14px]">{item.label}</span>
+                        </NavLink>
                     </li>
                 ))}
             </ul>

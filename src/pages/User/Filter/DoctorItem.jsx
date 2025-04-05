@@ -51,7 +51,7 @@ function DoctorItem(data) {
                 <div className="flex-1">
                     <div className="flex justify-between items-start">
                         <div>
-                            <h3 className="text-lg font-bold">
+                            <h3 className="text-lg font-bold text-custom262626">
                                 {academicRanksAndDegreess.find(
                                     (academicRanksAndDegrees) => academicRanksAndDegrees.keyMap === doctor.position,
                                 )?.valueVi || 'Chưa xác định'}{' '}

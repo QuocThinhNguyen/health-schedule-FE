@@ -4,7 +4,6 @@ import { NavLink, useSearchParams, useNavigate, useLocation } from 'react-router
 import { Play } from 'lucide-react';
 
 function VideoItem(data) {
-    console.log('Check data get:', data.data);
     const [isHovered, setIsHovered] = useState(false);
     const videoRef = useRef(null);
     const IMAGE_URL = `http://localhost:${import.meta.env.VITE_BE_PORT}/uploads/`;
@@ -38,8 +37,6 @@ function VideoItem(data) {
         const fetchDoctorInfo = async () => {
             try {
                 const response = await axiosInstance.get(`/doctor/${data.data.doctorId}`);
-                console.log('2');
-                console.log('Doctor info000: ', response);
                 if (response.status === 200) {
                     setDoctorInfo(response.data);
                 }
@@ -51,7 +48,6 @@ function VideoItem(data) {
     }, []);
 
     const getVideo = (videoId) => {
-        console.log('get videoId:', videoId);
         navigate(`/video?idVideo=${videoId}&&idDoctor=${data.data.doctorId}`);
     };
 

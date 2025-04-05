@@ -9,6 +9,7 @@ import { BrowserRouter } from 'react-router-dom';
 import ScrollToTop from './utils/ScrollToTop';
 import { OtpProvider } from './context/OTPContext';
 import { GoogleOAuthProvider } from '@react-oauth/google';
+import { ThemeProvider } from './context/ThemeProvider';
 
 const clientId = import.meta.env.VITE_APP_GG_CLIENT_ID;
 
@@ -19,22 +20,24 @@ createRoot(document.getElementById('root')).render(
             <ScrollToTop />
             <UserProvider>
                 <OtpProvider>
-                    <App />
-                    <ToastContainer
-                        position="top-right"
-                        autoClose={1000}
-                        limit={4}
-                        hideProgressBar={false}
-                        newestOnTop={false}
-                        closeOnClick
-                        rtl={false}
-                        pauseOnFocusLoss
-                        draggable
-                        pauseOnHover
-                        theme="light"
-                        transition:Slide
-                        style={{ top: '50px' }}
-                    />
+                    <ThemeProvider>
+                        <App />
+                        <ToastContainer
+                            position="top-right"
+                            autoClose={1000}
+                            limit={4}
+                            hideProgressBar={false}
+                            newestOnTop={false}
+                            closeOnClick
+                            rtl={false}
+                            pauseOnFocusLoss
+                            draggable
+                            pauseOnHover
+                            theme="light"
+                            transition:Slide
+                            style={{ top: '50px' }}
+                        />
+                    </ThemeProvider>
                 </OtpProvider>
             </UserProvider>
         </BrowserRouter>

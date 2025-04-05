@@ -17,8 +17,6 @@ function ForgotPassword() {
     const resetPassword = async () => {
         try {
             const response = await axiosClient.post('/reset-password', { email });
-            console.log(response);
-
             if (response.status === 200) {
                 toast.success(`${response.message}`);
                 setTimeout(() => {

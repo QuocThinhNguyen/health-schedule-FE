@@ -11,13 +11,15 @@ import {
     Legend,
     PointElement,
 } from 'chart.js';
-import { useEffect, useMemo, useState } from 'react';
+import { useContext, useEffect, useMemo, useState } from 'react';
 import { axiosInstance } from '~/api/apiRequest';
+import { ThemeContext } from '~/context/ThemeProvider';
 Chart.register(ArcElement, BarElement, LineElement, CategoryScale, LinearScale, Title, Tooltip, Legend, PointElement);
 function ThongKeLuotDatKhamNgayTrongThang() {
     const [labels, setLabels] = useState([]);
     const [values, setValues] = useState([]);
     const [maxValue, setMaxValue] = useState(0);
+    const { isDark } = useContext(ThemeContext);
 
     useEffect(() => {
         const fetchBookingDayInMonthChart = async () => {
@@ -44,9 +46,6 @@ function ThongKeLuotDatKhamNgayTrongThang() {
     }, []);
 
     const max = maxValue > 1 ? Math.ceil(maxValue * 1.5) : 6;
-    console.log('max', max);
-    console.log('maxValue:', maxValue);
-    console.log('max ceil:', Math.max(Math.ceil(maxValue * 1.5), 6));
 
     const dayData = useMemo(
         () => ({
@@ -61,14 +60,15 @@ function ThongKeLuotDatKhamNgayTrongThang() {
                     pointBorderColor: 'rgba(255, 0, 0, 0.5)', // Màu viền của các điểm dữ liệu
                     pointHoverBackgroundColor: 'rgba(0, 255, 0, 0.5)', // Màu nền của các điểm dữ liệu khi di chuột qua
                     pointHoverBorderColor: 'rgba(255, 0, 0, 0.5)', // Màu viền của các điểm dữ liệu khi di chuột qua
-                    // tension: 0.4,
+                    tension: 0.4,
                     pointRadius: 3, // Kích thước của các điểm dữ liệu
                     pointHoverRadius: 5,
                     fill: true,
+                    color: isDark ? '#ffffffe6' : '#262626',
                 },
             ],
         }),
-        [labels, values],
+        [labels, values, isDark],
     );
 
     const dayOptions = useMemo(
@@ -77,6 +77,7 @@ function ThongKeLuotDatKhamNgayTrongThang() {
                 title: {
                     display: true,
                     text: 'Thống kê số lượt đặt khám theo ngày trong tháng',
+                    color: isDark ? '#ffffffe6' : '#262626',
                 },
                 legend: {
                     display: true,
@@ -86,6 +87,7 @@ function ThongKeLuotDatKhamNgayTrongThang() {
                         usePointStyle: true,
                         boxWidth: 7,
                         boxHeight: 7,
+                        color: isDark ? '#ffffffe6' : '#262626',
                     },
                 },
                 tooltip: {
@@ -108,20 +110,24 @@ function ThongKeLuotDatKhamNgayTrongThang() {
                     title: {
                         display: true,
                         text: 'Ngày trong tháng',
+                        color: isDark ? '#ffffffe6' : '#262626',
                     },
                     ticks: {
                         autoSkip: false,
+                        color: isDark ? '#ffffffe6' : '#262626',
                     },
                 },
                 y: {
                     title: {
                         display: true,
                         text: 'Số lượt đặt khám',
+                        color: isDark ? '#ffffffe6' : '#262626',
                     },
                     ticks: {
                         beginAtZero: true,
                         stepSize: 1,
                         suggestedMax: maxValue > 1 ? Math.ceil(maxValue * 1.5) : 6,
+                        color: isDark ? '#ffffffe6' : '#262626',
                         callback: function (value) {
                             if (Number.isInteger(value)) {
                                 return value;
@@ -141,10 +147,8 @@ function ThongKeLuotDatKhamNgayTrongThang() {
                 color: 'rgba(200, 200, 200, 0.3)', // Giảm độ đậm
             },
         }),
-        [],
+        [isDark], // Thêm maxValue vào dependencies,
     );
-
-    console.log('maxValue', maxValue);
 
     return <Line data={dayData} options={dayOptions} />;
 }

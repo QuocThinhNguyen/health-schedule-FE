@@ -12,6 +12,11 @@ import { AiOutlineEdit } from 'react-icons/ai';
 import { RiDeleteBin6Line } from 'react-icons/ri';
 import { FiEdit } from 'react-icons/fi';
 import { Edit2, Eye, Trash2, Search, XCircle } from 'lucide-react';
+import Title from '../components/Tittle';
+import { IoIosAdd, IoIosSearch } from 'react-icons/io';
+import { CiEdit } from 'react-icons/ci';
+import Table from '~/components/Table';
+import AdvancePagination from '~/components/AdvancePagination';
 
 const WorktimeManagement = () => {
     const [isExpanded, setIsExpanded] = useState(true);
@@ -176,6 +181,7 @@ const WorktimeManagement = () => {
                 `/schedule/?query=${filterValue}&date=${filterDate}&page=${pagination.page}&limit=${pagination.limit}`,
             );
             if (response.status === 200) {
+                console.log('filterWorkTimeAPI:', response);
                 setWorkTimes(response.data);
                 if (response.totalPages === 0) {
                     response.totalPages = 1;
@@ -331,7 +337,6 @@ const WorktimeManagement = () => {
         createWorkTimeAPI(worktime);
         toast.success('Thêm ca làm việc thành công!');
         setValidationErrors(errors);
-        console.log('New Worktime Info:', worktime);
         handleCloseModal();
     };
 
@@ -347,7 +352,6 @@ const WorktimeManagement = () => {
         updateWorkTimeAPI(updateWorkTime);
         toast.success('Cập nhật ca làm việc thành công!');
         setValidationErrors(errors);
-        console.log('Updated Worktime Info:', updateWorkTime);
         handleCloseUpdateModal();
     };
 
@@ -396,335 +400,263 @@ const WorktimeManagement = () => {
         };
     }, []);
 
+    const timeTypeMapping = {
+        T1: '8:00 - 9:00',
+        T2: '9:00 - 10:00',
+        T3: '10:00 - 11:00',
+        T4: '11:00 - 12:00',
+        T5: '13:00 - 14:00',
+        T6: '14:00 - 15:00',
+        T7: '15:00 - 16:00',
+        T8: '16:00 - 17:00',
+    };
+
+    const processedWorktimes = worktimes.map((worktime) => ({
+        ...worktime,
+        timeTypes: worktime.timeTypes.map((time) => timeTypeMapping[time]),
+
+    }));
+    console.log('processedWorktimes:', processedWorktimes);
+    
+
+        const columns = [
+            { key: 'doctorId.fullname', label: 'Bác sĩ' },
+            { key: 'scheduleDate', label: 'Ngày làm việc' },
+            { key: 'timeTypes', label: 'Ca khám',type:'timeTypes' },
+        ];
+    
+        const actions = [
+                { icon: <CiEdit />, onClick: (worktime) => getDetailWorkTimeAPI(worktime.doctorId.userId, worktime.scheduleDate) },
+                { icon: <MdDeleteOutline />, onClick: (worktime) => handleDeleteClick(worktime.doctorId.userId, worktime.scheduleDate) },
+            ];
+
     return (
         <>
-            {/* Nội dung chính */}
-            <div className="p-8">
-                {/* Tiêu đề */}
-                <h2 className="text-center text-3xl font-bold mb-4">QUẢN LÝ CA LÀM VIỆC</h2>
-
-                <div className="flex items-center justify-between mb-4">
-                    {/* Thanh tìm kiếm */}
-                    {/* <div className="flex items-center space-x-2">
-                        <input
-                            type="text"
-                            placeholder="Tìm kiếm"
-                            value={filterValue}
-                            onChange={(e) => setFilterValue(e.target.value)}
-                            className="border border-gray-400 rounded px-3 py-2 w-96"
-                        />
+            <div className="px-3 mb-6">
+                <Title>Quản lý ca làm việc</Title>
+                <div className="p-4 rounded bg-[var(--bg-primary)] border border-[var(--border-primary)]">
+                    <div className="flex items-center justify-between mb-3">
+                        <div className="flex items-center gap-3">
+                            <div className="relative min-w-[448px]">
+                                <IoIosSearch className="absolute left-2 top-1/2 transform -translate-y-1/2 text-lg" />
+                                <input
+                                    type="text"
+                                    placeholder="Tìm kiếm..."
+                                    value={filterValue}
+                                    onChange={(e) => setFilterValue(e.target.value)}
+                                    className="w-full pl-8 pr-4 py-2 h-10 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500 bg-[var(--bg-primary)] border-[var(--border-primary)]"
+                                />
+                            </div>
+                            <div className="max-w-md">
+                                <input
+                                    type="date"
+                                    className="w-full px-4 py-2 h-10 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500 bg-[var(--bg-primary)] border-[var(--border-primary)]"
+                                    value={filterDate}
+                                    onChange={(e) => setFilterDate(e.target.value)}
+                                />
+                            </div>
+                        </div>
                         <button
-                            className="bg-gray-200 border border-gray-400 px-4 py-2 rounded"
-                            onClick={() => filterWorkTimeAPI()}
+                            className="flex justify-center items-center gap-2 px-4 py-2 h-10 bg-[rgba(var(--bg-active-rgb),0.15)] text-[rgb(var(--bg-active-rgb))] hover:bg-[var(--bg-active)] hover:text-[var(--text-active)] rounded-md  border border-[var(--border-primary)]"
+                            onClick={handleOpenModal}
                         >
-                            🔍
+                            <span>Thêm</span>
+                            <span>
+                                <IoIosAdd className="text-lg" />
+                            </span>
                         </button>
-                    </div> */}
-                    <div className="relative flex-1 max-w-md">
-                        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-600 w-6 h-6" />
-                        <input
-                            type="text"
-                            placeholder="Tìm kiếm"
-                            value={filterValue}
-                            onChange={(e) => setFilterValue(e.target.value)}
-                            className="w-full pl-10 pr-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        />
                     </div>
-                </div>
-                <div className="flex items-center justify-between mb-4">
-                    <input
-                        type="date"
-                        className="border rounded px-2 py-1"
-                        value={filterDate}
-                        onChange={(e) => setFilterDate(e.target.value)}
+                    <Table columns={columns} data={processedWorktimes} pagination={pagination} actions={actions} />
+                    <AdvancePagination
+                        pagination={pagination}
+                        totalElements="10"
+                        onPageChange={handlePageChange}
+                        selects={[10, 15, 20]}
+                        onSlectChange={handleLimitChange}
                     />
-                    {/* Nút Thêm */}
-                    <button
-                        // className="flex items-center space-x-2 bg-gray-200 border border-gray-400 px-4 py-2 rounded"
-                        className="flex items-center gap-2 px-4 py-2 text-blue-600 bg-blue-50 rounded-md hover:bg-blue-100 border border-blue-600"
-                        onClick={handleOpenModal}
-                    >
-                        <span>Thêm</span>
-                        <span>
-                            <FontAwesomeIcon icon={faPlus} />
-                        </span>
-                    </button>
-                </div>
 
-                {/* Bảng */}
-                <div className="overflow-x-auto rounded-lg border">
-                    <table className="min-w-full divide-y divide-gray-200">
-                        <thead className="bg-gray-200">
-                            <tr>
-                                <th className="px-4 py-2 font-bold uppercase tracking-wider">STT</th>
-                                <th className="px-4 py-2 font-bold uppercase tracking-wider">Tên bác sĩ</th>
-                                <th className="px-4 py-2 font-bold uppercase tracking-wider min-w-48">Ngày khám</th>
-                                <th className="px-4 py-2 font-bold uppercase tracking-wider">Ca khám</th>
-                                <th className="px-4 py-2 font-bold uppercase tracking-wider min-w-24">Thao tác</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {worktimes.map((item, index) => (
-                                <tr key={index} className={index % 2 === 0 ? 'bg-white' : 'bg-gray-100'}>
-                                    <td className="px-4 py-2 text-gray-900 text-center">
-                                        {index + 1 + pagination.limit * (pagination.page - 1)}
-                                    </td>
-                                    <td className="px-4 py-2 text-gray-900 text-center">{item.doctorId.fullname}</td>
-                                    <td className="px-4 py-2 text-gray-900 text-center">
-                                        {item.scheduleDate.split('-').reverse().join('-')}
-                                    </td>
-                                    <td className="px-4 py-2 text-gray-900 text-center">
-                                        <div className="grid grid-cols-3 gap-2">
-                                            {item.timeTypes.map((time, timeIndex) => (
-                                                <span key={timeIndex} className="bg-gray-200 px-2 py-1 rounded border">
-                                                    {getTimeValue(time)} {/* Gọi hàm để lấy value */}
-                                                </span>
+                    {/* Modal Thêm Ca Làm Việc*/}
+                    {isModalOpen && (
+                        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+                            <div className="bg-white w-1/2 p-6 rounded shadow-lg relative">
+                                <button
+                                    onClick={handleCloseModal}
+                                    className="absolute top-2 right-2 text-gray-500 hover:text-gray-800"
+                                >
+                                    ✖
+                                </button>
+                                <h2 className="text-xl font-bold mb-4">Thêm ca làm việc</h2>
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <label>Chọn ngày</label>
+                                        <input
+                                            type="date"
+                                            name="scheduleDate"
+                                            value={worktime.scheduleDate}
+                                            onChange={handleChange}
+                                            className="border w-full px-2 py-1 rounded border-gray-400"
+                                        />
+                                        {validationErrors.scheduleDate && (
+                                            <p className="text-red-500 text-sm">{validationErrors.scheduleDate}</p>
+                                        )}
+                                    </div>
+                                    <div>
+                                        <label>Chọn bác sĩ</label>
+                                        <select
+                                            type="text"
+                                            name="doctorId"
+                                            value={worktime.doctorId}
+                                            onChange={handleChange}
+                                            className="border w-full px-2 py-1 rounded border-gray-400"
+                                        >
+                                            <option value="">Chọn bác sĩ</option>
+                                            {doctors.map((doctor, index) => (
+                                                <option key={index} value={doctor.doctorId.userId}>
+                                                    {doctor.doctorId.fullname}
+                                                </option>
                                             ))}
-                                        </div>
-                                    </td>
-                                    <td className="px-4 py-2">
-                                        <div className="flex items-center justify-center gap-3">
-                                            <button
-                                                className="text-blue-500 text-2xl hover:text-blue-700 mr-2"
-                                                onClick={() =>
-                                                    getDetailWorkTimeAPI(item.doctorId.userId, item.scheduleDate)
-                                                }
-                                            >
-                                                <Edit2 className="w-7 h-7" />
-                                            </button>
-                                            <button
-                                                className="text-red-500 text-2xl hover:text-red-700"
-                                                onClick={() =>
-                                                    handleDeleteClick(item.doctorId.userId, item.scheduleDate)
-                                                }
-                                            >
-                                                <Trash2 className="w-7 h-7" />
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
-                {/* Điều hướng phân trang */}
-                <div className="flex justify-end items-center space-x-4 mt-4">
-                    <select
-                        className="border border-gray-400"
-                        name="number"
-                        value={pagination.limit}
-                        onChange={handleLimitChange}
-                    >
-                        <option value="5">5</option>
-                        <option value="10">10</option>
-                        <option value="15">15</option>
-                    </select>
-                </div>
-                <div className="flex justify-end items-center space-x-4 mt-4">
-                    <button
-                        className={`${pagination.page === 1 ? 'font-normal text-gray-500' : 'font-bold text-blue-500'}`}
-                        onClick={() => handlePageChange(pagination.page - 1)}
-                        disabled={pagination.page === 1}
-                    >
-                        Previous
-                    </button>
-                    <span>
-                        Page {pagination.page} of {pagination.totalPages}
-                    </span>
-                    <button
-                        className={`${
-                            pagination.page === pagination.totalPages
-                                ? 'font-normal text-gray-500'
-                                : 'font-bold text-blue-500'
-                        }`}
-                        onClick={() => handlePageChange(pagination.page + 1)}
-                        disabled={pagination.page === pagination.totalPages}
-                    >
-                        Next
-                    </button>
-                </div>
-
-                {/* Modal Thêm Ca Làm Việc*/}
-                {isModalOpen && (
-                    <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-                        <div className="bg-white w-1/2 p-6 rounded shadow-lg relative">
-                            <button
-                                onClick={handleCloseModal}
-                                className="absolute top-2 right-2 text-gray-500 hover:text-gray-800"
-                            >
-                                ✖
-                            </button>
-                            <h2 className="text-xl font-bold mb-4">Thêm ca làm việc</h2>
-                            <div className="grid grid-cols-2 gap-4">
+                                        </select>
+                                        {validationErrors.doctorId && (
+                                            <p className="text-red-500 text-sm">{validationErrors.doctorId}</p>
+                                        )}
+                                    </div>
+                                </div>
+                                {/* Time Slot Selection */}
                                 <div>
-                                    <label>Chọn ngày</label>
-                                    <input
-                                        type="date"
-                                        name="scheduleDate"
-                                        value={worktime.scheduleDate}
-                                        onChange={handleChange}
-                                        className="border w-full px-2 py-1 rounded border-gray-400"
-                                    />
-                                    {validationErrors.scheduleDate && (
-                                        <p className="text-red-500 text-sm">{validationErrors.scheduleDate}</p>
+                                    <label className="block font-bold mt-12 mb-4">Chọn thời gian</label>
+                                    <div className="grid grid-cols-3 gap-2">
+                                        {timeSlots.map((time) => (
+                                            <button
+                                                key={time.value}
+                                                onClick={() => handleTimeSlotClick(time.value)}
+                                                className={`border px-4 py-2 rounded ${
+                                                    selectedTimes.includes(time.value)
+                                                        ? 'bg-gray-300 font-bold'
+                                                        : 'bg-white'
+                                                }`}
+                                            >
+                                                {time.label}
+                                            </button>
+                                        ))}
+                                    </div>
+                                    {validationErrors.time && (
+                                        <p className="text-red-500 text-sm">{validationErrors.time}</p>
                                     )}
                                 </div>
-                                <div>
-                                    <label>Chọn bác sĩ</label>
-                                    <select
-                                        type="text"
-                                        name="doctorId"
-                                        value={worktime.doctorId}
-                                        onChange={handleChange}
-                                        className="border w-full px-2 py-1 rounded border-gray-400"
+                                <div className="col-span-2 flex justify-end">
+                                    <button
+                                        onClick={handleAddWorktime}
+                                        className="bg-blue-500 text-white px-4 py-2 rounded"
                                     >
-                                        <option value="">Chọn bác sĩ</option>
-                                        {doctors.map((doctor, index) => (
-                                            <option key={index} value={doctor.doctorId.userId}>
-                                                {doctor.doctorId.fullname}
-                                            </option>
-                                        ))}
-                                    </select>
-                                    {validationErrors.doctorId && (
-                                        <p className="text-red-500 text-sm">{validationErrors.doctorId}</p>
-                                    )}
+                                        Thêm
+                                    </button>
                                 </div>
                             </div>
-                            {/* Time Slot Selection */}
-                            <div>
-                                <label className="block font-bold mt-12 mb-4">Chọn thời gian</label>
-                                <div className="grid grid-cols-3 gap-2">
-                                    {timeSlots.map((time) => (
-                                        <button
-                                            key={time.value}
-                                            onClick={() => handleTimeSlotClick(time.value)}
-                                            className={`border px-4 py-2 rounded ${
-                                                selectedTimes.includes(time.value)
-                                                    ? 'bg-gray-300 font-bold'
-                                                    : 'bg-white'
+                        </div>
+                    )}
+                    {/* Modal Cập Nhật Ca Làm Việc*/}
+                    {isUpdateModalOpen && (
+                        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+                            <div className="bg-white w-1/2 p-6 rounded shadow-lg relative">
+                                <button
+                                    onClick={handleCloseUpdateModal}
+                                    className="absolute top-2 right-2 text-gray-500 hover:text-gray-800"
+                                >
+                                    ✖
+                                </button>
+                                <h2 className="text-xl font-bold mb-4">Cập nhật ca làm việc</h2>
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <label>Ngày khám</label>
+                                        <input
+                                            type="date"
+                                            name="date"
+                                            disabled
+                                            value={updateWorkTime.scheduleDate}
+                                            onChange={handleUpdateChange}
+                                            className="border w-full px-2 py-1 rounded border-gray-100"
+                                        />
+                                    </div>
+                                    <div>
+                                        <label>Chọn bác sĩ</label>
+                                        <select
+                                            type="text"
+                                            name="doctorId"
+                                            value={updateWorkTime.doctorId}
+                                            onChange={handleUpdateChange}
+                                            className={`border w-full px-2 py-1 rounded ${
+                                                validationErrors.doctorId ? 'border-red-500' : 'border-gray-400'
                                             }`}
                                         >
-                                            {time.label}
-                                        </button>
-                                    ))}
+                                            <option value="">Chọn bác sĩ</option>
+                                            {doctors.map((doctor, index) => (
+                                                <option key={index} value={doctor.doctorId.userId}>
+                                                    {doctor.doctorId.fullname}
+                                                </option>
+                                            ))}
+                                        </select>
+                                        {validationErrors.doctorId && (
+                                            <p className="text-red-500 text-sm">{validationErrors.doctorId}</p>
+                                        )}
+                                    </div>
                                 </div>
-                                {validationErrors.time && (
-                                    <p className="text-red-500 text-sm">{validationErrors.time}</p>
-                                )}
-                            </div>
-                            <div className="col-span-2 flex justify-end">
-                                <button
-                                    onClick={handleAddWorktime}
-                                    className="bg-blue-500 text-white px-4 py-2 rounded"
-                                >
-                                    Thêm
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                )}
-                {/* Modal Cập Nhật Ca Làm Việc*/}
-                {isUpdateModalOpen && (
-                    <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-                        <div className="bg-white w-1/2 p-6 rounded shadow-lg relative">
-                            <button
-                                onClick={handleCloseUpdateModal}
-                                className="absolute top-2 right-2 text-gray-500 hover:text-gray-800"
-                            >
-                                ✖
-                            </button>
-                            <h2 className="text-xl font-bold mb-4">Cập nhật ca làm việc</h2>
-                            <div className="grid grid-cols-2 gap-4">
+                                {/* Time Slot Selection */}
                                 <div>
-                                    <label>Ngày khám</label>
-                                    <input
-                                        type="date"
-                                        name="date"
-                                        disabled
-                                        value={updateWorkTime.scheduleDate}
-                                        onChange={handleUpdateChange}
-                                        className="border w-full px-2 py-1 rounded border-gray-100"
-                                    />
-                                </div>
-                                <div>
-                                    <label>Chọn bác sĩ</label>
-                                    <select
-                                        type="text"
-                                        name="doctorId"
-                                        value={updateWorkTime.doctorId}
-                                        onChange={handleUpdateChange}
-                                        className={`border w-full px-2 py-1 rounded ${
-                                            validationErrors.doctorId ? 'border-red-500' : 'border-gray-400'
-                                        }`}
-                                    >
-                                        <option value="">Chọn bác sĩ</option>
-                                        {doctors.map((doctor, index) => (
-                                            <option key={index} value={doctor.doctorId.userId}>
-                                                {doctor.doctorId.fullname}
-                                            </option>
+                                    <label className="block font-bold mt-12 mb-4">Chọn thời gian</label>
+                                    <div className="grid grid-cols-3 gap-2">
+                                        {timeSlots.map((time) => (
+                                            <button
+                                                key={time.value}
+                                                className={`border px-4 py-2 rounded ${
+                                                    selectedTimesUpdate.includes(time.value)
+                                                        ? 'bg-gray-300 font-bold'
+                                                        : 'bg-white'
+                                                }`}
+                                                onClick={() => handleTimeSlotUpdateClick(time.value)}
+                                            >
+                                                {time.label}
+                                            </button>
                                         ))}
-                                    </select>
-                                    {validationErrors.doctorId && (
-                                        <p className="text-red-500 text-sm">{validationErrors.doctorId}</p>
+                                    </div>
+                                    {validationErrors.time && (
+                                        <p className="text-red-500 text-sm">{validationErrors.time}</p>
                                     )}
                                 </div>
-                            </div>
-                            {/* Time Slot Selection */}
-                            <div>
-                                <label className="block font-bold mt-12 mb-4">Chọn thời gian</label>
-                                <div className="grid grid-cols-3 gap-2">
-                                    {timeSlots.map((time) => (
-                                        <button
-                                            key={time.value}
-                                            className={`border px-4 py-2 rounded ${
-                                                selectedTimesUpdate.includes(time.value)
-                                                    ? 'bg-gray-300 font-bold'
-                                                    : 'bg-white'
-                                            }`}
-                                            onClick={() => handleTimeSlotUpdateClick(time.value)}
-                                        >
-                                            {time.label}
-                                        </button>
-                                    ))}
+                                <div className="col-span-2 flex justify-end">
+                                    <button
+                                        onClick={handleUpdateWorktime}
+                                        className="bg-blue-500 text-white px-4 py-2 rounded"
+                                    >
+                                        Cập nhật
+                                    </button>
                                 </div>
-                                {validationErrors.time && (
-                                    <p className="text-red-500 text-sm">{validationErrors.time}</p>
-                                )}
-                            </div>
-                            <div className="col-span-2 flex justify-end">
-                                <button
-                                    onClick={handleUpdateWorktime}
-                                    className="bg-blue-500 text-white px-4 py-2 rounded"
-                                >
-                                    Cập nhật
-                                </button>
                             </div>
                         </div>
-                    </div>
-                )}
-                {/* Hộp thoại xác nhận */}
-                {showConfirm && (
-                    <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center z-50">
-                        <div className="bg-white p-6 rounded shadow-lg">
-                            <h3 className="text-lg font-semibold mb-4">Xác nhận xóa ca làm việc</h3>
-                            <p>Bạn có chắc chắn muốn xóa ca làm việc này?</p>
-                            <div className="mt-4 flex justify-end gap-4">
-                                <button
-                                    onClick={handleCancelDelete}
-                                    className="px-4 py-2 bg-gray-500 text-white rounded"
-                                >
-                                    Hủy
-                                </button>
-                                <button
-                                    onClick={handleConfirmDelete}
-                                    className="px-4 py-2 bg-red-500 text-white rounded"
-                                >
-                                    Xóa
-                                </button>
+                    )}
+                    {/* Hộp thoại xác nhận */}
+                    {showConfirm && (
+                        <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center z-50">
+                            <div className="bg-white p-6 rounded shadow-lg">
+                                <h3 className="text-lg font-semibold mb-4">Xác nhận xóa ca làm việc</h3>
+                                <p>Bạn có chắc chắn muốn xóa ca làm việc này?</p>
+                                <div className="mt-4 flex justify-end gap-4">
+                                    <button
+                                        onClick={handleCancelDelete}
+                                        className="px-4 py-2 bg-gray-500 text-white rounded"
+                                    >
+                                        Hủy
+                                    </button>
+                                    <button
+                                        onClick={handleConfirmDelete}
+                                        className="px-4 py-2 bg-red-500 text-white rounded"
+                                    >
+                                        Xóa
+                                    </button>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                )}
+                    )}
+                </div>
             </div>
         </>
     );

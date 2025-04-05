@@ -56,7 +56,7 @@ function Clinic(data) {
                                     <span className="line-clamp-2">{clinic.address}</span>
                                 </div>
                                 <div className="flex items-center  leading-[18px] text-customYellow font-normal">
-                                    <span className="text-base leading-none translate-y-[-1px]">({avgRating})</span>
+                                    <span className="text-base leading-none translate-y-[-1px]">{avgRating}</span>
                                     <span className="flex ml-1">{renderStars(avgRating)}</span>
                                 </div>
                             </div>

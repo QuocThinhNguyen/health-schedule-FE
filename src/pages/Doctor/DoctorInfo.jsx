@@ -23,8 +23,6 @@ function DoctorProfile() {
     const [selectedFile, setSelectedFile] = useState(null); // Thêm trạng thái để lưu trữ tệp ảnh
     const [previewImage, setPreviewImage] = useState(null); // Thêm trạng thái để lưu trữ URL tạm thời của ảnh
 
-    console.log('Image', selectedFile);
-
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -67,8 +65,6 @@ function DoctorProfile() {
     const handleSave = async () => {
         setIsEditing(false);
 
-        console.log('Updating doctor data:', doctorInfo);
-
         const formData = new FormData();
         formData.append('fullname', doctorInfo.name);
         formData.append('address', doctorInfo.address);
@@ -87,7 +83,6 @@ function DoctorProfile() {
                     'Content-Type': 'multipart/form-data',
                 },
             });
-            console.log('Response:', response);
             if (response.status === 200) {
                 // Check a success code if the backend provides it
                 toast.success('Cập nhật thông tin thành công');
@@ -102,8 +97,6 @@ function DoctorProfile() {
             toast.error('Cập nhật thông tin thất bại');
         }
     };
-
-    console.log('doctorinfo', doctorInfo);
 
     const IMAGE_URL = 'http://localhost:9000/uploads/';
     return (
