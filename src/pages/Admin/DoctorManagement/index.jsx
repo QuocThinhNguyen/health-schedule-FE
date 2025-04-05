@@ -7,6 +7,11 @@ import { AiOutlineEdit } from 'react-icons/ai';
 import { FiEdit } from 'react-icons/fi';
 import CustomTinyMCE from '~/components/CustomTinyMCE';
 import { Edit2, Eye, Trash2, Search, XCircle } from 'lucide-react';
+import { CiEdit } from 'react-icons/ci';
+import { IoIosAdd, IoIosSearch } from 'react-icons/io';
+import Table from '~/components/Table';
+import AdvancePagination from '~/components/AdvancePagination';
+import Title from '../components/Tittle';
 
 const DoctorManagement = () => {
     const [isExpanded, setIsExpanded] = useState(true);
@@ -356,7 +361,6 @@ const DoctorManagement = () => {
     const handleAddDoctor = () => {
         //Chưa có error do không dùng Thêm
         toast.success('Thêm bác sĩ thành công!');
-        console.log('New Doctor Info:', doctor);
         handleCloseModal();
     };
 
@@ -379,7 +383,6 @@ const DoctorManagement = () => {
         updateDoctorAPI(updateDoctor);
         toast.success('Cập nhật bác sĩ thành công!');
         setValidationErrors(errors);
-        console.log('Updated Doctor Info:', updateDoctor);
         handleCloseUpdateModal();
     };
 
@@ -428,159 +431,66 @@ const DoctorManagement = () => {
         };
     }, []);
 
+    const processedDoctors = doctors.map((doctor) => ({
+        ...doctor,
+        positionName:
+            academicRanksAndDegreess.find(
+                (academicRanksAndDegrees) => academicRanksAndDegrees.keyMap === doctor.position,
+            )?.valueVi || 'Chưa xác định',
+    }));
+
+    const columns = [
+        { key: 'doctorId.fullname', label: 'Họ và tên' },
+        {
+            key: 'doctorId.image',
+            label: 'Hình ảnh',
+            type: 'image',
+        },
+        { key: 'positionName', label: 'Học hàm, học vị' },
+        { key: 'clinicId.name', label: 'Bệnh viện' },
+        { key: 'specialtyId.name', label: 'Chuyên khoa' },
+        { key: 'doctorId.address', label: 'Địa chỉ' },
+        { key: 'doctorId.phoneNumber', label: 'Số điện thoại' },
+    ];
+
+    const actions = [{ icon: <CiEdit />, onClick: (clinic) => getDetailDoctorAPI(clinic.clinicId) }];
+
     return (
         <>
-            {/* Nội dung chính */}
-            <div className="p-8">
-                {/* Tiêu đề */}
-                <h2 className="text-center text-3xl font-bold mb-4">QUẢN LÝ BÁC SĨ</h2>
-
-                <div className="flex items-center justify-between mb-4">
-                    {/* Thanh tìm kiếm */}
-                    {/* <div className="flex items-center space-x-2">
-                        <input
-                            type="text"
-                            placeholder="Tìm kiếm"
-                            value={filterValue}
-                            onChange={(e) => setFilterValue(e.target.value)}
-                            className="border border-gray-400 rounded px-3 py-2 w-96"
-                        />
+            <div className="px-3 mb-6">
+                <Title>Quản lý bác sĩ</Title>
+                <div className="p-4 rounded bg-[var(--bg-primary)] border border-[var(--border-primary)]">
+                    <div className="flex items-center justify-between mb-3">
+                        <div className="relative flex-1 max-w-md">
+                            <IoIosSearch className="absolute left-2 top-1/2 transform -translate-y-1/2 text-lg" />
+                            <input
+                                type="text"
+                                placeholder="Tìm kiếm..."
+                                value={filterValue}
+                                onChange={(e) => setFilterValue(e.target.value)}
+                                className="w-full pl-8 pr-4 py-2 h-10 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-[var(--bg-primary)] border-[var(--border-primary)]"
+                            />
+                        </div>
                         <button
-                            className="bg-gray-200 border border-gray-400 px-4 py-2 rounded"
-                            onClick={() => filterDoctorAPI()}
+                            className="flex justify-center items-center gap-2 px-4 py-2 h-10 bg-[rgba(var(--bg-active-rgb),0.15)] text-[rgb(var(--bg-active-rgb))] hover:bg-[var(--bg-active)] hover:text-[var(--text-active)] rounded-md  border border-[var(--border-primary)]"
+                            onClick={handleOpenModal}
                         >
-                            🔍
+                            <span>Thêm</span>
+                            <span>
+                                <IoIosAdd className="text-lg" />
+                            </span>
                         </button>
-                    </div> */}
-
-                    <div className="relative flex-1 max-w-md">
-                        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-600 w-6 h-6" />
-                        <input
-                            type="text"
-                            placeholder="Tìm kiếm"
-                            value={filterValue}
-                            onChange={(e) => setFilterValue(e.target.value)}
-                            className="w-full pl-10 pr-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        />
                     </div>
-
-                    {/* Nút Thêm */}
-                    {/* <button
-              className="flex items-center space-x-2 bg-gray-200 border border-gray-400 px-4 py-2 rounded"
-              onClick={handleOpenModal}
-            >
-              <span>Thêm</span>
-              <span>
-                <FontAwesomeIcon icon={faPlus} />
-              </span>
-            </button> */}
+                    <Table columns={columns} data={processedDoctors} pagination={pagination} actions={actions} />
+                    <AdvancePagination
+                        pagination={pagination}
+                        totalElements="10"
+                        onPageChange={handlePageChange}
+                        selects={[10, 15, 20]}
+                        onSlectChange={handleLimitChange}
+                    />
                 </div>
 
-                {/* Bảng */}
-                <div className="overflow-x-auto rounded-lg border">
-                    <table className="min-w-full divide-y divide-gray-200">
-                        <thead className="bg-gray-200">
-                            <tr>
-                                <th className="px-4 py-2 font-bold   uppercase tracking-wider">STT</th>
-                                <th className="px-4 py-2 font-bold   uppercase tracking-wider">Hình ảnh</th>
-                                <th className="px-4 py-2 font-bold   uppercase tracking-wider">Tên</th>
-                                <th className="px-4 py-2 font-bold   uppercase tracking-wider">Học hàm, học vị</th>
-                                <th className="px-4 py-2 font-bold   uppercase tracking-wider">Bệnh viện</th>
-                                <th className="px-4 py-2 font-bold   uppercase tracking-wider">Chuyên khoa</th>
-                                <th className="px-4 py-2 font-bold   uppercase tracking-wider">Địa chỉ</th>
-                                <th className="px-4 py-2 font-bold   uppercase tracking-wider">SĐT</th>
-                                <th className="px-4 py-2 font-bold   uppercase tracking-wider">Thao tác</th>
-                            </tr>
-                        </thead>
-                        <tbody className="bg-white divide-y divide-gray-200">
-                            {mergedDoctors.map((doctor, index) => (
-                                <tr key={doctor.doctorInforId} className={index % 2 === 0 ? 'bg-white' : 'bg-gray-100'}>
-                                    <td className="px-4 py-2   text-gray-900 text-center">
-                                        {index + 1 + pagination.limit * (pagination.page - 1)}
-                                    </td>
-                                    <td className="px-4 py-2   text-gray-900">
-                                        <div className="w-24 h-24 bg-gray-300 rounded-full mx-auto">
-                                            <img
-                                                src={`http://localhost:9000/uploads/${doctor.doctorId.image}`}
-                                                alt={doctor.image}
-                                                className="w-full h-full object-cover"
-                                            />
-                                        </div>
-                                    </td>
-                                    <td className="px-4 py-2 text-center  text-gray-900">{doctor.doctorId.fullname}</td>
-                                    <td className="px-4 py-2  text-center text-gray-900">
-                                        {
-                                            academicRanksAndDegreess.find(
-                                                (academicRanksAndDegrees) => academicRanksAndDegrees.keyMap === doctor.position,
-                                            )?.valueVi || 'Chưa xác định'
-                                        }
-                                    </td>
-                                    <td className="px-4 py-2 text-center  text-gray-900">
-                                        {/* {clinics.find(clinic => clinic.clinicId === doctor.clinicId)?.name || "Chưa xác định"} */}
-                                        {doctor.clinicId?.name || 'Chưa xác định'}
-                                    </td>
-                                    <td className="px-4 py-2 text-center  text-gray-900">
-                                        {/* {specialties.find(specialty => specialty.specialtyId === doctor.specialtyId)?.name || "Chưa xác định"} */}
-                                        {doctor.specialtyId?.name || 'Chưa xác định'}
-                                    </td>
-                                    <td className="px-4 py-2  text-center text-gray-900">{doctor.doctorId.address}</td>
-                                    <td className="px-4 py-2 text-center  text-gray-900">
-                                        {doctor.doctorId.phoneNumber}
-                                    </td>
-                                    <td className="px-4 py-2   text-gray-900">
-                                        <div className="flex items-center justify-center gap-3">
-                                            <button
-                                                className="text-blue-500 text-2xl hover:text-blue-700"
-                                                onClick={() => getDetailDoctorAPI(doctor)}
-                                            >
-                                                <Edit2 className="w-7 h-7" />
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
-
-                {/* Điều hướng phân trang */}
-                <div className="flex justify-end items-center space-x-4 mt-4">
-                    <select
-                        className="border border-gray-400"
-                        name="number"
-                        value={pagination.limit}
-                        onChange={handleLimitChange}
-                    >
-                        <option value="5">5</option>
-                        <option value="10">10</option>
-                        <option value="15">15</option>
-                    </select>
-                </div>
-                <div className="flex justify-end items-center space-x-4 mt-4">
-                    <button
-                        className={`${pagination.page === 1 ? 'font-normal text-gray-500' : 'font-bold text-blue-500'}`}
-                        onClick={() => handlePageChange(pagination.page - 1)}
-                        disabled={pagination.page === 1}
-                    >
-                        Previous
-                    </button>
-                    <span>
-                        Page {pagination.page} of {pagination.totalPages}
-                    </span>
-                    <button
-                        className={`${
-                            pagination.page === pagination.totalPages
-                                ? 'font-normal text-gray-500'
-                                : 'font-bold text-blue-500'
-                        }`}
-                        onClick={() => handlePageChange(pagination.page + 1)}
-                        disabled={pagination.page === pagination.totalPages}
-                    >
-                        Next
-                    </button>
-                </div>
-
-                {/* Modal Cập Nhật Bác sĩ */}
                 {isUpdateModalOpen && (
                     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
                         <div className="bg-white w-1/2 p-6 rounded shadow-lg relative max-h-[600px] overflow-y-scroll">
@@ -805,3 +715,69 @@ const DoctorManagement = () => {
 };
 
 export default DoctorManagement;
+{
+    /* <div className="overflow-x-auto rounded-lg border">
+                    <table className="min-w-full divide-y divide-gray-200">
+                        <thead className="bg-gray-200">
+                            <tr>
+                                <th className="px-4 py-2 font-bold   uppercase tracking-wider">STT</th>
+                                <th className="px-4 py-2 font-bold   uppercase tracking-wider">Hình ảnh</th>
+                                <th className="px-4 py-2 font-bold   uppercase tracking-wider">Tên</th>
+                                <th className="px-4 py-2 font-bold   uppercase tracking-wider">Học hàm, học vị</th>
+                                <th className="px-4 py-2 font-bold   uppercase tracking-wider">Bệnh viện</th>
+                                <th className="px-4 py-2 font-bold   uppercase tracking-wider">Chuyên khoa</th>
+                                <th className="px-4 py-2 font-bold   uppercase tracking-wider">Địa chỉ</th>
+                                <th className="px-4 py-2 font-bold   uppercase tracking-wider">SĐT</th>
+                                <th className="px-4 py-2 font-bold   uppercase tracking-wider">Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody className="bg-white divide-y divide-gray-200">
+                            {mergedDoctors.map((doctor, index) => (
+                                <tr key={doctor.doctorInforId} className={index % 2 === 0 ? 'bg-white' : 'bg-gray-100'}>
+                                    <td className="px-4 py-2   text-gray-900 text-center">
+                                        {index + 1 + pagination.limit * (pagination.page - 1)}
+                                    </td>
+                                    <td className="px-4 py-2   text-gray-900">
+                                        <div className="w-24 h-24 bg-gray-300 rounded-full mx-auto">
+                                            <img
+                                                src={`http://localhost:9000/uploads/${doctor.doctorId.image}`}
+                                                alt={doctor.image}
+                                                className="w-full h-full object-cover"
+                                            />
+                                        </div>
+                                    </td>
+                                    <td className="px-4 py-2 text-center  text-gray-900">{doctor.doctorId.fullname}</td>
+                                    <td className="px-4 py-2  text-center text-gray-900">
+                                        {academicRanksAndDegreess.find(
+                                            (academicRanksAndDegrees) =>
+                                                academicRanksAndDegrees.keyMap === doctor.position,
+                                        )?.valueVi || 'Chưa xác định'}
+                                    </td>
+                                    <td className="px-4 py-2 text-center  text-gray-900">
+                                 
+                                        {doctor.clinicId?.name || 'Chưa xác định'}
+                                    </td>
+                                    <td className="px-4 py-2 text-center  text-gray-900">
+                                      
+                                        {doctor.specialtyId?.name || 'Chưa xác định'}
+                                    </td>
+                                    <td className="px-4 py-2  text-center text-gray-900">{doctor.doctorId.address}</td>
+                                    <td className="px-4 py-2 text-center  text-gray-900">
+                                        {doctor.doctorId.phoneNumber}
+                                    </td>
+                                    <td className="px-4 py-2   text-gray-900">
+                                        <div className="flex items-center justify-center gap-3">
+                                            <button
+                                                className="text-blue-500 text-2xl hover:text-blue-700"
+                                                onClick={() => getDetailDoctorAPI(doctor)}
+                                            >
+                                                <Edit2 className="w-7 h-7" />
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div> */
+}

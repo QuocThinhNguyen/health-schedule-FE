@@ -3,16 +3,19 @@ import { useContext, useEffect, useState } from 'react';
 import { UserContext } from '~/context/UserContext';
 import { FiMenu } from 'react-icons/fi';
 import { FaRegAddressBook } from 'react-icons/fa';
-import { IoLogOutOutline } from 'react-icons/io5';
+import { IoLogOutOutline, IoMoonOutline, IoSunnyOutline } from 'react-icons/io5';
 import { IoMdKey } from 'react-icons/io';
 import { axiosInstance } from '~/api/apiRequest';
 import avatar from '../../assets/img/avatar.png';
 import Logo from '~/components/Logo';
+import { ThemeContext } from '~/context/ThemeProvider';
 function Header() {
     const IMAGE_URL = 'http://localhost:9000/uploads';
 
     const { user, logout } = useContext(UserContext);
-    const [isOpen, setIsOpen] = useState(false);
+    const { isDark, toggleTheme } = useContext(ThemeContext);
+    // const [isDark, setIsDark] = useState(false);
+
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [userInfo, setUserInfo] = useState({});
     const handleLogout = () => {
@@ -49,75 +52,69 @@ function Header() {
     }, [user]);
 
     return (
-        <header className="bg-white shadow fixed top-0 left-0 right-0 z-50">
-            <div className="relative z-10 max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="flex justify-between h-20">
-                    {/* Logo */}
-                    <NavLink
-                        to="/admin/clinic"
-                        onClick={(e) => {
-                            if (window.location.pathname === '/') {
-                                e.preventDefault();
-                                window.scrollTo(0, 0);
-                            }
-                        }}
-                        className="flex-shrink-0 flex items-center mr-auto"
-                    >
-                        <Logo />
-                    </NavLink>
-
-                    <div className="hidden sm:ml-6 sm:flex sm:items-center">
-                        <div
-                            className="relative inline-block text-left"
-                            onMouseEnter={() => setIsDropdownOpen(true)}
-                            onMouseLeave={() => setIsDropdownOpen(false)}
-                        >
-                            <div className="flex justify-center items-center cursor-pointer">
-                                <div>
-                                    <img
-                                        className="w-14 h-14 rounded-full"
-                                        src={userInfo && userInfo.image ? userInfo.image : avatar}
-                                        alt="Avatar"
-                                    />
-                                </div>
-                                <div className="ml-2">
-                                    <p className="text-2xl font-bold">
-                                        {userInfo && userInfo.fullname ? userInfo.fullname : 'Guest'}
-                                    </p>
-                                </div>
-                            </div>
-                            {isDropdownOpen && (
-                                <div className="absolute top-14 left-0 right-0 h-3 bg-transparent"></div>
-                            )}
-                            {isDropdownOpen && (
-                                <div
-                                    className="absolute left-0  bg-white mt-3 py-2 w-56 min-w-64 text-left rounded-xl border border-gray-200   shadow-[0_0_1px_0_rgba(0,0,0,0.04),0_2px_6px_0_rgba(0,0,0,0.04),0_10px_20px_0_rgba(0,0,0,0.04)]"
-                                    onMouseEnter={() => setIsDropdownOpen(true)}
-                                    onMouseLeave={() => setIsDropdownOpen(false)}
-                                >
-                                    <ul className="py-1">
-                                        {user && user.auth && (
-                                            <li
-                                                className="group px-4 py-2 text-left text-2xl text-[#e74c3c] font-medium hover:bg-slate-100 cursor-pointer flex items-center"
-                                                onClick={handleLogout}
-                                            >
-                                                <IoLogOutOutline className="mr-2 transform group-hover:animate-rotate-fast" />
-                                                Đăng xuất
-                                            </li>
-                                        )}
-                                    </ul>
-                                </div>
-                            )}
-                        </div>
-                    </div>
-                    <div className="p-5 flex items-center sm:hidden" onClick={() => setIsOpen(!isOpen)}>
-                        <FiMenu />
+        <header className="fixed top-0 right-0 left-60  z-50  bg-[var(--bg-primary)]">
+            <div className="flex justify-between items-stretch border-b border-[var(--border-primary)] h-[68px] px-3">
+                <div className="mx-1 my-auto">
+                    <div className="w-[34px] h-[34px]  p-2">
+                        <FiMenu className="text-lg" />
                     </div>
                 </div>
+                <ul className="my-auto flex items-stretch">
+                    <li onClick={toggleTheme} className="mx-1 my-auto cursor-pointer">
+                        <div className="w-[34px] h-[34px]  p-2">
+                            {isDark ? <IoMoonOutline className="text-lg" /> : <IoSunnyOutline className="text-lg" />}
+                        </div>
+                    </li>
+                    <li
+                        className="flex justify-center items-center"
+                        onMouseEnter={() => setIsDropdownOpen(true)}
+                        onMouseLeave={() => setIsDropdownOpen(false)}
+                    >
+                        <div className="flex justify-center items-center cursor-pointer">
+                            <div>
+                                <img
+                                    className="w-7 h-7 rounded-full"
+                                    src={userInfo && userInfo.image ? userInfo.image : avatar}
+                                    alt="Avatar"
+                                />
+                            </div>
+                            <div className="ml-2">
+                                <p className="font-medium">
+                                    {userInfo && userInfo.fullname ? userInfo.fullname : 'Guest'}
+                                </p>
+                            </div>
+                        </div>
+                        {isDropdownOpen && (
+                            <div
+                                onMouseEnter={() => setIsDropdownOpen(true)}
+                                className="absolute top-12  right-0 h-3 min-w-44 bg-transparent"
+                            ></div>
+                        )}
+                        {isDropdownOpen && (
+                            <div
+                                className="absolute right-0 top-12  bg-[var(--bg-primary)] mt-3 py-1 min-w-44 rounded-md border border-gray-200 shadow-[0_0_1px_0_rgba(0,0,0,0.04),0_2px_6px_0_rgba(0,0,0,0.04),0_10px_20px_0_rgba(0,0,0,0.04)]"
+                                onMouseEnter={() => setIsDropdownOpen(true)}
+                                onMouseLeave={() => setIsDropdownOpen(false)}
+                            >
+                                <ul>
+                                    {user && user.auth && (
+                                        <li
+                                            className="group px-4 py-2  text-[#e74c3c] font-medium hover:bg-slate-100 cursor-pointer flex items-center"
+                                            onClick={handleLogout}
+                                        >
+                                            <IoLogOutOutline className="mr-2 transform group-hover:animate-rotate-fast" />
+                                            Đăng xuất
+                                        </li>
+                                    )}
+                                </ul>
+                            </div>
+                        )}
+                    </li>
+                </ul>
             </div>
 
             {/* Mobile Menu */}
-            {isOpen && (
+            {/* {isOpen && (
                 <div className="sm:hidden">
                     <div className="pb-3 border-t border-gray-200">
                         {user && user.auth && (
@@ -130,7 +127,7 @@ function Header() {
                         )}
                     </div>
                 </div>
-            )}
+            )} */}
         </header>
     );
 }

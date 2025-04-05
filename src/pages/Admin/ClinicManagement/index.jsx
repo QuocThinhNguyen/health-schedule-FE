@@ -8,6 +8,13 @@ import { toast } from 'react-toastify';
 import CustomTinyMCE from '~/components/CustomTinyMCE';
 import { Edit2, Eye, Trash2, Search, XCircle } from 'lucide-react';
 import defaultImage from '../../../assets/img/addImage.png';
+import { CiEdit } from 'react-icons/ci';
+import { MdDeleteOutline, MdOutlineDeleteForever, MdOutlineDeleteOutline } from 'react-icons/md';
+import { IoIosAdd, IoIosSearch } from 'react-icons/io';
+import Pagination from '~/components/Pagination';
+import AdvancePagination from '~/components/AdvancePagination';
+import Table from '~/components/Table';
+import Title from '../components/Tittle';
 
 const ClinicManagement = () => {
     const [isExpanded, setIsExpanded] = useState(true);
@@ -19,7 +26,7 @@ const ClinicManagement = () => {
     const [previewImage, setPreviewImage] = useState({});
     const [showConfirm, setShowConfirm] = useState(false);
     const [filterValue, setFilterValue] = useState('');
-    const [pagination, setPagination] = useState({ page: 1, limit: 5, totalPages: 1 });
+    const [pagination, setPagination] = useState({ page: 1, limit: 10, totalPages: 1 });
     const [clinics, setClinics] = useState([]);
     const [avata, setAvata] = useState('');
 
@@ -131,6 +138,8 @@ const ClinicManagement = () => {
             );
 
             if (response.status === 200) {
+                console.log('Clinic fetched successfully:', response);
+
                 setClinics(response.data);
                 if (response.totalPages === 0) {
                     response.totalPages = 1;
@@ -163,11 +172,13 @@ const ClinicManagement = () => {
     });
 
     // Chuyển trang
-    const handlePageChange = async (newPage) => {
-        if (newPage > 0 && newPage <= pagination.totalPages) {
-            setPagination((prev) => ({ ...prev, page: newPage }));
-        }
+    const handlePageChange = (newPage) => {
+        setPagination((prev) => ({
+            ...prev,
+            page: newPage,
+        }));
     };
+
     //Đổi số lượng (limit)
     const handleLimitChange = async (e) => {
         const newLimit = parseInt(e.target.value, 10);
@@ -300,7 +311,6 @@ const ClinicManagement = () => {
         toast.success('Thêm bệnh viện thành công!');
         setValidationErrors(errors);
         setSelectedFile(null);
-        console.log('New Clinic Info:', clinic);
         handleCloseModal();
     };
 
@@ -329,7 +339,6 @@ const ClinicManagement = () => {
         toast.success('Cập nhật bệnh viện thành công!');
         setValidationErrors(errors);
         setSelectedFile(null);
-        console.log('Updated Clinic Info:', updateClinic);
         handleCloseUpdateModal();
     };
 
@@ -382,467 +391,322 @@ const ClinicManagement = () => {
         };
     }, []);
 
+    const columns = [
+        { key: 'name', label: 'Tên bệnh viện' },
+        {
+            key: 'image',
+            label: 'Hình ảnh',
+            type: 'image',
+            getImageUrl: (image) => `http://localhost:9000/uploads/${image}`,
+        },
+        { key: 'email', label: 'Email' },
+        { key: 'address', label: 'Địa chỉ' },
+        { key: 'phoneNumber', label: 'Số điện thoại' },
+    ];
+
+    const actions = [
+        { icon: <CiEdit />, onClick: (clinic) => getDetailClinicAPI(clinic.clinicId) },
+        { icon: <MdDeleteOutline />, onClick: (clinic) => handleDeleteClick(clinic.clinicId) },
+    ];
+
     return (
         <>
             {/* Nội dung chính */}
-            <div className="p-8">
-                {/* Tiêu đề */}
-                <h2 className="text-center text-3xl font-bold mb-4">QUẢN LÝ BỆNH VIỆN</h2>
+            <div className="px-3 mb-6">
+                <Title>Quản lý bệnh viện</Title>
+                <div className="p-4 rounded bg-[var(--bg-primary)] border border-[var(--border-primary)]">
+                    <div className="flex items-center justify-between mb-3">
+                        <div className="relative flex-1 max-w-md">
+                            <IoIosSearch className="absolute left-2 top-1/2 transform -translate-y-1/2 text-lg" />
+                            <input
+                                type="text"
+                                placeholder="Tìm kiếm..."
+                                value={filterValue}
+                                onChange={(e) => setFilterValue(e.target.value)}
+                                className="w-full pl-8 pr-4 py-2 h-10 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-[var(--bg-primary)] border-[var(--border-primary)]"
+                            />
+                        </div>
 
-                <div className="flex items-center justify-between mb-4">
-                    {/* Thanh tìm kiếm */}
-                    {/* <div className="flex items-center space-x-2">
-                        <input
-                            type="text"
-                            placeholder="Tìm kiếm"
-                            value={filterValue}
-                            onChange={(e) => setFilterValue(e.target.value)}
-                            className="border border-gray-400 rounded px-3 py-2 w-96"
-                        />
+                        {/* Nút Thêm */}
                         <button
-                            className="bg-gray-200 border border-gray-400 px-4 py-2 rounded"
-                            onClick={() => filterClinicAPI()}
+                            className="flex justify-center items-center gap-2 px-4 py-2 h-10 bg-[rgba(var(--bg-active-rgb),0.15)] text-[rgb(var(--bg-active-rgb))] hover:bg-[var(--bg-active)] hover:text-[var(--text-active)] rounded-md  border border-[var(--border-primary)]"
+                            // onClick={handleOpenModal}
+                            onClick={() => {
+                                navigate('/admin/clinic/create-clinic');
+                            }}
                         >
-                            🔍
+                            <span>Thêm</span>
+                            <span>
+                                <IoIosAdd className="text-lg" />
+                            </span>
                         </button>
-                    </div> */}
-
-                    <div className="relative flex-1 max-w-md">
-                        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-600 w-6 h-6" />
-                        <input
-                            type="text"
-                            placeholder="Tìm kiếm"
-                            value={filterValue}
-                            onChange={(e) => setFilterValue(e.target.value)}
-                            className="w-full pl-10 pr-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        />
                     </div>
-
-                    {/* Nút Thêm */}
-                    <button
-                        // className="flex items-center space-x-2 bg-gray-200 border border-gray-400 px-4 py-2 rounded"
-                        className="flex items-center gap-2 px-4 py-2 text-blue-600 bg-blue-50 rounded-md hover:bg-blue-100 border border-blue-600"
-                        onClick={handleOpenModal}
-                    >
-                        <span>Thêm</span>
-                        <span>
-                            <FontAwesomeIcon icon={faPlus} />
-                        </span>
-                    </button>
+                    <Table columns={columns} data={clinics} pagination={pagination} actions={actions} />
+                    <AdvancePagination
+                        pagination={pagination}
+                        totalElements="10"
+                        onPageChange={handlePageChange}
+                        selects={[10, 15, 20]}
+                        onSlectChange={handleLimitChange}
+                    />
                 </div>
+            </div>
 
-                {/* Bảng */}
-                {/* <table className="w-full border border-gray-300">
-                    <thead className="bg-gray-200">
-                        <tr>
-                            <th className="border border-gray-300 px-4 py-2">STT</th>
-                            <th className="border border-gray-300 px-4 py-2">Tên</th>
-                            <th className="border border-gray-300 px-4 py-2">Hình ảnh</th>
-                            <th className="border border-gray-300 px-4 py-2">Email</th>
-                            <th className="border border-gray-300 px-4 py-2">Địa chỉ</th>
-                            <th className="border border-gray-300 px-4 py-2">Số điện thoại</th>
-                            <th className="border border-gray-300 px-4 py-2 min-w-36">Thao tác</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {clinics.map((clinic, index) => (
-                            <tr key={clinic.clinicId}>
-                                <td className="border border-gray-300 px-4 py-2 text-center">
-                                    {index + 1 + pagination.limit * (pagination.page - 1)}
-                                </td>
-                                <td className="border border-gray-300 px-4 py-2 text-center">{clinic.name}</td>
-                                <td className="border border-gray-300 px-4 py-2 text-center">
-                                    <div className="w-24 h-24 bg-gray-300 rounded-full mx-auto">
+            {/* Modal Thêm Bệnh Viện*/}
+            {isModalOpen && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+                    <div className="bg-white w-1/2 p-6 rounded shadow-lg relative max-h-[600px] overflow-y-scroll">
+                        <button
+                            onClick={handleCloseModal}
+                            className="absolute top-2 right-2 text-gray-500 hover:text-gray-800"
+                        >
+                            ✖
+                        </button>
+                        <h2 className="text-xl font-bold mb-4">Thêm bệnh viện</h2>
+                        <div className="grid grid-cols-2 gap-4">
+                            {/* Cột bên trái: Tên bệnh viện và Email */}
+                            <div className="flex-1 space-y-4">
+                                <div>
+                                    <label>
+                                        Tên bệnh viện<span className="text-red-500">*</span>
+                                    </label>
+                                    <input
+                                        type="text"
+                                        name="name"
+                                        value={clinic.name}
+                                        onChange={handleChange}
+                                        onBlur={handleBlur}
+                                        className={`border w-full px-2 py-1 rounded ${
+                                            validationErrors.name ? 'border-red-500' : 'border-gray-400'
+                                        }`}
+                                    />
+                                    {validationErrors.name && (
+                                        <p className="text-red-500 text-sm">{validationErrors.name}</p>
+                                    )}
+                                </div>
+                                <div>
+                                    <label>
+                                        Email<span className="text-red-500">*</span>
+                                    </label>
+                                    <input
+                                        type="email"
+                                        name="email"
+                                        value={clinic.email}
+                                        onChange={handleChange}
+                                        onBlur={handleBlur}
+                                        className={`border w-full px-2 py-1 rounded ${
+                                            validationErrors.email ? 'border-red-500' : 'border-gray-400'
+                                        }`}
+                                    />
+                                    {validationErrors.email && (
+                                        <p className="text-red-500 text-sm">{validationErrors.email}</p>
+                                    )}
+                                </div>
+                            </div>
+
+                            {/* Cột bên phải: Hình ảnh và nút "Thay đổi" */}
+                            <div className="flex flex-col items-center space-x-12">
+                                <label>Hình ảnh</label>
+                                <div className="flex items-center gap-4">
+                                    <div
+                                        className="w-40 h-40 border rounded overflow-hidden cursor-pointer flex items-center justify-center"
+                                        onClick={() => imageInputRef.current.click()}
+                                    >
                                         <img
-                                            src={`http://localhost:9000/uploads/${clinic.image}`}
+                                            src={clinic.image || defaultImage}
+                                            alt="No image"
+                                            className="w-full h-full object-cover"
+                                        />
+                                    </div>
+                                    <input //  Nút để tải lên hình ảnh mới
+                                        type="file"
+                                        name="image"
+                                        onChange={handleImageUpload}
+                                        className="hidden" // Ẩn trường input, sẽ dùng nút ẩn để mở
+                                        ref={imageInputRef} // Sử dụng ref để trigger khi cần
+                                    />
+                                </div>
+                                {validationErrors.image && (
+                                    <p className="text-red-500 text-sm">{validationErrors.image}</p>
+                                )}
+                            </div>
+                            <div className="col-span-2">
+                                <label>
+                                    Địa chỉ<span className="text-red-500">*</span>
+                                </label>
+                                <input
+                                    type="text"
+                                    name="address"
+                                    value={clinic.address}
+                                    onChange={handleChange}
+                                    onBlur={handleBlur}
+                                    className={`border w-full px-2 py-1 rounded ${
+                                        validationErrors.address ? 'border-red-500' : 'border-gray-400'
+                                    }`}
+                                />
+                                {validationErrors.address && (
+                                    <p className="text-red-500 text-sm">{validationErrors.address}</p>
+                                )}
+                            </div>
+                            <div className="col-span-2">
+                                <label>
+                                    Số điện thoại<span className="text-red-500">*</span>
+                                </label>
+                                <input
+                                    type="text"
+                                    name="phoneNumber"
+                                    value={clinic.phoneNumber}
+                                    onChange={handleChange}
+                                    onBlur={handleBlur}
+                                    className={`border w-full px-2 py-1 rounded ${
+                                        validationErrors.phoneNumber ? 'border-red-500' : 'border-gray-400'
+                                    }`}
+                                />
+                                {validationErrors.phoneNumber && (
+                                    <p className="text-red-500 text-sm">{validationErrors.phoneNumber}</p>
+                                )}
+                            </div>
+                            <div className="col-span-2">
+                                <label>
+                                    Mô tả<span className="text-red-500">*</span>
+                                </label>
+                                <CustomTinyMCE
+                                    name="description"
+                                    value={clinic.description}
+                                    onChange={handleChange}
+                                    onBlur={handleBlur}
+                                />
+                                {validationErrors.description && (
+                                    <p className="text-red-500 text-sm">{validationErrors.description}</p>
+                                )}
+                            </div>
+                            <div className="col-span-2 flex justify-end">
+                                <button onClick={handleAddClinic} className="bg-blue-500 text-white px-4 py-2 rounded">
+                                    Thêm
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+            {/* Modal Cập Nhật Bệnh Viện */}
+            {isUpdateModalOpen && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+                    <div className="bg-white w-1/2 p-6 rounded shadow-lg relative max-h-[600px] overflow-y-scroll">
+                        <button
+                            onClick={handleCloseUpdateModal}
+                            className="absolute top-2 right-2 text-gray-500 hover:text-gray-800"
+                        >
+                            ✖
+                        </button>
+                        <h2 className="text-xl font-bold mb-4">Cập nhật bệnh viện</h2>
+                        <div className="grid grid-cols-2 gap-4">
+                            {/* Cột bên trái: Tên bệnh viện và Email */}
+                            <div className="flex-1 space-y-4">
+                                <div>
+                                    <label>Tên bệnh viện</label>
+                                    <input
+                                        type="text"
+                                        name="name"
+                                        value={updateClinic.name}
+                                        onChange={handleUpdateChange}
+                                        onBlur={handleBlur}
+                                        className={`border w-full px-2 py-1 rounded ${
+                                            validationErrors.name ? 'border-red-500' : 'border-gray-400'
+                                        }`}
+                                    />
+                                    {validationErrors.name && (
+                                        <p className="text-red-500 text-sm">{validationErrors.name}</p>
+                                    )}
+                                </div>
+                                <div>
+                                    <label>Email</label>
+                                    <input
+                                        type="email"
+                                        name="email"
+                                        value={updateClinic.email}
+                                        onChange={handleUpdateChange}
+                                        onBlur={handleBlur}
+                                        className={`border w-full px-2 py-1 rounded ${
+                                            validationErrors.email ? 'border-red-500' : 'border-gray-400'
+                                        }`}
+                                    />
+                                    {validationErrors.email && (
+                                        <p className="text-red-500 text-sm">{validationErrors.email}</p>
+                                    )}
+                                </div>
+                            </div>
+
+                            {/* Cột bên phải: Hình ảnh và nút "Thay đổi" */}
+                            <div className="flex flex-col items-center space-x-12">
+                                <label>Hình ảnh</label>
+                                <div className="flex items-center gap-4">
+                                    <div
+                                        className="w-40 h-40 border rounded overflow-hidden cursor-pointer flex items-center justify-center"
+                                        onClick={() => imageInputRef.current.click()}
+                                    >
+                                        <img
+                                            src={
+                                                previewImage.image
+                                                    ? previewImage.image
+                                                    : `http://localhost:9000/uploads/${updateClinic.image}`
+                                            }
                                             alt="No Image"
                                             className="w-full h-full object-cover"
                                         />
                                     </div>
-                                </td>
-                                <td className="border border-gray-300 px-4 py-2 text-center">{clinic.email}</td>
-                                <td className="border border-gray-300 px-4 py-2 text-center">{clinic.address}</td>
-                                <td className="border border-gray-300 px-4 py-2 text-center">{clinic.phoneNumber}</td>
-                                <td className="border border-gray-300 px-4 py-2 text-center space-x-8">
-                                    <button
-                                        className="text-blue-500 text-2xl hover:text-blue-700"
-                                        onClick={() => getDetailClinicAPI(clinic.clinicId)}
-                                    >
-                                        <FiEdit />
-                                    </button>
-                                    <button
-                                        className="text-red-500 text-2xl hover:text-red-700"
-                                        onClick={() => handleDeleteClick(clinic.clinicId)}
-                                    >
-                                        <RiDeleteBin6Line />
-                                    </button>
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table> */}
-
-                <div className="overflow-x-auto rounded-lg border">
-                    <table className="min-w-full divide-y divide-gray-200">
-                        <thead className="bg-gray-200">
-                            <tr>
-                                <th className="px-4 py-2 font-bold uppercase tracking-wider">STT</th>
-                                <th className="px-4 py-2 font-bold uppercase tracking-wider">Tên</th>
-                                <th className="px-4 py-2 font-bold uppercase tracking-wider">Hình ảnh</th>
-                                <th className="px-4 py-2 font-bold uppercase tracking-wider">Email</th>
-                                <th className="px-4 py-2 font-bold uppercase tracking-wider">Địa chỉ</th>
-                                <th className="px-4 py-2 font-bold uppercase tracking-wider">Số điện thoại</th>
-                                <th className="px-4 py-2 font-bold uppercase tracking-wider">Thao tác</th>
-                            </tr>
-                        </thead>
-                        <tbody className="bg-white divide-y divide-gray-200">
-                            {clinics.map((clinic, index) => (
-                                <tr key={clinic.clinicId} className={index % 2 === 0 ? 'bg-white' : 'bg-gray-100'}>
-                                    <td className="px-4 py-2 text-gray-900 text-center">
-                                        {index + 1 + pagination.limit * (pagination.page - 1)}
-                                    </td>
-                                    <td className="px-4 py-2   text-gray-900">{clinic.name}</td>
-                                    <td className="px-4 py-2   text-gray-900">
-                                        <div className="w-24 h-24 bg-gray-300 rounded-full mx-auto">
-                                            <img
-                                                src={`http://localhost:9000/uploads/${clinic.image}`}
-                                                alt="No Image"
-                                                className="w-full h-full object-cover"
-                                            />
-                                        </div>
-                                    </td>
-                                    <td className="px-4 py-2   text-gray-900">{clinic.email}</td>
-
-                                    <td className="px-4 py-2  text-gray-900 ">{clinic.address}</td>
-                                    <td className="px-4 py-2  text-center text-gray-900">{clinic.phoneNumber}</td>
-                                    <td className="px-4 py-2">
-                                        <div className="flex items-center justify-center gap-3">
-                                            <button
-                                                className="text-blue-600 hover:text-blue-900"
-                                                onClick={() => getDetailClinicAPI(clinic.clinicId)}
-                                            >
-                                                <Edit2 className="w-7 h-7" />
-                                            </button>
-
-                                            <button
-                                                className="text-red-600 hover:text-red-900"
-                                                onClick={() => handleDeleteClick(clinic.clinicId)}
-                                            >
-                                                <Trash2 className="w-7 h-7" />
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
-
-                {/* Điều hướng phân trang */}
-                <div className="flex justify-end items-center space-x-4 mt-4">
-                    <select
-                        className="border border-gray-400"
-                        name="number"
-                        value={pagination.limit}
-                        onChange={handleLimitChange}
-                    >
-                        <option value="5">5</option>
-                        <option value="10">10</option>
-                        <option value="15">15</option>
-                    </select>
-                </div>
-                <div className="flex justify-end items-center space-x-4 mt-4">
-                    <button
-                        className={`${pagination.page === 1 ? 'font-normal text-gray-500' : 'font-bold text-blue-500'}`}
-                        onClick={() => handlePageChange(pagination.page - 1)}
-                        disabled={pagination.page === 1}
-                    >
-                        Previous
-                    </button>
-                    <span>
-                        Page {pagination.page} of {pagination.totalPages}
-                    </span>
-                    <button
-                        className={`${
-                            pagination.page === pagination.totalPages
-                                ? 'font-normal text-gray-500'
-                                : 'font-bold text-blue-500'
-                        }`}
-                        onClick={() => handlePageChange(pagination.page + 1)}
-                        disabled={pagination.page === pagination.totalPages}
-                    >
-                        Next
-                    </button>
-                </div>
-
-                {/* Modal Thêm Bệnh Viện*/}
-                {isModalOpen && (
-                    <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-                        <div className="bg-white w-1/2 p-6 rounded shadow-lg relative max-h-[600px] overflow-y-scroll">
-                            <button
-                                onClick={handleCloseModal}
-                                className="absolute top-2 right-2 text-gray-500 hover:text-gray-800"
-                            >
-                                ✖
-                            </button>
-                            <h2 className="text-xl font-bold mb-4">Thêm bệnh viện</h2>
-                            <div className="grid grid-cols-2 gap-4">
-                                {/* Cột bên trái: Tên bệnh viện và Email */}
-                                <div className="flex-1 space-y-4">
-                                    <div>
-                                        <label>
-                                            Tên bệnh viện<span className="text-red-500">*</span>
-                                        </label>
-                                        <input
-                                            type="text"
-                                            name="name"
-                                            value={clinic.name}
-                                            onChange={handleChange}
-                                            onBlur={handleBlur}
-                                            className={`border w-full px-2 py-1 rounded ${
-                                                validationErrors.name ? 'border-red-500' : 'border-gray-400'
-                                            }`}
-                                        />
-                                        {validationErrors.name && (
-                                            <p className="text-red-500 text-sm">{validationErrors.name}</p>
-                                        )}
-                                    </div>
-                                    <div>
-                                        <label>
-                                            Email<span className="text-red-500">*</span>
-                                        </label>
-                                        <input
-                                            type="email"
-                                            name="email"
-                                            value={clinic.email}
-                                            onChange={handleChange}
-                                            onBlur={handleBlur}
-                                            className={`border w-full px-2 py-1 rounded ${
-                                                validationErrors.email ? 'border-red-500' : 'border-gray-400'
-                                            }`}
-                                        />
-                                        {validationErrors.email && (
-                                            <p className="text-red-500 text-sm">{validationErrors.email}</p>
-                                        )}
-                                    </div>
-                                </div>
-
-                                {/* Cột bên phải: Hình ảnh và nút "Thay đổi" */}
-                                <div className="flex flex-col items-center space-x-12">
-                                    <label>Hình ảnh</label>
-                                    <div className="flex items-center gap-4">
-                                        <div
-                                            className="w-40 h-40 border rounded overflow-hidden cursor-pointer flex items-center justify-center"
-                                            onClick={() => imageInputRef.current.click()}
-                                        >
-                                            <img
-                                                src={clinic.image || defaultImage}
-                                                alt="No image"
-                                                className="w-full h-full object-cover"
-                                            />
-                                        </div>
-                                        <input //  Nút để tải lên hình ảnh mới
-                                            type="file"
-                                            name="image"
-                                            onChange={handleImageUpload}
-                                            className="hidden" // Ẩn trường input, sẽ dùng nút ẩn để mở
-                                            ref={imageInputRef} // Sử dụng ref để trigger khi cần
-                                        />
-                                    </div>
-                                    {validationErrors.image && (
-                                        <p className="text-red-500 text-sm">{validationErrors.image}</p>
-                                    )}
-                                </div>
-                                <div className="col-span-2">
-                                    <label>
-                                        Địa chỉ<span className="text-red-500">*</span>
-                                    </label>
-                                    <input
-                                        type="text"
-                                        name="address"
-                                        value={clinic.address}
-                                        onChange={handleChange}
-                                        onBlur={handleBlur}
-                                        className={`border w-full px-2 py-1 rounded ${
-                                            validationErrors.address ? 'border-red-500' : 'border-gray-400'
-                                        }`}
+                                    <input //  Nút để tải lên hình ảnh mới
+                                        type="file"
+                                        name="image"
+                                        onChange={handleUpdateImageUpload}
+                                        className="hidden" // Ẩn trường input, sẽ dùng nút ẩn để mở
+                                        ref={imageInputRef} // Sử dụng ref để trigger khi cần
                                     />
-                                    {validationErrors.address && (
-                                        <p className="text-red-500 text-sm">{validationErrors.address}</p>
-                                    )}
-                                </div>
-                                <div className="col-span-2">
-                                    <label>
-                                        Số điện thoại<span className="text-red-500">*</span>
-                                    </label>
-                                    <input
-                                        type="text"
-                                        name="phoneNumber"
-                                        value={clinic.phoneNumber}
-                                        onChange={handleChange}
-                                        onBlur={handleBlur}
-                                        className={`border w-full px-2 py-1 rounded ${
-                                            validationErrors.phoneNumber ? 'border-red-500' : 'border-gray-400'
-                                        }`}
-                                    />
-                                    {validationErrors.phoneNumber && (
-                                        <p className="text-red-500 text-sm">{validationErrors.phoneNumber}</p>
-                                    )}
-                                </div>
-                                <div className="col-span-2">
-                                    <label>
-                                        Mô tả<span className="text-red-500">*</span>
-                                    </label>
-                                    <CustomTinyMCE
-                                        name="description"
-                                        value={clinic.description}
-                                        onChange={handleChange}
-                                        onBlur={handleBlur}
-                                    />
-                                    {/* <textarea
-                                        name="description"
-                                        value={clinic.description}
-                                        onChange={handleChange}
-                                        onBlur={handleBlur}
-                                        rows="4"
-                                        className={`border w-full px-2 py-1 rounded ${
-                                            validationErrors.description ? 'border-red-500' : 'border-gray-400'
-                                        }`}
-                                    ></textarea> */}
-                                    {validationErrors.description && (
-                                        <p className="text-red-500 text-sm">{validationErrors.description}</p>
-                                    )}
-                                </div>
-                                <div className="col-span-2 flex justify-end">
-                                    <button
-                                        onClick={handleAddClinic}
-                                        className="bg-blue-500 text-white px-4 py-2 rounded"
-                                    >
-                                        Thêm
-                                    </button>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                )}
-                {/* Modal Cập Nhật Bệnh Viện */}
-                {isUpdateModalOpen && (
-                    <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-                        <div className="bg-white w-1/2 p-6 rounded shadow-lg relative max-h-[600px] overflow-y-scroll">
-                            <button
-                                onClick={handleCloseUpdateModal}
-                                className="absolute top-2 right-2 text-gray-500 hover:text-gray-800"
-                            >
-                                ✖
-                            </button>
-                            <h2 className="text-xl font-bold mb-4">Cập nhật bệnh viện</h2>
-                            <div className="grid grid-cols-2 gap-4">
-                                {/* Cột bên trái: Tên bệnh viện và Email */}
-                                <div className="flex-1 space-y-4">
-                                    <div>
-                                        <label>Tên bệnh viện</label>
-                                        <input
-                                            type="text"
-                                            name="name"
-                                            value={updateClinic.name}
-                                            onChange={handleUpdateChange}
-                                            onBlur={handleBlur}
-                                            className={`border w-full px-2 py-1 rounded ${
-                                                validationErrors.name ? 'border-red-500' : 'border-gray-400'
-                                            }`}
-                                        />
-                                        {validationErrors.name && (
-                                            <p className="text-red-500 text-sm">{validationErrors.name}</p>
-                                        )}
-                                    </div>
-                                    <div>
-                                        <label>Email</label>
-                                        <input
-                                            type="email"
-                                            name="email"
-                                            value={updateClinic.email}
-                                            onChange={handleUpdateChange}
-                                            onBlur={handleBlur}
-                                            className={`border w-full px-2 py-1 rounded ${
-                                                validationErrors.email ? 'border-red-500' : 'border-gray-400'
-                                            }`}
-                                        />
-                                        {validationErrors.email && (
-                                            <p className="text-red-500 text-sm">{validationErrors.email}</p>
-                                        )}
-                                    </div>
-                                </div>
+                            <div className="col-span-2">
+                                <label>Địa chỉ</label>
+                                <input
+                                    type="text"
+                                    name="address"
+                                    value={updateClinic.address}
+                                    onChange={handleUpdateChange}
+                                    onBlur={handleBlur}
+                                    className={`border w-full px-2 py-1 rounded ${
+                                        validationErrors.address ? 'border-red-500' : 'border-gray-400'
+                                    }`}
+                                />
+                                {validationErrors.address && (
+                                    <p className="text-red-500 text-sm">{validationErrors.address}</p>
+                                )}
+                            </div>
+                            <div className="col-span-2">
+                                <label>Số điện thoại</label>
+                                <input
+                                    type="text"
+                                    name="phoneNumber"
+                                    value={updateClinic.phoneNumber}
+                                    onChange={handleUpdateChange}
+                                    onBlur={handleBlur}
+                                    className={`border w-full px-2 py-1 rounded ${
+                                        validationErrors.phoneNumber ? 'border-red-500' : 'border-gray-400'
+                                    }`}
+                                />
+                                {validationErrors.phoneNumber && (
+                                    <p className="text-red-500 text-sm">{validationErrors.phoneNumber}</p>
+                                )}
+                            </div>
+                            <div className="col-span-2">
+                                <label>Mô tả</label>
 
-                                {/* Cột bên phải: Hình ảnh và nút "Thay đổi" */}
-                                <div className="flex flex-col items-center space-x-12">
-                                    <label>Hình ảnh</label>
-                                    <div className="flex items-center gap-4">
-                                        <div
-                                            className="w-40 h-40 border rounded overflow-hidden cursor-pointer flex items-center justify-center"
-                                            onClick={() => imageInputRef.current.click()}
-                                        >
-                                            <img
-                                                src={
-                                                    previewImage.image
-                                                        ? previewImage.image
-                                                        : `http://localhost:9000/uploads/${updateClinic.image}`
-                                                }
-                                                alt="No Image"
-                                                className="w-full h-full object-cover"
-                                            />
-                                        </div>
-                                        <input //  Nút để tải lên hình ảnh mới
-                                            type="file"
-                                            name="image"
-                                            onChange={handleUpdateImageUpload}
-                                            className="hidden" // Ẩn trường input, sẽ dùng nút ẩn để mở
-                                            ref={imageInputRef} // Sử dụng ref để trigger khi cần
-                                        />
-                                    </div>
-                                </div>
-                                <div className="col-span-2">
-                                    <label>Địa chỉ</label>
-                                    <input
-                                        type="text"
-                                        name="address"
-                                        value={updateClinic.address}
-                                        onChange={handleUpdateChange}
-                                        onBlur={handleBlur}
-                                        className={`border w-full px-2 py-1 rounded ${
-                                            validationErrors.address ? 'border-red-500' : 'border-gray-400'
-                                        }`}
-                                    />
-                                    {validationErrors.address && (
-                                        <p className="text-red-500 text-sm">{validationErrors.address}</p>
-                                    )}
-                                </div>
-                                <div className="col-span-2">
-                                    <label>Số điện thoại</label>
-                                    <input
-                                        type="text"
-                                        name="phoneNumber"
-                                        value={updateClinic.phoneNumber}
-                                        onChange={handleUpdateChange}
-                                        onBlur={handleBlur}
-                                        className={`border w-full px-2 py-1 rounded ${
-                                            validationErrors.phoneNumber ? 'border-red-500' : 'border-gray-400'
-                                        }`}
-                                    />
-                                    {validationErrors.phoneNumber && (
-                                        <p className="text-red-500 text-sm">{validationErrors.phoneNumber}</p>
-                                    )}
-                                </div>
-                                <div className="col-span-2">
-                                    <label>Mô tả</label>
+                                <CustomTinyMCE
+                                    name="description"
+                                    value={updateClinic.description}
+                                    onChange={handleUpdateChange}
+                                    onBlur={handleBlur}
+                                />
 
-                                    <CustomTinyMCE
-                                        name="description"
-                                        value={updateClinic.description}
-                                        onChange={handleUpdateChange}
-                                        onBlur={handleBlur}
-                                    />
-
-                                    {/* <textarea
+                                {/* <textarea
                                         name="description"
                                         value={updateClinic.description}
                                         onChange={handleUpdateChange}
@@ -852,46 +716,39 @@ const ClinicManagement = () => {
                                             validationErrors.description ? 'border-red-500' : 'border-gray-400'
                                         }`}
                                     ></textarea> */}
-                                    {validationErrors.description && (
-                                        <p className="text-red-500 text-sm">{validationErrors.description}</p>
-                                    )}
-                                </div>
-                                <div className="col-span-2 flex justify-end">
-                                    <button
-                                        onClick={handleUpdateClinic}
-                                        className="bg-blue-500 text-white px-4 py-2 rounded"
-                                    >
-                                        Cập nhật
-                                    </button>
-                                </div>
+                                {validationErrors.description && (
+                                    <p className="text-red-500 text-sm">{validationErrors.description}</p>
+                                )}
                             </div>
-                        </div>
-                    </div>
-                )}
-                {/* Hộp thoại xác nhận */}
-                {showConfirm && (
-                    <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center z-50">
-                        <div className="bg-white p-6 rounded shadow-lg">
-                            <h3 className="text-lg font-semibold mb-4">Xác nhận xóa bệnh viện</h3>
-                            <p>Bạn có chắc chắn muốn xóa bệnh viện này?</p>
-                            <div className="mt-4 flex justify-end gap-4">
+                            <div className="col-span-2 flex justify-end">
                                 <button
-                                    onClick={handleCancelDelete}
-                                    className="px-4 py-2 bg-gray-500 text-white rounded"
+                                    onClick={handleUpdateClinic}
+                                    className="bg-blue-500 text-white px-4 py-2 rounded"
                                 >
-                                    Hủy
-                                </button>
-                                <button
-                                    onClick={handleConfirmDelete}
-                                    className="px-4 py-2 bg-red-500 text-white rounded"
-                                >
-                                    Xóa
+                                    Cập nhật
                                 </button>
                             </div>
                         </div>
                     </div>
-                )}
-            </div>
+                </div>
+            )}
+            {/* Hộp thoại xác nhận */}
+            {showConfirm && (
+                <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center z-50">
+                    <div className="bg-white p-6 rounded shadow-lg">
+                        <h3 className="text-lg font-semibold mb-4">Xác nhận xóa bệnh viện</h3>
+                        <p>Bạn có chắc chắn muốn xóa bệnh viện này?</p>
+                        <div className="mt-4 flex justify-end gap-4">
+                            <button onClick={handleCancelDelete} className="px-4 py-2 bg-gray-500 text-white rounded">
+                                Hủy
+                            </button>
+                            <button onClick={handleConfirmDelete} className="px-4 py-2 bg-red-500 text-white rounded">
+                                Xóa
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </>
     );
 };

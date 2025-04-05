@@ -19,7 +19,6 @@ function HealthReport() {
     const [itemsPerPage] = useState(10); // Số lượng mục trên mỗi trang
     const IMAGE_URL = 'http://localhost:9000/uploads/';
 
-    console.log('CHECK DETAIL', isDetail);
     useEffect(() => {
         // Đặt ngày mặc định là ngày hiện tại khi component được tải
         const today = new Date().toISOString().split('T')[0];
@@ -33,8 +32,6 @@ function HealthReport() {
                 const response = await axiosInstance.get(
                     `/booking/doctor/${user.userId}?search=${searchQuery}&page=${pagination.page}&limit=${pagination.limit}`,
                 );
-                console.log('ResponseBooking:', response);
-
                 if (response.status === 200) {
                     setAppointments(response.data);
                     if (response.totalPages === 0) {
@@ -77,7 +74,6 @@ function HealthReport() {
         return age;
     };
 
-    console.log('Appointments:', appointments);
     const latestAppointments = Object.values(
         appointments
             .filter((appointments) => appointments.status.keyMap === 'S4')
@@ -93,15 +89,12 @@ function HealthReport() {
             }, {}),
     );
 
-    console.log('LatestAppointments:', latestAppointments);
-
     // Tính toán các mục cần hiển thị dựa trên trang hiện tại và số lượng mục trên mỗi trang
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
     const currentItems = latestAppointments.slice(indexOfFirstItem, indexOfLastItem);
 
     const [history, setHistory] = useState([]);
-    console.log('History:', history);
     const getDetail = async (bookingId, patientRecordId) => {
         try {
             const response = await axiosInstance.get(`/booking/${bookingId}`);
@@ -112,7 +105,6 @@ function HealthReport() {
             }
 
             const response1 = await axiosInstance.get(`/bookingImage/${bookingId}`);
-            // console.log('ResponseImage:', response);
 
             if (response1.status === 200) {
                 const images = response1.data.map((item) => item.name);
@@ -144,7 +136,6 @@ function HealthReport() {
     const handleViewImage = (image) => {
         const imageUrl = `${IMAGE_URL}${image}`;
         window.open(imageUrl, '_blank');
-        console.log('OPEN');
     };
 
     const [activeTab, setActiveTab] = useState('info');

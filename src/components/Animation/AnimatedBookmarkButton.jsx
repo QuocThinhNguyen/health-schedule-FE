@@ -26,7 +26,6 @@ const AnimatedBookmarkButton = ({ totalBookMark, checkBookmark, videoId, userId 
 
         try {
             const checkBookmark = !saved;
-            console.log('checkBookmark:', checkBookmark);
             if (checkBookmark) {
                 const responseBookMark = await axiosInstance.post(`/bookmark/${videoId}/${userId}`);
                 if (responseBookMark.status === 200) {

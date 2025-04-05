@@ -7,6 +7,12 @@ import { axiosInstance } from '~/api/apiRequest';
 import { toast } from 'react-toastify';
 import { Edit2, Eye, Trash2, Search, XCircle } from 'lucide-react';
 import defaultImage from '../../../assets/img/addImage.png';
+import { CiEdit } from 'react-icons/ci';
+import { MdDeleteOutline } from 'react-icons/md';
+import Title from '../components/Tittle';
+import { IoIosAdd, IoIosSearch } from 'react-icons/io';
+import Table from '~/components/Table';
+import AdvancePagination from '~/components/AdvancePagination';
 
 const SpecialtyManagement = () => {
     const [isExpanded, setIsExpanded] = useState(true);
@@ -18,7 +24,7 @@ const SpecialtyManagement = () => {
     const [previewImage, setPreviewImage] = useState({});
     const [showConfirm, setShowConfirm] = useState(false);
     const [filterValue, setFilterValue] = useState('');
-    const [pagination, setPagination] = useState({ page: 1, limit: 5, totalPages: 1 });
+    const [pagination, setPagination] = useState({ page: 1, limit: 10, totalPages: 1 });
     const [specialties, setSpecialties] = useState([]);
     const [avata, setAvata] = useState('');
 
@@ -135,7 +141,8 @@ const SpecialtyManagement = () => {
             );
 
             if (response.status === 200) {
-                console.log('totalPages:', response.totalPages);
+                console.log('Response:', response);
+
                 setSpecialties(response.data);
                 if (response.totalPages === 0) {
                     response.totalPages = 1;
@@ -296,7 +303,6 @@ const SpecialtyManagement = () => {
         toast.success('Thêm chuyên khoa thành công!');
         setValidationErrors(errors);
         setSelectedFile(null);
-        console.log('New Specialty Info:', specialty);
         handleCloseModal();
     };
 
@@ -322,7 +328,6 @@ const SpecialtyManagement = () => {
         toast.success('Cập nhật chuyên khoa thành công!');
         setValidationErrors(errors);
         setSelectedFile(null);
-        console.log('Updated Specialty Info:', updateSpecialty);
         handleCloseUpdateModal();
     };
 
@@ -371,149 +376,55 @@ const SpecialtyManagement = () => {
         };
     }, []);
 
+    const columns = [
+        { key: 'name', label: 'Tên chuyên khoa' },
+        {
+            key: 'image',
+            label: 'Hình ảnh',
+            type: 'image',
+        },
+    ];
+
+    const actions = [
+        { icon: <CiEdit />, onClick: (specialty) => getDetailSpecialtyAPI(specialty.specialtyId) },
+        { icon: <MdDeleteOutline />, onClick: (specialty) => handleDeleteClick(specialty.specialtyId) },
+    ];
+
     return (
         <>
             {/* Nội dung chính */}
-            <div className="p-8">
-                {/* Tiêu đề */}
-                <h2 className="text-center text-3xl font-bold mb-4">QUẢN LÝ CHUYÊN KHOA</h2>
-
-                <div className="flex items-center justify-between mb-4">
-                    {/* Thanh tìm kiếm */}
-                    {/* <div className="flex items-center space-x-2">
-                        <input
-                            type="text"
-                            placeholder="Tìm kiếm"
-                            value={filterValue}
-                            onChange={(e) => setFilterValue(e.target.value)}
-                            className="border border-gray-400 rounded px-3 py-2 w-96"
-                        />
+            <div className="px-3 mb-6">
+                <Title>Quản lý chuyên khoa</Title>
+                <div className="p-4 rounded bg-[var(--bg-primary)] border border-[var(--border-primary)]">
+                    <div className="flex items-center justify-between mb-3">
+                        <div className="relative flex-1 max-w-md">
+                            <IoIosSearch className="absolute left-2 top-1/2 transform -translate-y-1/2 text-lg" />
+                            <input
+                                type="text"
+                                placeholder="Tìm kiếm..."
+                                value={filterValue}
+                                onChange={(e) => setFilterValue(e.target.value)}
+                                className="w-full pl-8 pr-4 py-2 h-10 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-[var(--bg-primary)] border-[var(--border-primary)]"
+                            />
+                        </div>
                         <button
-                            className="bg-gray-200 border border-gray-400 px-4 py-2 rounded"
-                            onClick={() => filterSpecialtyAPI()}
+                            className="flex justify-center items-center gap-2 px-4 py-2 h-10 bg-[rgba(var(--bg-active-rgb),0.15)] text-[rgb(var(--bg-active-rgb))] hover:bg-[var(--bg-active)] hover:text-[var(--text-active)] rounded-md  border border-[var(--border-primary)]"
+                            onClick={handleOpenModal}
                         >
-                            🔍
+                            <span>Thêm</span>
+                            <span>
+                                <IoIosAdd className="text-lg" />
+                            </span>
                         </button>
-                    </div> */}
-
-                    <div className="relative flex-1 max-w-md">
-                        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-600 w-6 h-6" />
-                        <input
-                            type="text"
-                            placeholder="Tìm kiếm"
-                            value={filterValue}
-                            onChange={(e) => setFilterValue(e.target.value)}
-                            className="w-full pl-10 pr-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        />
                     </div>
-                    {/* Nút Thêm */}
-                    {/* <button
-                        className="flex items-center space-x-2 bg-gray-200 border border-gray-400 px-4 py-2 rounded"
-                        onClick={handleOpenModal}
-                    >
-                        <span>Thêm</span>
-                        <span>
-                            <FontAwesomeIcon icon={faPlus} />
-                        </span>
-                    </button> */}
-                    <button
-                        // className="flex items-center space-x-2 bg-gray-200 border border-gray-400 px-4 py-2 rounded"
-                        className="flex items-center gap-2 px-4 py-2 text-blue-600 bg-blue-50 rounded-md hover:bg-blue-100 border border-blue-600"
-                        onClick={handleOpenModal}
-                    >
-                        <span>Thêm</span>
-                        <span>
-                            <FontAwesomeIcon icon={faPlus} />
-                        </span>
-                    </button>
-                </div>
-
-                {/* Bảng */}
-                <div className="overflow-x-auto rounded-lg border">
-                    <table className="min-w-full divide-y divide-gray-200">
-                        <thead className="bg-gray-200">
-                            <tr>
-                                <th className="px-4 py-2 font-bold uppercase tracking-wider">STT</th>
-                                <th className="px-4 py-2 font-bold uppercase tracking-wider">Hình ảnh</th>
-                                <th className="px-4 py-2 font-bold uppercase tracking-wider">Tên chuyên khoa</th>
-                                <th className="px-4 py-2 font-bold uppercase tracking-wider">Thao tác</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {specialties.map((specialty, index) => (
-                                <tr
-                                    key={specialty.specialtyId}
-                                    className={index % 2 === 0 ? 'bg-white' : 'bg-gray-100'}
-                                >
-                                    <td className="px-4 py-2 text-gray-900 text-center">
-                                        {index + 1 + pagination.limit * (pagination.page - 1)}
-                                    </td>
-                                    <td className="px-4 py-2 text-gray-900 text-center">
-                                        <div className="w-24 h-24 mx-auto mt-2 mb-2">
-                                            <img
-                                                src={`http://localhost:9000/uploads/${specialty.image}`}
-                                                alt="No Image"
-                                                className="w-full h-full object-cover"
-                                            />
-                                        </div>
-                                    </td>
-                                    <td className="px-4 py-2 text-gray-900 text-center">{specialty.name}</td>
-                                    <td className="px-4 py-2">
-                                        <div className="flex items-center justify-center gap-3">
-                                            <button
-                                                className="text-blue-500 text-2xl hover:text-blue-700"
-                                                onClick={() => getDetailSpecialtyAPI(specialty.specialtyId)}
-                                            >
-                                                <Edit2 className="w-7 h-7" />
-                                            </button>
-                                            <button
-                                                className="text-red-500 text-2xl hover:text-red-700"
-                                                onClick={() => handleDeleteClick(specialty.specialtyId)}
-                                            >
-                                                <Trash2 className="w-7 h-7" />
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
-                {/* Điều hướng phân trang */}
-                <div className="flex justify-end items-center space-x-4 mt-4">
-                    <select
-                        className="border border-gray-400"
-                        name="number"
-                        value={pagination.limit}
-                        onChange={handleLimitChange}
-                    >
-                        <option value="5">5</option>
-                        <option value="10">10</option>
-                        <option value="15">15</option>
-                    </select>
-                </div>
-                <div className="flex justify-end items-center space-x-4 mt-4">
-                    <button
-                        className={`${pagination.page === 1 ? 'font-normal text-gray-500' : 'font-bold text-blue-500'}`}
-                        onClick={() => handlePageChange(pagination.page - 1)}
-                        disabled={pagination.page === 1}
-                    >
-                        Previous
-                    </button>
-                    <span>
-                        Page {pagination.page} of {pagination.totalPages}
-                    </span>
-                    <button
-                        className={`${
-                            pagination.page === pagination.totalPages
-                                ? 'font-normal text-gray-500'
-                                : 'font-bold text-blue-500'
-                        }`}
-                        onClick={() => handlePageChange(pagination.page + 1)}
-                        disabled={pagination.page === pagination.totalPages}
-                    >
-                        Next
-                    </button>
+                    <Table columns={columns} data={specialties} pagination={pagination} actions={actions} />
+                    <AdvancePagination
+                        pagination={pagination}
+                        totalElements="10"
+                        onPageChange={handlePageChange}
+                        selects={[10, 15, 20]}
+                        onSlectChange={handleLimitChange}
+                    />
                 </div>
 
                 {/* Modal Thêm chuyên khoa*/}

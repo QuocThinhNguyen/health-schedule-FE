@@ -77,7 +77,6 @@ function Login() {
                 loginContext(email, res.access_token);
                 toast.success('Đăng nhập thành công');
                 const decodeToken = jwtDecode(res.access_token);
-                console.log(decodeToken.roleId);
 
                 if (decodeToken.roleId === 'R1') {
                     navigate('/admin/dashboard', { replace: true });
@@ -104,7 +103,6 @@ function Login() {
         try {
             const token = credentialResponse.credential;
             const result = await axiosClient.post(`/google-login`, { token });
-            console.log('RESULT: ', result);
             if (result.status === 200) {
                 loginContext(result.data.email, result.access_token);
                 // loginContextGoogle(result.data.email, result.data.userId, result.data.roleId, result.access_token);
@@ -140,9 +138,7 @@ function Login() {
     const handleResponseFacebook = async (data) => {
         try {
             const accessToken = data.accessToken;
-            // console.log('TOKEN: ', accessToken);
             const result = await axiosClient.post(`/facebook-login`, { accessToken });
-            // console.log('RESULT: ', result);
             if (result.status === 200) {
                 loginContext(result.data.email, result.access_token);
                 // loginContextGoogle(result.data.email, result.data.userId, result.data.roleId, result.access_token);

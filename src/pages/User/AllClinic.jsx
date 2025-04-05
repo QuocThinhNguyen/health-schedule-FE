@@ -27,9 +27,6 @@ function AllClinic() {
         const newLimit = parseInt(e.target.value, 10);
         setPagination((prev) => ({ ...prev, limit: newLimit, page: 1 }));
     };
-
-    console.log('STATEEEE', state);
-
     let getClinicId = '';
     let getSpecialtyId = '';
 
@@ -62,9 +59,6 @@ function AllClinic() {
                 const response = await axiosInstance.get(
                     `/clinic?query=${searchQuery}&page=${pagination.page}&limit=${pagination.limit}`,
                 );
-                console.log('page', pagination.page);
-                console.log(pagination.limit);
-                console.log('response:', response);
                 if (response.status === 200) {
                     setClinics(response.data);
                     if (response.totalPages === 0) {
@@ -85,10 +79,6 @@ function AllClinic() {
 
         fetchClinics();
     }, [pagination, searchQuery]);
-
-    console.log('alldoctors:', allClinics);
-    console.log('clinics:', clinics);
-
     // const filteredDoctors = clinics.filter(
     //     (doctor) => doctor.name.toLowerCase().includes(searchQuery.toLowerCase()),
     //     // doctor.specialtyId.name.toLowerCase().includes(searchQuery.toLowerCase()),

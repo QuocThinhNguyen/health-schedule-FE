@@ -47,7 +47,7 @@ function ClinicItem(data) {
                 </div>
                 <div className="flex-1 flex flex-col justify-center">
                     <div className="flex items-center justify-between">
-                        <p className="text-lg font-bold ">{clinic.name}</p>
+                        <p className="text-lg font-bold text-custom262626">{clinic.name}</p>
                         <div className="flex items-center gap-1 text-sm">
                             <div className="flex items-center gap-1 px-2 py-[1px] bg-[#2d87f31a] bg-opacity-10 rounded-full">
                                 <IoIosStar className="text-yellow-500" />

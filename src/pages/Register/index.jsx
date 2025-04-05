@@ -97,7 +97,6 @@ function Register() {
                 email,
                 password,
             });
-            console.log(response);
 
             if (response.status === 200) {
                 setEmailRegister(email);
