@@ -1,40 +1,40 @@
 import { useNavigate, useParams } from 'react-router-dom';
-import Title from '../components/Tittle';
-import FormClinic from './FormClinic';
 import { useEffect, useState } from 'react';
-import { axiosInstance } from '~/api/apiRequest';
 import { toast } from 'react-toastify';
+import { axiosInstance } from '~/api/apiRequest';
+import Title from '../components/Tittle';
+import FormPost from './FormPost';
 
-function UpdateClinic() {
+function UpdatePost() {
     const { id } = useParams();
     const navigate = useNavigate();
     const [defaultValues, setDefaultValues] = useState();
 
     useEffect(() => {
-        const getDetailClinicAPI = async (id) => {
+        const getDetailPostAPI = async (id) => {
             try {
-                const response = await axiosInstance.get(`/clinic/${id}`);
+                const response = await axiosInstance.get(`/post/${id}`);
                 if (response.status === 200) {
                     setDefaultValues(response.data);
                 } else {
-                    console.error('Failed to get detail clinic:', response.message);
+                    console.error('No post found:', response.message);
                 }
             } catch (error) {
-                console.error('Error get detail clinic:', error);
+                console.error('Failed to get post:', error);
             }
         };
-        getDetailClinicAPI(id);
+        getDetailPostAPI(id);
     }, [id]);
 
-    const updateClinicAPI = async (formData) => {
+    const updatePostAPI = async (formData) => {
         try {
-            const response = await axiosInstance.put(`/clinic/${id}`, formData, {
+            const response = await axiosInstance.put(`/post/${id}`, formData, {
                 headers: { 'Content-Type': 'multipart/form-data' },
             });
 
             if (response.status === 200) {
-                toast.success('Clinic updated successfully!');
-                navigate('/admin/clinic');
+                toast.success('Cập nhật bệnh viện thành công!');
+                navigate('/admin/post');
             } else {
                 console.error('Failed to update clinic:', response.message);
             }
@@ -42,15 +42,14 @@ function UpdateClinic() {
             console.error('Error update clinic:', error);
         }
     };
-
     return (
         <>
             <div className="px-3 mb-6">
-                <Title>Cập nhật bệnh viện</Title>
-                <FormClinic defaultValues={defaultValues} onSubmit={updateClinicAPI} />
+                <Title>Cập nhật bài viết</Title>
+                <FormPost defaultValues={defaultValues} onSubmit={updatePostAPI} />
             </div>
         </>
     );
 }
 
-export default UpdateClinic;
+export default UpdatePost;

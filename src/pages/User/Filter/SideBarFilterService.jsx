@@ -64,6 +64,11 @@ function SideBarFilterServie() {
                         getOptionValue={(option) => option.serviceCategoryId}
                         getOptionLabel={(option) => option.name}
                         placeholder="Tất cả dịch vụ"
+                        value={
+                            serviveCategories.find(
+                                (option) => option.serviceCategoryId === Number(searchParams.get('serviceCategory')),
+                            ) || null
+                        }
                         onChange={(option) =>
                             handleFilterChange('serviceCategory', option ? option.serviceCategoryId : '')
                         }
@@ -89,6 +94,7 @@ function SideBarFilterServie() {
                         getOptionValue={(option) => option.clinicId}
                         getOptionLabel={(option) => option.name}
                         placeholder="Tất cả bệnh viện"
+                        value={clinics.find((option) => option.clinicId === Number(searchParams.get('clinic'))) || null}
                         onChange={(option) => handleFilterChange('clinic', option ? option.clinicId : '')}
                         className="z-10"
                         isSearchable

@@ -18,6 +18,9 @@ export default {
                 custom284a75: '#284a75',
                 customTitle: '#262626',
             },
+            maxWidth: {
+                'screen-admin': 'calc(100vw - 240px)',
+            },
             height: {
                 'screen-minus-20': 'calc(100vh - 3.5rem)',
                 'screen-admin': 'calc(100vh - 68px)',
@@ -26,12 +29,12 @@ export default {
                 'screen-minus-20': 'calc(100vh - 3.5rem)',
             },
             animation: {
-                'rotate-fast': 'rotate-fast 1s ease-in-out', // Animation chạy trong 1 giây
+                'rotate-fast': 'rotate-fast 1s ease-in-out',
             },
             keyframes: {
                 'rotate-fast': {
                     '0%': { transform: 'rotate(0deg)' },
-                    '12.5%': { transform: 'rotate(30deg)' }, // Tăng tần suất xoay
+                    '12.5%': { transform: 'rotate(30deg)' },
                     '25%': { transform: 'rotate(-30deg)' },
                     '37.5%': { transform: 'rotate(30deg)' },
                     '50%': { transform: 'rotate(-30deg)' },
