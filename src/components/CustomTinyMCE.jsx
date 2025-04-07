@@ -2,17 +2,22 @@ import React, { useContext, useEffect, useRef } from 'react';
 import { Editor } from '@tinymce/tinymce-react';
 import { ThemeContext } from '~/context/ThemeProvider';
 
-const CustomTinyMCE = ({ name, value, onChange, onBlur }) => {
+const CustomTinyMCE = ({ name, value, onChange, onBlur = null }) => {
     const { isDark } = useContext(ThemeContext);
     const editorRef = useRef(null);
     useEffect(() => {}, [isDark]);
+    const handleBlur = (event) => {
+        if (onBlur) {
+            onBlur({ target: { name, value: event.target.getContent() } });
+        }
+    };
     return (
         <>
             <Editor
                 value={value} // Đồng bộ giá trị từ state
                 apiKey={import.meta.env.VITE_API_KEY_TINYMCE}
                 init={{
-                    height: 500,
+                    height: 800,
                     plugins:
                         'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount',
                     toolbar:
@@ -24,8 +29,8 @@ const CustomTinyMCE = ({ name, value, onChange, onBlur }) => {
                     content_style: 'body{font-family:Helvetica,Arial,sans-serif; font-size:13px}',
                 }}
                 onInit={(editor) => (editorRef.current = editor)}
-                onEditorChange={(value) => onChange({ target: { name, value: value } })}
-                onBlur={(event) => onBlur({ target: { name, value: event.target.getContent() } })}
+                onEditorChange={(value) => onChange(value)}
+                onBlur={handleBlur}
             />
         </>
     );

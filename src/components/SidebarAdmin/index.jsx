@@ -22,9 +22,9 @@ function SidebarAdmin() {
         { path: '/admin/doctor', label: 'Quản lý bác sĩ', icon: <FaUserDoctor /> },
         { path: '/admin/user', label: 'Quản lý tài khoản người dùng', icon: <FaRegUser /> },
         { path: '/admin/specialty', label: 'Quản lý chuyên khoa', icon: <LiaStethoscopeSolid /> },
-        { path: '/admin/schedule', label: 'Quản lý lịch hẹn', icon: <SlCalender /> },
-        { path: '/admin/worktime', label: 'Quản lý thời gian làm việc', icon: <MdOutlineAccessTime /> },
-        { path: '/admin/news', label: 'Quản lý tin tức', icon: <IoNewspaperOutline /> },
+        { path: '/admin/booking', label: 'Quản lý lịch hẹn', icon: <SlCalender /> },
+        { path: '/admin/doctor-schedule', label: 'Quản lý thời gian làm việc', icon: <MdOutlineAccessTime /> },
+        { path: '/admin/post', label: 'Quản lý tin tức', icon: <IoNewspaperOutline /> },
         { path: '/admin/comment', label: 'Quản lý bình luận', icon: <MdOutlineComment /> },
     ];
 
