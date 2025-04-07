@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useRef } from 'react';
 import { axiosInstance } from '~/api/apiRequest'; // Đảm bảo bạn đã config axios
 import { ArrowLeft, Italic, Send } from 'lucide-react';
 import { UserContext } from '~/context/UserContext';
@@ -17,6 +17,14 @@ const ChatBot = () => {
     const [sessionId, setSessionId] = useState(null);
     const [history, setHistory] = useState([]);
     const [selectedChatId, setSelectedChatId] = useState(null);
+    const messagesEndRef = useRef(null); // Tạo ref cho phần cuối danh sách tin nhắn
+
+    useEffect(() => {
+        // Cuộn xuống cuối cùng khi messages thay đổi
+        if (messagesEndRef.current) {
+            messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
+        }
+    }, [messages]);
 
     useEffect(() => {
         const newSessionId = `${user.userId}_${Date.now()}`;
@@ -62,7 +70,7 @@ const ChatBot = () => {
         setMessage('');
         setIsLoading(true);
         try {
-            const response = await axiosInstance.post('/chatbot', { message });
+            const response = await axiosInstance.post(`/chatbot/${user.userId}/${sessionId}`, { message });
             console.log('Response:', response);
             if (response.status === 200) {
                 // setMessages([
@@ -131,35 +139,38 @@ const ChatBot = () => {
         }
     };
 
-    const getDetailMessage = (chatbotMessageId) => async () => {
+    const getDetailMessage = (chatbotMessageId, sessionId) => async () => {
         try {
             const response = await axiosInstance.get(`/chatbot/detail/${chatbotMessageId}`);
             if (response.status === 200) {
                 setMessages(response.data.messages);
                 setShowIntro(false);
                 setSelectedChatId(chatbotMessageId);
+                setSessionId(sessionId);
             }
         } catch (error) {
             console.log('Error:', error);
         }
     };
 
+    console.log('Check session id', sessionId);
+
     const handleReload = () => {
         window.location.reload();
     };
 
     return (
-        <div className="flex w-full h-screen-minus-20">
+        <div className="flex w-full h-screen-minus-20 overflow-hidden">
             {/* Cột trái */}
-            <div className=" h-full flex flex-col w-64 bg-[#e3f2ff] p-4 space-y-5">
-                <div className="flex items-center justify-start h-fit">
+            <div className=" h-full flex flex-col w-64 bg-[#e3f2ff]  space-y-5">
+                <div className="flex items-center justify-start h-fit p-4">
                     <img src="/robot.png" className="w-10 h-10 border rounded-full" />
                     <div className="ml-3">
                         <p className="font-medium text-base">Medigo Trợ lý sức khỏe</p>
                         <p className="text-sm text-gray-500">Trợ lý y tế thông minh</p>
                     </div>
                 </div>
-                <div className="space-y-5 border-t pt-5">
+                <div className="space-y-5 border-t pt-5 overflow-y-auto p-2">
                     {/* <input
                         className="flex-1 border rounded-lg p-2 h-10 outline-none w-full shadow-md"
                         placeholder="Tìm kiếm cuộc trò chuyện"
@@ -182,7 +193,7 @@ const ChatBot = () => {
                                     selectedChatId === item.chatbotMessageId ? 'bg-blue-200' : 'bg-gray-100'
                                 } `}
                                 key={index}
-                                onClick={getDetailMessage(item.chatbotMessageId)}
+                                onClick={getDetailMessage(item.chatbotMessageId, item.sessionId)}
                             >
                                 <div className="ml-3">
                                     <p className="font-medium text-sm">
@@ -208,7 +219,7 @@ const ChatBot = () => {
                     </div>
                 </div>
                 {/* Message */}
-                <div className="flex-1 flex flex-col overflow-y-scroll bg-[#f9fafb] p-4 space-y-4">
+                <div className="flex-1 flex flex-col h-full max-h-[calc(100vh-100px)] overflow-y-auto bg-[#f9fafb] p-4 space-y-4">
                     {showIntro && (
                         <div className="w-full h-full items-center justify-center flex">
                             <div className="flex flex-col items-center">
@@ -255,6 +266,7 @@ const ChatBot = () => {
                             )}
                         </div>
                     ))}
+                    {/* <div ref={messagesEndRef} /> */}
                     <AnimatePresence>
                         {isLoading && (
                             <motion.div
@@ -267,17 +279,17 @@ const ChatBot = () => {
                                 <div className="bg-gray-200 text-gray-900 p-3 rounded-lg shadow-md max-w-xs md:max-w-xl">
                                     <div className="flex space-x-1">
                                         <motion.div
-                                            className="w-2 h-2 rounded-full bg-gray-400 dark:bg-gray-500"
+                                            className="w-1.5 h-1.5 rounded-full bg-gray-400 dark:bg-gray-500"
                                             animate={{ y: [0, -5, 0] }}
                                             transition={{ repeat: Number.POSITIVE_INFINITY, duration: 1, delay: 0 }}
                                         />
                                         <motion.div
-                                            className="w-2 h-2 rounded-full bg-gray-400 dark:bg-gray-500"
+                                            className="w-1.5 h-1.5 rounded-full bg-gray-400 dark:bg-gray-500"
                                             animate={{ y: [0, -5, 0] }}
                                             transition={{ repeat: Number.POSITIVE_INFINITY, duration: 1, delay: 0.2 }}
                                         />
                                         <motion.div
-                                            className="w-2 h-2 rounded-full bg-gray-400 dark:bg-gray-500"
+                                            className="w-1.5 h-1.5 rounded-full bg-gray-400 dark:bg-gray-500"
                                             animate={{ y: [0, -5, 0] }}
                                             transition={{ repeat: Number.POSITIVE_INFINITY, duration: 1, delay: 0.4 }}
                                         />
