@@ -3,16 +3,19 @@ import PropTypes from 'prop-types';
 import renderStars from '~/pages/Home/ListClinic/renderStars';
 
 const Table = ({ columns, data, pagination, actions }) => {
+    console.log('------------------> Table data doctor schedule:', data);
+
     const IMAGE_URL = `http://localhost:${import.meta.env.VITE_BE_PORT}/uploads/`;
     const getValueFromKey = (key, item) => {
         if (typeof key !== 'string') {
-            console.error('Expected key to be a string, but got:', typeof key);
             return null;
         }
         return key.split('.').reduce((acc, part) => acc?.[part] ?? null, item);
     };
     const renderCell = (column, item) => {
         const value = getValueFromKey(column.key, item);
+        console.log('------------------> value data:', value);
+        
         const src = `${IMAGE_URL}${value}`;
 
         switch (column.type) {
@@ -72,7 +75,10 @@ const Table = ({ columns, data, pagination, actions }) => {
                 </thead>
                 <tbody>
                     {data.map((item, index) => (
-                        <tr key={item._id} className="border border-[var(--border-primary)] hover:bg-[var(--bg-tertiary)]">
+                        <tr
+                            key={item._id}
+                            className="border border-[var(--border-primary)] hover:bg-[var(--bg-tertiary)]"
+                        >
                             <td className="px-3 py-2 text-center">
                                 {index + 1 + pagination.limit * (pagination.page - 1)}
                             </td>
