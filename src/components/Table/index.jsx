@@ -3,16 +3,19 @@ import PropTypes from 'prop-types';
 import renderStars from '~/pages/Home/ListClinic/renderStars';
 
 const Table = ({ columns, data, pagination, actions }) => {
+    console.log('------------------> Table data doctor schedule:', data);
+
     const IMAGE_URL = `http://localhost:${import.meta.env.VITE_BE_PORT}/uploads/`;
     const getValueFromKey = (key, item) => {
         if (typeof key !== 'string') {
-            console.error('Expected key to be a string, but got:', typeof key);
             return null;
         }
         return key.split('.').reduce((acc, part) => acc?.[part] ?? null, item);
     };
     const renderCell = (column, item) => {
         const value = getValueFromKey(column.key, item);
+        console.log('------------------> value data:', value);
+        
         const src = `${IMAGE_URL}${value}`;
 
         switch (column.type) {
@@ -53,12 +56,12 @@ const Table = ({ columns, data, pagination, actions }) => {
                 return value || 'Null';
         }
     };
-
+    //min-w-max w-full table-auto border-collaps
     return (
-        <div className="overflow-x-auto">
-            <table className="min-w-full table-auto">
+        <div className="w-full overflow-x-auto">
+            <table className="min-w-full table-auto border-collapse">
                 <thead>
-                    <tr className="border border-[var(--border-primary)] text-[var(--text-primary)]">
+                    <tr className="border border-[var(--border-primary)] text-[var(--text-primary)] bg-[var(--bg-table-title)]">
                         <th className="px-3 py-3 font-semibold whitespace-nowrap text-center">#</th>
                         {columns.map((column) => (
                             <th key={column.key} className="px-3 py-3 font-semibold whitespace-nowrap text-left">
@@ -72,12 +75,20 @@ const Table = ({ columns, data, pagination, actions }) => {
                 </thead>
                 <tbody>
                     {data.map((item, index) => (
-                        <tr key={item._id} className="border border-[var(--border-primary)]">
+                        <tr
+                            key={item._id}
+                            className="border border-[var(--border-primary)] hover:bg-[var(--bg-tertiary)]"
+                        >
                             <td className="px-3 py-2 text-center">
                                 {index + 1 + pagination.limit * (pagination.page - 1)}
                             </td>
                             {columns.map((column) => (
-                                <td key={column.key} className="px-3 py-2 min-w-28 max-w-64">
+                                <td
+                                    key={column.key}
+                                    className={`px-3 py-2 ${
+                                        column.wrap === true ? 'min-w-72' : 'min-w-[116px]'
+                                    } max-w-64`}
+                                >
                                     {renderCell(column, item)}
                                 </td>
                             ))}
@@ -88,7 +99,7 @@ const Table = ({ columns, data, pagination, actions }) => {
                                             <button
                                                 key={idx}
                                                 onClick={() => action.onClick(item)}
-                                                className="mx-2 p-2 border border-[var(--border-primary)] bg-[var(--bg-secondary)]  rounded text-lg hover:text-blue-800"
+                                                className="mx-2 p-2 text-lg hover:text-blue-800"
                                             >
                                                 {action.icon}
                                             </button>

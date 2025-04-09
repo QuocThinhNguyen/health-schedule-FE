@@ -1,13 +1,12 @@
 import React, { useEffect, useMemo, useState } from 'react';
-
+import { FaUserDoctor } from 'react-icons/fa6';
+import { FaHospital, FaUser } from 'react-icons/fa';
+import { AiOutlineSchedule } from 'react-icons/ai';
+import { axiosInstance } from '~/api/apiRequest';
 import ThongKeLuotDatKhamNgayTrongThang from './ThongKeLuotDatKhamNgayTrongThang';
 import ThongKeLuotDatKhamThangTrongNam from './ThongKeLuotDatKhamThangTrongNam';
 import ThongKeDoanhThuHeThongTheoThang from './ThongKeDoanhThuHeThongTheoThang';
 import ThongKeCaKhamTrongThangNay from './ThongKeCaKhamTrongThangNay';
-import { FaUserDoctor } from 'react-icons/fa6';
-import { FaHospital, FaUser } from 'react-icons/fa';
-import { AiOutlineSchedule } from 'react-icons/ai';
-import { axiosClient, axiosInstance } from '~/api/apiRequest';
 import Title from '../components/Tittle';
 
 function Dashboard() {

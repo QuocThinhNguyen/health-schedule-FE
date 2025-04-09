@@ -26,7 +26,6 @@ function DoctorInfo() {
     const doctorId = searchParams.get('id') || state.doctorId;
     const navigate = useNavigate();
     const [activeTab, setActiveTab] = useState('info');
-    const [doctors, setDoctors] = useState([]);
     const [pagination, setPagination] = useState({ page: 1, limit: 20, totalPages: 1 });
 
     const keyPoints = [
@@ -37,16 +36,14 @@ function DoctorInfo() {
     const handlePageChange = (page) => {
         setPagination((prev) => ({
             ...prev,
-            page: page, // Cập nhật thuộc tính page
+            page: page, 
         }));
     };
-    console.log('CHECK', doctorInfo);
+
     useEffect(() => {
         const fetchDoctorInfo = async () => {
             try {
                 const response = await axiosInstance.get(`/doctor/${doctorId}`);
-                console.log('2');
-                console.log('Doctor info000: ', response);
                 if (response.status === 200) {
                     setDoctorInfo(response.data);
                 }

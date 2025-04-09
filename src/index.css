@@ -20,12 +20,18 @@ html {
     --text-secondary: #61748f;
     --text-color: #222f36;
     --text-active:#ffffff;
+    --text-active-rgb: 255, 255, 255;
 
     --bg-primary:#ffffff;
     --bg-secondary:#F5F6FA;
+    --bg-tertiary:#FBFBFC;
+    --bg-table-title:#F7F8FA;
     
     --bg-active:#735dff;
     --bg-active-rgb: 115, 93, 255;
+    --bg-edit: #0c9cfc;
+    --bg-delete:#FF383C;
+
 
     --border-primary:#E4E8EC;
 }
@@ -37,6 +43,8 @@ html {
 
     --bg-primary:#232226;
     --bg-secondary:#19181A;
+    --bg-tertiary:#28282C;
+    --bg-table-title:#2E2D32;
 
     --border-primary:#ffffff1a;
 }
@@ -49,7 +57,6 @@ body {
     line-height: 24px;
     text-rendering: optimizeSpeed;
     color: var(--text-color);
-    
 }
 
 @layer base {
