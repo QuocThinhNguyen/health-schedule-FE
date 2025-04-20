@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { MapPin, Clock, CreditCard, ChevronRight, Check, Star } from 'lucide-react';
-import { axiosInstance } from '~/api/apiRequest';
+import { axiosInstance, axiosClient } from '~/api/apiRequest';
 import { NavLink, useSearchParams, useNavigate, useLocation } from 'react-router-dom'; // Dùng để lấy `patientRecordId` từ URL
 import parse from 'html-react-parser';
 import './CSS/DoctorDescription.css';
@@ -11,6 +11,7 @@ import Pagination from '~/components/Pagination';
 import Modal from 'react-modal';
 import VideoItem from '~/components/Video/VideoItem';
 import { BsCoin } from 'react-icons/bs';
+import { toast } from 'react-toastify';
 
 function DoctorInfo() {
     const [selectedTime, setSelectedTime] = useState('');
@@ -21,9 +22,10 @@ function DoctorInfo() {
     const { user } = useContext(UserContext);
     const [videos, setVideos] = useState([]);
     const [rating, setRating] = useState(5);
-
+    const [academicRanksAndDegreess, setAcademicRanksAndDegreess] = useState([]);
     const [searchParams] = useSearchParams();
     const doctorId = searchParams.get('id') || state.doctorId;
+    const userId = user.userId;
     const navigate = useNavigate();
     const [activeTab, setActiveTab] = useState('info');
     const [pagination, setPagination] = useState({ page: 1, limit: 20, totalPages: 1 });
@@ -36,9 +38,37 @@ function DoctorInfo() {
     const handlePageChange = (page) => {
         setPagination((prev) => ({
             ...prev,
-            page: page, 
+            page: page,
         }));
     };
+
+    useEffect(() => {
+        const handleClick = async () => {
+            try {
+                console.log('check doctorId:', doctorId);
+                console.log('check userId:', userId);
+                const formData = new FormData();
+                formData.append('doctorId', doctorId);
+                formData.append('userId', userId);
+
+                console.log('Form data:', formData);
+
+                const response = await axiosInstance.post('/doctor/clicked', formData);
+                console.log('Clicked:', response.data);
+                if (response.status === 200) {
+                    console.log('Clicked successfully:', response.data);
+                    toast.success('Cảm ơn bạn đã quan tâm đến bác sĩ của chúng tôi!');
+                } else {
+                    console.error('Failed to click:', response);
+                    toast.error('Có lỗi xảy ra khi gửi thông tin!');
+                }
+            } catch (error) {
+                console.error('Error:', error.message);
+                toast.error('Có lỗi xảy ra khi gửi thông tin!!!!');
+            }
+        };
+        handleClick();
+    }, []);
 
     useEffect(() => {
         const fetchDoctorInfo = async () => {
@@ -53,6 +83,13 @@ function DoctorInfo() {
         };
         fetchDoctorInfo();
     }, []);
+
+    console.log('doctorInfo:', doctorInfo.position);
+    let checkdoctor = academicRanksAndDegreess.find(
+        (academicRanksAndDegrees) => academicRanksAndDegrees.keyMap === doctorInfo.position,
+    )?.valueVi;
+
+    console.log('checkdoctor:', checkdoctor);
 
     useEffect(() => {
         const today = new Date();
@@ -95,7 +132,7 @@ function DoctorInfo() {
         fetchSchedule();
         console.log('currentDay:', currentDate);
         console.log('schedule:', schedule);
-    }, [currentDate]);
+    }, [currentDate, doctorId]);
 
     // Map timeTypes sang label
     // const mapTimeTypeToLabel = (timeTypes) => {
@@ -261,6 +298,28 @@ function DoctorInfo() {
         setIsOpen(false);
         setSelectedMedia(null);
     };
+
+    useEffect(() => {
+        const getDropdownAcademicRanksAndDegrees = async () => {
+            try {
+                const response = await axiosClient.get(`/doctor/academic-ranks-and-degrees`);
+
+                if (response.status === 200) {
+                    setAcademicRanksAndDegreess(response.data);
+                } else {
+                    console.error('No academic ranks and degrees are found:', response.message);
+                    setAcademicRanksAndDegreess([]);
+                }
+            } catch (error) {
+                console.error('Error fetching academic ranks and degrees:', error);
+                setAcademicRanksAndDegreess([]);
+            }
+        };
+        getDropdownAcademicRanksAndDegrees();
+    }, []);
+
+    console.log('academicRanksAndDegreess:', academicRanksAndDegreess);
+
     return (
         <div className="min-h-screen bg-white">
             <div className="w-full bg-blue-50">
@@ -280,7 +339,8 @@ function DoctorInfo() {
                         </NavLink>
                         <ChevronRight className="w-4 h-4 text-gray-400" />
                         <div className="text-[#2D87F3] cursor-pointer font-semibold">
-                            {doctorInfo.position} {doctorInfo.fullname}
+                            {checkdoctor} {''}
+                            {doctorInfo.fullname}
                         </div>
                     </div>
                 </div>
@@ -306,7 +366,8 @@ function DoctorInfo() {
                     <div className="flex justify-between">
                         <div>
                             <h1 className="text-2xl font-bold">
-                                {doctorInfo.position} {doctorInfo.fullname}
+                                {checkdoctor} {''}
+                                {doctorInfo.fullname}
                             </h1>
                             <p className="text-gray-600 mt-1">{doctorInfo.specialtyName}</p>
                         </div>
@@ -578,7 +639,7 @@ function DoctorInfo() {
                                             : 'flex flex-col items-center justify-center'
                                     } mt-16 h-full`}
                                 >
-                                    {schedule.length > 0 ? (
+                                    {schedule?.length > 0 ? (
                                         mapTimeTypeToLabel(schedule[0]).map(({ value, label }, index) => (
                                             <button
                                                 key={index}

@@ -1,6 +1,34 @@
 import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
 
+const axiosClientPython = axios.create({
+    baseURL: 'http://localhost:5000',
+    headers: {
+        'Content-Type': 'application/json',
+    },
+    withCredentials: true,
+    paramsSerializer: (params) => queryString.stringify(params),
+});
+
+axiosClientPython.interceptors.response.use(
+    function (response) {
+        return response.data ? response.data : { statusCode: response.status };
+    },
+    function (error) {
+        let res = {};
+        if (error.response) {
+            res.data = error.response.data;
+            res.status = error.response.status;
+            res.headers = error.response.headers;
+        } else if (error.request) {
+            console.log(error.request);
+        } else {
+            console.log('Error', error.message);
+        }
+        return res;
+    },
+);
+
 const baseURL = 'http://localhost:9000';
 
 const axiosClient = axios.create({
@@ -95,4 +123,4 @@ axiosInstance.interceptors.response.use(
     },
 );
 
-export { axiosClient, axiosInstance };
+export { axiosClient, axiosInstance, axiosClientPython };

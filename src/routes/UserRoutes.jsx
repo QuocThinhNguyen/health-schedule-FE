@@ -29,7 +29,7 @@ const UserRoutes = () => {
                     </PrivateRoute>
                 }
             >
-                <Route index element={<Navigate to="profile" />} />
+                <Route index element={<Navigate to="statistical" />} />
                 <Route path="profile" element={<UserProfile />} />
                 <Route path="appointments" element={<AppointmentManagement />} />
                 <Route path="appointments/comment" element={<CommentModel />} />
