@@ -306,6 +306,7 @@ function Statistical() {
                                         label: 'Số lần khám',
                                         data: selectedStats.doctorStats.map((d) => d.count),
                                         backgroundColor: 'rgba(54, 162, 235, 0.7)',
+                                        barThickness: 30,
                                     },
                                 ],
                             }}

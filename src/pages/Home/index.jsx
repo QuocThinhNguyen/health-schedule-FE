@@ -6,6 +6,7 @@ import SearchInput from './Search/Search';
 import Statistics from './Statistics';
 import News from './News/News';
 import ListService from './ListService/ListService';
+import ListDoctorRecommended from './DoctorRecommended/ListDoctorRecommended';
 import { useNavigate } from 'react-router-dom';
 import { UserContext } from '~/context/UserContext';
 
@@ -86,6 +87,9 @@ function Home() {
 
             {/* Bac si */}
             <ListDoctor />
+
+            {/* Gợi ý bác sĩ */}
+            {user.auth && <ListDoctorRecommended />}
 
             {/* Dich vu */}
             <ListService />

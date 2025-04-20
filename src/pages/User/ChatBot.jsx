@@ -22,7 +22,7 @@ const ChatBot = () => {
     useEffect(() => {
         // Cuộn xuống cuối cùng khi messages thay đổi
         if (messagesEndRef.current) {
-            messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
+            messagesEndRef.current.scrollIntoView({ behavior: 'smooth', block: 'end', inline: 'nearest' });
         }
     }, [messages]);
 
@@ -266,7 +266,7 @@ const ChatBot = () => {
                             )}
                         </div>
                     ))}
-                    {/* <div ref={messagesEndRef} /> */}
+
                     <AnimatePresence>
                         {isLoading && (
                             <motion.div
@@ -298,6 +298,7 @@ const ChatBot = () => {
                             </motion.div>
                         )}
                     </AnimatePresence>
+                    <div ref={messagesEndRef} />
                 </div>
 
                 {/* Input */}
