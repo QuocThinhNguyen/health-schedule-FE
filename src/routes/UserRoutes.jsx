@@ -15,6 +15,7 @@ import AddRecord from '~/pages/User/AddRecord';
 import CommentModel from '~/components/Comment/CommentModel';
 import Help from '~/pages/User/Help';
 import VideoBookmark from '~/pages/User/VideoBookmark';
+
 const UserRoutes = () => {
     const { user } = useContext(UserContext);
 

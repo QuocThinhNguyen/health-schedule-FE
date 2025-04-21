@@ -48,18 +48,18 @@ function SearchInput({ initialSearchValue = '' }) {
         };
 
         const fetchSearchDoctors = async () => {
-            // try {
-            //     const response = await axiosClient.get(`/doctor/search?keyword=${searchValue}&limit=20`);
-            //     if (response.status === 200) {
-            //         setDoctors(response.data);
-            //     } else {
-            //         toast.error(response.message);
-            //         setDoctors([]);
-            //     }
-            // } catch (error) {
-            //     toast.error(error);
-            //     setDoctors([]);
-            // }
+            try {
+                const response = await axiosClient.get(`/doctor/search?keyword=${searchValue}&limit=20`);
+                if (response.status === 200) {
+                    setDoctors(response.data);
+                } else {
+                    toast.error(response.message);
+                    setDoctors([]);
+                }
+            } catch (error) {
+                toast.error(error);
+                setDoctors([]);
+            }
         };
 
         const fetchSearchServices = async () => {

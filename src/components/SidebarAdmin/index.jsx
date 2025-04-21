@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { IoMenu, IoNewspaperOutline } from 'react-icons/io5';
+import { IoChatboxEllipsesOutline, IoMenu, IoNewspaperOutline } from 'react-icons/io5';
 import { useNavigate, NavLink } from 'react-router-dom';
 import { LuLayoutDashboard } from 'react-icons/lu';
 import { CiHospital1 } from 'react-icons/ci';
@@ -11,11 +11,7 @@ import { MdOutlineAccessTime, MdOutlineComment } from 'react-icons/md';
 import Logo from '../Logo';
 
 function SidebarAdmin() {
-    const [isExpanded, setIsExpanded] = useState(true);
     const navigate = useNavigate();
-    const toggleAdminMenu = () => {
-        setIsExpanded(!isExpanded);
-    };
     const menuItems = [
         { path: '/admin/dashboard', label: 'Bảng thống kê', icon: <LuLayoutDashboard /> },
         { path: '/admin/clinic', label: 'Quản lý bệnh viện', icon: <CiHospital1 /> },
@@ -26,6 +22,7 @@ function SidebarAdmin() {
         { path: '/admin/doctor-schedule', label: 'Quản lý thời gian làm việc', icon: <MdOutlineAccessTime /> },
         { path: '/admin/post', label: 'Quản lý tin tức', icon: <IoNewspaperOutline /> },
         { path: '/admin/comment', label: 'Quản lý bình luận', icon: <MdOutlineComment /> },
+        { path: '/admin/chat', label: 'Chăm sóc khách hàng', icon: <IoChatboxEllipsesOutline  /> },
     ];
 
     return (
@@ -34,7 +31,6 @@ function SidebarAdmin() {
                 <Logo />
             </div>
             <ul className="w-full py-2">
-                {/* Menu items */}
                 {menuItems.map((item) => (
                     <li key={item.path} className="px-4" onClick={() => navigate(item.path)}>
                         <NavLink

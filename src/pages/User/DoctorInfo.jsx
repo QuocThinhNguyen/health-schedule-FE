@@ -11,6 +11,8 @@ import Pagination from '~/components/Pagination';
 import Modal from 'react-modal';
 import VideoItem from '~/components/Video/VideoItem';
 import { BsCoin } from 'react-icons/bs';
+import { IoChatboxEllipsesOutline } from 'react-icons/io5';
+import { useSocket } from '../Chat/useSocket';
 
 function DoctorInfo() {
     const [selectedTime, setSelectedTime] = useState('');
@@ -36,7 +38,7 @@ function DoctorInfo() {
     const handlePageChange = (page) => {
         setPagination((prev) => ({
             ...prev,
-            page: page, 
+            page: page,
         }));
     };
 
@@ -130,17 +132,6 @@ function DoctorInfo() {
         setSelectedTime(timeSlot);
         navigate(`/bac-si/booking/?doctorId=${doctorId}&currentDate=${currentDate}&timeSlot=${timeSlot}`);
     };
-    //, {
-    //     state: {
-    //         doctorId,
-    //         currentDate,
-    //         timeSlot,
-    //     },
-    // }
-
-    // const customDescription = doctorInfo.description;
-
-    // console.log('customDescription:', customDescription);
 
     const reviews = [
         {
@@ -261,6 +252,31 @@ function DoctorInfo() {
         setIsOpen(false);
         setSelectedMedia(null);
     };
+
+    const handleClickButtonMessage = async () => {
+        if (!user.auth) {
+            return navigate('/login');
+        }
+
+        try {
+            const formData = new FormData();
+            formData.append('userId', user?.userId);
+            formData.append('partnerId', doctorId);
+            const response = await axiosInstance.post('/chat-room', formData);
+            console.log('Response from getOrCreateRoom:', response);
+            if (response.status === 200) {
+                const socket = useSocket(user?.userId);
+                socket.emit('join_room', response.data.chatRoomId);
+            } else {
+                console.error('Failed to create chat room:', response.message);
+            }
+        } catch (error) {
+            console.error('Error creating chat room:', error);
+        }
+
+        navigate(`/chat`);
+    };
+
     return (
         <div className="min-h-screen bg-white">
             <div className="w-full bg-blue-50">
@@ -303,7 +319,7 @@ function DoctorInfo() {
                 </div> */}
 
                 <div className="flex-1">
-                    <div className="flex justify-between">
+                    <div className="flex justify-between items-start">
                         <div>
                             <h1 className="text-2xl font-bold">
                                 {doctorInfo.position} {doctorInfo.fullname}
@@ -318,9 +334,18 @@ function DoctorInfo() {
                             <a className="text-gray-700 ml-1 underline">{feedbacks.totalFeedBacks} đánh giá</a>
                         </div>
                     </div>
-                    <div className="flex gap-2 mt-2">
+                    <div className="flex justify-between items-center mt-2">
                         <button className="px-3 py-1 bg-blue-50 text-blue-500 rounded-2xl text-sm font-medium border border-blue-500">
                             Đặt lịch khám
+                        </button>
+                        <button
+                            onClick={handleClickButtonMessage}
+                            className="flex justify-center items-center gap-2 px-4 py-2 h-10 hover:bg-[rgba(var(--bg-active-rgb),0.85)] bg-[var(--bg-active)] text-[var(--text-active)] rounded-md  border border-[var(--border-primary)]"
+                        >
+                            <span>Nhắn tin</span>
+                            <span>
+                                <IoChatboxEllipsesOutline className="text-lg mt-1" />
+                            </span>
                         </button>
                     </div>
                 </div>
@@ -417,7 +442,6 @@ function DoctorInfo() {
                                     </div>
                                 </div> */}
 
-                                {/* Reviews List */}
                                 <div className="space-y-6 mt-2">
                                     {feedbacks?.data.length > 0 ? (
                                         feedbacks.data.map((feedback) => (

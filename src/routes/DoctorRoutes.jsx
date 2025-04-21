@@ -14,6 +14,8 @@ import Review from '~/pages/Doctor/Review';
 import DoctorProfile from '~/pages/Doctor/DoctorProfile';
 import ChangePassword from '~/pages/Doctor/ChangePassword';
 import DoctorVideoManagement from '~/pages/Doctor/DoctorVideoManagement';
+import ChatApp from '~/pages/Chat/ChatApp';
+
 function DoctorRoutes() {
     const { user } = useContext(UserContext);
 
@@ -38,6 +40,7 @@ function DoctorRoutes() {
                 <Route path="review" element={<Review />} />
                 <Route path="reset-password" element={<ChangePassword />} />
                 <Route path="videos" element={<DoctorVideoManagement />} />
+                <Route path="chat" element={<ChatApp />} />
             </Route>
         </Fragment>
     );
