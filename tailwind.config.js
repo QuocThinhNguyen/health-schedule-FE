@@ -20,6 +20,7 @@ export default {
             },
             maxWidth: {
                 'screen-admin': 'calc(100vw - 240px)',
+                'screen-chat': 'calc(100vw - 344px)',
             },
             height: {
                 'screen-minus-20': 'calc(100vh - 3.5rem)',

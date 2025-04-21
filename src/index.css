@@ -16,37 +16,36 @@ html {
 }
 
 :root {
-    --text-primary:#262626;
+    --text-primary: #262626;
     --text-secondary: #61748f;
     --text-color: #222f36;
-    --text-active:#ffffff;
+    --text-active: #ffffff;
     --text-active-rgb: 255, 255, 255;
 
-    --bg-primary:#ffffff;
-    --bg-secondary:#F5F6FA;
-    --bg-tertiary:#FBFBFC;
-    --bg-table-title:#F7F8FA;
-    
-    --bg-active:#735dff;
+    --bg-primary: #ffffff;
+    --bg-secondary: #f5f6fa;
+    --bg-tertiary: #fbfbfc;
+    --bg-table-title: #f7f8fa;
+
+    --bg-active: #735dff;
     --bg-active-rgb: 115, 93, 255;
     --bg-edit: #0c9cfc;
-    --bg-delete:#FF383C;
+    --bg-delete: #ff383c;
 
-
-    --border-primary:#E4E8EC;
+    --border-primary: #e4e8ec;
 }
 
-.dark{
-    --text-primary:#ffffffe6;
-    --text-secondary:#ffffff80;
+.dark {
+    --text-primary: #ffffffe6;
+    --text-secondary: #ffffff80;
     --text-color: #ffffffcc;
 
-    --bg-primary:#232226;
-    --bg-secondary:#19181A;
-    --bg-tertiary:#28282C;
-    --bg-table-title:#2E2D32;
+    --bg-primary: #232226;
+    --bg-secondary: #19181a;
+    --bg-tertiary: #28282c;
+    --bg-table-title: #2e2d32;
 
-    --border-primary:#ffffff1a;
+    --border-primary: #ffffff1a;
 }
 
 body {
@@ -54,9 +53,27 @@ body {
         sans-serif;
     font-size: 16px;
     font-weight: 400;
-    line-height: 24px;
+    line-height: 16px;
     text-rendering: optimizeSpeed;
     color: var(--text-color);
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8;
 }
 
 @layer base {

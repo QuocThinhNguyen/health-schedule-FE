@@ -25,6 +25,7 @@
         "clinic_frontend": "file:",
         "cors": "^2.8.5",
         "date-fns": "^4.1.0",
+        "dayjs": "^1.11.13",
         "dotenv": "^16.4.5",
         "fortawesome": "^0.0.1-security",
         "framer-motion": "^12.4.11",
@@ -55,6 +56,7 @@
         "react-toastify": "^10.0.6",
         "sass": "^1.80.6",
         "slick-carousel": "^1.8.1",
+        "socket.io-client": "^4.8.1",
         "swiper": "^11.2.1",
         "tinymce": "^7.5.1",
         "use-debounce": "^10.0.4"

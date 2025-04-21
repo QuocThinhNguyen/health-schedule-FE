@@ -12,6 +12,8 @@ import FacebookLogin from 'react-facebook-login';
 import './CSS/button_facebook.css';
 import './CSS/button_google.css';
 import { IoEye, IoEyeOff } from 'react-icons/io5';
+import { useSocket } from '../Chat/useSocket';
+
 
 function Login() {
     const [showPassword, setShowPassword] = useState(false);
@@ -77,7 +79,7 @@ function Login() {
                 loginContext(email, res.access_token);
                 toast.success('Đăng nhập thành công');
                 const decodeToken = jwtDecode(res.access_token);
-
+                useSocket(decodeToken.userId);
                 if (decodeToken.roleId === 'R1') {
                     navigate('/admin/dashboard', { replace: true });
                 } else if (decodeToken.roleId === 'R2') {
@@ -194,7 +196,7 @@ function Login() {
                                 className="absolute top-1/2 right-3 transform -translate-y-1/2 text-gray-500 text-lg"
                                 onClick={toggleShowPassword}
                             >
-                                 {showPassword ? <IoEye /> : <IoEyeOff />}
+                                {showPassword ? <IoEye /> : <IoEyeOff />}
                             </button>
                         </div>
                         {passwordError && <span className="text-red-500 text-xs">{passwordError}</span>}
