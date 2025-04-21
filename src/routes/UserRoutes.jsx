@@ -15,6 +15,7 @@ import AddRecord from '~/pages/User/AddRecord';
 import CommentModel from '~/components/Comment/CommentModel';
 import Help from '~/pages/User/Help';
 import VideoBookmark from '~/pages/User/VideoBookmark';
+import Statistical from '~/pages/User/Statistical';
 
 const UserRoutes = () => {
     const { user } = useContext(UserContext);
@@ -29,7 +30,7 @@ const UserRoutes = () => {
                     </PrivateRoute>
                 }
             >
-                <Route index element={<Navigate to="profile" />} />
+                <Route index element={<Navigate to="statistical" />} />
                 <Route path="profile" element={<UserProfile />} />
                 <Route path="appointments" element={<AppointmentManagement />} />
                 <Route path="appointments/comment" element={<CommentModel />} />
@@ -39,6 +40,7 @@ const UserRoutes = () => {
                 <Route path="change-password" element={<ChangePassword />} />
                 <Route path="help" element={<Help />} />
                 <Route path="video" element={<VideoBookmark />} />
+                <Route path="statistical" element={<Statistical />} />
             </Route>
         </Fragment>
     );

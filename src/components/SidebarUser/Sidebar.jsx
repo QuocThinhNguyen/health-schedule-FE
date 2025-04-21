@@ -26,6 +26,7 @@ const Sidebar = ({ selectedTab }) => {
     };
 
     const menuItems = [
+        { label: 'Thống kê', path: '/user/statistical', image: 'statistical.png' },
         { label: 'Hồ sơ cá nhân', path: '/user/profile', image: 'user.png' },
         { label: 'Lịch sử đặt lịch khám', path: '/user/appointments', image: 'schedule.png' },
         { label: 'Hồ sơ bệnh nhân', path: '/user/records', image: 'health-report.png' },

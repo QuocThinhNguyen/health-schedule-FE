@@ -11,12 +11,12 @@ const UserDashboard = () => {
 
     return (
         <div className="min-h-screen bg-[#f8f9fc]">
-            <div className='flex max-w-6xl mx-auto'>
+            <div className="flex max-w-6xl mx-auto">
                 {/* Sidebar */}
                 <Sidebar onSelectTab={handleSelectTab} selectedTab={selectedTab} />
-    
+
                 {/* Main content */}
-                <div className="flex-1 px-11 overflow-auto">
+                <div className="flex-1 px-11 mb-4">
                     <Outlet />
                 </div>
             </div>

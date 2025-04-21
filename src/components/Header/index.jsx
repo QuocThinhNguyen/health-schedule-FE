@@ -171,6 +171,23 @@ function Header() {
                                         <ul className="mt-2 border-b">
                                             <li className="group px-4 py-3 text-left text-base font-medium hover:bg-slate-100 cursor-pointer flex items-center">
                                                 <NavLink
+                                                    to="/user/statistical"
+                                                    className={({ isActive }) =>
+                                                        isActive
+                                                            ? 'text-blue-500 flex items-center w-full'
+                                                            : 'flex items-center w-full'
+                                                    }
+                                                >
+                                                    <img
+                                                        src="/statistical.png"
+                                                        alt={'statistical'}
+                                                        className="h-5 w-5 mr-2"
+                                                    />
+                                                    Thống kê
+                                                </NavLink>
+                                            </li>
+                                            <li className="group px-4 py-3 text-left text-base font-medium hover:bg-slate-100 cursor-pointer flex items-center">
+                                                <NavLink
                                                     to="/user/profile"
                                                     className={({ isActive }) =>
                                                         isActive
