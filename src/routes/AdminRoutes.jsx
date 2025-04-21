@@ -24,6 +24,7 @@ import PostManagement from '~/pages/Admin/PostManagement';
 import CreatePost from '~/pages/Admin/PostManagement/CreatePost';
 import UpdatePost from '~/pages/Admin/PostManagement/UpdatePost';
 import CommentManagement from '~/pages/Admin/CommentManagement';
+import ChatApp from '~/pages/Chat/ChatApp';
 
 function AdminRoutes() {
     const { user } = useContext(UserContext);
@@ -62,6 +63,7 @@ function AdminRoutes() {
                 <Route path="post/create-post" element={<CreatePost />} />
                 <Route path="post/update-post/:id" element={<UpdatePost />} />
                 <Route path="comment" element={<CommentManagement />} />
+                <Route path="chat" element={<ChatApp />} />
             </Route>
         </Fragment>
     );
