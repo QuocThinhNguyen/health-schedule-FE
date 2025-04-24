@@ -23,11 +23,11 @@ export default {
                 'screen-chat': 'calc(100vw - 344px)',
             },
             height: {
-                'screen-minus-20': 'calc(100vh - 3.5rem)',
+                'screen-minus-20': 'calc(100vh - 56px)',
                 'screen-admin': 'calc(100vh - 68px)',
             },
             minHeight: {
-                'screen-minus-20': 'calc(100vh - 3.5rem)',
+                'screen-minus-20': 'calc(100vh - 56px)',
             },
             animation: {
                 'rotate-fast': 'rotate-fast 1s ease-in-out',
