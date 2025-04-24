@@ -1,10 +1,7 @@
-import { NavLink } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import { useContext, useEffect, useState } from 'react';
 import { UserContext } from '~/context/UserContext';
 import { FiMenu } from 'react-icons/fi';
-import { FaRegAddressBook } from 'react-icons/fa';
-import { IoLogOutOutline } from 'react-icons/io5';
-import { IoMdKey } from 'react-icons/io';
 import { axiosInstance } from '~/api/apiRequest';
 import avatar from '../../assets/img/avatar.png';
 import Logo from '~/components/Logo';
@@ -18,11 +15,6 @@ function Header() {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [userInfo, setUserInfo] = useState({});
     const [isLogout, setIsLogout] = useState(false);
-
-    // const handleLogout = () => {
-    //     setIsDropdownOpen(false);
-    //     logout();
-    // };
 
     const handleLogout = () => {
         setIsLogout(true);
@@ -70,7 +62,6 @@ function Header() {
         <header className="bg-white shadow fixed top-0 left-0 right-0 z-50">
             <div className="relative z-10 mx-auto px-8 sm:px-6 lg:px-8">
                 <div className="flex justify-between h-14">
-                    {/* Logo */}
                     <NavLink
                         to="/"
                         onClick={(e) => {
@@ -112,7 +103,6 @@ function Header() {
                         </NavLink>
                     </nav>
 
-                    {/* Login Button */}
                     <div className="hidden sm:ml-10 sm:flex sm:items-center">
                         {user && !user.auth ? (
                             <>
@@ -130,165 +120,176 @@ function Header() {
                                 </NavLink>
                             </>
                         ) : (
-                            <div
-                                className="relative inline-block text-left"
-                                onMouseEnter={() => setIsDropdownOpen(true)}
-                                onMouseLeave={() => setIsDropdownOpen(false)}
-                            >
-                                <div className="flex justify-center items-center cursor-pointer">
-                                    <div>
-                                        <img
-                                            className="w-8 h-8 rounded-full"
-                                            src={userInfo && userInfo.image ? userInfo.image : avatar}
-                                            alt="Avatar"
-                                        />
+                            <>
+                                <Link
+                                    to="/chat"
+                                    target="_blank"
+                                    aria-label="Trò chuyện"
+                                    className="w-9 h-9 rounded-full p-2 bg-[var(--bg-secondary)] border border-[var(--border-primary)] mr-2 cursor-pointer"
+                                >
+                                    <svg viewBox="0 0 12 12" width="18" height="18" fill="#1B3250">
+                                        <path
+                                            d="m106.868 921.248-1.892 2.925a.32.32 0 0 1-.443.094l-1.753-1.134a.2.2 0 0 0-.222.003l-1.976 1.363c-.288.199-.64-.143-.45-.437l1.892-2.925a.32.32 0 0 1 .443-.095l1.753 1.134a.2.2 0 0 0 .222-.003l1.976-1.363c.288-.198.64.144.45.438m-3.368-4.251c-3.323 0-5.83 2.432-5.83 5.658 0 1.642.652 3.128 1.834 4.186a.331.331 0 0 1 .111.234l.03 1.01a.583.583 0 0 0 .82.519l1.13-.5a.32.32 0 0 1 .22-.015c.541.148 1.108.223 1.685.223 3.323 0 5.83-2.432 5.83-5.657 0-3.226-2.507-5.658-5.83-5.658"
+                                            transform="translate(-450 -1073.5) translate(352.5 156.845)"
+                                        ></path>
+                                    </svg>
+                                </Link>
+                                <div
+                                    className="relative inline-block text-left"
+                                    onMouseEnter={() => setIsDropdownOpen(true)}
+                                    onMouseLeave={() => setIsDropdownOpen(false)}
+                                >
+                                    <div className="flex justify-center items-center cursor-pointer">
+                                        <div>
+                                            <img
+                                                className="w-9 h-9 rounded-full"
+                                                src={userInfo && userInfo.image ? userInfo.image : avatar}
+                                                alt="Avatar"
+                                            />
+                                        </div>
+                                        <div className="ml-1">
+                                            <p className="text-lg font-bold">
+                                                {userInfo && userInfo.fullname ? userInfo.fullname : 'Guest'}
+                                            </p>
+                                        </div>
                                     </div>
-                                    <div className="ml-1">
-                                        <p className="text-lg font-bold">
-                                            {userInfo && userInfo.fullname ? userInfo.fullname : 'Guest'}
-                                        </p>
-                                    </div>
-                                </div>
-                                {isDropdownOpen && (
-                                    <div className="absolute top-8 left-0 right-0 h-3 bg-transparent"></div>
-                                )}
-                                {isDropdownOpen && (
-                                    <div
-                                        className="absolute -right-6  bg-white mt-3 w-60 text-left rounded-xl border border-gray-200 shadow-[0_0_1px_0_rgba(0,0,0,0.04),0_2px_6px_0_rgba(0,0,0,0.04),0_10px_20px_0_rgba(0,0,0,0.04)]"
-                                        onMouseEnter={() => setIsDropdownOpen(true)}
-                                        onMouseLeave={() => setIsDropdownOpen(false)}
-                                    >
-                                        <div className="px-4 py-2 border-b">
-                                            <div className="flex items-center gap-3 mb-1">
-                                                <div>
-                                                    <div className="text-sm text-gray-600">Xin chào,</div>
-                                                    <div className="text-blue-500 font-medium">
-                                                        {userInfo && userInfo.fullname ? userInfo.fullname : 'Guest'}
+                                    {isDropdownOpen && (
+                                        <div className="absolute top-8 left-0 right-0 h-3 bg-transparent"></div>
+                                    )}
+                                    {isDropdownOpen && (
+                                        <div
+                                            className="absolute -right-6  bg-white mt-3 w-60 text-left rounded-xl border border-gray-200 shadow-[0_0_1px_0_rgba(0,0,0,0.04),0_2px_6px_0_rgba(0,0,0,0.04),0_10px_20px_0_rgba(0,0,0,0.04)]"
+                                            onMouseEnter={() => setIsDropdownOpen(true)}
+                                            onMouseLeave={() => setIsDropdownOpen(false)}
+                                        >
+                                            <div className="px-4 py-2 border-b">
+                                                <div className="flex items-center gap-3 mb-1">
+                                                    <div>
+                                                        <div className="text-sm text-gray-600">Xin chào,</div>
+                                                        <div className="text-blue-500 font-medium">
+                                                            {userInfo && userInfo.fullname
+                                                                ? userInfo.fullname
+                                                                : 'Guest'}
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <ul className="mt-2 border-b">
-                                            <li className="group px-4 py-3 text-left text-base font-medium hover:bg-slate-100 cursor-pointer flex items-center">
-                                                <NavLink
-                                                    to="/user/statistical"
-                                                    className={({ isActive }) =>
-                                                        isActive
-                                                            ? 'text-blue-500 flex items-center w-full'
-                                                            : 'flex items-center w-full'
-                                                    }
-                                                >
-                                                    <img
-                                                        src="/statistical.png"
-                                                        alt={'statistical'}
-                                                        className="h-5 w-5 mr-2"
-                                                    />
-                                                    Thống kê
-                                                </NavLink>
-                                            </li>
-                                            <li className="group px-4 py-3 text-left text-base font-medium hover:bg-slate-100 cursor-pointer flex items-center">
-                                                <NavLink
-                                                    to="/user/profile"
-                                                    className={({ isActive }) =>
-                                                        isActive
-                                                            ? 'text-blue-500 flex items-center w-full'
-                                                            : 'flex items-center w-full'
-                                                    }
-                                                >
-                                                    <img src="/user.png" alt={'profile'} className="h-5 w-5 mr-2" />
-                                                    Hồ sơ cá nhân
-                                                </NavLink>
-                                            </li>
-                                            <li className="group px-4 py-3 text-left text-base font-medium hover:bg-slate-100 cursor-pointer flex items-center">
-                                                <NavLink
-                                                    to="/user/appointments"
-                                                    className={({ isActive }) =>
-                                                        isActive
-                                                            ? 'text-blue-500 flex items-center w-full'
-                                                            : 'flex items-center w-full'
-                                                    }
-                                                >
-                                                    <img
-                                                        src="/schedule.png"
-                                                        alt={'schedule'}
-                                                        className="h-5 w-5 mr-2"
-                                                    />
-                                                    Lịch sử đặt khám
-                                                </NavLink>
-                                            </li>
+                                            <ul className="mt-2 border-b">
+                                                <li className="group px-4 py-3 text-left text-base font-medium hover:bg-slate-100 cursor-pointer flex items-center">
+                                                    <NavLink
+                                                        to="/user/statistical"
+                                                        className={({ isActive }) =>
+                                                            isActive
+                                                                ? 'text-blue-500 flex items-center w-full'
+                                                                : 'flex items-center w-full'
+                                                        }
+                                                    >
+                                                        <img
+                                                            src="/statistical.png"
+                                                            alt={'statistical'}
+                                                            className="h-5 w-5 mr-2"
+                                                        />
+                                                        Thống kê
+                                                    </NavLink>
+                                                </li>
+                                                <li className="group px-4 py-3 text-left text-base font-medium hover:bg-slate-100 cursor-pointer flex items-center">
+                                                    <NavLink
+                                                        to="/user/profile"
+                                                        className={({ isActive }) =>
+                                                            isActive
+                                                                ? 'text-blue-500 flex items-center w-full'
+                                                                : 'flex items-center w-full'
+                                                        }
+                                                    >
+                                                        <img src="/user.png" alt={'profile'} className="h-5 w-5 mr-2" />
+                                                        Hồ sơ cá nhân
+                                                    </NavLink>
+                                                </li>
+                                                <li className="group px-4 py-3 text-left text-base font-medium hover:bg-slate-100 cursor-pointer flex items-center">
+                                                    <NavLink
+                                                        to="/user/appointments"
+                                                        className={({ isActive }) =>
+                                                            isActive
+                                                                ? 'text-blue-500 flex items-center w-full'
+                                                                : 'flex items-center w-full'
+                                                        }
+                                                    >
+                                                        <img
+                                                            src="/schedule.png"
+                                                            alt={'schedule'}
+                                                            className="h-5 w-5 mr-2"
+                                                        />
+                                                        Lịch sử đặt khám
+                                                    </NavLink>
+                                                </li>
 
-                                            <li className="group px-4 py-3 text-left text-base font-medium hover:bg-slate-100 cursor-pointer flex items-center">
-                                                <NavLink
-                                                    to="/user/records"
-                                                    className={({ isActive }) =>
-                                                        isActive
-                                                            ? 'text-blue-500 flex items-center w-full'
-                                                            : 'flex items-center w-full'
-                                                    }
-                                                >
-                                                    <img
-                                                        src="/health-report.png"
-                                                        alt={'health-report'}
-                                                        className="h-5 w-5 mr-2"
-                                                    />
-                                                    Hồ sơ bệnh nhân
-                                                </NavLink>
-                                            </li>
-                                            <li className="group px-4 py-3 text-left text-base font-medium hover:bg-slate-100 cursor-pointer flex items-center">
-                                                <NavLink
-                                                    to="/user/change-password"
-                                                    className={({ isActive }) =>
-                                                        isActive
-                                                            ? 'text-blue-500 flex items-center w-full'
-                                                            : 'flex items-center w-full'
-                                                    }
-                                                >
-                                                    <img
-                                                        src="/reset-password.png"
-                                                        alt={'change-password'}
-                                                        className="h-5 w-5 mr-2"
-                                                    />
-                                                    Đổi mật khẩu
-                                                </NavLink>
-                                            </li>
-                                            <li className="group px-4 py-3 text-left text-base font-medium hover:bg-slate-100 cursor-pointer flex items-center">
-                                                <NavLink
-                                                    to="/user/help"
-                                                    className={({ isActive }) =>
-                                                        isActive
-                                                            ? 'text-blue-500 flex items-center w-full'
-                                                            : 'flex items-center w-full'
-                                                    }
-                                                >
-                                                    <img
-                                                        src="/question.png"
-                                                        alt={'question'}
-                                                        className="h-5 w-5 mr-2"
-                                                    />
-                                                    Trợ giúp
-                                                </NavLink>
-                                            </li>
+                                                <li className="group px-4 py-3 text-left text-base font-medium hover:bg-slate-100 cursor-pointer flex items-center">
+                                                    <NavLink
+                                                        to="/user/records"
+                                                        className={({ isActive }) =>
+                                                            isActive
+                                                                ? 'text-blue-500 flex items-center w-full'
+                                                                : 'flex items-center w-full'
+                                                        }
+                                                    >
+                                                        <img
+                                                            src="/health-report.png"
+                                                            alt={'health-report'}
+                                                            className="h-5 w-5 mr-2"
+                                                        />
+                                                        Hồ sơ bệnh nhân
+                                                    </NavLink>
+                                                </li>
+                                                <li className="group px-4 py-3 text-left text-base font-medium hover:bg-slate-100 cursor-pointer flex items-center">
+                                                    <NavLink
+                                                        to="/user/change-password"
+                                                        className={({ isActive }) =>
+                                                            isActive
+                                                                ? 'text-blue-500 flex items-center w-full'
+                                                                : 'flex items-center w-full'
+                                                        }
+                                                    >
+                                                        <img
+                                                            src="/reset-password.png"
+                                                            alt={'change-password'}
+                                                            className="h-5 w-5 mr-2"
+                                                        />
+                                                        Đổi mật khẩu
+                                                    </NavLink>
+                                                </li>
+                                                <li className="group px-4 py-3 text-left text-base font-medium hover:bg-slate-100 cursor-pointer flex items-center">
+                                                    <NavLink
+                                                        to="/user/help"
+                                                        className={({ isActive }) =>
+                                                            isActive
+                                                                ? 'text-blue-500 flex items-center w-full'
+                                                                : 'flex items-center w-full'
+                                                        }
+                                                    >
+                                                        <img
+                                                            src="/question.png"
+                                                            alt={'question'}
+                                                            className="h-5 w-5 mr-2"
+                                                        />
+                                                        Trợ giúp
+                                                    </NavLink>
+                                                </li>
 
-                                            <li
-                                                className="group px-4 py-3 text-left text-base text-[#e74c3c] font-medium hover:bg-slate-100 cursor-pointer flex items-center"
-                                                onClick={handleLogout}
-                                            >
-                                                <img src="/logout.png" alt={'logout'} className="h-5 w-5 mr-2" />
-                                                Đăng xuất
-                                            </li>
-                                        </ul>
-                                        <div className="px-4 py-2 text-sm text-gray-500">
-                                            Cập nhật mới nhất: {today}
+                                                <li
+                                                    className="group px-4 py-3 text-left text-base text-[#e74c3c] font-medium hover:bg-slate-100 cursor-pointer flex items-center"
+                                                    onClick={handleLogout}
+                                                >
+                                                    <img src="/logout.png" alt={'logout'} className="h-5 w-5 mr-2" />
+                                                    Đăng xuất
+                                                </li>
+                                            </ul>
+                                            <div className="px-4 py-2 text-sm text-gray-500">
+                                                Cập nhật mới nhất: {today}
+                                            </div>
                                         </div>
-                                    </div>
-                                )}
-                            </div>
-                            // <NavLink
-                            //     className="ml-4 inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700"
-                            //     onClick={handleLogout}
-                            // >
-                            //     Logout
-                            // </NavLink>
+                                    )}
+                                </div>
+                            </>
                         )}
                     </div>
                     <div className="p-5 flex items-center sm:hidden" onClick={() => setIsOpen(!isOpen)}>

@@ -1,6 +1,6 @@
 import { MdOutlineDateRange } from 'react-icons/md';
 import { NavLink } from 'react-router-dom';
-import formatDate from '~/utils/formatDate';
+import {formatDate} from '~/utils/formatDate';
 import { formatTitleForUrl } from '~/utils/formatTitleForUrl';
 
 function NewsItem(data) {
