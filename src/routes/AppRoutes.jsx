@@ -26,7 +26,7 @@ import DetailVideo from '~/components/Video/DetailVideo';
 import Filter from '~/pages/User/Filter/Filter';
 import ServiceDetail from '~/pages/User/ServiceDetail';
 import ChatBot from '~/pages/User/ChatBot';
-import ChatApp from '~/pages/Chat/ChatApp';
+import ChatAppUser from '~/pages/Chat/ChatAppUser';
 
 function AppRoutes() {
     return (
@@ -57,7 +57,7 @@ function AppRoutes() {
                     <Route path="/video" element={<DetailVideo />} />
                     <Route path="/dich-vu/:title" element={<ServiceDetail />} />
                     <Route path="/chatbot" element={<ChatBot />} />
-                    <Route path="/chat" element={<ChatApp />} />
+                    <Route path="/chat" element={<ChatAppUser />} />
                 </Route>
                 {AdminRoutes()}
                 {DoctorRoutes()}

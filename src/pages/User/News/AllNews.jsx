@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FaArrowRightLong } from 'react-icons/fa6';
 import { MdOutlineDateRange } from 'react-icons/md';
 import { NavLink } from 'react-router-dom';
 import { axiosClient } from '~/api/apiRequest';
-import formatDate from '~/utils/formatDate.jsx';
+import {formatDate} from '~/utils/formatDate.jsx';
 import Pagination from '~/components/Pagination';
 import { formatTitleForUrl } from '~/utils/formatTitleForUrl';
 
@@ -52,18 +52,14 @@ function AllNews() {
 
     return (
         <div className="max-w-6xl mx-auto min-h-screen bg-white">
-            {/* Header Navigation */}
             <div className="container mx-auto">
                 <div className="flex items-center h-16 space-x-8">
                     <h1 className="text-[#003553] font-bold text-3xl px-4 pt-6 pb-4">TIN TỨC Y KHOA</h1>
                 </div>
             </div>
 
-            {/* Main Content */}
             <main className="container">
-                {/* hàng 1 */}
                 <div className="flex justify-center">
-                    {/* khung lớn */}
                     <div className="w-[62.5%]">
                         {posts[0] && (
                             <div className="px-1 group">
@@ -103,8 +99,6 @@ function AllNews() {
                             </div>
                         )}
                     </div>
-
-                    {/* 5 khung nhỏ */}
                     <div className="w-[37.5%]">
                         <div className="px-1 flex flex-col gap-3">
                             {posts.slice(1, 6).map((post) => (
@@ -138,8 +132,6 @@ function AllNews() {
                         </div>
                     </div>
                 </div>
-
-                {/* hàng 2 */}
                 <div className="flex flex-wrap mt-7">
                     {posts.slice(6).map((post) => (
                         <div key={post.postId} className=" p-1 w-1/3 group">

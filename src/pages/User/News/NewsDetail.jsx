@@ -3,10 +3,10 @@ import { useEffect, useState } from 'react';
 import { MdKeyboardArrowRight, MdOutlineDateRange } from 'react-icons/md';
 import { NavLink, useNavigate, useParams } from 'react-router-dom';
 import { axiosClient } from '~/api/apiRequest';
-import formatDate from '~/utils/formatDate';
+import {formatDate} from '~/utils/formatDate';
 import './NewsDetail.css';
 import { FaAngleRight } from 'react-icons/fa';
-import { FaArrowRightLong, FaUserDoctor } from 'react-icons/fa6';
+import { FaArrowRightLong } from 'react-icons/fa6';
 import { formatTitleForUrl } from '~/utils/formatTitleForUrl';
 
 function NewsDetail() {
@@ -76,7 +76,6 @@ function NewsDetail() {
                     </li>
                 </ul>
             </div>
-            {/* title */}
             <div className="max-w-6xl mx-auto ">
                 <div className="mt-2 px-4 w-9/12">
                     <div className="text-4xl font-medium">{post.title}</div>
@@ -116,8 +115,8 @@ function NewsDetail() {
                     </div>
                     <div className="mt-7 mb-11">
                         <div className="flex flex-wrap">
-                            {posts.slice(0, 4).map((post) => (
-                                <div className=" px-1 w-1/4 group">
+                            {posts.slice(0, 4).map((post, index) => (
+                                <div key={index} className=" px-1 w-1/4 group">
                                     <NavLink
                                         to={`/tin-tuc/${formatTitleForUrl(post.title)}-${post.postId}`}
                                         className="cursor-pointer p-3 border border-transparent group-hover:boder group-hover:border-[#00B5F1] rounded-2xl group-hover:shadow-lg block"

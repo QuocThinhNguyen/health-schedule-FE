@@ -1,4 +1,4 @@
-import formatDate from '~/utils/formatDate.jsx';
+import {formatDate} from '~/utils/formatDate.jsx';
 import { MdOutlineDateRange } from 'react-icons/md';
 import { NavLink } from 'react-router-dom';
 import { formatTitleForUrl } from '~/utils/formatTitleForUrl';

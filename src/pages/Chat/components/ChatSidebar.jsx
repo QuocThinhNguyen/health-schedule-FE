@@ -9,36 +9,15 @@ import { formatTimeAgo } from '~/utils/formatTimeAgo';
 export default function ChatSidebar({ activeChat, setActiveChat }) {
     const [searchTerm, setSearchTerm] = useState('');
     const { user } = useContext(UserContext);
-
+    const socket = useSocket(user?.userId);
     const IMAGE_URL = `http://localhost:${import.meta.env.VITE_BE_PORT}/uploads/`;
-    const [friendList, setFriendList] = useState([]);
     const [recentChatList, setRecentChatList] = useState([]);
 
-    useEffect(() => {
-        const filterUserAPI = async () => {
-            try {
-                const response = await axiosInstance.get(`/user/?query=${searchTerm}&page=1&limit=10`);
-                if (response.status === 200) {
-                    console.log('Fetched response:', response);
-                    console.log('Fetched users:', response.data);
-                    setFriendList(response.data);
-                } else {
-                    console.error('No users are found:', response.message);
-                    setFriendList([]);
-                }
-            } catch (error) {
-                console.error('Error fetching users:', error);
-                setFriendList([]);
-            }
-        };
-        filterUserAPI();
-    }, [searchTerm]);
     useEffect(() => {
         const fetchRecentChats = async () => {
             try {
                 const response = await axiosInstance.get(`/chat-room`);
                 if (response.status === 200) {
-                    console.log('Fetched recent chats:', response.data);
                     setRecentChatList(response.data);
                 } else {
                     console.error('No recent chats found:', response.message);
@@ -52,25 +31,49 @@ export default function ChatSidebar({ activeChat, setActiveChat }) {
         fetchRecentChats();
     }, []);
 
+    useEffect(() => {
+        socket.on('server_sidebar_update', ({ chatRoomId, lastMessage }) => {
+            setRecentChatList((prev) => {
+                const updatedList = prev.map((chat) =>
+                    chat.chatRoomId === chatRoomId
+                        ? {
+                              ...chat,
+                              latestMessage: lastMessage,
+                          }
+                        : chat,
+                );
+
+                const chatToMove = updatedList.find((chat) => chat.chatRoomId === chatRoomId);
+
+                if (chatToMove) {
+                    const filteredList = updatedList.filter((chat) => chat.chatRoomId !== chatRoomId);
+                    return [chatToMove, ...filteredList];
+                }
+
+                return updatedList;
+            });
+        });
+
+        return () => socket.off('server_sidebar_update');
+    }, [socket]);
+
     const handleClickFriend = async (chat) => {
         try {
             const formData = new FormData();
             formData.append('userId', user?.userId);
             formData.append('partnerId', chat?.partner?.userId);
             const response = await axiosInstance.post('/chat-room', formData);
-            console.log('Response from getOrCreateRoom:', response);
             if (response.status === 200) {
                 setActiveChat({
                     chatRoomId: response.data.chatRoomId,
                     partner: chat,
                 });
-                const socket = useSocket(user?.userId);
                 socket.emit('join_room', response.data.chatRoomId);
             } else {
-                console.error('Failed to create clinic:', response.message);
+                console.error('Failed to create room:', response.message);
             }
         } catch (error) {
-            console.error('Error creating clinic:', error);
+            console.error('Error creating room:', error);
         }
     };
 
@@ -97,7 +100,7 @@ export default function ChatSidebar({ activeChat, setActiveChat }) {
                         <div key={index} className="mx-[6px]">
                             <div
                                 className={`flex items-center rounded p-[10px] cursor-pointer hover:bg-gray-100 ${
-                                    activeChat?.partner?.userId === chat?.partner?.userId ? 'bg-[#dbebff]' : ''
+                                    activeChat?.partner?.partner?.userId === chat?.partner?.userId ? 'bg-[#dbebff]' : ''
                                 }`}
                                 onClick={() => handleClickFriend(chat)}
                             >
@@ -112,21 +115,41 @@ export default function ChatSidebar({ activeChat, setActiveChat }) {
                                         className="w-12 h-12 rounded-full object-cover"
                                     />
                                 </div>
-                                <div className="ml-[10px]  flex-1 flex flex-col justify-between h-full">
-                                    <div className="flex justify-between items-center mb-1">
-                                        <h3 className="text-black font-medium">{chat?.partner?.fullname}</h3>
-                                        <p className="text-xs text-[var(--text-secondary)]">
-                                            {formatTimeAgo(chat?.latestMessage?.createdAt)}
-                                        </p>
+                                {chat?.latestMessage?.status === 'sent' ? (
+                                    <div className="ml-[10px] flex-1 flex flex-col justify-between h-full">
+                                        <div className="flex justify-between items-center mb-1">
+                                            <h3 className="text-black font-medium">{chat?.partner?.fullname}</h3>
+                                            <p className="text-xs text-[var(--text-secondary)]">
+                                                {formatTimeAgo(chat?.latestMessage?.createdAt)}
+                                            </p>
+                                        </div>
+                                        {chat?.latestMessage && (
+                                            <p className="line-clamp-1 text-sm text-[var(--text-secondary)]">
+                                                {chat?.latestMessage?.senderId === user?.userId
+                                                    ? 'Bạn: ' + chat?.latestMessage?.content
+                                                    : chat?.partner?.fullname + ': ' + chat?.latestMessage?.content}
+                                            </p>
+                                        )}
                                     </div>
-                                    {chat?.latestMessage && (
-                                        <p className="line-clamp-1 text-sm text-[var(--text-secondary)]">
-                                            {chat?.latestMessage?.senderId === user?.userId
-                                                ? chat?.partner?.fullname + ': ' + chat?.latestMessage?.content
-                                                : 'Bạn: ' + chat?.latestMessage?.content}
-                                        </p>
-                                    )}
-                                </div>
+                                ) : (
+                                    <div className="ml-[10px] flex-1 flex flex-col justify-between h-full">
+                                        <div className="flex justify-between items-center mb-1">
+                                            <h3 className="text-black font-bold">{chat?.partner?.fullname}</h3>
+                                            <p className="text-xs text-[var(--text-secondary)] font-medium">
+                                                {formatTimeAgo(chat?.latestMessage?.createdAt)}
+                                            </p>
+                                        </div>
+                                        {chat?.latestMessage && (
+                                            <>
+                                                <p className="line-clamp-1 text-sm text-[var(--text-secondary)] font-medium">
+                                                    {chat?.latestMessage?.senderId === user?.userId
+                                                        ? 'Bạn: ' + chat?.latestMessage?.content
+                                                        : chat?.partner?.fullname + ': ' + chat?.latestMessage?.content}
+                                                </p>
+                                            </>
+                                        )}
+                                    </div>
+                                )}
                             </div>
                         </div>
                     ))}

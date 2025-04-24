@@ -1,20 +1,15 @@
-import { NavLink } from 'react-router-dom';
 import { useContext, useEffect, useState } from 'react';
 import { UserContext } from '~/context/UserContext';
 import { FiMenu } from 'react-icons/fi';
-import { FaRegAddressBook } from 'react-icons/fa';
 import { IoLogOutOutline, IoMoonOutline, IoSunnyOutline } from 'react-icons/io5';
-import { IoMdKey } from 'react-icons/io';
 import { axiosInstance } from '~/api/apiRequest';
 import avatar from '../../assets/img/avatar.png';
-import Logo from '~/components/Logo';
 import { ThemeContext } from '~/context/ThemeProvider';
 function Header() {
     const IMAGE_URL = `${import.meta.env.VITE_REACT_APP_BACKEND_URL}/uploads`;
 
     const { user, logout } = useContext(UserContext);
     const { isDark, toggleTheme } = useContext(ThemeContext);
-    // const [isDark, setIsDark] = useState(false);
 
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [userInfo, setUserInfo] = useState({});
