@@ -17,7 +17,7 @@ function HealthReport() {
     const [selectedImages, setSelectedImages] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage] = useState(10); // Số lượng mục trên mỗi trang
-    const IMAGE_URL = 'http://localhost:9000/uploads/';
+    const IMAGE_URL = `${import.meta.env.VITE_REACT_APP_BACKEND_URL}/uploads/`;
 
     useEffect(() => {
         // Đặt ngày mặc định là ngày hiện tại khi component được tải

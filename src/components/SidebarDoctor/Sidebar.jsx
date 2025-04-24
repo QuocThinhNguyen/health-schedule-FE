@@ -83,7 +83,7 @@ const Sidebar = ({ onSelectTab, selectedTab, setCurrentFunction }) => {
         }
     };
 
-    const IMAGE_URL = 'http://localhost:9000/uploads/';
+    const IMAGE_URL = `${import.meta.env.VITE_REACT_APP_BACKEND_URL}/uploads/`;
 
     useEffect(() => {
         onSelectTab('overview');

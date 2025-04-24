@@ -17,7 +17,7 @@ function TextChat() {
     // });
 
     useEffect(() => {
-        socketRef.current = io('http://localhost:9000', {
+        socketRef.current = io(import.meta.env.VITE_REACT_APP_BACKEND_URL, {
             auth: { userId: user.userId },
         });
 

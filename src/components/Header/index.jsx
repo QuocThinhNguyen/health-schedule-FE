@@ -11,7 +11,7 @@ import Logo from '~/components/Logo';
 import { X } from 'lucide-react';
 
 function Header() {
-    const IMAGE_URL = 'http://localhost:9000/uploads';
+    const IMAGE_URL = `${import.meta.env.VITE_REACT_APP_BACKEND_URL}/uploads`;
 
     const { user, logout } = useContext(UserContext);
     const [isOpen, setIsOpen] = useState(false);

@@ -12,7 +12,7 @@ const DoctorDashboard = () => {
     const [selectedTab, setSelectedTab] = useState('overview'); // Mặc định là "patients"
     const [currentFunction, setCurrentFunction] = useState('Xin chào bác sĩ');
     const { user, logout } = useContext(UserContext);
-    const IMAGE_URL = 'http://localhost:9000/uploads/';
+    const IMAGE_URL = `${import.meta.env.VITE_REACT_APP_BACKEND_URL}/uploads/`;
     const profileMenuRef = useRef(null);
     const [showProfileMenu, setShowProfileMenu] = useState(false);
     const [isLogout, setIsLogout] = useState(false);

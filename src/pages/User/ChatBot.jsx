@@ -129,7 +129,7 @@ const ChatBot = () => {
             .replace(/\*(.*?)\*/g, '<em>$1</em>') // Chữ nghiêng
             .replace(/\n/g, '<br />'); // Xuống dòng
     };
-    const IMAGE_URL = 'http://localhost:9000/uploads/';
+    const IMAGE_URL = `${import.meta.env.VITE_REACT_APP_BACKEND_URL}/uploads/`;
 
     const handleKeyDown = (e) => {
         if (e.key === 'Enter' && !e.shiftKey) {
