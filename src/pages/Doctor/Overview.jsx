@@ -19,7 +19,7 @@ function Overview() {
     const [feedbacks, setFeedbacks] = useState([]);
     const [statistical, setStatistical] = useState([]);
     const [bookings, setBookings] = useState([]);
-    const IMAGE_URL = 'http://localhost:9000/uploads/';
+    const IMAGE_URL = `${import.meta.env.VITE_REACT_APP_BACKEND_URL}/uploads/`;
     const handlePageChange = (page) => {
         setPagination((prev) => ({
             ...prev,

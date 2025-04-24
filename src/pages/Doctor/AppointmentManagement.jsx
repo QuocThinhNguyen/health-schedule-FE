@@ -82,7 +82,7 @@ function PatientManagement() {
             toast.error('Có lỗi xảy ra khi tải ảnh.');
         }
     };
-    const IMAGE_URL = 'http://localhost:9000/uploads/';
+    const IMAGE_URL = `${import.meta.env.VITE_REACT_APP_BACKEND_URL}/uploads/`;
     const updateStatus = async (appointmentId, statusKey) => {
         try {
             const response = await axiosInstance.put(`/booking/${appointmentId}`, { status: statusKey });

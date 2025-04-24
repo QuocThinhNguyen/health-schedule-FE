@@ -113,7 +113,7 @@ function DoctorProfile() {
     };
 
     const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
-    const IMAGE_URL = 'http://localhost:9000/uploads/';
+    const IMAGE_URL = `${import.meta.env.VITE_REACT_APP_BACKEND_URL}/uploads/`;
     const handleChange = (e) => {
         const { name, value, files } = e.target;
         if (files) {

@@ -6,7 +6,7 @@ import { axiosInstance } from '~/api/apiRequest';
 import avatar from '../../assets/img/avatar.png';
 import { ThemeContext } from '~/context/ThemeProvider';
 function Header() {
-    const IMAGE_URL = 'http://localhost:9000/uploads';
+    const IMAGE_URL = `${import.meta.env.VITE_REACT_APP_BACKEND_URL}/uploads`;
 
     const { user, logout } = useContext(UserContext);
     const { isDark, toggleTheme } = useContext(ThemeContext);

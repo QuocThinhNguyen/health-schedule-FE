@@ -29,7 +29,10 @@ axiosClientPython.interceptors.response.use(
     },
 );
 
-const baseURL = 'http://localhost:9000';
+// const baseURL = 'http://localhost:9000';
+
+const baseURL = import.meta.env.VITE_REACT_APP_BACKEND_URL;
+console.log('Base URL: ', baseURL);
 
 const axiosClient = axios.create({
     baseURL: baseURL,

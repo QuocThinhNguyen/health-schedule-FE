@@ -82,7 +82,7 @@ function AllSpecialty() {
 
     // const filteredDoctors = specialties.filter((doctor) => doctor.name.toLowerCase().includes(searchQuery.toLowerCase()));
 
-    const IMAGE_URL = 'http://localhost:9000/uploads/';
+    const IMAGE_URL = `${import.meta.env.VITE_REACT_APP_BACKEND_URL}/uploads/`;
     const formatCurrency = (value) =>
         new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(value);
 

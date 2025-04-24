@@ -98,7 +98,7 @@ function DoctorProfile() {
         }
     };
 
-    const IMAGE_URL = 'http://localhost:9000/uploads/';
+    const IMAGE_URL = `${import.meta.env.VITE_REACT_APP_BACKEND_URL}/uploads/`;
     return (
         <div className=" w-full h-full border rounded-lg shadow-lg bg-white overflow-y-auto px-10">
             {/* <h2 className="text-5xl font-bold text-center mb-6">Thông Tin Cá Nhân Bác Sĩ</h2> */}
