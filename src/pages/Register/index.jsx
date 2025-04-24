@@ -5,7 +5,7 @@ import { IoEye, IoEyeOff } from 'react-icons/io5';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { axiosClient } from '~/api/apiRequest';
-import { useOtpToken } from '~/context/OTPContext';
+import { useOtpToken } from '~/context/OtpContext';
 function Register() {
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);

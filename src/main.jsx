@@ -7,7 +7,7 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { BrowserRouter } from 'react-router-dom';
 import ScrollToTop from './utils/ScrollToTop';
-import { OtpProvider } from './context/OTPContext';
+import { OtpProvider } from './context/OtpContext';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import { ThemeProvider } from './context/ThemeProvider';
 
