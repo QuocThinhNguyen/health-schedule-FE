@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { axiosClient } from '~/api/apiRequest';
-import { useOtpToken } from '~/context/OTPContext';
+import { useOtpToken } from '~/context/OtpContext';
 
 function ConfirmOTP() {
     const [otp, setOtp] = useState(Array(6).fill(''));
@@ -75,7 +75,7 @@ function ConfirmOTP() {
                     <h1 className="text-3xl text-black font-bold px-7 py-5">Nhập mã OTP</h1>
                 </div>
                 <p className="mb-6 text-center">
-                    Mã OTP đã được gửi đến email: <span className='font-semibold text-black'>{emailRegister}</span>
+                    Mã OTP đã được gửi đến email: <span className="font-semibold text-black">{emailRegister}</span>
                 </p>
                 <form onSubmit={handleSubmit} className="pb-6 px-10">
                     <div className="flex justify-center gap-6 mb-6">
