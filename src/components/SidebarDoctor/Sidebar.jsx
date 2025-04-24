@@ -1,21 +1,14 @@
-import React, { useState, useEffect, useContext } from 'react';
-import axios from 'axios';
-import { FaUser, FaCalendarAlt, FaClipboardList, FaSignOutAlt } from 'react-icons/fa';
-import pngegg from '../../assets/img/avatar.png';
+import { useState, useEffect, useContext } from 'react';
 import { UserContext } from '~/context/UserContext';
-import { axiosClient, axiosInstance } from '~/api/apiRequest';
+import { axiosInstance } from '~/api/apiRequest';
 import { toast } from 'react-toastify';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash } from '@fortawesome/free-regular-svg-icons';
 import { useNavigate, useLocation } from 'react-router-dom';
-import Logo from '../Logo';
 
-const Sidebar = ({ onSelectTab, selectedTab, setCurrentFunction }) => {
-    const [showMenu, setShowMenu] = useState(false);
+const Sidebar = ({ onSelectTab, setCurrentFunction }) => {
     const [doctorInfo, setDoctorInfo] = useState({ name: '', image: '', userId: '' });
     const [showChangePasswordModal, setShowChangePasswordModal] = useState(false);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState('');
     const [newPassword, setNewPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [oldPassword, setOldPassword] = useState('');
@@ -34,7 +27,6 @@ const Sidebar = ({ onSelectTab, selectedTab, setCurrentFunction }) => {
         setShowPassword_2(!showPassword_2);
     };
 
-    const { logout } = useContext(UserContext);
     const { user } = useContext(UserContext);
 
     useEffect(() => {
@@ -54,14 +46,6 @@ const Sidebar = ({ onSelectTab, selectedTab, setCurrentFunction }) => {
         };
         fetchData();
     }, []);
-
-    const handleProfileClick = () => {
-        setShowMenu(!showMenu);
-    };
-
-    const handleLogout = () => {
-        logout();
-    };
 
     const handleChangePassword = async () => {
         if (newPassword === confirmPassword) {
@@ -101,6 +85,7 @@ const Sidebar = ({ onSelectTab, selectedTab, setCurrentFunction }) => {
         { label: 'Quản lý video', image: 'creative.png', path: '/doctor/videos' },
         { label: 'Đổi mật khẩu', image: 'reset-password.png', path: '/doctor/reset-password' },
         { label: 'Hồ sơ cá nhân', image: 'user.png', path: '/doctor/profile' },
+        { label: 'Trò chuyện', image: 'messenger.png', path: '/doctor/chat' },
     ];
 
     return (

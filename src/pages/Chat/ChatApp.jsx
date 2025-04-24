@@ -30,7 +30,7 @@ export default function ChatApp() {
             <div
                 className={`${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} 
                 md:translate-x-0 transition-transform duration-300 ease-in-out 
-                w-[344px] h-full shadow-md z-40 fixed md:relative`}
+                w-[344px] h-full z-40 fixed md:relative`}
             >
                 <ChatSidebar activeChat={activeChat} setActiveChat={setActiveChat} />
             </div>
