@@ -2,7 +2,7 @@ import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
 
 const axiosClientPython = axios.create({
-    baseURL: 'http://localhost:5000',
+    baseURL: import.meta.env.VITE_PYTHON_APP_BACKEND_URL,
     headers: {
         'Content-Type': 'application/json',
     },
