@@ -16,12 +16,12 @@ function ListDoctor() {
                     const formattedData = response.data.map((item) => ({
                         doctorInforId: item.doctorInforId,
                         position: item.position,
-                        fullname: item.doctorId.fullname,
-                        specialtyName: item.specialtyId.name,
-                        clinicName: item.clinicId.name,
+                        fullname: item.doctorId?.fullname,
+                        specialtyName: item.specialtyId?.name,
+                        clinicName: item.clinicId?.name,
                         price: item.price,
-                        image: item.doctorId.image,
-                        userId: item.doctorId.userId,
+                        image: item.doctorId?.image,
+                        userId: item.doctorId?.userId,
                         rating: item.avgRating,
                         bookingCount: item.bookingCount,
                     }));

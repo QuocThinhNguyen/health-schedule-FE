@@ -1,18 +1,15 @@
-import React, { useState, useEffect, useContext } from 'react';
-import { FaCamera } from 'react-icons/fa';
-import { axiosClient, axiosInstance } from '~/api/apiRequest';
+import { useState, useEffect, useContext } from 'react';
+
+import { axiosInstance } from '~/api/apiRequest';
 import { UserContext } from '~/context/UserContext';
-import { toast } from 'react-toastify';
 import { Star } from 'lucide-react';
 import Pagination from '~/components/Pagination';
 import Modal from 'react-modal';
 
 function Review() {
-    const [selectedReview, setSelectedReview] = useState(null);
     const [pagination, setPagination] = useState({ page: 1, limit: 12, totalPages: 1 });
     const [feedbacks, setFeedbacks] = useState([]);
     const { user } = useContext(UserContext);
-    const IMAGE_URL = `http://localhost:${import.meta.env.VITE_BE_PORT}/uploads/`;
     const [isOpen, setIsOpen] = useState(false);
     const [selectedMedia, setSelectedMedia] = useState(null);
 
@@ -118,15 +115,12 @@ function Review() {
                                                     mediaName.endsWith('.jpg') ||
                                                     mediaName.endsWith('.jpeg') ? (
                                                         <img
-                                                            src={`${IMAGE_URL}${mediaName}`}
+                                                            src={mediaName}
                                                             alt="Preview"
                                                             className="w-full h-full object-cover"
                                                         />
                                                     ) : (
-                                                        <video
-                                                            src={`${IMAGE_URL}${mediaName}`}
-                                                            className="w-full h-full object-cover"
-                                                        />
+                                                        <video src={mediaName} className="w-full h-full object-cover" />
                                                     )}
                                                 </div>
                                             ))}
@@ -152,13 +146,13 @@ function Review() {
                                                     selectedMedia.endsWith('.jpg') ||
                                                     selectedMedia.endsWith('.jpeg')) ? (
                                                     <img
-                                                        src={`${IMAGE_URL}${selectedMedia}`}
+                                                        src={selectedMedia}
                                                         alt="Full View"
                                                         className="w-full h-auto max-h-[80vh] object-contain"
                                                     />
                                                 ) : (
                                                     <video
-                                                        src={`${IMAGE_URL}${selectedMedia}`}
+                                                        src={selectedMedia}
                                                         controls
                                                         className="w-full max-h-[80vh] object-contain"
                                                     />

@@ -1,28 +1,9 @@
-import React, { useState, useEffect, useContext } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { FaCamera } from 'react-icons/fa';
-import { axiosClient, axiosInstance } from '~/api/apiRequest';
+import { axiosInstance } from '~/api/apiRequest';
 import { UserContext } from '~/context/UserContext';
 import { toast } from 'react-toastify';
-import {
-    User,
-    Mail,
-    Phone,
-    MapPin,
-    GraduationCap,
-    Stethoscope,
-    Calendar,
-    Edit2,
-    Save,
-    Briefcase,
-    DollarSign,
-    FileText,
-    Menu,
-    X,
-    ChevronRight,
-    Star,
-    Clock,
-} from 'lucide-react';
-import { set } from 'date-fns';
+import { X, Star } from 'lucide-react';
 
 function DoctorProfile() {
     const [activeSection, setActiveSection] = useState('personal');
@@ -113,7 +94,6 @@ function DoctorProfile() {
     };
 
     const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
-    const IMAGE_URL = `${import.meta.env.VITE_REACT_APP_BACKEND_URL}/uploads/`;
     const handleChange = (e) => {
         const { name, value, files } = e.target;
         if (files) {
@@ -182,7 +162,7 @@ function DoctorProfile() {
                 </button>
                 <div className="flex flex-col items-center mb-8 relative">
                     <img
-                        src={previewImage || `${IMAGE_URL}${doctorInfo.image}`} // Thay thế URL này bằng link ảnh thực tế của bác sĩ
+                        src={previewImage || doctorInfo.image} // Thay thế URL này bằng link ảnh thực tế của bác sĩ
                         alt="Doctor Avatar"
                         className="w-24 h-24 rounded-full border-2 border-gray-300"
                     />

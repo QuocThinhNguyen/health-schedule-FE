@@ -1,6 +1,5 @@
-import React, { useState, useEffect, useContext } from 'react';
-import { FaCamera } from 'react-icons/fa';
-import { axiosClient, axiosInstance } from '~/api/apiRequest';
+import  { useState, useEffect, useContext } from 'react';
+import {  axiosInstance } from '~/api/apiRequest';
 import { UserContext } from '~/context/UserContext';
 import { toast } from 'react-toastify';
 import { Eye, Phone, Mail, MapPin } from 'lucide-react';
@@ -19,7 +18,7 @@ function Overview() {
     const [feedbacks, setFeedbacks] = useState([]);
     const [statistical, setStatistical] = useState([]);
     const [bookings, setBookings] = useState([]);
-    const IMAGE_URL = `${import.meta.env.VITE_REACT_APP_BACKEND_URL}/uploads/`;
+
     const handlePageChange = (page) => {
         setPagination((prev) => ({
             ...prev,
@@ -232,8 +231,7 @@ function Overview() {
     };
 
     const handleViewImage = (image) => {
-        const imageUrl = `${IMAGE_URL}${image}`;
-        window.open(imageUrl, '_blank');
+        window.open(image, '_blank');
     };
 
     const closeModal1 = () => {
@@ -448,7 +446,7 @@ function Overview() {
                                             >
                                                 {/* Hiển thị ảnh */}
                                                 <img
-                                                    src={`${IMAGE_URL}${image}`}
+                                                    src={image}
                                                     alt={`Ảnh ${index + 1}`}
                                                     className="w-full h-full object-cover"
                                                 />
@@ -552,13 +550,13 @@ function Overview() {
                                                 image.endsWith('.jpg') ||
                                                 image.endsWith('.jpeg') ? (
                                                     <img
-                                                        src={`${IMAGE_URL}${image}`}
+                                                        src={image}
                                                         alt={`Ảnh ${index + 1}`}
                                                         className="w-full h-full object-cover"
                                                     />
                                                 ) : (
                                                     <video
-                                                        src={`${IMAGE_URL}${image}`}
+                                                        src={image}
                                                         className="w-full h-full object-cover"
                                                         controls
                                                     />

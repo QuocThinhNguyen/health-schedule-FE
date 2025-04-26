@@ -1,29 +1,9 @@
-import React, { useState, useEffect, useContext, useRef } from 'react';
+import { useState, useEffect, useContext, useRef } from 'react';
 import { axiosInstance } from '~/api/apiRequest';
-import { NavLink, useSearchParams, useNavigate, useLocation, useParams } from 'react-router-dom';
-import {
-    Heart,
-    Share2,
-    Music2,
-    Volume2,
-    VolumeX,
-    Maximize2,
-    X,
-    MoreVertical,
-    Search,
-    ChevronDown,
-    ChevronUp,
-    Play,
-    Pause,
-    Edit,
-    Pen,
-} from 'lucide-react';
-import e from 'cors';
+import { useSearchParams, useNavigate, useParams } from 'react-router-dom';
+import { Heart, X, ChevronDown, ChevronUp, Play, Pause } from 'lucide-react';
 import VideoItem from '~/components/Video/VideoItem';
 import { toast } from 'react-toastify';
-import { IoIosHeart } from 'react-icons/io';
-import { BiSolidMessageRoundedDots } from 'react-icons/bi';
-import { RxBookmarkFilled } from 'react-icons/rx';
 import AnimatedHeartButton from '../Animation/AnimatedHeartButton';
 import AnimatedBookmarkButton from '../Animation/AnimatedBookmarkButton';
 import AnimatedCommentButton from '../Animation/AnimatedCommentButton';
@@ -45,7 +25,6 @@ function DetailVideo() {
     const idDoctor = searchParams.get('idDoctor');
     const idVideo = searchParams.get('idVideo');
     const [currentIndex, setCurrentIndex] = useState();
-    const IMAGE_URL = `http://localhost:${import.meta.env.VITE_BE_PORT}/uploads/`;
     const [detailVideo, setDetailVideo] = useState([]);
     const [doctorInfo, setDoctorInfo] = useState([]);
     const [checkDoctor, setCheckDoctor] = useState([]);
@@ -103,7 +82,6 @@ function DetailVideo() {
         const fetchData = async () => {
             try {
                 const response = await axiosInstance.get(`/video/${idDoctor}`);
-                // console.log('response check', response);
                 if (response.status === 200) {
                     setVideos(response.data);
                 }
@@ -115,12 +93,6 @@ function DetailVideo() {
     }, []);
 
     const videoIds = videos.map((video) => video.videoId);
-    // console.log('data video:', videoIds);
-    // console.log('check id', idVideo);
-    // console.log('type of id', typeof idVideo);
-    // console.log('current index', videoIds.indexOf(Number(idVideo)));
-    // console.log('videoId:', videoIds[0]);
-
     const handleNextVideo = () => {
         const currentIndex = videoIds.indexOf(Number(idVideo));
         const nextIndex = (currentIndex + 1) % videoIds.length; // Lặp lại từ đầu nếu đến cuối
@@ -294,7 +266,6 @@ function DetailVideo() {
         checkUserBookmarkVideo();
     }, [idVideo, userId]);
 
-    // console.log('Check bookmark:', bookMark);
     useEffect(() => {
         const fetchBookmark = async () => {
             try {
@@ -311,7 +282,6 @@ function DetailVideo() {
 
     const [comment, getComment] = useState('');
 
-    // console.log('Check comment:', comment);
     const currentDate = new Date().toISOString().slice(0, 10);
 
     const sendComment = async () => {
@@ -323,7 +293,6 @@ function DetailVideo() {
                 createdAt: currentDate,
             });
             if (response.status === 200) {
-                // console.log('Send comment success:', response);
                 toast.success('Bạn đã bình luận thành công');
                 getComment('');
             }
@@ -333,7 +302,6 @@ function DetailVideo() {
     };
 
     const [comments, setComments] = useState([]);
-    // console.log('Check comments:', comments);
     useEffect(() => {
         const fetchComment = async () => {
             try {
@@ -367,8 +335,6 @@ function DetailVideo() {
         }
         if (!replyText.trim()) return; // Không gửi nếu input rỗng
 
-        // console.log(`Gửi phản hồi cho commentId ${parentId}:`, replyText);
-
         try {
             const response = await axiosInstance.post(`/comment`, {
                 userId: userId,
@@ -378,7 +344,6 @@ function DetailVideo() {
                 parentId: parentId,
             });
             if (response.status === 200) {
-                // console.log('Send comment success:', response);
                 toast.success('Bạn đã bình luận thành công');
                 getComment('');
             }
@@ -502,8 +467,6 @@ function DetailVideo() {
         }
     };
 
-    // console.log('Check liked:', checkLiked);
-
     const [totalComment, setTotalComment] = useState(0);
 
     useEffect(() => {
@@ -608,7 +571,7 @@ function DetailVideo() {
                     <div className="w-full h-full flex items-center justify-center">
                         <video
                             ref={videoRef}
-                            src={`${IMAGE_URL}${detailVideo.videoName}`}
+                            src={detailVideo.videoName}
                             className="w-ful h-full object-contain"
                             loop
                             playsInline
@@ -696,11 +659,7 @@ function DetailVideo() {
                 <div className="flex-grow flex flex-col overflow-y-scroll">
                     <div className="ml-5 mt-6 border border-none bg-[#16182308] rounded-xl p-4 space-y-2">
                         <div className="flex items-center justify-start gap-2">
-                            <img
-                                src={`${IMAGE_URL}${doctorInfo.image}`}
-                                alt="avatar"
-                                className="rounded-full w-10 h-10 object-cover"
-                            />
+                            <img src={doctorInfo.image} alt="avatar" className="rounded-full w-10 h-10 object-cover" />
                             <div className="w-full">
                                 <div className="flex items-center justify-start w-full">
                                     <div className="text-lg font-bold">
@@ -736,7 +695,7 @@ function DetailVideo() {
                                 <div className="flex items-center justify-start gap-2 w-full">
                                     <div className="text-base font-normal">{title}</div>
                                     {checkDoctor.roleId === 'R2' &&
-                                        checkDoctor.userId === detailVideo.doctorId.userId && (
+                                        checkDoctor.userId === detailVideo.doctorId?.userId && (
                                             <button className="ml-auto" onClick={handleEdit}>
                                                 <img src="/edit.png" className="w-5 h-5" />
                                             </button>
@@ -815,7 +774,7 @@ function DetailVideo() {
                                                 <div className="flex items-start justify-start gap-2 mb-2">
                                                     <div className="flex items-start justify-center gap-2">
                                                         <img
-                                                            src={`${IMAGE_URL}${comment.userId.image}`}
+                                                            src={comment.userId.image}
                                                             alt="avatar"
                                                             className="w-10 h-10 rounded-full border-2"
                                                         />
@@ -883,15 +842,15 @@ function DetailVideo() {
 
                                             {comment.replies.length > 0 && (
                                                 <div>
-                                                    {comment.replies.map((reply) => (
-                                                        <div>
+                                                    {comment.replies.map((reply, index) => (
+                                                        <div key={index}>
                                                             <div className="flex items-start justify-start gap-2 w-full pl-10 mb-2">
                                                                 <div
                                                                     key={reply._id}
                                                                     className="flex items-start justify-start gap-2 w-full"
                                                                 >
                                                                     <img
-                                                                        src={`${IMAGE_URL}${reply.userId.image}`}
+                                                                        src={reply.userId.image}
                                                                         alt="avatar"
                                                                         className="w-8 h-8 rounded-full border-2"
                                                                     />

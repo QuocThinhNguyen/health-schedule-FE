@@ -5,8 +5,6 @@ import { formatTitleForUrl } from '~/utils/formatTitleForUrl';
 function NewsItemMax(data) {
     const post = data.data;
 
-    const IMAGE_URL = `http://localhost:${import.meta.env.VITE_BE_PORT}/uploads/`;
-
     return (
         <div className="p-2 h-full group">
             <NavLink
@@ -15,7 +13,7 @@ function NewsItemMax(data) {
             >
                 <div className="w-full h-72 max-h-72">
                     <img
-                        src={`${IMAGE_URL}${post.image}`}
+                        src={post.image}
                         alt={post.title}
                         className="w-0 h-0 min-w-full max-w-full min-h-full max-h-full object-cover rounded-lg"
                         loading="lazy"

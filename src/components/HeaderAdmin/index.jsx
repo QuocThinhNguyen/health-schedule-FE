@@ -6,11 +6,8 @@ import { axiosInstance } from '~/api/apiRequest';
 import avatar from '../../assets/img/avatar.png';
 import { ThemeContext } from '~/context/ThemeProvider';
 function Header() {
-    const IMAGE_URL = `${import.meta.env.VITE_REACT_APP_BACKEND_URL}/uploads`;
-
     const { user, logout } = useContext(UserContext);
     const { isDark, toggleTheme } = useContext(ThemeContext);
-
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [userInfo, setUserInfo] = useState({});
     const handleLogout = () => {
@@ -24,7 +21,7 @@ function Header() {
                 try {
                     const response = await axiosInstance.get(`/user/${user.userId}`);
                     if (response.status === 200) {
-                        const imageUrl = response.data.image ? `${IMAGE_URL}/${response.data.image}` : avatar;
+                        const imageUrl = response.data.image ? response.data.image : avatar;
                         const img = new Image();
                         img.src = imageUrl;
                         img.onload = () => {

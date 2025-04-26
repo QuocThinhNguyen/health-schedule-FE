@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { axiosInstance } from '~/api/apiRequest';
 import { CiEdit } from 'react-icons/ci';
@@ -98,7 +98,7 @@ function ClinicManagement() {
             key: 'image',
             label: 'Hình ảnh',
             type: 'image',
-            getImageUrl: (image) => `${import.meta.env.VITE_REACT_APP_BACKEND_URL}/uploads/${image}`,
+            getImageUrl: (image) => `${image}`,
         },
         { key: 'email', label: 'Email' },
         { key: 'address', label: 'Địa chỉ', wrap: true },

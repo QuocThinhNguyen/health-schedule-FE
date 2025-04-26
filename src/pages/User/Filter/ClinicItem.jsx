@@ -1,6 +1,4 @@
-import { Star } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import { FaMoneyBillWave } from 'react-icons/fa';
 import { FiPhone } from 'react-icons/fi';
 import { GoLocation } from 'react-icons/go';
 import { IoIosStar } from 'react-icons/io';
@@ -9,8 +7,6 @@ import { axiosInstance } from '~/api/apiRequest';
 function ClinicItem(data) {
     const navigate = useNavigate();
     const clinic = data.data;
-
-    const IMAGE_URL = `http://localhost:${import.meta.env.VITE_BE_PORT}/uploads/`;
     const [avgRating, setAvgRating] = useState(0);
     const [totalFeedbacks, setTotalFeedbacks] = useState(0);
 
@@ -40,7 +36,7 @@ function ClinicItem(data) {
             <div className="px-4 pt-4 mb-4 flex items-start gap-4">
                 <div className="w-16 h-16  cursor-pointer">
                     <img
-                        src={`${IMAGE_URL}${clinic.image}` || 'https://via.placeholder.com/150'}
+                        src={clinic.image || 'https://via.placeholder.com/150'}
                         alt={clinic.name}
                         className="w-full h-full rounded-full object-cover border border-[#E4E8EC]"
                     />

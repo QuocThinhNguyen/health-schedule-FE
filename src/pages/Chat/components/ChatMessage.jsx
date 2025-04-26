@@ -5,7 +5,6 @@ import { formatTime } from '~/utils/formatDate';
 import MessageDateSeparator from './MessageDateSeparator';
 
 function ChatMessage({ activeChat, message, previousMessage, nextMessage }) {
-    const IMAGE_URL = `http://localhost:${import.meta.env.VITE_BE_PORT}/uploads/`;
     const { user } = useContext(UserContext);
     const { image, fullname } = activeChat?.partner?.partner || {};
     const { senderId, content, createdAt } = message;
@@ -27,11 +26,7 @@ function ChatMessage({ activeChat, message, previousMessage, nextMessage }) {
             <div className={`flex px-4 ${isSameSender ? 'mb-1' : 'mb-2'} ${isMe ? 'justify-end' : 'justify-start'}`}>
                 {showAvatar ? (
                     <div className="mr-2">
-                        <img
-                            src={image && `${IMAGE_URL}${image}`}
-                            alt={fullname}
-                            className="w-10 h-10 rounded-full object-cover"
-                        />
+                        <img src={image} alt={fullname} className="w-10 h-10 rounded-full object-cover" />
                     </div>
                 ) : (
                     <div className="mr-2 w-10 h-10"></div>

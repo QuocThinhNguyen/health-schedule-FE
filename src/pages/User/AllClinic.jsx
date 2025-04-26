@@ -84,7 +84,6 @@ function AllClinic() {
     //     // doctor.specialtyId.name.toLowerCase().includes(searchQuery.toLowerCase()),
     // );
 
-    const IMAGE_URL = `${import.meta.env.VITE_REACT_APP_BACKEND_URL}/uploads/`;
     const formatCurrency = (value) =>
         new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(value);
 
@@ -143,7 +142,7 @@ function AllClinic() {
                         className="flex justify-center items-center gap-4 p-6 mb-6 border rounded-lg hover:shadow-lg transition-shadow"
                     >
                         <img
-                            src={`${IMAGE_URL}${doctor.image}`}
+                            src={doctor.image}
                             alt={doctor.name}
                             className="w-36 h-36 rounded-full object-cover"
                         />
