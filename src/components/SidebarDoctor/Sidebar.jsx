@@ -66,7 +66,6 @@ const Sidebar = ({ onSelectTab, setCurrentFunction }) => {
             toast.error('Mật khẩu mới và xác nhận mật khẩu không khớp');
         }
     };
-
     useEffect(() => {
         onSelectTab('overview');
     }, []);

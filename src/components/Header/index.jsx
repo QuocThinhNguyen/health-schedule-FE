@@ -8,7 +8,6 @@ import Logo from '~/components/Logo';
 import { X } from 'lucide-react';
 
 function Header() {
-
     const { user, logout } = useContext(UserContext);
     const [isOpen, setIsOpen] = useState(false);
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);

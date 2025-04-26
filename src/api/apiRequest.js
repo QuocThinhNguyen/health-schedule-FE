@@ -2,7 +2,7 @@ import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
 
 const axiosClientPython = axios.create({
-    baseURL: 'http://localhost:5000',
+    baseURL: import.meta.env.VITE_PYTHON_APP_BACKEND_URL,
     headers: {
         'Content-Type': 'application/json',
     },
@@ -29,7 +29,10 @@ axiosClientPython.interceptors.response.use(
     },
 );
 
-const baseURL = 'http://localhost:9000';
+// const baseURL = 'http://localhost:9000';
+
+const baseURL = import.meta.env.VITE_REACT_APP_BACKEND_URL;
+console.log('Base URL: ', baseURL);
 
 const axiosClient = axios.create({
     baseURL: baseURL,

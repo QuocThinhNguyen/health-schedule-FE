@@ -83,6 +83,7 @@ function AllClinic() {
     //     (doctor) => doctor.name.toLowerCase().includes(searchQuery.toLowerCase()),
     //     // doctor.specialtyId.name.toLowerCase().includes(searchQuery.toLowerCase()),
     // );
+
     const formatCurrency = (value) =>
         new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(value);
 

@@ -77,7 +77,6 @@ function PatientManagement() {
             toast.error('Có lỗi xảy ra khi tải ảnh.');
         }
     };
-
     const updateStatus = async (appointmentId, statusKey) => {
         try {
             const response = await axiosInstance.put(`/booking/${appointmentId}`, { status: statusKey });

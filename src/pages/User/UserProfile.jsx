@@ -94,7 +94,7 @@ function DoctorProfile() {
             toast.error('Cập nhật thông tin thất bại');
         }
     };
-
+  
     return (
         <div className="mt-20 h-fit overflow-y-auto max-w-xl">
             {/* <h2 className="text-5xl font-bold text-center mb-6">Thông Tin Cá Nhân Bác Sĩ</h2> */}

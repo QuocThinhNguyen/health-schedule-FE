@@ -6,7 +6,6 @@ import { axiosInstance } from '~/api/apiRequest';
 import avatar from '../../assets/img/avatar.png';
 import { ThemeContext } from '~/context/ThemeProvider';
 function Header() {
-
     const { user, logout } = useContext(UserContext);
     const { isDark, toggleTheme } = useContext(ThemeContext);
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);

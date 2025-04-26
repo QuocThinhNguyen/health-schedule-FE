@@ -2,9 +2,9 @@ import { io } from 'socket.io-client';
 
 let socket;
 
- const useSocket = (userId) => {
+const useSocket = (userId) => {
     if (!socket) {
-        socket = io('http://localhost:9000', {
+        socket = io(import.meta.env.VITE_REACT_APP_BACKEND_URL, {
             auth: { userId },
         });
         console.log('Socket initialized:', socket);
@@ -26,7 +26,7 @@ let socket;
 
     return socket;
 };
- const disconnectSocket = () => {
+const disconnectSocket = () => {
     if (socket) {
         socket.disconnect();
         socket = null;
