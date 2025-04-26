@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { axiosInstance } from '~/api/apiRequest';
 import { CiEdit } from 'react-icons/ci';
@@ -9,7 +9,6 @@ import Table from '~/components/Table';
 import Title from '../components/Tittle';
 
 function ClinicManagement() {
-
     const navigate = useNavigate();
     const [showConfirm, setShowConfirm] = useState(false);
     const [filterValue, setFilterValue] = useState('');
@@ -89,8 +88,8 @@ function ClinicManagement() {
     };
 
     const handleConfirmDelete = () => {
-        deleteClinicAPI(deleteClinic.clinicId); 
-        setShowConfirm(false); 
+        deleteClinicAPI(deleteClinic.clinicId);
+        setShowConfirm(false);
     };
 
     const columns = [
@@ -99,7 +98,7 @@ function ClinicManagement() {
             key: 'image',
             label: 'Hình ảnh',
             type: 'image',
-            getImageUrl: (image) => `http://localhost:9000/uploads/${image}`,
+            getImageUrl: (image) => `${image}`,
         },
         { key: 'email', label: 'Email' },
         { key: 'address', label: 'Địa chỉ', wrap: true },

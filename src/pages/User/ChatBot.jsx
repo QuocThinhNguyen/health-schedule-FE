@@ -1,13 +1,12 @@
-import axios from 'axios';
-import React, { useState, useEffect, useContext, useRef } from 'react';
+import { useState, useEffect, useContext, useRef } from 'react';
 import { axiosInstance } from '~/api/apiRequest'; // Đảm bảo bạn đã config axios
-import { ArrowLeft, Italic, Send } from 'lucide-react';
+import { Send } from 'lucide-react';
 import { UserContext } from '~/context/UserContext';
 import ReactMarkdown from 'react-markdown';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const ChatBot = () => {
-    const [response, setResponse] = useState([]);
+
     const [message, setMessage] = useState('');
     const [messages, setMessages] = useState([]);
     const { user } = useContext(UserContext);
@@ -31,7 +30,6 @@ const ChatBot = () => {
         localStorage.setItem('chatSessionId', newSessionId);
         setSessionId(newSessionId);
     }, [user.userId]);
-    // console.log('Messages:', messages);
 
     useEffect(() => {
         const fetchHistory = async () => {
@@ -71,7 +69,6 @@ const ChatBot = () => {
         setIsLoading(true);
         try {
             const response = await axiosInstance.post(`/chatbot/${user.userId}/${sessionId}`, { message });
-            console.log('Response:', response);
             if (response.status === 200) {
                 // setMessages([
                 //     ...newMessages,
@@ -100,7 +97,6 @@ const ChatBot = () => {
 
                 try {
                     const response = await axiosInstance.put(`/chatbot/${user.userId}`, request);
-                    console.log('Response:', response);
                     if (response.status === 200) {
                         console.log('Lưu tin nhắn thành công!');
                     }
@@ -129,7 +125,6 @@ const ChatBot = () => {
             .replace(/\*(.*?)\*/g, '<em>$1</em>') // Chữ nghiêng
             .replace(/\n/g, '<br />'); // Xuống dòng
     };
-    const IMAGE_URL = 'http://localhost:9000/uploads/';
 
     const handleKeyDown = (e) => {
         if (e.key === 'Enter' && !e.shiftKey) {
@@ -152,9 +147,6 @@ const ChatBot = () => {
             console.log('Error:', error);
         }
     };
-
-    console.log('Check session id', sessionId);
-
     const handleReload = () => {
         window.location.reload();
     };
@@ -258,11 +250,7 @@ const ChatBot = () => {
                                 <p className="text-xs text-gray-500 mt-1 text-right">{msg.time}</p>
                             </div>
                             {msg.sender === 'user' && (
-                                <img
-                                    src={`${IMAGE_URL}${userProfile.image}`}
-                                    alt="User"
-                                    className="w-8 h-8 rounded-full ml-2"
-                                />
+                                <img src={userProfile.image} alt="User" className="w-8 h-8 rounded-full ml-2" />
                             )}
                         </div>
                     ))}

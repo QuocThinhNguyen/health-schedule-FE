@@ -19,11 +19,10 @@ function ImageInput({ value, onChange, className = '', placeholder = 'Browse Ima
                 URL.revokeObjectURL(objectUrl);
             };
         } else if (typeof value === 'string') {
-            const IMAGE_URL = `http://localhost:${import.meta.env.VITE_BE_PORT}/uploads/`;
             if (value.startsWith('http')) {
                 setPreviewImage(value);
             } else {
-                setPreviewImage(`${IMAGE_URL}${value}`);
+                setPreviewImage(value);
             }
         }
     }, [value]);

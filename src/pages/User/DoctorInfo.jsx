@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useContext } from 'react';
-import { MapPin, Clock, CreditCard, ChevronRight, Check, Star } from 'lucide-react';
+import { useState, useEffect, useContext } from 'react';
+import { ChevronRight, Star } from 'lucide-react';
 import { axiosInstance, axiosClient } from '~/api/apiRequest';
 import { NavLink, useSearchParams, useNavigate, useLocation } from 'react-router-dom'; // Dùng để lấy `patientRecordId` từ URL
 import parse from 'html-react-parser';
@@ -47,18 +47,11 @@ function DoctorInfo() {
     useEffect(() => {
         const handleClick = async () => {
             try {
-                console.log('check doctorId:', doctorId);
-                console.log('check userId:', userId);
                 const formData = new FormData();
                 formData.append('doctorId', doctorId);
                 formData.append('userId', userId);
-
-                console.log('Form data:', formData);
-
                 const response = await axiosInstance.post('/doctor/clicked', formData);
-                console.log('Clicked:', response.data);
                 if (response.status === 200) {
-                    console.log('Clicked successfully:', response.data);
                     toast.success('Cảm ơn bạn đã quan tâm đến bác sĩ của chúng tôi!');
                 } else {
                     console.error('Failed to click:', response);
@@ -86,12 +79,9 @@ function DoctorInfo() {
         fetchDoctorInfo();
     }, []);
 
-    console.log('doctorInfo:', doctorInfo.position);
     let checkdoctor = academicRanksAndDegreess.find(
         (academicRanksAndDegrees) => academicRanksAndDegrees.keyMap === doctorInfo.position,
     )?.valueVi;
-
-    console.log('checkdoctor:', checkdoctor);
 
     useEffect(() => {
         const today = new Date();
@@ -114,7 +104,6 @@ function DoctorInfo() {
         setCurrentDate(event.target.value);
     };
 
-    const IMAGE_URL = `http://localhost:${import.meta.env.VITE_BE_PORT}/uploads/`;
     const formatCurrency = (value) => {
         return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(value);
     };
@@ -132,8 +121,6 @@ function DoctorInfo() {
             }
         };
         fetchSchedule();
-        console.log('currentDay:', currentDate);
-        console.log('schedule:', schedule);
     }, [currentDate, doctorId]);
 
     // Map timeTypes sang label
@@ -217,7 +204,6 @@ function DoctorInfo() {
     ];
 
     const [feedbacks, setFeedbacks] = useState([]);
-    console.log('Feedbacks:', feedbacks);
 
     useEffect(() => {
         const fetchFeedbacks = async () => {
@@ -225,7 +211,6 @@ function DoctorInfo() {
                 const response = await axiosInstance.get(
                     `/feedback/${doctorId}?page=${pagination.page}&&limit=${pagination.limit}`,
                 );
-                console.log('Feedbacksssssss:', response);
                 if (response.status === 200) {
                     setFeedbacks(response);
                     if (response.totalPages === 0) {
@@ -250,7 +235,6 @@ function DoctorInfo() {
         const fetchData = async () => {
             try {
                 const response = await axiosInstance.get(`/video/${doctorId}`);
-                // console.log('response check', response);
                 if (response.status === 200) {
                     setVideos(response.data);
                 }
@@ -260,8 +244,6 @@ function DoctorInfo() {
         };
         fetchData();
     }, []);
-
-    console.log('videos:', videos);
 
     const tabs = [
         { id: 'info', label: 'Thông tin cơ bản' },
@@ -300,7 +282,6 @@ function DoctorInfo() {
             formData.append('userId', user?.userId);
             formData.append('partnerId', doctorId);
             const response = await axiosInstance.post('/chat-room', formData);
-            console.log('Response from getOrCreateRoom:', response);
             if (response.status === 200) {
                 const socket = useSocket(user?.userId);
                 socket.emit('join_room', response.data.chatRoomId);
@@ -313,7 +294,7 @@ function DoctorInfo() {
 
         navigate(`/chat`);
     };
-    
+
     useEffect(() => {
         const getDropdownAcademicRanksAndDegrees = async () => {
             try {
@@ -332,7 +313,7 @@ function DoctorInfo() {
         };
         getDropdownAcademicRanksAndDegrees();
     }, []);
-    
+
     return (
         <div className="min-h-screen bg-white">
             <div className="w-full bg-blue-50">
@@ -361,7 +342,7 @@ function DoctorInfo() {
             {/* Doctor Info Section */}
             <div className="flex items-center gap-6 mb-8 mt-8 max-w-6xl mx-auto px-4 border-b pb-4">
                 <img
-                    src={`${IMAGE_URL}${doctorInfo.image}`} // Thay thế URL này bằng link ảnh thực tế của bác sĩ
+                    src={doctorInfo.image} // Thay thế URL này bằng link ảnh thực tế của bác sĩ
                     alt="Doctor profile"
                     className="rounded-full w-28 h-28 object-cover border-4 border-white shadow-lg"
                 />
@@ -553,13 +534,13 @@ function DoctorInfo() {
                                                                 mediaName.endsWith('.jpg') ||
                                                                 mediaName.endsWith('.jpeg') ? (
                                                                     <img
-                                                                        src={`${IMAGE_URL}${mediaName}`}
+                                                                        src={mediaName}
                                                                         alt="Preview"
                                                                         className="w-full h-full object-cover"
                                                                     />
                                                                 ) : (
                                                                     <video
-                                                                        src={`${IMAGE_URL}${mediaName}`}
+                                                                        src={mediaName}
                                                                         className="w-full h-full object-cover"
                                                                     />
                                                                 )}
@@ -587,13 +568,13 @@ function DoctorInfo() {
                                                                 selectedMedia.endsWith('.jpg') ||
                                                                 selectedMedia.endsWith('.jpeg')) ? (
                                                                 <img
-                                                                    src={`${IMAGE_URL}${selectedMedia}`}
+                                                                    src={selectedMedia}
                                                                     alt="Full View"
                                                                     className="w-full h-auto max-h-[80vh] object-contain"
                                                                 />
                                                             ) : (
                                                                 <video
-                                                                    src={`${IMAGE_URL}${selectedMedia}`}
+                                                                    src={selectedMedia}
                                                                     controls
                                                                     className="w-full max-h-[80vh] object-contain"
                                                                 />

@@ -12,7 +12,7 @@ import { UserContext } from '~/context/UserContext';
 import parse from 'html-react-parser';
 
 function ServiceDetail() {
-    const IMAGE_URL = `http://localhost:${import.meta.env.VITE_BE_PORT}/uploads/`;
+
     const { title } = useParams();
     const { user } = useContext(UserContext);
     const navigate = useNavigate();
@@ -48,15 +48,8 @@ function ServiceDetail() {
     useEffect(() => {
         const fetchServiceSchedule = async () => {
             try {
-                console.log('serviceId', serviceId);
-                console.log('serviceSchedule', currentDate);
-
                 const response = await axiosClient.get(`/service-schedule/${serviceId}?scheduleDate=${currentDate}`);
-                console.log('response', response);
-
                 if (response.status === 200) {
-                    console.log('response.data.timeTypes', response.data.timeTypes);
-
                     setTimeTypes(response.data.timeTypes);
                 } else {
                     toast.error('No service  are found:', response.message);

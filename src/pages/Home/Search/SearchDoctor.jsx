@@ -5,10 +5,7 @@ import { axiosClient } from '~/api/apiRequest';
 
 function SearchDoctor(data) {
     const navigate = useNavigate();
-
     const doctor = data.data;
-
-    const IMAGE_URL = `http://localhost:${import.meta.env.VITE_BE_PORT}/uploads/`;
     const [academicRanksAndDegreess, setAcademicRanksAndDegreess] = useState([]);
 
     useEffect(() => {
@@ -44,7 +41,7 @@ function SearchDoctor(data) {
         >
             <div>
                 <img
-                    src={`${IMAGE_URL}${doctor.image}`}
+                    src={doctor.image}
                     alt={doctor.fullname}
                     className="w-12 h-12 object-cover rounded-full"
                 />

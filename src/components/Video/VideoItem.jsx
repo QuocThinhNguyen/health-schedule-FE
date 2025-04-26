@@ -1,12 +1,10 @@
-import React, { useState, useEffect, useContext, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { axiosInstance } from '~/api/apiRequest';
-import { NavLink, useSearchParams, useNavigate, useLocation } from 'react-router-dom';
-import { Play } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 function VideoItem(data) {
     const [isHovered, setIsHovered] = useState(false);
     const videoRef = useRef(null);
-    const IMAGE_URL = `http://localhost:${import.meta.env.VITE_BE_PORT}/uploads/`;
     const [isExpanded, setIsExpanded] = useState(false);
     const [doctorInfo, setDoctorInfo] = useState([]);
     const navigate = useNavigate();
@@ -29,7 +27,7 @@ function VideoItem(data) {
     };
 
     const toggleExpand = (e) => {
-        e.stopPropagation(); // Ngăn sự kiện lan truyền
+        e.stopPropagation(); 
         setIsExpanded(!isExpanded);
     };
 
@@ -60,9 +58,9 @@ function VideoItem(data) {
         >
             <video
                 ref={videoRef}
-                src={`${IMAGE_URL}${data.data.videoName}`}
+                src={data.data.videoName}
                 className="w-full h-full object-cover"
-                lazy="loading"
+                loading="lazy"
                 muted
                 playsInline
                 preload="metadata"
@@ -74,7 +72,7 @@ function VideoItem(data) {
                 <div className="relative">
                     {/* <div className="flex items-center justify-center gap-2">
                         <img
-                            src={`${IMAGE_URL}${doctorInfo.image}`} // Thay thế URL này bằng link ảnh thực tế của bác sĩ
+                            src={doctorInfo.image} // Thay thế URL này bằng link ảnh thực tế của bác sĩ
                             alt="Doctor profile"
                             className="rounded-full w-8 h-8"
                         />

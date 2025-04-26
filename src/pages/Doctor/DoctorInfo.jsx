@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useContext } from 'react';
+import  { useState, useEffect, useContext } from 'react';
 import { FaCamera } from 'react-icons/fa';
-import { axiosClient, axiosInstance } from '~/api/apiRequest';
+import {  axiosInstance } from '~/api/apiRequest';
 import { UserContext } from '~/context/UserContext';
 import { toast } from 'react-toastify';
 
@@ -98,7 +98,6 @@ function DoctorProfile() {
         }
     };
 
-    const IMAGE_URL = 'http://localhost:9000/uploads/';
     return (
         <div className=" w-full h-full border rounded-lg shadow-lg bg-white overflow-y-auto px-10">
             {/* <h2 className="text-5xl font-bold text-center mb-6">Thông Tin Cá Nhân Bác Sĩ</h2> */}
@@ -107,7 +106,7 @@ function DoctorProfile() {
                 {/* Ảnh Avatar */}
                 <div className="top-3 flex justify-center mb-6 relative">
                     <img
-                        src={previewImage || `${IMAGE_URL}${doctorInfo.image}`} // Thay thế URL này bằng link ảnh thực tế của bác sĩ
+                        src={previewImage || doctorInfo.image} // Thay thế URL này bằng link ảnh thực tế của bác sĩ
                         alt="Doctor Avatar"
                         className="w-32 h-32 rounded-full border-2 border-gray-300"
                     />

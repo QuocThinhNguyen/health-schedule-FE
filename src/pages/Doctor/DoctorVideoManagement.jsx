@@ -1,10 +1,8 @@
-import React, { useState, useEffect, useContext, useRef } from 'react';
+import { useState, useEffect, useContext, useRef } from 'react';
 import { UserContext } from '~/context/UserContext';
 import { toast } from 'react-toastify';
-import { axiosClient, axiosInstance } from '~/api/apiRequest';
-import { Plus, Edit, Trash, MessageCircle, Send, Play, Heart, X } from 'lucide-react';
-import e from 'cors';
-import { set } from 'date-fns';
+import { axiosInstance } from '~/api/apiRequest';
+import { Send, Heart, X } from 'lucide-react';
 import Pagination from '~/components/Pagination';
 import { useNavigate } from 'react-router-dom';
 import VideoItem from '~/components/Video/VideoItem';
@@ -22,7 +20,6 @@ function DoctorVideoManagement() {
     const [videoFile, setVideoFile] = useState(null);
     const videoInputRef = useRef(null);
     const [videos, setVideos] = useState([]);
-    const IMAGE_URL = `http://localhost:${import.meta.env.VITE_BE_PORT}/uploads/`;
     const [pagination, setPagination] = useState({ page: 1, limit: 15, totalPages: 1 });
     const [detailVideo, setDetailVideo] = useState({});
     const [comfirmDelete, setComfirmDelete] = useState(false);
@@ -234,7 +231,7 @@ function DoctorVideoManagement() {
                         // <div className="border rounded-lg shadow-lg w-fit bg-[#f9f8fc]" key={video._id}>
                         //     <div className="w-full aspect-auto border rounded-md overflow-hidden">
                         //         <video
-                        //             src={`${IMAGE_URL}${video.videoName}`}
+                        //             src={video.videoName}
                         //             className="w-full h-full object-cover"
                         //             controls
                         //         />
@@ -441,11 +438,7 @@ function DoctorVideoManagement() {
                                 <label className="block text-lg font-medium text-gray-700">Xem trước Video</label>
                                 <div className="w-full aspect-video border rounded-md overflow-hidden">
                                     {detailVideo ? (
-                                        <video
-                                            src={`${IMAGE_URL}${detailVideo.videoName}`}
-                                            className="w-full h-full"
-                                            controls
-                                        />
+                                        <video src={detailVideo.videoName} className="w-full h-full" controls />
                                     ) : (
                                         <p className="text-center text-gray-500">Chưa có video nào được chọn</p>
                                     )}

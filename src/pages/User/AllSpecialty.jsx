@@ -1,12 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { MapPin, Search, Clock, DollarSign } from 'lucide-react';
-import axios from 'axios';
+import { useState, useEffect } from 'react';
+import { Search } from 'lucide-react';
+
 import { axiosInstance } from '~/api/apiRequest';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { LiaStethoscopeSolid } from 'react-icons/lia';
-import { BsCoin } from 'react-icons/bs';
-import { CiHospital1 } from 'react-icons/ci';
-import { GrLocation } from 'react-icons/gr';
 import Pagination from '~/components/Pagination';
 
 function AllSpecialty() {
@@ -82,7 +78,6 @@ function AllSpecialty() {
 
     // const filteredDoctors = specialties.filter((doctor) => doctor.name.toLowerCase().includes(searchQuery.toLowerCase()));
 
-    const IMAGE_URL = 'http://localhost:9000/uploads/';
     const formatCurrency = (value) =>
         new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(value);
 
@@ -143,11 +138,7 @@ function AllSpecialty() {
                         key={doctor._id}
                         className="flex justify-center items-center gap-4 p-6 mb-6 border rounded-lg hover:shadow-lg transition-shadow"
                     >
-                        <img
-                            src={`${IMAGE_URL}${doctor.image}`}
-                            alt={doctor.name}
-                            className="w-36 h-36 rounded-full object-cover"
-                        />
+                        <img src={doctor.image} alt={doctor.name} className="w-36 h-36 rounded-full object-cover" />
                         <div className="flex-1">
                             <div className="flex justify-between flex-col items-start">
                                 <div className="flex gap-2">

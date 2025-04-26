@@ -1,7 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { FaStar } from 'react-icons/fa6';
 import { CiLocationOn } from 'react-icons/ci';
-import { GoStarFill } from 'react-icons/go';
 import renderStars from './renderStars';
 import { axiosInstance } from '~/api/apiRequest';
 import { useEffect, useState } from 'react';
@@ -10,8 +8,6 @@ function Clinic(data) {
     const navigate = useNavigate();
     const clinic = data.data;
     const [avgRating, setAvgRating] = useState(0);
-
-    const IMAGE_URL = `http://localhost:${import.meta.env.VITE_BE_PORT}/uploads/`;
 
     useEffect(() => {
         const fetchFeedbacks = async () => {
@@ -38,11 +34,7 @@ function Clinic(data) {
             <div className="bg-white rounded-lg shadow cursor-pointer border group-hover:border group-hover:border-[rgb(44,116,223)] group-hover:shadow-2xl">
                 <div className="px-2 pt-4 pb-2 flex flex-col items-center gap-3">
                     <div className="flex justify-center items-center h-28 w-28  overflow-hidden ">
-                        <img
-                            src={`${IMAGE_URL}${clinic.image}`}
-                            alt={clinic.name}
-                            className="object-cover w-full h-full"
-                        />
+                        <img src={clinic.image} alt={clinic.name} className="object-cover w-full h-full" />
                     </div>
 
                     <div className="flex flex-col justify-between gap-1 w-full">

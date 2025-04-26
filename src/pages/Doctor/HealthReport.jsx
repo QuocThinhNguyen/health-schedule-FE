@@ -1,10 +1,9 @@
-import React, { useState, useEffect, useContext } from 'react';
-import { FaCamera } from 'react-icons/fa';
-import { axiosClient, axiosInstance } from '~/api/apiRequest';
+import { useState, useEffect, useContext } from 'react';
+import { axiosInstance } from '~/api/apiRequest';
 import { UserContext } from '~/context/UserContext';
 import { toast } from 'react-toastify';
 import Pagination from '~/components/Pagination';
-import { Search, Phone, Mail, MapPin, Eye, Calendar, Clock } from 'lucide-react';
+import { Search, Phone, Mail, MapPin, Eye } from 'lucide-react';
 
 function HealthReport() {
     const [selectedPatient, setSelectedPatient] = useState(null);
@@ -17,7 +16,6 @@ function HealthReport() {
     const [selectedImages, setSelectedImages] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage] = useState(10); // Số lượng mục trên mỗi trang
-    const IMAGE_URL = 'http://localhost:9000/uploads/';
 
     useEffect(() => {
         // Đặt ngày mặc định là ngày hiện tại khi component được tải
@@ -134,8 +132,7 @@ function HealthReport() {
     };
 
     const handleViewImage = (image) => {
-        const imageUrl = `${IMAGE_URL}${image}`;
-        window.open(imageUrl, '_blank');
+        window.open(image, '_blank');
     };
 
     const [activeTab, setActiveTab] = useState('info');
@@ -326,13 +323,13 @@ function HealthReport() {
                                                     image.endsWith('.jpg') ||
                                                     image.endsWith('.jpeg') ? (
                                                         <img
-                                                            src={`${IMAGE_URL}${image}`}
+                                                            src={image}
                                                             alt={`Ảnh ${index + 1}`}
                                                             className="w-full h-full object-cover"
                                                         />
                                                     ) : (
                                                         <video
-                                                            src={`${IMAGE_URL}${image}`}
+                                                            src={image}
                                                             className="w-full h-full object-cover"
                                                             controls
                                                         />
@@ -415,13 +412,13 @@ function HealthReport() {
                                                             image.endsWith('.jpg') ||
                                                             image.endsWith('.jpeg') ? (
                                                                 <img
-                                                                    src={`${IMAGE_URL}${image}`}
+                                                                    src={image}
                                                                     alt={`Ảnh ${index + 1}`}
                                                                     className="w-full h-full object-cover"
                                                                 />
                                                             ) : (
                                                                 <video
-                                                                    src={`${IMAGE_URL}${image}`}
+                                                                    src={image}
                                                                     className="w-full h-full object-cover"
                                                                     controls
                                                                 />

@@ -1,10 +1,10 @@
-import React, { useState, useEffect, useContext } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { FaCamera } from 'react-icons/fa';
-import { axiosClient, axiosInstance } from '~/api/apiRequest';
+import { axiosInstance } from '~/api/apiRequest';
 import { UserContext } from '~/context/UserContext';
 import { toast } from 'react-toastify';
 import defaultImage from '../../assets/img/avatar.png';
-import { Camera, Pencil } from 'lucide-react';
+import { Pencil } from 'lucide-react';
 
 function DoctorProfile() {
     const [doctorInfo, setDoctorInfo] = useState({
@@ -22,13 +22,10 @@ function DoctorProfile() {
     const [selectedFile, setSelectedFile] = useState(null); // Thêm trạng thái để lưu trữ tệp ảnh
     const [previewImage, setPreviewImage] = useState(null); // Thêm trạng thái để lưu trữ URL tạm thời của ảnh
 
-    console.log('Image', selectedFile);
-
     useEffect(() => {
         const fetchData = async () => {
             try {
                 const response = await axiosInstance.get(`/user/${user.userId}`);
-                console.log('Response:', response);
 
                 if (response.status === 200) {
                     setDoctorInfo({
@@ -44,8 +41,6 @@ function DoctorProfile() {
                         image: response.data.image,
                     });
                 }
-                // console.log('Doctor data:', response.data);
-                // console.log('Doctor info:', doctorInfo);
             } catch (error) {
                 console.error('Error fetching doctor data:', error);
                 setDoctorInfo({});
@@ -69,9 +64,6 @@ function DoctorProfile() {
 
     const handleSave = async () => {
         setIsEditing(false);
-
-        console.log('Updating doctor data:', doctorInfo);
-
         const formData = new FormData();
         formData.append('fullname', doctorInfo.name);
         formData.append('address', doctorInfo.address);
@@ -83,14 +75,12 @@ function DoctorProfile() {
         if (selectedFile) {
             formData.append('image', selectedFile); // Thêm tệp ảnh vào FormData
         }
-        console.log('FormData:', formData);
         try {
             const response = await axiosInstance.put(`/user/${user.userId}`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
             });
-            console.log('Response:', response);
             if (response.status === 200) {
                 // Check a success code if the backend provides it
                 toast.success('Cập nhật thông tin thành công');
@@ -101,16 +91,8 @@ function DoctorProfile() {
                 toast.warn(response.data.message || 'Đã xảy ra vấn đề');
             }
         } catch (error) {
-            // console.error('Error updating doctor data:', error);
             toast.error('Cập nhật thông tin thất bại');
         }
-    };
-
-    console.log('doctorinfo', doctorInfo);
-
-    const IMAGE_URL = 'http://localhost:9000/uploads/';
-    const doctorInfo_Image = {
-        image: doctorInfo.image,
     };
 
     return (
@@ -131,7 +113,7 @@ function DoctorProfile() {
             {/* Ảnh Avatar */}
             <div className=" flex justify-start mb-6 relative">
                 <img
-                    src={previewImage || (doctorInfo.image ? `${IMAGE_URL}${doctorInfo.image}` : defaultImage)} // Thay thế URL này bằng link ảnh thực tế của bác sĩ
+                    src={previewImage || (doctorInfo.image ? doctorInfo.image : defaultImage)} // Thay thế URL này bằng link ảnh thực tế của bác sĩ
                     alt="Doctor Avatar"
                     className="w-32 h-32 rounded-full border-2 border-gray-300"
                 />

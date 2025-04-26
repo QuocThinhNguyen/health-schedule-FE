@@ -1,23 +1,20 @@
-import React, { useState, useEffect, useContext, useRef } from 'react';
+import { useState, useEffect, useContext, useRef } from 'react';
 import Sidebar from '~/components/SidebarDoctor/Sidebar'; // Import Sidebar component
 import { UserContext } from '~/context/UserContext';
 import { Outlet, NavLink } from 'react-router-dom';
-import { axiosClient, axiosInstance } from '~/api/apiRequest';
+import { axiosInstance } from '~/api/apiRequest';
 import { X } from 'lucide-react';
 
-import { UserCircle, Settings, Bell, ChevronDown, ChevronUp, LogOut, ChevronRight } from 'lucide-react';
+import { ChevronDown, ChevronUp, ChevronRight } from 'lucide-react';
 
 const DoctorDashboard = () => {
     // State để lưu tab đang chọn
     const [selectedTab, setSelectedTab] = useState('overview'); // Mặc định là "patients"
     const [currentFunction, setCurrentFunction] = useState('Xin chào bác sĩ');
     const { user, logout } = useContext(UserContext);
-    const IMAGE_URL = 'http://localhost:9000/uploads/';
     const profileMenuRef = useRef(null);
     const [showProfileMenu, setShowProfileMenu] = useState(false);
     const [isLogout, setIsLogout] = useState(false);
-    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-    const [isOpen, setIsOpen] = useState(false);
 
     const getTitle = () => {
         if (currentFunction === 'Tổng quan') {
@@ -99,7 +96,7 @@ const DoctorDashboard = () => {
                                 <div className="relative" ref={profileMenuRef}>
                                     <button className="flex items-center gap-2 text-sm" onClick={handleProfileClick}>
                                         <img
-                                            src={`${IMAGE_URL}${doctorInfo.image}`}
+                                            src={doctorInfo.image}
                                             alt="Doctor Avatar"
                                             className="w-8 h-8 rounded-full"
                                         />

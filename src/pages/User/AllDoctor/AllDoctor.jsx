@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { MapPin, Search, Clock, DollarSign } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Search } from 'lucide-react';
 import { axiosClient, axiosInstance } from '~/api/apiRequest';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { LiaStethoscopeSolid } from 'react-icons/lia';
@@ -13,7 +13,6 @@ function AllDoctor() {
     const [doctors, setDoctors] = useState([]);
     const navigate = useNavigate();
     const [pagination, setPagination] = useState({ page: 1, limit: 6, totalPages: 1 });
-    const [allDoctors, setAllDoctors] = useState([]); // Dữ liệu tất cả bác sĩ
     const [academicRanksAndDegreess, setAcademicRanksAndDegreess] = useState([]);
 
     const { state } = useLocation();
@@ -92,7 +91,6 @@ function AllDoctor() {
     //         doctor.specialtyId.name.toLowerCase().includes(searchQuery.toLowerCase()),
     // );
 
-    const IMAGE_URL = 'http://localhost:9000/uploads/';
     const formatCurrency = (value) =>
         new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(value);
 
@@ -138,7 +136,7 @@ function AllDoctor() {
                         className="flex justify-center items-center gap-4 p-6 mb-6 border rounded-lg hover:shadow-lg transition-shadow"
                     >
                         <img
-                            src={`${IMAGE_URL}${doctor.doctorId.image}`}
+                            src={doctor.doctorId.image}
                             alt={doctor.doctorId.fullname}
                             className="w-36 h-36 rounded-full object-cover"
                         />

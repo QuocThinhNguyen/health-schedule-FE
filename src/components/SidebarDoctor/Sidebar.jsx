@@ -41,7 +41,7 @@ const Sidebar = ({ onSelectTab, setCurrentFunction }) => {
                     });
                 }
             } catch (error) {
-                console.log('Error fetching doctor data:', error);
+                console.error('Error fetching doctor data:', error);
             }
         };
         fetchData();
@@ -66,8 +66,6 @@ const Sidebar = ({ onSelectTab, setCurrentFunction }) => {
             toast.error('Mật khẩu mới và xác nhận mật khẩu không khớp');
         }
     };
-
-    const IMAGE_URL = 'http://localhost:9000/uploads/';
 
     useEffect(() => {
         onSelectTab('overview');
@@ -147,8 +145,8 @@ const Sidebar = ({ onSelectTab, setCurrentFunction }) => {
             {/* <div className="absolute bottom-0  px-4 py-6 border-t border-gray-200">
                 <div className="flex items-center space-x-3 cursor-pointer" onClick={handleProfileClick}>
                     <img
-                        // src={doctorInfo.image ? `${IMAGE_URL}${doctorInfo.image}` : pngegg}
-                        src={`${IMAGE_URL}${doctorInfo.image}`}
+                        // src={doctorInfo.image ? doctorInfo.image : pngegg}
+                        src={doctorInfo.image}
                         alt="Doctor Avatar"
                         className="w-12 h-12 rounded-full"
                     />
