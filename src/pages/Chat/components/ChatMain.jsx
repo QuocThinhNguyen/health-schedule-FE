@@ -5,12 +5,10 @@ import { useSocket } from '../useSocket';
 import { axiosClient } from '~/api/apiRequest';
 
 export default function ChatMain({ activeChat }) {
-    const IMAGE_URL = `http://localhost:${import.meta.env.VITE_BE_PORT}/uploads/`;
-    const [partner, setPartner] = useState();
 
+    const [partner, setPartner] = useState();
     const { user } = useContext(UserContext);
     const socket = useSocket(user?.userId);
-
     const [message, setMessage] = useState('');
     const [messages, setMessages] = useState([]);
     const [hasMore, setHasMore] = useState(true);
@@ -143,11 +141,7 @@ export default function ChatMain({ activeChat }) {
                 <div className="flex items-center">
                     <div className="relative">
                         <img
-                            src={
-                                partner?.partner?.image
-                                    ? `${IMAGE_URL}${partner?.partner?.image}`
-                                    : 'https://cellphones.com.vn/sforum/wp-content/uploads/2024/01/hinh-nen-anime-2.jpg'
-                            }
+                            src={partner?.partner?.image}
                             alt={partner?.partner?.name}
                             className="w-10 h-10 rounded-full object-cover"
                         />

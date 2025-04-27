@@ -8,8 +8,6 @@ import Logo from '~/components/Logo';
 import { X } from 'lucide-react';
 
 function Header() {
-    const IMAGE_URL = `${import.meta.env.VITE_REACT_APP_BACKEND_URL}/uploads`;
-
     const { user, logout } = useContext(UserContext);
     const [isOpen, setIsOpen] = useState(false);
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -35,7 +33,7 @@ function Header() {
                 try {
                     const response = await axiosInstance.get(`/user/${user.userId}`);
                     if (response.status === 200) {
-                        const imageUrl = response.data.image ? `${IMAGE_URL}/${response.data.image}` : avatar;
+                        const imageUrl = response.data.image ? response.data.image : avatar;
                         const img = new Image();
                         img.src = imageUrl;
                         img.onload = () => {

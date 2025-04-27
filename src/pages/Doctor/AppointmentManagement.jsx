@@ -28,14 +28,12 @@ function PatientManagement() {
     }, []);
 
     useEffect(() => {
-        // Hàm gọi API để lấy dữ liệu lịch hẹn
         const fetchAppointments = async () => {
             setLoading(true);
             setError(null);
 
             try {
                 const response = await axiosInstance.get(`/booking/doctor/${user.userId}?date=${selectedDate}`);
-
                 if (response.status === 200) {
                     setAppointments(response.data);
                 } else {
@@ -50,11 +48,10 @@ function PatientManagement() {
             }
         };
 
-        // Gọi API mỗi khi selectedDate thay đổi
         if (selectedDate) {
             fetchAppointments();
         }
-    }, [selectedDate]);
+    }, [selectedDate, user.userId]);
 
     // Hàm xử lý khi người dùng chọn ngày mới
     const handleDateChange = (e) => {
@@ -64,8 +61,6 @@ function PatientManagement() {
     const getImage = async (bookingId) => {
         try {
             const response = await axiosInstance.get(`/bookingImage/${bookingId}`);
-            // console.log('ResponseImage:', response);
-
             if (response.status === 200) {
                 const images = response.data.map((item) => item.name);
                 if (images.length === 0) {
@@ -82,7 +77,6 @@ function PatientManagement() {
             toast.error('Có lỗi xảy ra khi tải ảnh.');
         }
     };
-    const IMAGE_URL = `${import.meta.env.VITE_REACT_APP_BACKEND_URL}/uploads/`;
     const updateStatus = async (appointmentId, statusKey) => {
         try {
             const response = await axiosInstance.put(`/booking/${appointmentId}`, { status: statusKey });
@@ -140,8 +134,7 @@ function PatientManagement() {
         setSelectedImages([]);
     };
     const handleViewImage = (image) => {
-        const imageUrl = `${IMAGE_URL}${image}`;
-        window.open(imageUrl, '_blank');
+        window.open(image, '_blank');
     };
 
     const getDetail = async (bookingId) => {
@@ -154,8 +147,6 @@ function PatientManagement() {
             }
 
             const response1 = await axiosInstance.get(`/bookingImage/${bookingId}`);
-            // console.log('ResponseImage:', response);
-
             if (response1.status === 200) {
                 const images = response1.data.map((item) => item.name);
                 // if (images.length === 0) {
@@ -339,11 +330,7 @@ function PatientManagement() {
                             {selectedImages.map((image, index) => (
                                 <div key={index} className="relative group w-80 h-80 border rounded-lg overflow-hidden">
                                     {/* Hiển thị ảnh */}
-                                    <img
-                                        src={`${IMAGE_URL}${image}`}
-                                        alt={`Ảnh ${index + 1}`}
-                                        className="w-full h-full object-cover"
-                                    />
+                                    <img src={image} alt={`Ảnh ${index + 1}`} className="w-full h-full object-cover" />
 
                                     {/* Eye Icon (Zoom) */}
                                     <div
@@ -432,16 +419,12 @@ function PatientManagement() {
                                 <div key={index} className="relative group w-20 h-20 border rounded-lg overflow-hidden">
                                     {image.endsWith('.png') || image.endsWith('.jpg') || image.endsWith('.jpeg') ? (
                                         <img
-                                            src={`${IMAGE_URL}${image}`}
+                                            src={image}
                                             alt={`Ảnh ${index + 1}`}
                                             className="w-full h-full object-cover"
                                         />
                                     ) : (
-                                        <video
-                                            src={`${IMAGE_URL}${image}`}
-                                            className="w-full h-full object-cover"
-                                            controls
-                                        />
+                                        <video src={image} className="w-full h-full object-cover" controls />
                                     )}
 
                                     {/* Eye Icon (Zoom) */}

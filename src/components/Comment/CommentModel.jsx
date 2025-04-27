@@ -1,12 +1,11 @@
-import React, { useState, useEffect, useContext, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Eye, X, Star, ArrowLeft } from 'lucide-react';
-import { Route, Navigate, useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { axiosInstance } from '~/api/apiRequest';
 import { toast } from 'react-toastify';
 const CommentModel = () => {
     const [rating, setRating] = useState(5);
     const [review, setReview] = useState('');
-    const [showGuide, setShowGuide] = useState(false);
     const navigate = useNavigate();
     const { state } = useLocation();
     const [doctorInfo, setDoctorInfo] = useState([]);
@@ -33,7 +32,6 @@ const CommentModel = () => {
     const handleBack = () => {
         navigate('/user/appointments');
     };
-    const IMAGE_URL = `http://localhost:${import.meta.env.VITE_BE_PORT}/uploads/`;
 
     // const handleSubmit = async (e) => {
     //     e.preventDefault();
@@ -138,11 +136,7 @@ const CommentModel = () => {
 
             {/* Product Info */}
             <div className="flex gap-4 mb-6 mt-12">
-                <img
-                    src={`${IMAGE_URL}${doctorInfo.image}`}
-                    alt="Product"
-                    className="w-20 h-20 object-cover rounded-lg"
-                />
+                <img src={doctorInfo.image} alt="Product" className="w-20 h-20 object-cover rounded-lg" />
                 <div>
                     <div className="font-medium text-lg">
                         {doctorInfo.position} {doctorInfo.fullname}

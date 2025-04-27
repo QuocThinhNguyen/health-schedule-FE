@@ -10,7 +10,6 @@ import { FaArrowRightLong } from 'react-icons/fa6';
 import { formatTitleForUrl } from '~/utils/formatTitleForUrl';
 
 function NewsDetail() {
-    const IMAGE_URL = `http://localhost:${import.meta.env.VITE_BE_PORT}/uploads/`;
     const navigate = useNavigate();
     const [post, setPost] = useState({});
     const [posts, setPosts] = useState([]);
@@ -88,7 +87,7 @@ function NewsDetail() {
                     <div className="mt-6">
                         <div className="w-full">
                             <img
-                                src={`${IMAGE_URL}${post.image}`}
+                                src={post.image}
                                 alt={post.title}
                                 className="w-full h-full object-cover"
                                 loading="lazy"
@@ -124,7 +123,7 @@ function NewsDetail() {
                                         <div className="flex flex-col">
                                             <div className="w-full h-40 overflow-hidden">
                                                 <img
-                                                    src={`${IMAGE_URL}${post.image}`}
+                                                    src={post.image}
                                                     alt={post.title}
                                                     className="w-full h-full object-cover rounded-2xl"
                                                     loading="lazy"

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import  { useState, useEffect, useContext } from 'react';
 import {
     ChevronRight,
     X,
@@ -6,21 +6,17 @@ import {
     Clock,
     CreditCard,
     Banknote,
-    Phone,
-    Mail,
     Shield,
     Eye,
     Pencil,
     Trash2,
     Plus,
-    Calendar,
 } from 'lucide-react';
 import { BsCoin } from 'react-icons/bs';
 import { axiosInstance } from '~/api/apiRequest';
 import { UserContext } from '~/context/UserContext';
 import { NavLink, useNavigate, useLocation } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import ConfirmationModal from '~/components/Confirm/ConfirmationModal';
 
 function MakeAnAppointment() {
 
@@ -30,7 +26,6 @@ function MakeAnAppointment() {
     const currentDate = queryParams.get('currentDate');
     const timeSlot = queryParams.get('timeSlot');
 
-    const [userType, setUserType] = useState('self');
     const [paymentMethod, setPaymentMethod] = useState('cash');
     const [isVisible, setIsVisible] = useState(true);
     const [isDragging, setIsDragging] = useState(false);
@@ -39,7 +34,6 @@ function MakeAnAppointment() {
     const { state } = useLocation();
     const [doctorInfo, setDoctorInfo] = useState([]);
     const navigate = useNavigate();
-    const IMAGE_URL = `http://localhost:${import.meta.env.VITE_BE_PORT}/uploads/`;
     const [self, setSelf] = useState([]);
     const { user } = useContext(UserContext);
     const [patientData, setPatientData] = useState([]);
@@ -269,7 +263,7 @@ function MakeAnAppointment() {
             formData.append('price', doctorInfo.price);
             formData.append('reason', reason || '');
 
-            files.forEach((file, index) => {
+            files.forEach((file) => {
                 formData.append('images', file);
             });
 
@@ -686,7 +680,7 @@ function MakeAnAppointment() {
                             <div className="mt-4 p-4 space-y-4">
                                 <div className="flex items-start gap-3">
                                     <img
-                                        src={`${IMAGE_URL}${doctorInfo.image}`} // Thay thế URL này bằng link ảnh thực tế của bác sĩ
+                                        src={doctorInfo.image} // Thay thế URL này bằng link ảnh thực tế của bác sĩ
                                         alt="Doctor profile"
                                         className="rounded-full w-16 h-16 object-cover border-4 border-white shadow-lg"
                                     />

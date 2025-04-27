@@ -1,13 +1,11 @@
-import React, { useState, useEffect, useRef, useContext } from 'react';
+import { useState, useEffect, useRef, useContext } from 'react';
 import { MapPin, Clock, ChevronRight, Mail, Info, Phone, Search, X, Star, Banknote, Smartphone } from 'lucide-react';
 import { FaMoneyBillWave } from 'react-icons/fa';
 import { axiosInstance, axiosClient } from '~/api/apiRequest';
 import { NavLink, useNavigate, useLocation } from 'react-router-dom';
 import parse from 'html-react-parser';
-import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
-import { set, formatDistanceToNow, parseISO } from 'date-fns';
-import { Input } from 'postcss';
+import { formatDistanceToNow, parseISO } from 'date-fns';
 import Pagination from '~/components/Pagination';
 import { UserContext } from '~/context/UserContext';
 import Modal from 'react-modal';
@@ -33,18 +31,12 @@ function ClinicInfo() {
     const [schedule, setSchedule] = useState([]);
     const { user } = useContext(UserContext);
     const [pagination_1, setPagination_1] = useState({ page: 1, limit: 5, totalPages: 1 });
-    const IMAGE_URL = `http://localhost:${import.meta.env.VITE_BE_PORT}/uploads/`;
 
-    console.log('STATE', state);
-    console.log('clinicData:', clinicData);
-    console.log('CHECK', academicRanksAndDegreess);
-    console.log('tab', activeTab);
     const ReviewDate = ({ date }) => {
         const formattedDate = formatDistanceToNow(parseISO(date), { addSuffix: true });
 
         return <div className="text-gray-500 text-sm">{formattedDate}</div>;
     };
-    console.log('CHECKK', selectedDoctor);
 
     useEffect(() => {
         const fetchClinicInfo = async () => {
@@ -98,7 +90,6 @@ function ClinicInfo() {
     }, []);
 
     const handleDepartmentSelect = (department) => {
-        console.log('department:', department);
         setSelectedDepartment(department.specialtyId);
         setSpecialtyId(department.specialtyId.specialtyId);
         setShowDepartments(false);
@@ -106,12 +97,11 @@ function ClinicInfo() {
 
     console.log('selectedDepartment:', selectedDepartment);
     const handleClearSelection = (e) => {
-        e.stopPropagation(); // Prevent dropdown from opening
+        e.stopPropagation();
         setSelectedDepartment(null);
     };
     const [doctors, setDoctors] = useState([]);
     const [price, setPrice] = useState('');
-    console.log('doctorss:', doctors);
 
     const handleDoctorSelect = (doctor) => {
         console.log('doctorrrr:', doctor);
@@ -122,7 +112,7 @@ function ClinicInfo() {
     };
 
     const handleClearDoctorSelection = (e) => {
-        e.stopPropagation(); // Prevent dropdown from opening
+        e.stopPropagation();
         setSelectedDoctor(null);
         setPrice(null);
         setIsDoctorSelected(false);
@@ -202,12 +192,10 @@ function ClinicInfo() {
     // if (specialty) {
     //     getSpecialtyId = specialty.specialtyId;
     //}
-    console.log('getSpecialtyId:', specialyId);
 
     useEffect(() => {
         const fetchDoctors = async () => {
             try {
-                console.log('getSpecialtyId:', specialyId);
                 const response = await axiosInstance.get(
                     `/doctor?query=${searchQuery}&page=${pagination.page}&limit=${pagination.limit}&clinicId=${state.clinicId}&specialtyId=${specialyId}`,
                 );
@@ -301,9 +289,6 @@ function ClinicInfo() {
 
     const [morningSlots, setMorningSlots] = useState([]);
     const [afternoonSlots, setAfternoonSlots] = useState([]);
-
-    console.log('morningSlots:', morningSlots);
-    console.log('afternoonSlots:', afternoonSlots);
 
     useEffect(() => {
         const fetchSchedule = async () => {
@@ -471,7 +456,7 @@ function ClinicInfo() {
                     <div className="flex items-center justify-between mt-[-40px]">
                         <div className="flex items-center gap-5">
                             <img
-                                src={`http://localhost:${import.meta.env.VITE_BE_PORT}/uploads/${clinicData.image}`}
+                                src={clinicData.image}
                                 alt="logo clinic"
                                 className=" h-36 w-36 rounded-full border-4 border-white shadow-lg"
                             />
@@ -660,9 +645,7 @@ function ClinicInfo() {
                                     <div key={doctor.doctorId.userId} className="border rounded-lg p-4">
                                         <div className="flex gap-4">
                                             <img
-                                                src={`http://localhost:${import.meta.env.VITE_BE_PORT}/uploads/${
-                                                    doctor.doctorId.image
-                                                }`}
+                                                src={doctor.doctorId.image}
                                                 alt={doctor.doctorId.fullname}
                                                 className="w-20 h-20 rounded-full object-cover"
                                             />
@@ -869,13 +852,13 @@ function ClinicInfo() {
                                                                     mediaName.endsWith('.jpg') ||
                                                                     mediaName.endsWith('.jpeg') ? (
                                                                         <img
-                                                                            src={`${IMAGE_URL}${mediaName}`}
+                                                                            src={mediaName}
                                                                             alt="Preview"
                                                                             className="w-full h-full object-cover"
                                                                         />
                                                                     ) : (
                                                                         <video
-                                                                            src={`${IMAGE_URL}${mediaName}`}
+                                                                            src={mediaName}
                                                                             className="w-full h-full object-cover"
                                                                         />
                                                                     )}
@@ -903,13 +886,13 @@ function ClinicInfo() {
                                                                     selectedMedia.endsWith('.jpg') ||
                                                                     selectedMedia.endsWith('.jpeg')) ? (
                                                                     <img
-                                                                        src={`${IMAGE_URL}${selectedMedia}`}
+                                                                        src={selectedMedia}
                                                                         alt="Full View"
                                                                         className="w-full h-auto max-h-[80vh] object-contain"
                                                                     />
                                                                 ) : (
                                                                     <video
-                                                                        src={`${IMAGE_URL}${selectedMedia}`}
+                                                                        src={selectedMedia}
                                                                         controls
                                                                         className="w-full max-h-[80vh] object-contain"
                                                                     />

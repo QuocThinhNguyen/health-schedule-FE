@@ -1,8 +1,7 @@
-import React, { useContext, useState, useEffect } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { FaUser, FaClipboardList, FaCalendarAlt, FaKey } from 'react-icons/fa';
 import { UserContext } from '~/context/UserContext';
-import { axiosClient, axiosInstance } from '~/api/apiRequest';
+import { axiosInstance } from '~/api/apiRequest';
 import { X } from 'lucide-react';
 
 const Sidebar = ({ selectedTab }) => {
@@ -56,11 +55,7 @@ const Sidebar = ({ selectedTab }) => {
         <div className="w-fit h-fit bg-white text-black flex flex-col rounded-md mt-20 mb-20">
             <div className="p-4 border-b">
                 <div className="flex items-center gap-3 mb-2">
-                    <img
-                        src={`http://localhost:${import.meta.env.VITE_BE_PORT}/uploads/${userProfile.image}`}
-                        alt="logo clinic"
-                        className="h-14 w-14 rounded-full"
-                    />
+                    <img src={userProfile.image} alt="logo clinic" className="h-14 w-14 rounded-full" />
                     <div className="flex items-center gap-2 ml-auto">
                         <div className="flex items-center px-3 py-0 bg-white rounded-full text-sm border border-blue-300 font-semibold">
                             <div className="mt-2">

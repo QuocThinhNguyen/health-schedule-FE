@@ -8,11 +8,9 @@ import Pagination from '~/components/Pagination';
 import { formatTitleForUrl } from '~/utils/formatTitleForUrl';
 
 function AllNews() {
-    const IMAGE_URL = `http://localhost:${import.meta.env.VITE_BE_PORT}/uploads/`;
+
     const [posts, setPosts] = useState([]);
-
     const [pagination, setPagination] = useState({ page: 1, limit: 15, totalPages: 1 });
-
     useEffect(() => {
         getAllPostsAndFilter();
     }, [pagination.page]);
@@ -20,7 +18,7 @@ function AllNews() {
     const handlePageChange = (page) => {
         setPagination((prev) => ({
             ...prev,
-            page: page, // Cập nhật thuộc tính page
+            page: page, 
         }));
     };
 
@@ -29,7 +27,6 @@ function AllNews() {
             const response = await axiosClient.get(`/post?page=${pagination.page}&&limit=${pagination.limit}`);
             if (response.status === 200) {
                 setPosts(response.data);
-                console.log('Posts:', response.data);
                 if (response.totalPages === 0) {
                     response.totalPages = 1;
                 }
@@ -69,7 +66,7 @@ function AllNews() {
                                 >
                                     <div className="w-full h-[374px] max-h-[374px]">
                                         <img
-                                            src={`${IMAGE_URL}${posts[0].image}`}
+                                            src={posts[0].image}
                                             alt={posts[0].title}
                                             className="w-0 h-0 min-w-full max-w-full min-h-full max-h-full object-cover rounded-2xl"
                                             loading="lazy"
@@ -110,7 +107,7 @@ function AllNews() {
                                         <div className="flex gap-4">
                                             <div className="min-w-[140px] min-h-[100px]">
                                                 <img
-                                                    src={`${IMAGE_URL}${post.image}`}
+                                                    src={posts[0].image}
                                                     alt={post.title}
                                                     className="w-0 h-0 min-w-full max-w-full min-h-full max-h-full object-cover rounded-2xl"
                                                     loading="lazy"
@@ -139,11 +136,10 @@ function AllNews() {
                                 to={`/tin-tuc/${formatTitleForUrl(post.title)}-${post.postId}`}
                                 className="cursor-pointer p-3 border border-transparent group-hover:boder group-hover:border-[#00B5F1] rounded-2xl group-hover:shadow-lg block"
                             >
-                                {console.log('postId', post.postId)}
                                 <div className="flex flex-col">
                                     <div className="w-full h-48 overflow-hidden">
                                         <img
-                                            src={`${IMAGE_URL}${post.image}`}
+                                            src={posts[0].image}
                                             alt={post.title}
                                             className="w-full h-full object-cover rounded-2xl"
                                             loading="lazy"

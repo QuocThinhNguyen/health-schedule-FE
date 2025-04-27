@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext, useRef } from 'react';
+import  { useState, useEffect, useContext, useRef } from 'react';
 import {
     ChevronRight,
     X,
@@ -6,21 +6,17 @@ import {
     Clock,
     CreditCard,
     Banknote,
-    Phone,
-    Mail,
     Shield,
     Eye,
     Pencil,
     Trash2,
-    Plus,
-    Calendar,
+    Plus
 } from 'lucide-react';
 import { BsCoin } from 'react-icons/bs';
 import { axiosInstance } from '~/api/apiRequest';
 import { UserContext } from '~/context/UserContext';
 import { NavLink, useNavigate, useLocation } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import ConfirmationModal from '~/components/Confirm/ConfirmationModal';
 import { formatTitleForUrl } from '~/utils/formatTitleForUrl';
 
 function MakeAServiceAppointment() {
@@ -42,12 +38,6 @@ function MakeAServiceAppointment() {
             navigate('/404', { replace: true });
             return;
         }
-
-        
-        console.log('appointmentData:', appointmentData);
-        console.log('correctUrl:', appointmentData.currentUrl);
-        console.log('location.pathname + location.search:', location.pathname + location.search);
-
         if (location.pathname + location.search !== appointmentData.currentUrl) {
             navigate( appointmentData.currentUrl, { replace: true });
         }
@@ -61,8 +51,6 @@ function MakeAServiceAppointment() {
     const [selectedPatientId, setSelectedPatientId] = useState(1);
     const { state } = useLocation();
     const [serviceData, setServiceData] = useState(null);
-
-    const IMAGE_URL = `http://localhost:${import.meta.env.VITE_BE_PORT}/uploads/`;
     const [self, setSelf] = useState([]);
     const { user } = useContext(UserContext);
     const [patientData, setPatientData] = useState([]);
@@ -143,7 +131,6 @@ function MakeAServiceAppointment() {
         const fetchSerivceInfo = async () => {
             try {
                 const response = await axiosInstance.get(`/service/${appointmentData.serviceId}`);
-                console.log('data:', response.data);
                 if (response.status === 200) {
                     setServiceData(response.data);
                 }

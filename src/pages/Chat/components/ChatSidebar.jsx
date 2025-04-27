@@ -10,7 +10,6 @@ export default function ChatSidebar({ activeChat, setActiveChat }) {
     const [searchTerm, setSearchTerm] = useState('');
     const { user } = useContext(UserContext);
     const socket = useSocket(user?.userId);
-    const IMAGE_URL = `http://localhost:${import.meta.env.VITE_BE_PORT}/uploads/`;
     const [recentChatList, setRecentChatList] = useState([]);
 
     useEffect(() => {
@@ -106,11 +105,7 @@ export default function ChatSidebar({ activeChat, setActiveChat }) {
                             >
                                 <div className="relative block shrink-0">
                                     <img
-                                        src={
-                                            chat?.partner?.image
-                                                ? `${IMAGE_URL}${chat?.partner?.image}`
-                                                : 'https://cellphones.com.vn/sforum/wp-content/uploads/2024/01/hinh-nen-anime-2.jpg'
-                                        }
+                                        src={chat?.partner?.image}
                                         alt={chat?.partner?.fullname}
                                         className="w-12 h-12 rounded-full object-cover"
                                     />

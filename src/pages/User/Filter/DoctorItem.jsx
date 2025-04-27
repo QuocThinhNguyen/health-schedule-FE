@@ -1,7 +1,5 @@
-import { BsCashCoin, BsCoin } from 'react-icons/bs';
-import { FaMoneyBillWave } from 'react-icons/fa';
+import { BsCoin } from 'react-icons/bs';
 import { IoIosStar } from 'react-icons/io';
-import { RiMoneyDollarCircleFill } from 'react-icons/ri';
 import { useEffect, useState } from 'react';
 import { axiosClient } from '~/api/apiRequest';
 import { useNavigate } from 'react-router-dom';
@@ -10,10 +8,7 @@ function DoctorItem(data) {
     const [academicRanksAndDegreess, setAcademicRanksAndDegreess] = useState([]);
     const doctor = data.data;
 
-    const IMAGE_URL = `http://localhost:${import.meta.env.VITE_BE_PORT}/uploads/`;
-
     const handleBooking = (doctorId) => {
-        // Điều hướng đến trang với ID bác sĩ
         navigate(`/bac-si/get?id=${doctorId}`);
     };
 
@@ -44,7 +39,7 @@ function DoctorItem(data) {
         <div className="rounded-lg mb-4 border border-[#E4E8EC]">
             <div className="px-4 pt-4 mb-4 flex gap-4">
                 <img
-                    src={`${IMAGE_URL}${doctor.image}` || 'https://via.placeholder.com/150'}
+                    src={doctor.image || 'https://via.placeholder.com/150'}
                     alt={doctor.fullname}
                     className="w-20 h-20 rounded-full object-cover border border-[#E4E8EC]"
                 />
@@ -87,7 +82,7 @@ function DoctorItem(data) {
             <div className="bg-[#F8F9FC] px-4 py-2 flex items-center justify-between w-full">
                 <div className="flex items-center gap-2">
                     <img
-                        src={`${IMAGE_URL}${doctor.clinicImage}` || 'https://via.placeholder.com/150'}
+                        src={doctor.clinicImage || 'https://via.placeholder.com/150'}
                         alt={doctor.clinicName}
                         className="w-10 h-10 rounded-full object-cover border border-[#E4E8EC]"
                     />
