@@ -1,26 +1,13 @@
-import  { useState, useEffect, useContext } from 'react';
-import {
-    ChevronRight,
-    X,
-    MapPin,
-    Clock,
-    CreditCard,
-    Banknote,
-    Shield,
-    Eye,
-    Pencil,
-    Trash2,
-    Plus,
-} from 'lucide-react';
+import { useState, useEffect, useContext } from 'react';
+import { ChevronRight, X, MapPin, Clock, CreditCard, Banknote, Shield, Eye, Pencil, Trash2, Plus } from 'lucide-react';
 import { BsCoin } from 'react-icons/bs';
-import { axiosInstance } from '~/api/apiRequest';
+import { axiosInstance, axiosClient } from '~/api/apiRequest';
 import { UserContext } from '~/context/UserContext';
 import { NavLink, useNavigate, useLocation } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 function MakeAnAppointment() {
-
-    const location =  useLocation();
+    const location = useLocation();
     const queryParams = new URLSearchParams(location.search);
     const doctorId = queryParams.get('doctorId');
     const currentDate = queryParams.get('currentDate');
@@ -39,6 +26,7 @@ function MakeAnAppointment() {
     const [patientData, setPatientData] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [reason, setReason] = useState('');
+    const [academicRanksAndDegreess, setAcademicRanksAndDegreess] = useState([]);
     const [showEditModal, setShowEditModal] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [formData, setFormData] = useState({
@@ -336,7 +324,6 @@ function MakeAnAppointment() {
                 }
             } catch (error) {
                 toast.error('Đã xảy ra lỗi khi lấy dữ liệu hồ sơ bệnh nhân');
-
             }
         };
         fetchRecordData();
@@ -421,6 +408,29 @@ function MakeAnAppointment() {
         }
     };
 
+    useEffect(() => {
+        const getDropdownAcademicRanksAndDegrees = async () => {
+            try {
+                const response = await axiosClient.get(`/doctor/academic-ranks-and-degrees`);
+
+                if (response.status === 200) {
+                    setAcademicRanksAndDegreess(response.data);
+                } else {
+                    console.error('No academic ranks and degrees are found:', response.message);
+                    setAcademicRanksAndDegreess([]);
+                }
+            } catch (error) {
+                console.error('Error fetching academic ranks and degrees:', error);
+                setAcademicRanksAndDegreess([]);
+            }
+        };
+        getDropdownAcademicRanksAndDegrees();
+    }, []);
+
+    let checkdoctor = academicRanksAndDegreess.find(
+        (academicRanksAndDegrees) => academicRanksAndDegrees.keyMap === doctorInfo.position,
+    )?.valueVi;
+
     return (
         <div className="min-h-screen bg-white">
             <div className="w-full bg-blue-50">
@@ -450,7 +460,7 @@ function MakeAnAppointment() {
                             className=" cursor-pointer font-semibold"
                             onClick={() => handleClickDoctor(doctorInfo.doctorId)}
                         >
-                            {doctorInfo.position} {doctorInfo.fullname}
+                            {checkdoctor} {doctorInfo.fullname}
                         </div>
                         <ChevronRight className="w-4 h-4 text-gray-400" />
                         <div className="text-blue-600 cursor-pointer font-semibold">Đặt lịch hẹn</div>
@@ -686,7 +696,7 @@ function MakeAnAppointment() {
                                     />
                                     <div>
                                         <h3 className="font-semibold">
-                                            {doctorInfo.position} {doctorInfo.fullname}
+                                            {checkdoctor} {doctorInfo.fullname}
                                         </h3>
                                         <p className="text-sm text-gray-500">{doctorInfo.specialtyName}</p>
                                     </div>

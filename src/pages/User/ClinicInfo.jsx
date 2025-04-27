@@ -705,9 +705,7 @@ function ClinicInfo() {
                                         <div className="mt-4 pt-4 border-t flex items-center justify-between w-full">
                                             <div className="flex items-center gap-2">
                                                 <img
-                                                    src={`http://localhost:${import.meta.env.VITE_BE_PORT}/uploads/${
-                                                        clinicData.image
-                                                    }`}
+                                                    src={clinicData.image}
                                                     alt={doctor.clinicId.name}
                                                     className="w-6 h-6"
                                                 />
@@ -822,9 +820,7 @@ function ClinicInfo() {
                                                         >
                                                             <div className="flex items-center gap-2">
                                                                 <img
-                                                                    src={`http://localhost:${
-                                                                        import.meta.env.VITE_BE_PORT
-                                                                    }/uploads/${review.doctorId.image}`}
+                                                                    src={review.doctorId.image}
                                                                     alt="logo clinic"
                                                                     className=" h-8 w-8 rounded-full"
                                                                 />
@@ -930,9 +926,7 @@ function ClinicInfo() {
                                 <div className="p-3 rounded-lg border bg-gray-50 cursor-not-allowed">
                                     <div className="flex items-center gap-2">
                                         <img
-                                            src={`http://localhost:${import.meta.env.VITE_BE_PORT}/uploads/${
-                                                clinicData.image
-                                            }`}
+                                            src={clinicData.image}
                                             alt="logo clinic"
                                             className=" h-8 w-8 rounded-full border-4 border-white"
                                         />
@@ -973,9 +967,7 @@ function ClinicInfo() {
                                         {!selectedDepartment && <Search className="w-5 h-5 text-gray-400" />}
                                         {selectedDepartment && (
                                             <img
-                                                src={`http://localhost:${import.meta.env.VITE_BE_PORT}/uploads/${
-                                                    selectedDepartment.image
-                                                }`}
+                                                src={selectedDepartment.image}
                                                 alt="logo clinic"
                                                 className="h-8 w-8 rounded-full border-4 border-white"
                                             />
@@ -1015,9 +1007,7 @@ function ClinicInfo() {
                                                 onClick={() => handleDepartmentSelect(dept)}
                                             >
                                                 <img
-                                                    src={`http://localhost:${import.meta.env.VITE_BE_PORT}/uploads/${
-                                                        dept.specialtyId.image
-                                                    }`}
+                                                    src={dept.specialtyId.image}
                                                     alt="logo clinic"
                                                     className="h-8 w-8 rounded-full border-4 border-white"
                                                 />
@@ -1039,9 +1029,7 @@ function ClinicInfo() {
                                         {!selectedDoctor && <Search className="w-5 h-5 text-gray-400" />}
                                         {selectedDoctor && (
                                             <img
-                                                src={`http://localhost:${import.meta.env.VITE_BE_PORT}/uploads/${
-                                                    selectedDoctor.image
-                                                }`}
+                                                src={selectedDoctor.image}
                                                 alt="logo clinic"
                                                 className="h-8 w-8 rounded-full border-4 border-white"
                                             />
@@ -1085,9 +1073,7 @@ function ClinicInfo() {
                                                 onClick={() => handleDoctorSelect(doctor)}
                                             >
                                                 <img
-                                                    src={`http://localhost:${import.meta.env.VITE_BE_PORT}/uploads/${
-                                                        doctor.doctorId.image
-                                                    }`}
+                                                    src={doctor.doctorId.image}
                                                     alt="logo clinic"
                                                     className="h-8 w-8 rounded-full border-4 border-white"
                                                 />
