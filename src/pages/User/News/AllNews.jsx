@@ -3,12 +3,11 @@ import { FaArrowRightLong } from 'react-icons/fa6';
 import { MdOutlineDateRange } from 'react-icons/md';
 import { NavLink } from 'react-router-dom';
 import { axiosClient } from '~/api/apiRequest';
-import {formatDate} from '~/utils/formatDate.jsx';
+import { formatDate } from '~/utils/formatDate.jsx';
 import Pagination from '~/components/Pagination';
 import { formatTitleForUrl } from '~/utils/formatTitleForUrl';
 
 function AllNews() {
-
     const [posts, setPosts] = useState([]);
     const [pagination, setPagination] = useState({ page: 1, limit: 15, totalPages: 1 });
     useEffect(() => {
@@ -18,7 +17,7 @@ function AllNews() {
     const handlePageChange = (page) => {
         setPagination((prev) => ({
             ...prev,
-            page: page, 
+            page: page,
         }));
     };
 
@@ -107,7 +106,7 @@ function AllNews() {
                                         <div className="flex gap-4">
                                             <div className="min-w-[140px] min-h-[100px]">
                                                 <img
-                                                    src={posts[0].image}
+                                                    src={post.image}
                                                     alt={post.title}
                                                     className="w-0 h-0 min-w-full max-w-full min-h-full max-h-full object-cover rounded-2xl"
                                                     loading="lazy"
@@ -139,7 +138,7 @@ function AllNews() {
                                 <div className="flex flex-col">
                                     <div className="w-full h-48 overflow-hidden">
                                         <img
-                                            src={posts[0].image}
+                                            src={post.image}
                                             alt={post.title}
                                             className="w-full h-full object-cover rounded-2xl"
                                             loading="lazy"
