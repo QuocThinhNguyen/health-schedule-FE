@@ -111,6 +111,7 @@ function DoctorInfo() {
     // Fetch lịch làm việc
     useEffect(() => {
         const fetchSchedule = async () => {
+            if (!currentDate) return;
             try {
                 const response = await axiosInstance.get(`/schedule/${doctorId}?date=${currentDate}`);
                 if (response.status === 200) {
