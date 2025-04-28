@@ -255,6 +255,8 @@ function MakeAnAppointment() {
                 formData.append('images', file);
             });
 
+            console.log('check date: ', currentDate);
+
             const response = await axiosInstance.post('/booking/book-appointment-direct', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
@@ -804,15 +806,6 @@ function MakeAnAppointment() {
                         >
                             Xác nhận đặt lịch
                         </button>
-                        {isLoading && (
-                            <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-                                <img
-                                    src="https://media.tenor.com/On7kvXhzml4AAAAj/loading-gif.gif"
-                                    alt="Loading..."
-                                    className="w-full h-full"
-                                />
-                            </div>
-                        )}
                     </div>
                 </div>
             </div>
@@ -1204,6 +1197,15 @@ function MakeAnAppointment() {
                             </button>
                         </div>
                     </div>
+                </div>
+            )}
+            {isLoading && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+                    <img
+                        src="https://media.tenor.com/On7kvXhzml4AAAAj/loading-gif.gif"
+                        alt="Loading..."
+                        className="w-fit h-fit"
+                    />
                 </div>
             )}
         </div>
