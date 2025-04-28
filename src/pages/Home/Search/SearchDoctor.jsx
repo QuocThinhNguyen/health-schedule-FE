@@ -40,11 +40,7 @@ function SearchDoctor(data) {
             className="px-6 py-2 hover:shadow-xl flex items-center gap-4 hover:bg-[rgba(227,242,255,0.3)] cursor-pointer border-b-2 border-transparent hover:border-b-2 hover:border-blue-400"
         >
             <div>
-                <img
-                    src={doctor.image}
-                    alt={doctor.fullname}
-                    className="w-12 h-12 object-cover rounded-full"
-                />
+                <img src={doctor.image} alt={doctor.fullname} className="w-12 h-12 object-cover rounded-full" />
             </div>
             <div className="flex flex-col gap-2">
                 <div className="font-bold">

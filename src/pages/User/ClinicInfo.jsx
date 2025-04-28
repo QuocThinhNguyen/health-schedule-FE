@@ -293,6 +293,7 @@ function ClinicInfo() {
     useEffect(() => {
         const fetchSchedule = async () => {
             try {
+                if (!currentDate) return;
                 const response = await axiosInstance.get(`/schedule/${selectedDoctor.userId}?date=${currentDate}`);
                 if (response.status === 200) {
                     const scheduleData = response.data;
