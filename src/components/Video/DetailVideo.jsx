@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext, useRef } from 'react';
-import { axiosInstance } from '~/api/apiRequest';
+import { axiosInstance, axiosClient } from '~/api/apiRequest';
 import { useSearchParams, useNavigate, useParams } from 'react-router-dom';
 import { Heart, X, ChevronDown, ChevronUp, Play, Pause } from 'lucide-react';
 import VideoItem from '~/components/Video/VideoItem';
@@ -27,7 +27,19 @@ function DetailVideo() {
     const [currentIndex, setCurrentIndex] = useState();
     const [detailVideo, setDetailVideo] = useState([]);
     const [doctorInfo, setDoctorInfo] = useState([]);
+    const [showControls, setShowControls] = useState(true);
+    const progressRef = useRef(null);
+    const [progress, setProgress] = useState(0);
+    const [currentTime, setCurrentTime] = useState(0);
+    const [duration, setDuration] = useState(0);
+    const controlsTimeoutRef = useRef(null);
+    const [isDragging, setIsDragging] = useState(false);
     const [checkDoctor, setCheckDoctor] = useState([]);
+    const link = import.meta.env.VITE_LINK;
+    const [academicRanksAndDegreess, setAcademicRanksAndDegreess] = useState([]);
+    const [titleDelete, setTitleDelete] = useState('');
+    const [idDelete, setIdDelete] = useState(null);
+    const [comfirmDelete, setComfirmDelete] = useState(false);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -137,7 +149,7 @@ function DetailVideo() {
     }, []);
 
     const copyToClipboard = () => {
-        const url = `http://localhost:5173/video?idVideo=${idVideo}&&idDoctor=${idDoctor}`;
+        const url = `${link}/video?idVideo=${idVideo}&&idDoctor=${idDoctor}`;
         navigator.clipboard
             .writeText(url)
             .then(() => {
@@ -154,16 +166,14 @@ function DetailVideo() {
     };
 
     const previousPage = () => {
-        navigate(`/bac-si/get?id=${idDoctor}`);
+        if (checkDoctor.roleId === 'R2') {
+            navigate(`/doctor/videos`);
+            // console.log('bác sĩ');
+        } else {
+            navigate(`/bac-si/get?id=${idDoctor}`);
+        }
     };
 
-    const [showControls, setShowControls] = useState(true);
-    const progressRef = useRef(null);
-    const [progress, setProgress] = useState(0);
-    const [currentTime, setCurrentTime] = useState(0);
-    const [duration, setDuration] = useState(0);
-    const controlsTimeoutRef = useRef(null);
-    const [isDragging, setIsDragging] = useState(false);
     useEffect(() => {
         const video = videoRef.current;
         if (!video) return;
@@ -527,6 +537,67 @@ function DetailVideo() {
             }
         }
     };
+
+    useEffect(() => {
+        const getDropdownAcademicRanksAndDegrees = async () => {
+            try {
+                const response = await axiosClient.get(`/doctor/academic-ranks-and-degrees`);
+
+                if (response.status === 200) {
+                    setAcademicRanksAndDegreess(response.data);
+                } else {
+                    console.error('No academic ranks and degrees are found:', response.message);
+                    setAcademicRanksAndDegreess([]);
+                }
+            } catch (error) {
+                console.error('Error fetching academic ranks and degrees:', error);
+                setAcademicRanksAndDegreess([]);
+            }
+        };
+        getDropdownAcademicRanksAndDegrees();
+    }, []);
+
+    let checkdoctor = academicRanksAndDegreess.find(
+        (academicRanksAndDegrees) => academicRanksAndDegrees.keyMap === doctorInfo.position,
+    )?.valueVi;
+
+    const handleDelete = async (videoId) => {
+        try {
+            const response = await axiosInstance.get(`/video/detail/${videoId}`);
+            if (response.status === 200) {
+                setTitleDelete(response.data.videoTitle);
+                setIdDelete(response.data.videoId);
+            }
+        } catch (error) {
+            console.error('Error delete video:', error);
+        }
+        setComfirmDelete(true);
+    };
+
+    const handleCancelDelete = () => {
+        setComfirmDelete(false);
+        setTitleDelete('');
+        setIdDelete(null);
+    };
+
+    const handleConfirmDelete = async () => {
+        try {
+            const response = await axiosInstance.delete(`/video/${idDelete}`);
+            if (response.status === 200) {
+                toast.success('Xóa video thành công');
+                setComfirmDelete(false);
+                // setTimeout(() => {
+                //     window.location.reload();
+                // }, 2000);
+                navigate(`/doctor/videos`);
+            } else {
+                toast.error('Xóa video thất bại');
+            }
+        } catch (error) {
+            console.error('Error delete video:', error);
+        }
+    };
+
     return (
         <div className="w-full flex bg-white h-screen-minus-20">
             {/* Cột bên trái */}
@@ -663,7 +734,7 @@ function DetailVideo() {
                             <div className="w-full">
                                 <div className="flex items-center justify-start w-full">
                                     <div className="text-lg font-bold">
-                                        {doctorInfo.position} {doctorInfo.fullname}
+                                        {checkdoctor} {doctorInfo.fullname}
                                     </div>
                                     <span className="text-sm ml-auto text-blue-700">
                                         {new Date(detailVideo.createAt).toLocaleDateString('vi-VN')}
@@ -696,9 +767,14 @@ function DetailVideo() {
                                     <div className="text-base font-normal">{title}</div>
                                     {checkDoctor.roleId === 'R2' &&
                                         checkDoctor.userId === detailVideo.doctorId?.userId && (
-                                            <button className="ml-auto" onClick={handleEdit}>
-                                                <img src="/edit.png" className="w-5 h-5" />
-                                            </button>
+                                            <div className="ml-auto">
+                                                <button onClick={handleEdit} className="mr-2">
+                                                    <img src="/edit.png" className="w-5 h-5" />
+                                                </button>
+                                                <button onClick={() => handleDelete(detailVideo.videoId)}>
+                                                    <img src="/delete.png" className="w-5 h-5" />
+                                                </button>
+                                            </div>
                                         )}
                                 </div>
                             )}
@@ -735,7 +811,7 @@ function DetailVideo() {
 
                     <div className="items-center justify-start flex mx-8 bg-[#1618230f] rounded-lg border">
                         <div className="truncate text-sm pl-3 pb-2 pt-[6px]">
-                            {`http://localhost:5173/video?idVideo=${idVideo}&&idDoctor=${idDoctor}`}
+                            {`${link}/video?idVideo=${idVideo}&&idDoctor=${idDoctor}`}
                         </div>
                         <div
                             className="px-4 pb-2 pt-[6px] text-sm font-bold cursor-pointer whitespace-nowrap"
@@ -980,6 +1056,58 @@ function DetailVideo() {
                     </div>
                 )}
             </div>
+            {comfirmDelete && (
+                <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-20">
+                    <div className="bg-white rounded-xl w-full max-w-md">
+                        {/* Header */}
+                        <div className="flex justify-end p-4">
+                            <button
+                                className="hover:bg-gray-100 p-2 rounded-lg transition-colors"
+                                onClick={handleCancelDelete}
+                            >
+                                <X className="w-5 h-5 text-gray-500" />
+                            </button>
+                        </div>
+
+                        {/* Content */}
+                        <div className="px-6 pb-6 text-center">
+                            {/* Avatar with X icon */}
+                            <div className="relative inline-block mb-4">
+                                <div className="w-24 h-24 bg-blue-100 rounded-full flex items-center justify-center">
+                                    <img src="/deleteVideo.png" alt="delete video" className="w-16 h-16" />
+                                </div>
+                            </div>
+
+                            {/* Title */}
+                            <h2 className="text-2xl font-bold mb-4">Xóa video</h2>
+
+                            {/* Message */}
+                            <p className="text-gray-600 mb-8">
+                                Bạn có chắc chắn muốn xóa video{' '}
+                                <span className="font-bold text-gray-900">{titleDelete}</span> khỏi danh sách video của
+                                bạn không?
+                            </p>
+
+                            {/* Buttons */}
+                            <div className="flex gap-3">
+                                <button
+                                    // onClick={onConfirm}
+                                    className="flex-1 px-4 py-2.5 border border-blue-600 text-blue-600 rounded-lg hover:bg-blue-50 transition-colors"
+                                    onClick={handleConfirmDelete}
+                                >
+                                    Đồng ý, xóa
+                                </button>
+                                <button
+                                    onClick={handleCancelDelete}
+                                    className="flex-1 px-4 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                                >
+                                    Không, giữ lại
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }
