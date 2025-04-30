@@ -1,5 +1,5 @@
-import  { useState, useEffect, useContext } from 'react';
-import {  axiosInstance } from '~/api/apiRequest';
+import { useState, useEffect, useContext } from 'react';
+import { axiosInstance } from '~/api/apiRequest';
 import { UserContext } from '~/context/UserContext';
 import { toast } from 'react-toastify';
 import { Eye, Phone, Mail, MapPin } from 'lucide-react';
@@ -47,6 +47,9 @@ function Overview() {
                 const responseYesterday = await axiosInstance.get(
                     `/booking/doctor/${user.userId}?date=${yesterdayDate}`,
                 );
+
+                console.log('response', response);
+                console.log('responseYesterday', responseYesterday);
 
                 if (response.status === 200) {
                     setAppointments(response.data);
@@ -128,20 +131,24 @@ function Overview() {
             ((statistical.totalBookingThisMonth - statistical.totalBookingLastMonth) /
                 statistical.totalBookingLastMonth) *
             100;
-        return `${change > 0 ? '+' : ''}${change.toFixed(1)}% so với tháng trước`;
+        return `${change > 0 ? '+' : ''}${change.toFixed(0)}% so với tháng trước`;
     };
+
+    const filteredAppointmentsYesterDay = appointmentsYesterday.filter(
+        (appointment) => appointment.status.keyMap !== 'S1' && appointment.status.keyMap !== 'S5',
+    );
 
     const stats = [
         {
             title: 'Cuộc hẹn hôm nay',
             value: appointments.length,
             icon: 'meeting.png',
-            change: `${appointments.length >= appointmentsYesterday.length ? '+' : '-'}${
-                appointments.length >= appointmentsYesterday.length
-                    ? appointments.length - appointmentsYesterday.length
-                    : appointmentsYesterday.length - appointments.length
+            change: `${appointments.length >= filteredAppointmentsYesterDay.length ? '+' : '-'}${
+                appointments.length >= filteredAppointmentsYesterDay.length
+                    ? appointments.length - filteredAppointmentsYesterDay.length
+                    : filteredAppointmentsYesterDay.length - appointments.length
             } so với hôm qua`,
-            status: appointments.length >= appointmentsYesterday.length ? 'increase' : 'decrease',
+            status: appointments.length >= filteredAppointmentsYesterDay.length ? 'increase' : 'decrease',
         },
         {
             title: 'Bệnh nhân tuần này',

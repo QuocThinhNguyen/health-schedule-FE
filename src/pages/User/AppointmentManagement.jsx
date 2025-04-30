@@ -96,6 +96,7 @@ const AppointmentManagement = () => {
                         }),
                     );
                     setAppointments(updatedAppointments);
+                    console.log('Appointments:', updatedAppointments);
                 } else {
                     setError('Không thể tải dữ liệu.');
                 }

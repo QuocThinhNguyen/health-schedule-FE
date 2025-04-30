@@ -62,7 +62,9 @@ function DoctorInfo() {
                 toast.error('Có lỗi xảy ra khi gửi thông tin!!!!');
             }
         };
-        handleClick();
+        if (user?.auth) {
+            handleClick();
+        }
     }, []);
 
     useEffect(() => {
