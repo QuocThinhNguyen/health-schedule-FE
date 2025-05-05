@@ -2,15 +2,25 @@ import { useEffect, useState } from 'react';
 import { BsCoin } from 'react-icons/bs';
 import { CiHospital1 } from 'react-icons/ci';
 import { FaUser } from 'react-icons/fa';
-
+import { BadgeCheck } from 'lucide-react';
 import { LiaStethoscopeSolid } from 'react-icons/lia';
 import { useNavigate } from 'react-router-dom';
 import { axiosClient } from '~/api/apiRequest';
 import { GoStarFill } from 'react-icons/go';
+import { use } from 'react';
 
 function Doctor(data) {
     const doctor = data.data;
+    // console.log('Check doctor', doctor);
     const [academicRanksAndDegreess, setAcademicRanksAndDegreess] = useState([]);
+    const [isBooking, setIsBooking] = useState(false);
+
+    useEffect(() => {
+        if (doctor.bookingCount === 0) {
+            setIsBooking(true);
+        }
+    }, [doctor.bookingCount]);
+
     useEffect(() => {
         const getDropdownAcademicRanksAndDegrees = async () => {
             try {
@@ -44,8 +54,16 @@ function Doctor(data) {
         <div className="w-1/4 px-2 mt-4 group">
             <div className="bg-white rounded-lg shadow cursor-pointer border group-hover:border group-hover:border-[rgb(44,116,223)] group-hover:shadow-2xl">
                 <div className="pt-4 pb-2 gap-3 flex flex-col items-center">
-                    <div className="flex justify-center items-center h-28 w-28 mt-4 rounded-full overflow-hidden border border-customGray">
-                        <img src={doctor.image} alt={doctor.fullname} className="object-cover w-full h-full" />
+                    <div className="relative w-full flex justify-center items-center">
+                        {isBooking && (
+                            <div className="absolute top-0 right-0 text-xs bg-gradient-to-r from-green-500 to-emerald-600 text-white font-medium px-3 py-1 rounded-full flex items-center">
+                                <BadgeCheck className="w-4 h-4 mr-1" /> Bác sĩ mới
+                            </div>
+                        )}
+
+                        <div className="flex justify-center items-center h-28 w-28 rounded-full overflow-hidden border border-customGray">
+                            <img src={doctor.image} alt={doctor.fullname} className="object-cover w-full h-full" />
+                        </div>
                     </div>
                     <div className="flex justify-between items-center bg-[#EBF9FD] w-full px-2 py-2 text-sm">
                         <p className="flex items-center justify-center gap-1 font-semibold ">

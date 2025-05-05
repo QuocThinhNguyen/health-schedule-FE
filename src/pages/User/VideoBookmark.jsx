@@ -26,7 +26,7 @@ function VideoBookmark() {
 
     console.log(videos);
     return (
-        <div className="mt-20 fit overflow-y-auto">
+        <div className="mt-20 fit">
             <div className="text-2xl text-black font-bold mb-1 text-start">Danh sách video</div>
             {videos.length === 0 ? (
                 <div className="mt-5">Không có video nào</div>

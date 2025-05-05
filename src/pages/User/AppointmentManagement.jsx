@@ -98,7 +98,7 @@ const AppointmentManagement = () => {
                     setAppointments(updatedAppointments);
                     console.log('Appointments:', updatedAppointments);
                 } else {
-                    setError('Không thể tải dữ liệu.');
+                    setError('Không có dữ liệu');
                 }
             } catch (err) {
                 setError('Đã xảy ra lỗi khi tải dữ liệu.');

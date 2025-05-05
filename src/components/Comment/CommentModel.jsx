@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { Eye, X, Star, ArrowLeft } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { axiosInstance } from '~/api/apiRequest';
+import { axiosInstance, axiosClient } from '~/api/apiRequest';
 import { toast } from 'react-toastify';
 const CommentModel = () => {
     const [rating, setRating] = useState(5);
@@ -14,6 +14,7 @@ const CommentModel = () => {
     const videoInputRef = useRef(null);
     const [mediaFiles, setMediaFiles] = useState([]);
     const [previews, setPreviews] = useState([]);
+    const [academicRanksAndDegreess, setAcademicRanksAndDegreess] = useState([]);
 
     useEffect(() => {
         const fetchDoctorInfo = async () => {
@@ -32,40 +33,6 @@ const CommentModel = () => {
     const handleBack = () => {
         navigate('/user/appointments');
     };
-
-    // const handleSubmit = async (e) => {
-    //     e.preventDefault();
-
-    //     if (!state?.patientRecordId || !state?.doctorId) {
-    //         toast.error('Thiếu thông tin bệnh nhân hoặc bác sĩ!');
-    //         return;
-    //     }
-
-    //     const feedbackData = {
-    //         patientId: state.patientRecordId,
-    //         doctorId: state.doctorId,
-    //         rating,
-    //         comment: review,
-    //         date: state.appointmentDate,
-    //         clinicId: state.clinicId,
-    //     };
-
-    //     try {
-    //         setIsSubmitting(true);
-    //         const response = await axiosInstance.post('/feedback', feedbackData);
-    //         if (response.status === 200) {
-    //             toast.success('Đánh giá đã được gửi thành công!');
-    //             navigate('/user/appointments'); // Điều hướng về trang quản lý lịch hẹn
-    //         } else {
-    //             toast.error('Đánh giá không thành công, vui lòng thử lại.');
-    //         }
-    //     } catch (error) {
-    //         console.error('Error submitting feedback:', error);
-    //         toast.error('Đã xảy ra lỗi khi gửi đánh giá.');
-    //     } finally {
-    //         setIsSubmitting(false);
-    //     }
-    // };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -130,6 +97,30 @@ const CommentModel = () => {
     const handleRemoveImage = (index) => {
         setMediaFiles((prevFiles) => prevFiles.filter((_, i) => i !== index));
     };
+
+    useEffect(() => {
+        const getDropdownAcademicRanksAndDegrees = async () => {
+            try {
+                const response = await axiosClient.get(`/doctor/academic-ranks-and-degrees`);
+
+                if (response.status === 200) {
+                    setAcademicRanksAndDegreess(response.data);
+                } else {
+                    console.error('No academic ranks and degrees are found:', response.message);
+                    setAcademicRanksAndDegreess([]);
+                }
+            } catch (error) {
+                console.error('Error fetching academic ranks and degrees:', error);
+                setAcademicRanksAndDegreess([]);
+            }
+        };
+        getDropdownAcademicRanksAndDegrees();
+    }, []);
+
+    let checkdoctor = academicRanksAndDegreess.find(
+        (academicRanksAndDegrees) => academicRanksAndDegrees.keyMap === doctorInfo.position,
+    )?.valueVi;
+
     return (
         <div className="max-w-6xl mx-auto p-4 mt-20">
             <h1 className="text-2xl font-bold mb-6 text-left">Đánh Giá Bác Sĩ</h1>
@@ -139,7 +130,7 @@ const CommentModel = () => {
                 <img src={doctorInfo.image} alt="Product" className="w-20 h-20 object-cover rounded-lg" />
                 <div>
                     <div className="font-medium text-lg">
-                        {doctorInfo.position} {doctorInfo.fullname}
+                        {checkdoctor} {doctorInfo.fullname}
                     </div>
                     <div className="text-base">{doctorInfo.clinicName}</div>
                 </div>

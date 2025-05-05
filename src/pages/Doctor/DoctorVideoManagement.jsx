@@ -215,7 +215,7 @@ function DoctorVideoManagement() {
     };
 
     return (
-        <div className="p-6 w-150 h-full border rounded-lg shadow-lg bg-white overflow-y-auto">
+        <div className="p-6 w-150 h-full border rounded-lg shadow-lg bg-white overflow-y-auto flex flex-col">
             <div className="flex justify-between items-center">
                 <div className="text-xl font-semibold">Danh sách Video</div>
                 <button className="border rounded-lg px-4 py-2 justify-center items-center flex gap-2 bg-blue-400 hover:bg-blue-500">
@@ -279,7 +279,7 @@ function DoctorVideoManagement() {
                     ))}
                 </div>
             </div>
-            <div className="text-center">
+            <div className="text-center mt-auto">
                 <Pagination
                     currentPage={pagination.page}
                     totalPages={pagination.totalPages}
