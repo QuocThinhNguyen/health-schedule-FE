@@ -116,6 +116,7 @@ function DoctorInfo() {
             if (!currentDate) return;
             try {
                 const response = await axiosInstance.get(`/schedule/${doctorId}?date=${currentDate}`);
+                console.log('Schedule response:', response.data);
                 if (response.status === 200) {
                     setSchedule(response.data);
                 }
@@ -139,7 +140,7 @@ function DoctorInfo() {
         const { timeTypes, currentNumbers } = scheduleData;
 
         // Lọc các timeTypes dựa trên currentNumbers (bỏ qua nếu currentNumbers === 2)
-        const availableTimeSlots = timeTypes.filter((_, index) => currentNumbers[index] !== 2);
+        const availableTimeSlots = timeTypes.filter((_, index) => currentNumbers[index] !== 4);
 
         // Map timeTypes đã lọc sang label
         return availableTimeSlots.map((timeType) => {

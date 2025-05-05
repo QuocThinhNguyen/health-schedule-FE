@@ -143,87 +143,83 @@ function HealthReport() {
     ];
 
     return (
-        <main className="flex-1">
-            {/* Patient Records Content */}
-            <div className="">
-                <div className="bg-white rounded-xl shadow-sm p-6">
-                    {/* Search and Add Patient */}
-                    <div className="flex justify-between mb-6">
-                        <div className="relative w-64">
-                            <input
-                                type="text"
-                                placeholder="Tìm kiếm bệnh nhân..."
-                                className="w-full pl-10 pr-4 py-2 border rounded-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                                value={searchQuery}
-                                onChange={(e) => setSearchQuery(e.target.value)}
-                            />
-                            <Search className="absolute left-3 top-2.5 w-5 h-5 text-gray-400" />
-                        </div>
-                    </div>
-
-                    {/* Patient List */}
-                    <div className="overflow-x-auto">
-                        <table className="w-full table-auto border-collapse">
-                            <thead>
-                                <tr className="text-gray-500 border-b">
-                                    <th className="pb-3 font-medium w-min whitespace-nowrap">Tên bệnh nhân</th>
-                                    <th className="pb-3 font-medium w-20 ">Tuổi</th>
-                                    <th className="pb-3 font-medium w-24 ">Giới tính</th>
-                                    <th className="pb-3 font-medium min-w-[150px] ">Lần khám gần nhất</th>
-                                    <th className="pb-3 font-medium min-w-[200px] ">Tình trạng</th>
-                                    <th className="pb-3 font-medium w-32 ">Thao tác</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {currentItems.map((patient) => (
-                                    <tr key={patient.id} className="border-b last:border-b-0">
-                                        <td className="py-4 text-center whitespace-nowrap ">
-                                            {patient.patientRecordId.fullname}
-                                        </td>
-                                        <td className="py-4 text-center">
-                                            {calculateAge(patient.patientRecordId.birthDate)}
-                                        </td>
-                                        <td className="py-4 text-center">
-                                            {patient.patientRecordId.gender === 'Male'
-                                                ? 'Nam'
-                                                : patient.patientRecordId.gender === 'Female'
-                                                ? 'Nữ'
-                                                : 'Khác'}
-                                        </td>
-                                        <td className="py-4 text-center">
-                                            {new Date(patient.appointmentDate).toLocaleDateString('vi-VN')}
-                                        </td>
-                                        <td className="py-4 text-center truncate max-w-[250px]">{patient.reason}</td>
-                                        <td className="py-4 text-center">
-                                            <button
-                                                onClick={() =>
-                                                    getDetail(
-                                                        patient.bookingId,
-                                                        patient.patientRecordId.patientRecordId,
-                                                    )
-                                                }
-                                                className="text-blue-600 hover:text-blue-800"
-                                            >
-                                                Xem chi tiết
-                                            </button>
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
-
-                    {/* Pagination */}
-                    <div className="text-center">
-                        <Pagination
-                            currentPage={currentPage}
-                            totalPages={Math.ceil(latestAppointments.length / itemsPerPage)}
-                            onPageChange={setCurrentPage}
-                        />
-                    </div>
+        <div className="p-6 w-150 h-full border rounded-lg shadow-lg bg-white overflow-y-auto flex flex-col">
+            {/* Search and Add Patient */}
+            <div className="flex justify-between mb-6">
+                <div className="relative w-64">
+                    <input
+                        type="text"
+                        placeholder="Tìm kiếm bệnh nhân..."
+                        className="w-full pl-10 pr-4 py-2 border rounded-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                    />
+                    <Search className="absolute left-3 top-2.5 w-5 h-5 text-gray-400" />
                 </div>
             </div>
 
+            {/* Patient List */}
+            <div className="overflow-x-auto">
+                <table className="w-full table-auto border-collapse">
+                    <thead>
+                        <tr className="text-gray-500 border-b">
+                            <th className="pb-3 font-medium w-min whitespace-nowrap">Tên bệnh nhân</th>
+                            <th className="pb-3 font-medium w-20 ">Tuổi</th>
+                            <th className="pb-3 font-medium w-24 ">Giới tính</th>
+                            <th className="pb-3 font-medium min-w-[150px] ">Lần khám gần nhất</th>
+                            <th className="pb-3 font-medium min-w-[200px] ">Tình trạng</th>
+                            <th className="pb-3 font-medium w-32 ">Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {currentItems.map((patient) => (
+                            <tr key={patient.id} className="border-b last:border-b-0">
+                                <td className="py-4 text-center whitespace-nowrap ">
+                                    {patient.patientRecordId.fullname}
+                                </td>
+                                <td className="py-4 text-center">{calculateAge(patient.patientRecordId.birthDate)}</td>
+                                <td className="py-4 text-center">
+                                    {patient.patientRecordId.gender === 'Male'
+                                        ? 'Nam'
+                                        : patient.patientRecordId.gender === 'Female'
+                                        ? 'Nữ'
+                                        : 'Khác'}
+                                </td>
+                                <td className="py-4 text-center">
+                                    {new Date(patient.appointmentDate).toLocaleDateString('vi-VN')}
+                                </td>
+                                <td className="py-4 text-center truncate max-w-[250px]">{patient.reason}</td>
+                                <td className="py-4 text-center">
+                                    <button
+                                        onClick={() =>
+                                            getDetail(patient.bookingId, patient.patientRecordId.patientRecordId)
+                                        }
+                                        className="text-blue-600 hover:text-blue-800"
+                                    >
+                                        Xem chi tiết
+                                    </button>
+                                </td>
+                            </tr>
+                        ))}
+                        {currentItems.length === 0 && (
+                            <tr>
+                                <td colSpan="6" className="px-4 py-2 text-center text-gray-500">
+                                    Không có dữ liệu
+                                </td>
+                            </tr>
+                        )}
+                    </tbody>
+                </table>
+            </div>
+
+            {/* Pagination */}
+            <div className="text-center mt-auto">
+                <Pagination
+                    currentPage={currentPage}
+                    totalPages={Math.ceil(latestAppointments.length / itemsPerPage)}
+                    onPageChange={setCurrentPage}
+                />
+            </div>
             {/* Patient Detail Modal */}
             {selectedPatient && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
@@ -444,7 +440,7 @@ function HealthReport() {
                     </div>
                 </div>
             )}
-        </main>
+        </div>
     );
 }
 
