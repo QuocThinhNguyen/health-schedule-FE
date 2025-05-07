@@ -89,6 +89,12 @@ function Register() {
     };
 
     const handleSubmit = async (e) => {
+        // kiểm tra các trường không được để trống
+        if (!fullname || !email || !password || !confirmPassword) {
+            toast.error('Vui lòng điền đầy đủ thông tin.');
+            return;
+        }
+
         e.preventDefault();
         setIsLoading(true);
         try {
@@ -97,6 +103,8 @@ function Register() {
                 email,
                 password,
             });
+
+            console.log(response);
 
             if (response.status === 200) {
                 setEmailRegister(email);
@@ -139,6 +147,7 @@ function Register() {
                             onChange={handleFullNameChange}
                             onBlur={handleFullnameBlur}
                             onKeyDown={handleKeyDown}
+                            required
                         />
                         {fullnameError && <span className="text-red-500 text-xs">{fullnameError}</span>}
                     </div>
@@ -151,6 +160,7 @@ function Register() {
                             onChange={handleEmailChange}
                             onBlur={handleEmailBlur}
                             onKeyDown={handleKeyDown}
+                            required
                         />
                         {emailError && <span className="text-red-500 text-xs">{emailError}</span>}
                     </div>
@@ -164,6 +174,7 @@ function Register() {
                                 onChange={handlePasswordChange}
                                 onBlur={handlePasswordBlur}
                                 onKeyDown={handleKeyDown}
+                                required
                             />
                             <button
                                 type="button"
@@ -185,13 +196,14 @@ function Register() {
                                 onChange={handleConfirmPasswordChange}
                                 onBlur={handleConfirmPasswordBlur}
                                 onKeyDown={handleKeyDown}
+                                required
                             />
                             <button
                                 type="button"
                                 className="absolute top-1/2 right-3 transform -translate-y-1/2 text-gray-500 "
                                 onClick={toggleShowConfirmPassword}
                             >
-                                {setConfirmPassword ? <IoEye /> : <IoEyeOff />}
+                                {showConfirmPassword ? <IoEye /> : <IoEyeOff />}
                             </button>
                         </div>
                         {confirmPasswordError && <span className="text-red-500 text-xs">{confirmPasswordError}</span>}
