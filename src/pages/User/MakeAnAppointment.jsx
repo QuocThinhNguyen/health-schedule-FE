@@ -17,7 +17,7 @@ function MakeAnAppointment() {
     const [isVisible, setIsVisible] = useState(true);
     const [isDragging, setIsDragging] = useState(false);
     const [files, setFiles] = useState([]);
-    const [selectedPatientId, setSelectedPatientId] = useState(1);
+    const [selectedPatientId, setSelectedPatientId] = useState(null);
     const { state } = useLocation();
     const [doctorInfo, setDoctorInfo] = useState([]);
     const navigate = useNavigate();
@@ -227,6 +227,10 @@ function MakeAnAppointment() {
     }, [user.userId]);
 
     const handleConfirm = async () => {
+        if (!selectedPatientId) {
+            toast.error('Vui lòng chọn hồ sơ bệnh nhân trước khi đặt lịch!');
+            return;
+        }
         setIsLoading(true);
         try {
             if (paymentMethod === 'cash') {

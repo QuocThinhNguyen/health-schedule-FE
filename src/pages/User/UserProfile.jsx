@@ -63,6 +63,24 @@ function DoctorProfile() {
     };
 
     const handleSave = async () => {
+        // kiểm tra nhập có đủ dữ liệu chưa và focus vào ô nào chưa nhập
+        if (doctorInfo.name === '') {
+            toast.warn('Vui lòng nhập họ và tên');
+            return;
+        }
+        if (doctorInfo.address === '') {
+            toast.warn('Vui lòng nhập địa chỉ');
+            return;
+        }
+        if (doctorInfo.birthdate === '') {
+            toast.warn('Vui lòng nhập ngày sinh');
+            return;
+        }
+        if (doctorInfo.phone === '') {
+            toast.warn('Vui lòng nhập số điện thoại');
+            return;
+        }
+
         setIsEditing(false);
         const formData = new FormData();
         formData.append('fullname', doctorInfo.name);
@@ -81,6 +99,7 @@ function DoctorProfile() {
                     'Content-Type': 'multipart/form-data',
                 },
             });
+            console.log('Check update response: ', response);
             if (response.status === 200) {
                 // Check a success code if the backend provides it
                 toast.success('Cập nhật thông tin thành công');
@@ -94,7 +113,7 @@ function DoctorProfile() {
             toast.error('Cập nhật thông tin thất bại');
         }
     };
-  
+
     return (
         <div className="mt-20 h-fit overflow-y-auto max-w-xl">
             {/* <h2 className="text-5xl font-bold text-center mb-6">Thông Tin Cá Nhân Bác Sĩ</h2> */}
@@ -113,7 +132,7 @@ function DoctorProfile() {
             {/* Ảnh Avatar */}
             <div className=" flex justify-start mb-6 relative">
                 <img
-                    src={previewImage || (doctorInfo.image ? doctorInfo.image : defaultImage)} // Thay thế URL này bằng link ảnh thực tế của bác sĩ
+                    src={previewImage || (doctorInfo.image ? doctorInfo.image : defaultImage)}
                     alt="Doctor Avatar"
                     className="w-32 h-32 rounded-full border-2 border-gray-300"
                 />
@@ -152,6 +171,8 @@ function DoctorProfile() {
                         onChange={handleChange}
                         disabled={!isEditing}
                         className={` ${isEditing ? 'bg-white w-full p-2 border rounded' : 'bg-white'}`}
+                        required
+                        placeholder="Nhập họ và tên"
                     />
                 </div>
 
@@ -163,6 +184,7 @@ function DoctorProfile() {
                         value={doctorInfo.email}
                         onChange={handleChange}
                         disabled={true}
+                        placeholder="Nhập email"
                         className={`cursor-not-allowed w-1/2 ${
                             isEditing ? 'bg-white w-full p-2 border rounded' : 'bg-white'
                         }`}
@@ -214,6 +236,8 @@ function DoctorProfile() {
                         onChange={handleChange}
                         disabled={!isEditing}
                         className={` ${isEditing ? 'bg-white w-full p-2 border rounded' : 'bg-white'}`}
+                        required
+                        placeholder="Nhập số điện thoại"
                     />
                 </div>
 
@@ -226,6 +250,8 @@ function DoctorProfile() {
                         onChange={handleChange}
                         disabled={!isEditing}
                         className={` ${isEditing ? 'bg-white w-full p-2 border rounded' : 'bg-white'}`}
+                        required
+                        placeholder="Nhập địa chỉ"
                     />
                 </div>
             </div>
