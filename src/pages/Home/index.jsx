@@ -10,12 +10,7 @@ import ListDoctorRecommended from './DoctorRecommended/ListDoctorRecommended';
 import { UserContext } from '~/context/UserContext';
 
 function Home() {
-    const images = [
-        'https://pmc.bookingcare.vn/assets/anh/bookingcare-cover-4.jpg',
-        'https://www.hopkinsmedicine.org/-/media/images/option3.jpg',
-        'https://cdn.medpro.vn/prod-partner/92b6d682-4b5a-4c94-ac54-97a077c0c6c5-homepage_banner.webp',
-        'https://cdn.youmed.vn/wp-content/themes/youmed/images/your-medical-booking.webp',
-    ];
+    const images = ['home_image1.jpg', 'home_image2.jpg', 'home_image3.jpg', 'home_image4.jpg'];
 
     //Slider
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -24,7 +19,7 @@ function Home() {
     useEffect(() => {
         const interval = setInterval(() => {
             setCurrentImageIndex((prevClinicIndex) => (prevClinicIndex + 1) % images.length);
-        }, 4000); 
+        }, 4000);
         return () => clearInterval(interval);
     }, [images.length]);
 
@@ -89,7 +84,6 @@ function Home() {
 
             {/* Tin tuc */}
             <News />
-
         </div>
     );
 }

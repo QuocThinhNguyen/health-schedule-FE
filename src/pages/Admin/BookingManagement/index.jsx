@@ -27,6 +27,9 @@ const BookingManagement = () => {
             const response = await axiosInstance.get(
                 `/booking/?query=${filterValue}&date=${filterDate}&status=${selectedStatus}&page=${pagination.page}&limit=${pagination.limit}`,
             );
+            console.log(
+                `/booking/?query=${filterValue}&date=${filterDate}&status=${selectedStatus}&page=${pagination.page}&limit=${pagination.limit}`,
+            );
             if (response.status === 200) {
                 setSchedules(response.data);
                 if (response.totalPages === 0) {

@@ -48,6 +48,7 @@ const DoctorManagement = () => {
             const response = await axiosInstance.get(
                 `/doctor/?query=${filterValue}&page=${pagination.page}&limit=${pagination.limit}`,
             );
+            console.log(`/doctor/?query=${filterValue}&page=${pagination.page}&limit=${pagination.limit}`);
             if (response.status === 200) {
                 setDoctors(response.data);
                 if (response.totalPages === 0) {

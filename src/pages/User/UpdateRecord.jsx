@@ -58,8 +58,36 @@ function UpdateRecord() {
     };
 
     const handleSubmit = async (e) => {
+        if (!formData.fullname) {
+            toast.error('Vui lòng nhập họ và tên');
+            return;
+        }
+        if (!formData.birthDate) {
+            toast.error('Vui lòng nhập ngày sinh');
+            return;
+        }
+        if (!formData.phoneNumber) {
+            toast.error('Vui lòng nhập số điện thoại');
+            return;
+        }
+        if (!formData.job) {
+            toast.error('Vui lòng nhập nghề nghiệp');
+            return;
+        }
+        if (!formData.CCCD) {
+            toast.error('Vui lòng nhập số CCCD/Passport');
+            return;
+        }
+        if (!formData.email) {
+            toast.error('Vui lòng nhập địa chỉ email');
+            return;
+        }
+        if (!formData.address) {
+            toast.error('Vui lòng nhập địa chỉ hiện tại');
+            return;
+        }
         e.preventDefault();
-        console.log('Form submitted:', formData);
+        // console.log('Form submitted:', formData);
         try {
             const response = await axiosInstance.put(`/patientrecord/${recordId}`, formData);
             console.log('Response Update:', response);
@@ -90,7 +118,7 @@ function UpdateRecord() {
                         <input
                             type="text"
                             name="fullname"
-                            placeholder="Nguyễn Văn A"
+                            placeholder="Nhập họ và tên"
                             value={formData.fullname}
                             onChange={handleChange}
                             className="w-full p-3 border rounded-lg bg-white focus:ring-2 focus:ring-blue-500 placeholder-gray-400 focus:outline-none"
@@ -158,6 +186,8 @@ function UpdateRecord() {
                             value={formData.job}
                             onChange={handleChange}
                             className="w-full p-3 border rounded-lg bg-white focus:ring-2 focus:ring-blue-500 placeholder-gray-400 focus:outline-none"
+                            required
+                            placeholder="Nhập nghề nghiệp"
                         />
                     </div>
 
@@ -171,6 +201,7 @@ function UpdateRecord() {
                             value={formData.CCCD}
                             onChange={handleChange}
                             className="w-full p-3 border rounded-lg bg-white focus:ring-2 focus:ring-blue-500 placeholder-gray-400 focus:outline-none"
+                            required
                         />
                     </div>
 
@@ -184,6 +215,7 @@ function UpdateRecord() {
                             value={formData.email}
                             onChange={handleChange}
                             className="w-full p-3 border rounded-lg bg-white focus:ring-2 focus:ring-blue-500 placeholder-gray-400 focus:outline-none"
+                            required
                         />
                     </div>
 

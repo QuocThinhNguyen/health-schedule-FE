@@ -4,6 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import Input from '~/components/Input';
 import ImageInput from '../components/ImageInput';
 import SelectOption from '../components/SelectOption';
+import { use } from 'react';
+import { axiosClient, axiosInstance } from '~/api/apiRequest';
 
 function FormUser({ onSubmit, defaultValues = {} }) {
     const navigate = useNavigate();
@@ -14,7 +16,10 @@ function FormUser({ onSubmit, defaultValues = {} }) {
         setValue,
         reset,
         control,
+        watch,
     } = useForm();
+
+    const roleId = watch('roleId');
 
     const genderOptions = {
         Male: 'Nam',
@@ -25,10 +30,13 @@ function FormUser({ onSubmit, defaultValues = {} }) {
         R1: 'Quản trị viên',
         R2: 'Bác sĩ',
         R3: 'Người dùng',
+        R4: 'Quản lý bệnh viện',
     };
 
     const [readOnly, setReadOnly] = useState(false);
     const [required, setRequired] = useState(true);
+    const [clinicOptions, setClinicOptions] = useState([]);
+    console.log('clinicOptions', clinicOptions);
     console.log('required', required);
     console.log('readOnly', readOnly);
 
@@ -39,6 +47,27 @@ function FormUser({ onSubmit, defaultValues = {} }) {
     const handleClickReturn = () => {
         navigate('/admin/user');
     };
+
+    useEffect(() => {
+        const fetchClinicOptions = async () => {
+            try {
+                const response = await axiosInstance.get('/clinic/dropdown');
+                console.log('response', response);
+                if (response.status === 200) {
+                    const option = response.data.map((item) => ({
+                        value: item.clinicId,
+                        label: item.name,
+                    }));
+                    setClinicOptions(option);
+                } else {
+                    console.log('Error fetching clinic options:', response.message);
+                }
+            } catch (error) {
+                console.error('Error fetching clinic options:', error);
+            }
+        };
+        fetchClinicOptions();
+    }, []);
 
     useEffect(() => {
         console.log('defaultValues', defaultValues);
@@ -75,6 +104,7 @@ function FormUser({ onSubmit, defaultValues = {} }) {
         formData.append('address', data.address);
         formData.append('gender', data.gender);
         formData.append('roleId', data.roleId);
+        formData.append('clinicId', data.clinicId);
         if (avatar) formData.append('image', avatar);
         onSubmit && onSubmit(formData);
 
@@ -153,7 +183,7 @@ function FormUser({ onSubmit, defaultValues = {} }) {
                         />
                     </div>
                     <div className="flex items-center justify-between gap-3">
-                        <div className="w-full mt-4 z-20">
+                        <div className="w-full mt-4 z-50">
                             <label
                                 htmlFor="gender"
                                 className="block text-sm font-medium mb-1 text-[var(--text-primary)]"
@@ -181,7 +211,7 @@ function FormUser({ onSubmit, defaultValues = {} }) {
                             {errors.gender && <p className="text-red-500 text-sm mt-1">{errors.gender?.message}</p>}
                         </div>
 
-                        <div className="w-full mt-4 z-20">
+                        <div className="w-full mt-4 z-50">
                             <label
                                 htmlFor="roleId"
                                 className="block text-sm font-medium mb-1 text-[var(--text-primary)]"
@@ -209,6 +239,37 @@ function FormUser({ onSubmit, defaultValues = {} }) {
                             {errors.roleId && <p className="text-red-500 text-sm mt-1">{errors.roleId?.message}</p>}
                         </div>
                     </div>
+
+                    {roleId === 'R4' && (
+                        <div className="flex items-center justify-between gap-3">
+                            <div className="w-full mt-4 z-20">
+                                <label
+                                    htmlFor="clinicId"
+                                    className="block text-sm font-medium mb-1 text-[var(--text-primary)]"
+                                >
+                                    Bệnh viện quản lý
+                                </label>
+                                <Controller
+                                    name="clinicId"
+                                    control={control}
+                                    rules={{ required: 'Vui lòng chọn bệnh viện quản lý' }}
+                                    render={({ field }) => {
+                                        return (
+                                            <SelectOption
+                                                value={field.value}
+                                                onChange={field.onChange}
+                                                options={clinicOptions}
+                                                placeholder="Chọn bệnh viện"
+                                            />
+                                        );
+                                    }}
+                                />
+                                {errors.clinicId && (
+                                    <p className="text-red-500 text-sm mt-1">{errors.clinicId?.message}</p>
+                                )}
+                            </div>
+                        </div>
+                    )}
                 </div>
                 <div className="w-1/4 flex justify-center items-center mt-4">
                     <ImageInput value={avatar} onChange={setAvatar} className="w-48 h-48" />
