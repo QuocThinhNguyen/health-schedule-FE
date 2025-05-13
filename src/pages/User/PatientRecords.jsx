@@ -54,7 +54,7 @@ function PatientRecord() {
                 );
                 toast.success('Đã xóa hồ sơ thành công');
             } else {
-                toast.error('Không thể xóa hồ sơ');
+                toast.error(response.message);
             }
         } catch (error) {
             console.error('Lỗi khi xóa hồ sơ:', error);
