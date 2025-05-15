@@ -1,4 +1,4 @@
-import Title from '../components/Tittle';
+import Title from '../../../components/Tittle';
 import FormClinic from './FormClinic';
 import { axiosInstance } from '~/api/apiRequest';
 import { toast } from 'react-toastify';

@@ -1,6 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEye, faEyeSlash } from '@fortawesome/free-regular-svg-icons';
+import { useEffect, useRef, useState, useMemo } from 'react';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useContext } from 'react';
@@ -13,7 +11,6 @@ import './CSS/button_facebook.css';
 import './CSS/button_google.css';
 import { IoEye, IoEyeOff } from 'react-icons/io5';
 import { useSocket } from '../Chat/useSocket';
-
 
 function Login() {
     const [showPassword, setShowPassword] = useState(false);
@@ -30,9 +27,12 @@ function Login() {
     }, []);
 
     const navigate = useNavigate();
-    const location = useLocation();
 
     const { user, loginContext, loginContextGoogle } = useContext(UserContext);
+    const socket = useMemo(() => {
+        const decodeToken = user.auth ? jwtDecode(user.accessToken) : null;
+        return decodeToken ? useSocket(decodeToken.userId) : null;
+    }, [user]);
 
     const toggleShowPassword = () => {
         setShowPassword(!showPassword);
@@ -74,23 +74,27 @@ function Login() {
                 email,
                 password,
             });
+            console.log('login', res);
 
             if (res.status === 200) {
                 loginContext(email, res.access_token);
-                toast.success('Đăng nhập thành công');
                 const decodeToken = jwtDecode(res.access_token);
-                useSocket(decodeToken.userId);
+                toast.success('Đăng nhập thành công');
+                // useSocket(decodeToken.userId);
                 if (decodeToken.roleId === 'R1') {
                     navigate('/admin/dashboard', { replace: true });
                 } else if (decodeToken.roleId === 'R2') {
                     navigate('/doctor/', { replace: true });
                 } else if (decodeToken.roleId === 'R3') {
                     navigate('/', { replace: true });
+                } else if (decodeToken.roleId === 'R4') {
+                    navigate('/clinic', { replace: true });
                 }
             } else {
                 toast.error('Đăng nhập thất bại');
             }
         } catch (error) {
+            console.log('error', error);
             toast.error('Đăng nhập thất bại');
         }
     };

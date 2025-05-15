@@ -1,5 +1,5 @@
 import { useNavigate, useParams } from 'react-router-dom';
-import Title from '../components/Tittle';
+import Title from '../../../components/Tittle';
 import FormClinic from './FormClinic';
 import { useEffect, useState } from 'react';
 import { axiosInstance } from '~/api/apiRequest';

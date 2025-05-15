@@ -5,7 +5,7 @@ import { IoIosSearch } from 'react-icons/io';
 import { axiosClient, axiosInstance } from '~/api/apiRequest';
 import Table from '~/components/Table';
 import AdvancePagination from '~/components/AdvancePagination';
-import Title from '../components/Tittle';
+import Title from '../../../components/Tittle';
 
 const DoctorManagement = () => {
     const navigate = useNavigate();
