@@ -2,9 +2,9 @@ import { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import Input from '~/components/Input';
-import ImageInput from '../components/ImageInput';
+import ImageInput from '../../../components/ImageInput';
 import CustomTinyMCE from '~/components/CustomTinyMCE';
-import SelectOption from '../components/SelectOption';
+import SelectOption from '../../../components/SelectOption';
 import { axiosClient, axiosInstance } from '~/api/apiRequest';
 
 function FormDoctor({ onSubmit, defaultValues = {} }) {
@@ -209,7 +209,9 @@ function FormDoctor({ onSubmit, defaultValues = {} }) {
                                     );
                                 }}
                             />
-                            {errors.specialtyId && <p className="text-red-500 text-sm mt-1">{errors.specialtyId?.message}</p>}
+                            {errors.specialtyId && (
+                                <p className="text-red-500 text-sm mt-1">{errors.specialtyId?.message}</p>
+                            )}
                         </div>
                         <div className="w-full mt-4 z-10">
                             <label

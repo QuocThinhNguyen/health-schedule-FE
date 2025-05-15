@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { axiosInstance } from '~/api/apiRequest';
 import { IoIosSearch } from 'react-icons/io';
-import Title from '../components/Tittle';
+import Title from '../../../components/Tittle';
 import { CiEdit } from 'react-icons/ci';
 import Table from '~/components/Table';
 import AdvancePagination from '~/components/AdvancePagination';

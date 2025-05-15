@@ -1,5 +1,5 @@
 import { useNavigate, useParams } from 'react-router-dom';
-import Title from '../components/Tittle';
+import Title from '../../../components/Tittle';
 import FormBooking from './FormBooking';
 import { useEffect, useState } from 'react';
 import { axiosInstance } from '~/api/apiRequest';

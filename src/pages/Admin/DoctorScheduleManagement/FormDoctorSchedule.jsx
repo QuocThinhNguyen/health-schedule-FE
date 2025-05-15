@@ -4,7 +4,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { axiosInstance } from '~/api/apiRequest';
 import Input from '~/components/Input';
 
-import SelectOption from '../components/SelectOption';
+import SelectOption from '../../../components/SelectOption';
 
 function FormDoctorSchedule({ onSubmit, defaultValues = {} }) {
     const navigate = useNavigate();

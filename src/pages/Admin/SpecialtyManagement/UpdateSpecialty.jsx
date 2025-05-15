@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { axiosInstance } from '~/api/apiRequest';
 import FormSpecialty from './FormSpecialty';
-import Title from '../components/Tittle';
+import Title from '../../../components/Tittle';
 
 function UpdateSpecialty() {
     const { id } = useParams();

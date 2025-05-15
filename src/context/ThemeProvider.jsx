@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect } from 'react';
+import  { createContext, useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 
 const ThemeContext = createContext();
@@ -15,7 +15,7 @@ const ThemeProvider = ({ children }) => {
 
     useEffect(() => {
         const body = document.body;
-        const isAdminPage = location.pathname.includes('/admin');
+        const isAdminPage = location.pathname.includes('/admin') || location.pathname.includes('/clinic');
         localStorage.setItem('theme', isDark ? 'dark' : 'light');
         if (isAdminPage) {
             body.classList.toggle('dark', isDark);

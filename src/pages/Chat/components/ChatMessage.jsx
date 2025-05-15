@@ -5,6 +5,8 @@ import { formatTime } from '~/utils/formatDate';
 import MessageDateSeparator from './MessageDateSeparator';
 
 function ChatMessage({ activeChat, message, previousMessage, nextMessage }) {
+    console.log("message", message);
+    
     const { user } = useContext(UserContext);
     const { image, fullname } = activeChat?.partner?.partner || {};
     const { senderId, content, createdAt } = message;

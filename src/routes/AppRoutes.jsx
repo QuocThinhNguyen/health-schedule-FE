@@ -27,6 +27,7 @@ import Filter from '~/pages/User/Filter/Filter';
 import ServiceDetail from '~/pages/User/ServiceDetail';
 import ChatBot from '~/pages/User/ChatBot';
 import ChatAppUser from '~/pages/Chat/ChatAppUser';
+import ClinicRoutes from './ClinicRoutes';
 
 function AppRoutes() {
     return (
@@ -60,6 +61,7 @@ function AppRoutes() {
                     <Route path="/chat" element={<ChatAppUser />} />
                 </Route>
                 {AdminRoutes()}
+                {ClinicRoutes()}
                 {DoctorRoutes()}
                 {UserRoutes()}
                 <Route path="*" element={<Page404 />} />

@@ -1,5 +1,5 @@
 import CustomTinyMCE from '~/components/CustomTinyMCE';
-import ImageInput from '../components/ImageInput';
+import ImageInput from '../../../components/ImageInput';
 import { useNavigate } from 'react-router-dom';
 import Input from '~/components/Input';
 import { useEffect, useState } from 'react';

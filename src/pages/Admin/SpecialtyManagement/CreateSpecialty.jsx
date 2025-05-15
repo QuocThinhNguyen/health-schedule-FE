@@ -1,6 +1,6 @@
 import { toast } from 'react-toastify';
 import { axiosInstance } from '~/api/apiRequest';
-import Title from '../components/Tittle';
+import Title from '../../../components/Tittle';
 import FormSpecialty from './FormSpecialty';
 
 function CreateSpecialty() {

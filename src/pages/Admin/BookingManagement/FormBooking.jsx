@@ -3,9 +3,9 @@ import { Controller, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import Input from '~/components/Input';
 import { UserContext } from '~/context/UserContext';
-import ImageInput from '../components/ImageInput';
+import ImageInput from '../../../components/ImageInput';
 import Select from 'react-select';
-import SelectOption from '../components/SelectOption';
+import SelectOption from '../../../components/SelectOption';
 
 function FormBooking({ onSubmit, defaultValues = {} }) {
     const { user } = useContext(UserContext);
@@ -80,13 +80,7 @@ function FormBooking({ onSubmit, defaultValues = {} }) {
         >
             <div className="flex items-center justify-between gap-3">
                 <Input id="bookingId" label="Mã lịch hẹn (ID)" type="text" readOnly {...register('bookingId')} />
-                <Input
-                    id="createdAt"
-                    label="Ngày đặt lịch"
-                    type="date"
-                    readOnly
-                    {...register('createAt')}
-                />
+                <Input id="createdAt" label="Ngày đặt lịch" type="date" readOnly {...register('createAt')} />
             </div>
             <div className="flex items-center justify-between gap-3">
                 <Input id="patientName" label="Bệnh nhân" type="text" readOnly {...register('patientName')} />

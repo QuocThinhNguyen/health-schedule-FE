@@ -9,6 +9,8 @@ import { formatDistanceToNow, parseISO } from 'date-fns';
 import Pagination from '~/components/Pagination';
 import { UserContext } from '~/context/UserContext';
 import Modal from 'react-modal';
+import { IoChatboxEllipsesOutline } from 'react-icons/io5';
+import { useSocket } from '../Chat/useSocket';
 
 function ClinicInfo() {
     const [clinicData, setClinicData] = useState([]); // Trạng thái lưu dữ liệu từ API
@@ -413,6 +415,29 @@ function ClinicInfo() {
         setSelectedMedia(null);
     };
 
+    const handleClickButtonMessage = async () => {
+        if (!user.auth) {
+            return navigate('/login');
+        }
+
+        try {
+            const formData = new FormData();
+            formData.append('userId', user?.userId);
+            formData.append('partnerId', doctorId);
+            const response = await axiosInstance.post('/chat-room', formData);
+            if (response.status === 200) {
+                const socket = useSocket(user?.userId);
+                socket.emit('join_room', response.data.chatRoomId);
+            } else {
+                console.error('Failed to create chat room:', response.message);
+            }
+        } catch (error) {
+            console.error('Error creating chat room:', error);
+        }
+
+        navigate(`/chat`);
+    };
+
     return (
         <div className="min-h-screen bg-white">
             <div className="w-full bg-blue-50 ">
@@ -469,6 +494,17 @@ function ClinicInfo() {
                                     <p className="text-[14px] font-semibold text-gray-500">{clinicData.address}</p>
                                 </div>
                             </div>
+                        </div>
+                        <div className="mt-8">
+                            <button
+                                onClick={handleClickButtonMessage}
+                                className="flex justify-center items-center gap-2 px-4 py-2 h-10 hover:bg-[rgba(var(--bg-active-rgb),0.85)] bg-[var(--bg-active)] text-[var(--text-active)] rounded-md  border border-[var(--border-primary)]"
+                            >
+                                <span>Nhắn tin</span>
+                                <span>
+                                    <IoChatboxEllipsesOutline className="text-lg mt-1" />
+                                </span>
+                            </button>
                         </div>
                     </div>
                 </div>

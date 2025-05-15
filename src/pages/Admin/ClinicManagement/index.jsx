@@ -6,7 +6,7 @@ import { MdDeleteOutline } from 'react-icons/md';
 import { IoIosAdd, IoIosSearch } from 'react-icons/io';
 import AdvancePagination from '~/components/AdvancePagination';
 import Table from '~/components/Table';
-import Title from '../components/Tittle';
+import Title from '../../../components/Tittle';
 
 function ClinicManagement() {
     const navigate = useNavigate();

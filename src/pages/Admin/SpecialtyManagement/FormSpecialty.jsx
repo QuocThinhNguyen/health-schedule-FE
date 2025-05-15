@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import CustomTinyMCE from '~/components/CustomTinyMCE';
 import Input from '~/components/Input';
-import ImageInput from '../components/ImageInput';
+import ImageInput from '../../../components/ImageInput';
 
 function FormSpecialty({ onSubmit, defaultValues = {} }) {
     const navigate = useNavigate();

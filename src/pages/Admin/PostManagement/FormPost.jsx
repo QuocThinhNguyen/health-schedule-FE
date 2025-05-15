@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { UserContext } from '~/context/UserContext';
 import Input from '~/components/Input';
-import ImageInput from '../components/ImageInput';
+import ImageInput from '../../../components/ImageInput';
 import CustomTinyMCE from '~/components/CustomTinyMCE';
 
 function FormPost({ onSubmit, defaultValues = {} }) {
@@ -36,7 +36,6 @@ function FormPost({ onSubmit, defaultValues = {} }) {
     }, [defaultValues, setValue, isInitialized]);
 
     const onHandleSubmit = (data) => {
-
         const formData = new FormData();
         formData.append('userId', user.userId);
         formData.append('title', data.title);

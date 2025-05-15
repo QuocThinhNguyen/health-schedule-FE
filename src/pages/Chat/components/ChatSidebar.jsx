@@ -51,8 +51,8 @@ export default function ChatSidebar({ activeChat, setActiveChat }) {
 
                 return updatedList;
             });
-        });
-
+        });   
+        
         return () => socket.off('server_sidebar_update');
     }, [socket]);
 

@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { IoChatboxEllipsesOutline, IoMenu, IoNewspaperOutline } from 'react-icons/io5';
 import { useNavigate, NavLink } from 'react-router-dom';
 import { LuLayoutDashboard } from 'react-icons/lu';

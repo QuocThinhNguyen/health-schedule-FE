@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { axiosInstance } from '~/api/apiRequest';
 import { toast } from 'react-toastify';
 import { MdDeleteOutline } from 'react-icons/md';
-import Title from '../components/Tittle';
+import Title from '../../../components/Tittle';
 import { IoIosSearch } from 'react-icons/io';
 import Table from '~/components/Table';
 import AdvancePagination from '~/components/AdvancePagination';

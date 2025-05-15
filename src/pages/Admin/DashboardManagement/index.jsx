@@ -7,7 +7,7 @@ import ThongKeLuotDatKhamNgayTrongThang from './ThongKeLuotDatKhamNgayTrongThang
 import ThongKeLuotDatKhamThangTrongNam from './ThongKeLuotDatKhamThangTrongNam';
 import ThongKeDoanhThuHeThongTheoThang from './ThongKeDoanhThuHeThongTheoThang';
 import ThongKeCaKhamTrongThangNay from './ThongKeCaKhamTrongThangNay';
-import Title from '../components/Tittle';
+import Title from '../../../components/Tittle';
 
 function Dashboard() {
     const [count, setCounts] = useState({
