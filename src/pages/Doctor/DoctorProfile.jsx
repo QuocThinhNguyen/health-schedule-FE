@@ -1,6 +1,6 @@
 import { useState, useEffect, useContext } from 'react';
 import { FaCamera } from 'react-icons/fa';
-import { axiosInstance } from '~/api/apiRequest';
+import { axiosInstance, axiosClient } from '~/api/apiRequest';
 import { UserContext } from '~/context/UserContext';
 import { toast } from 'react-toastify';
 import { X, Star } from 'lucide-react';
@@ -25,6 +25,7 @@ function DoctorProfile() {
         image: '',
         price: '',
     });
+    const [academicRanksAndDegreess, setAcademicRanksAndDegreess] = useState([]);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -146,6 +147,30 @@ function DoctorProfile() {
         };
         fetchStatistical();
     }, []);
+
+    useEffect(() => {
+        const getDropdownAcademicRanksAndDegrees = async () => {
+            try {
+                const response = await axiosClient.get(`/doctor/academic-ranks-and-degrees`);
+
+                if (response.status === 200) {
+                    setAcademicRanksAndDegreess(response.data);
+                } else {
+                    console.error('No academic ranks and degrees are found:', response.message);
+                    setAcademicRanksAndDegreess([]);
+                }
+            } catch (error) {
+                console.error('Error fetching academic ranks and degrees:', error);
+                setAcademicRanksAndDegreess([]);
+            }
+        };
+        getDropdownAcademicRanksAndDegrees();
+    }, []);
+
+    let checkdoctor = academicRanksAndDegreess.find(
+        (academicRanksAndDegrees) => academicRanksAndDegrees.keyMap === doctorInfo.position,
+    )?.valueVi;
+
     return (
         <div className="max-w-7xl flex">
             {/* Sidebar */}
@@ -179,7 +204,7 @@ function DoctorProfile() {
                         </label>
                     )}
                     <h2 className="text-xl font-semibold text-center">{doctorInfo.name}</h2>
-                    <p className="text-lg text-gray-500">{doctorInfo.position}</p>
+                    <p className="text-lg text-gray-500">{checkdoctor}</p>
                 </div>
                 <nav>
                     <button
@@ -361,7 +386,7 @@ function DoctorProfile() {
                                         <input
                                             id="title"
                                             name="title"
-                                            value={doctorInfo.position}
+                                            value={checkdoctor}
                                             onChange={handleInputChange}
                                             readOnly={!isEditing}
                                             className={`w-full px-3 py-2 border rounded-md outline-none ${
