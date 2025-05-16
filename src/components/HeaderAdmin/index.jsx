@@ -5,14 +5,17 @@ import { IoLogOutOutline, IoMoonOutline, IoSunnyOutline } from 'react-icons/io5'
 import { axiosInstance } from '~/api/apiRequest';
 import avatar from '../../assets/img/avatar.png';
 import { ThemeContext } from '~/context/ThemeProvider';
+import { ClinicContext } from '~/context/ClinicContext';
 function Header() {
     const { user, logout } = useContext(UserContext);
+    const {clearClinicId}  = useContext(ClinicContext);
     const { isDark, toggleTheme } = useContext(ThemeContext);
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [userInfo, setUserInfo] = useState({});
     const handleLogout = () => {
         setIsDropdownOpen(false);
         logout();
+        clearClinicId();
     };
 
     useEffect(() => {

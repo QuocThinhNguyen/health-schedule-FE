@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { axiosInstance } from '~/api/apiRequest';
 import { IoIosSearch } from 'react-icons/io';
@@ -6,9 +6,13 @@ import Title from '../../../components/Tittle';
 import { CiEdit } from 'react-icons/ci';
 import Table from '~/components/Table';
 import AdvancePagination from '~/components/AdvancePagination';
+import { ClinicContext } from '~/context/ClinicContext';
 
 const BookingManagement = () => {
     const navigate = useNavigate();
+
+    const {clinicId} = useContext(ClinicContext);
+
     const [selectedStatus, setSelectedStatus] = useState('');
     const [filterValue, setFilterValue] = useState('');
     const [filterDate, setFilterDate] = useState('');
@@ -25,10 +29,7 @@ const BookingManagement = () => {
     const filterScheduleAPI = async () => {
         try {
             const response = await axiosInstance.get(
-                `/booking/getBookingByClinicId?clinicId=2&query=${filterValue}&date=${filterDate}&status=${selectedStatus}&page=${pagination.page}&limit=${pagination.limit}`,
-            );
-            console.log(
-                `/booking/getBookingByClinicId?clinicId=1&query=${filterValue}&date=${filterDate}&status=${selectedStatus}&page=${pagination.page}&limit=${pagination.limit}`,
+                `/booking/getBookingByClinicId?clinicId=${clinicId}&query=${filterValue}&date=${filterDate}&status=${selectedStatus}&page=${pagination.page}&limit=${pagination.limit}`,
             );
             if (response.status === 200) {
                 setSchedules(response.data);
