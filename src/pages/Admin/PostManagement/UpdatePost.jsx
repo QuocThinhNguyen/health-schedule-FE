@@ -2,7 +2,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { axiosInstance } from '~/api/apiRequest';
-import Title from '../components/Tittle';
+import Title from '../../../components/Tittle';
 import FormPost from './FormPost';
 
 function UpdatePost() {

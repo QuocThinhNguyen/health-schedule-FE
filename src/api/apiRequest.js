@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
+import queryString from 'query-string';
 
 const axiosClientPython = axios.create({
     baseURL: import.meta.env.VITE_PYTHON_APP_BACKEND_URL,

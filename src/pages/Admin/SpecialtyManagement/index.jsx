@@ -5,7 +5,7 @@ import { CiEdit } from 'react-icons/ci';
 import { MdDeleteOutline } from 'react-icons/md';
 import { IoIosAdd, IoIosSearch } from 'react-icons/io';
 import { axiosInstance } from '~/api/apiRequest';
-import Title from '../components/Tittle';
+import Title from '../../../components/Tittle';
 import Table from '~/components/Table';
 import AdvancePagination from '~/components/AdvancePagination';
 

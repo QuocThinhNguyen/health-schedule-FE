@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import Input from '~/components/Input';
-import ImageInput from '../components/ImageInput';
-import SelectOption from '../components/SelectOption';
+import ImageInput from '../../../components/ImageInput';
+import SelectOption from '../../../components/SelectOption';
 import { use } from 'react';
 import { axiosClient, axiosInstance } from '~/api/apiRequest';
 

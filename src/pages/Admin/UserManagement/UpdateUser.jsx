@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { axiosInstance } from '~/api/apiRequest';
 import FormUser from './FormUser';
-import Title from '../components/Tittle';
+import Title from '../../../components/Tittle';
 
 function UpdateUser() {
     const { id } = useParams();

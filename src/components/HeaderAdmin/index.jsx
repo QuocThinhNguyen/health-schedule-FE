@@ -20,6 +20,8 @@ function Header() {
             if (user.userId) {
                 try {
                     const response = await axiosInstance.get(`/user/${user.userId}`);
+                    console.log("resonse", response);
+                    
                     if (response.status === 200) {
                         const imageUrl = response.data.image ? response.data.image : avatar;
                         const img = new Image();
