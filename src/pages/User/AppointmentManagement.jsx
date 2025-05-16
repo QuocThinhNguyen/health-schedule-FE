@@ -7,6 +7,8 @@ import { toast } from 'react-toastify';
 import ConfirmationModal from '~/components/Confirm/ConfirmationModal';
 import { Route, Navigate, useNavigate, useLocation } from 'react-router-dom';
 import { MdOutlineCalendarToday } from 'react-icons/md';
+import emailjs from '@emailjs/browser';
+import { use } from 'react';
 
 const AppointmentManagement = () => {
     const [activeTab, setActiveTab] = useState('paid');
@@ -27,8 +29,23 @@ const AppointmentManagement = () => {
     const [isModalOpen, setModalOpen] = useState(false);
     const [selectedBookingId, setSelectedBookingId] = useState(null);
     const [patientName, setPatientName] = useState('');
+    const [name, setName] = useState('');
+    console.log('User:', user);
+    const openModal = (bookingId, patientName, appointmentDate) => {
+        // Kiểm tra xem lịch hẹn đã qua chưa
+        const currentDate = new Date();
+        const appointmentDateObj = new Date(appointmentDate);
+        // console.log('Current Date:', currentDate);
+        // console.log('Appointment Date:', appointmentDateObj);
+        // console.log('Difference:', appointmentDateObj - currentDate);
 
-    const openModal = (bookingId, patientName) => {
+        if (appointmentDateObj - currentDate < 24 * 60 * 60 * 1000) {
+            toast.error(
+                'Lịch khám không thể hủy trong vòng 24 giờ trước giờ hẹn. Vui lòng liên hệ hỗ trợ để được xử lý.',
+            );
+            return;
+        }
+
         setSelectedBookingId(bookingId);
         setPatientName(patientName);
         setModalOpen(true);
@@ -56,26 +73,19 @@ const AppointmentManagement = () => {
         }
     };
 
-    // useEffect(() => {
-    //     const fetchAppointments = async () => {
-    //         try {
-    //             const response = await axiosInstance.post('/booking/allbooking', {
-    //                 userId: user.userId,
-    //             });
-
-    //             console.log('Response:::::', response);
-    //             if (response.status === 200) {
-    //                 setAppointments(response.data);
-    //             } else {
-    //                 setError('Không thể tải dữ liệu.');
-    //             }
-    //         } catch (err) {
-    //             setError('Đã xảy ra lỗi khi tải dữ liệu.');
-    //         }
-    //     };
-
-    //     fetchAppointments();
-    // }, []);
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await axiosInstance.get(`/user/${user.userId}`);
+                if (response.status === 200) {
+                    setName(response.data.fullname);
+                }
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };
+        fetchData();
+    }, []);
 
     useEffect(() => {
         const fetchAppointments = async () => {
@@ -122,10 +132,35 @@ const AppointmentManagement = () => {
 
             if (response.status === 200) {
                 toast.success('Hủy lịch hẹn thành công.');
-                setAppointments((prev) => prev.filter((appointment) => appointment.bookingId !== selectedBookingId));
-                setTimeout(() => {
-                    window.location.reload();
-                }, 2000);
+                // setAppointments((prev) => prev.filter((appointment) => appointment.bookingId !== selectedBookingId));
+                // setTimeout(() => {
+                //     window.location.reload();
+                // }, 2000);
+
+                // Gửi email thông báo hủy lịch hẹn
+                const selectAppointment = appointments.find((a) => a.bookingId === selectedBookingId);
+                const templateParams = {
+                    email: user.email,
+                    name: name,
+                    patientName: selectAppointment.patientRecordId.fullname,
+                    doctorName: selectAppointment.doctorId.fullname,
+                    appointmentDate: new Date(selectAppointment.appointmentDate).toLocaleDateString('vi-VN'),
+                    appointmentTime: selectAppointment.timeType.valueVi,
+                };
+                emailjs.send(
+                    import.meta.env.VITE_EMAIL_SERVICE_ID,
+                    import.meta.env.VITE_EMAIL_TEMPLATE_ID,
+                    templateParams,
+                    import.meta.env.VITE_EMAIL_PUBLIC_KEY,
+                );
+
+                setAppointments((prev) =>
+                    prev.map((appointment) =>
+                        appointment.bookingId === selectedBookingId
+                            ? { ...appointment, status: { keyMap: 'S5', valueVi: 'Đã hủy' } }
+                            : appointment,
+                    ),
+                );
             } else {
                 toast.error('Hủy lịch hẹn thất bại.');
             }
@@ -251,7 +286,11 @@ const AppointmentManagement = () => {
                                         <button
                                             className="px-4 py-3 bg-red-500 text-white font-semibold rounded-lg hover:bg-red-600 transition-colors"
                                             onClick={() =>
-                                                openModal(appointment.bookingId, appointment.patientRecordId.fullname)
+                                                openModal(
+                                                    appointment.bookingId,
+                                                    appointment.patientRecordId.fullname,
+                                                    appointment.appointmentDate,
+                                                )
                                             }
                                         >
                                             Hủy lịch hẹn
