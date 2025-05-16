@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { axiosInstance } from '~/api/apiRequest';
 import { toast } from 'react-toastify';
 import { MdDeleteOutline } from 'react-icons/md';
@@ -7,8 +7,10 @@ import { IoIosSearch } from 'react-icons/io';
 import Table from '~/components/Table';
 import AdvancePagination from '~/components/AdvancePagination';
 import { format } from 'date-fns';
+import { ClinicContext } from '~/context/ClinicContext';
 
 const CommentManagement = () => {
+    const {clinicId} = useContext(ClinicContext);
     const [showConfirm, setShowConfirm] = useState(false);
     const [filterValue, setFilterValue] = useState('');
     const [pagination, setPagination] = useState({ page: 1, limit: 10, totalPages: 1 });
@@ -43,7 +45,7 @@ const CommentManagement = () => {
     const filterComment = async () => {
         try {
             const response = await axiosInstance.get(
-                `/feedback/clinic/1?query=${filterValue}&page=${pagination.page}&limit=${pagination.limit}`,
+                `/feedback/clinic/${clinicId}?query=${filterValue}&page=${pagination.page}&limit=${pagination.limit}`,
             );
             if (response.status === 200) {
                 setComments(response.data);

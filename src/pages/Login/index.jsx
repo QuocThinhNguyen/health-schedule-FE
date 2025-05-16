@@ -11,6 +11,7 @@ import './CSS/button_facebook.css';
 import './CSS/button_google.css';
 import { IoEye, IoEyeOff } from 'react-icons/io5';
 import { useSocket } from '../Chat/useSocket';
+import { ClinicContext } from '~/context/ClinicContext';
 
 function Login() {
     const [showPassword, setShowPassword] = useState(false);
@@ -29,9 +30,11 @@ function Login() {
     const navigate = useNavigate();
 
     const { user, loginContext, loginContextGoogle } = useContext(UserContext);
+    const { updateClinicId } = useContext(ClinicContext);
+
     const socket = useMemo(() => {
-        const decodeToken = user.auth ? jwtDecode(user.accessToken) : null;
-        return decodeToken ? useSocket(decodeToken.userId) : null;
+        console.log("user",user);
+        return useSocket(user.userId);
     }, [user]);
 
     const toggleShowPassword = () => {
@@ -88,6 +91,16 @@ function Login() {
                 } else if (decodeToken.roleId === 'R3') {
                     navigate('/', { replace: true });
                 } else if (decodeToken.roleId === 'R4') {
+                    try {
+                        const clinicRes = await axiosClient.get(`/user/${decodeToken.userId}/clinic`);
+                        console.log("clinicRes", clinicRes);
+                        
+                        if (clinicRes.status === 200) {
+                            updateClinicId(clinicRes.data.clinicId);
+                        }
+                    } catch (error) {
+                        console.error('Error fetching clinicId:', error);
+                    }
                     navigate('/clinic', { replace: true });
                 }
             } else {
