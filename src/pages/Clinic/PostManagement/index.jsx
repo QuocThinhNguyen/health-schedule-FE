@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { format } from 'date-fns';
 import { toast } from 'react-toastify';
@@ -9,9 +9,11 @@ import { axiosClient, axiosInstance } from '~/api/apiRequest';
 import Title from '../../../components/Tittle';
 import Table from '~/components/Table';
 import AdvancePagination from '~/components/AdvancePagination';
+import { ClinicContext } from '~/context/ClinicContext';
 
 function PostManagement() {
     const navigate = useNavigate();
+    const {clinicId} = useContext(ClinicContext);
     const [posts, setPosts] = useState([]);
     const [deletePost, setDeletePost] = useState({ postId: 0 });
     const [showConfirm, setShowConfirm] = useState(false);
@@ -52,7 +54,7 @@ function PostManagement() {
     const getAllPostsAndFilter = async () => {
         try {
             const response = await axiosClient.get(
-                `/post?query=${filterValue}&page=${pagination.page}&limit=${pagination.limit}`,
+                `/post/${clinicId}/clinic-posts?query=${filterValue}&page=${pagination.page}&limit=${pagination.limit}`,
             );
             if (response.status === 200) {
                 setPosts(response.data);

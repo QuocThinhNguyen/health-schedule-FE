@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CiEdit } from 'react-icons/ci';
 import { IoIosSearch } from 'react-icons/io';
@@ -6,9 +6,11 @@ import { axiosClient, axiosInstance } from '~/api/apiRequest';
 import Table from '~/components/Table';
 import AdvancePagination from '~/components/AdvancePagination';
 import Title from '../../../components/Tittle';
+import { ClinicContext } from '~/context/ClinicContext';
 
 const DoctorManagement = () => {
     const navigate = useNavigate();
+    const {clinicId} = useContext(ClinicContext);
     const [filterValue, setFilterValue] = useState('');
     const [academicRanksAndDegreess, setAcademicRanksAndDegreess] = useState([]);
     const [doctors, setDoctors] = useState([]);
@@ -46,7 +48,7 @@ const DoctorManagement = () => {
     const filterDoctorAPI = async () => {
         try {
             const response = await axiosInstance.get(
-                `/doctor/?clinicId=1&query=${filterValue}&page=${pagination.page}&limit=${pagination.limit}`,
+                `/doctor/?clinicId=${clinicId}&query=${filterValue}&page=${pagination.page}&limit=${pagination.limit}`,
             );
             console.log(`/doctor/?query=${filterValue}&page=${pagination.page}&limit=${pagination.limit}`);
             if (response.status === 200) {
