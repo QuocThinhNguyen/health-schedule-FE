@@ -16,6 +16,9 @@ import UpdatePost from '~/pages/Clinic/PostManagement/UpdatePost';
 import CreatePost from '~/pages/Clinic/PostManagement/CreatePost';
 import PostManagement from '~/pages/Clinic/PostManagement';
 import ChatApp from '~/pages/Chat/ChatApp';
+import ServiceScheduleManagement from '~/pages/Clinic/ServiceScheduleManagement';
+import CreateServiceSchedule from '~/pages/Clinic/ServiceScheduleManagement/CreateServiceSchedule';
+import UpdateServiceSchedule from '~/pages/Clinic/ServiceScheduleManagement/UpdateServiceSchedule';
 
 function ClinicRoutes() {
     const { user } = useContext(UserContext);
@@ -38,12 +41,16 @@ function ClinicRoutes() {
                 <Route path="booking/update-booking/:id" element={<UpdateBooking />} />
                 <Route path="doctor-schedule" element={<DoctorScheduleManagement />} />
                 <Route path="doctor-schedule/create-doctor-schedule" element={<CreateDoctorSchedule />} />
-                <Route path="service" element={<BookingManagement />} />
-                <Route path="service-schedule" element={<DoctorScheduleManagement />} />
-                <Route path="service-schedule/create-service-schedule" element={<CreateDoctorSchedule />} />
                 <Route
                     path="doctor-schedule/update-doctor-schedule/:doctorId/:scheduleDate"
                     element={<UpdateDoctorSchedule />}
+                />
+                <Route path="service" element={<BookingManagement />} />
+                <Route path="service-schedule" element={<ServiceScheduleManagement />} />
+                <Route path="service-schedule/create-service-schedule" element={<CreateServiceSchedule />} />
+                <Route
+                    path="service-schedule/update-service-schedule/:serviceId/:scheduleDate"
+                    element={<UpdateServiceSchedule />}
                 />
                 <Route path="post" element={<PostManagement />} />
                 <Route path="post/create-post" element={<CreatePost />} />
