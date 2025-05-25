@@ -16,7 +16,7 @@ function SidebarClinic() {
         { path: '/clinic/doctor', label: 'Quản lý bác sĩ', icon: <FaUserDoctor /> },
         { path: '/clinic/booking', label: 'Quản lý lịch hẹn', icon: <SlCalender /> },
         { path: '/clinic/doctor-schedule', label: 'Quản lý thời gian làm việc', icon: <MdOutlineAccessTime /> },
-        { path: '/clinic/service', label: 'Quản lý dịch vụ', icon: <SlCalender /> },
+        // { path: '/clinic/service', label: 'Quản lý dịch vụ', icon: <SlCalender /> },
         { path: '/clinic/service-schedule', label: 'Quản lý thời gian dịch vụ', icon: <MdOutlineAccessTime /> },
         { path: '/clinic/post', label: 'Quản lý tin tức', icon: <IoNewspaperOutline /> },
         { path: '/clinic/comment', label: 'Quản lý bình luận', icon: <MdOutlineComment /> },

@@ -1,14 +1,14 @@
-import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { CiEdit } from 'react-icons/ci';
 import { IoIosAdd, IoIosSearch } from 'react-icons/io';
 import { MdDeleteOutline } from 'react-icons/md';
-import { CiEdit } from 'react-icons/ci';
-import { axiosInstance } from '~/api/apiRequest';
-import Title from '../../../components/Tittle';
-import Table from '~/components/Table';
+import { useNavigate } from 'react-router-dom';
+import { axiosClient, axiosInstance } from '~/api/apiRequest';
 import AdvancePagination from '~/components/AdvancePagination';
+import Table from '~/components/Table';
+import Title from '~/components/Tittle';
 
-function DoctorScheduleManagement() {
+function ServiceScheduleManagement() {
     const navigate = useNavigate();
     const [showConfirm, setShowConfirm] = useState(false);
     const [filterValue, setFilterValue] = useState('');
@@ -24,14 +24,14 @@ function DoctorScheduleManagement() {
     }, [pagination, filterValue, filterDate]);
 
     const [deleteWorkTime, setDeleteWorkTime] = useState({
-        doctorId: '',
+        serviceId: '',
         scheduleDate: '',
     });
 
     const deleteWorkTimeAPI = async () => {
         try {
             const response = await axiosInstance.delete(
-                `/schedule/${deleteWorkTime.doctorId}?date=${deleteWorkTime.scheduleDate}`,
+                `/service-schedule/${deleteWorkTime.serviceId}?scheduleDate=${deleteWorkTime.scheduleDate}`,
             );
             if (response.status === 200) {
                 await filterWorkTimeAPI();
@@ -45,10 +45,12 @@ function DoctorScheduleManagement() {
 
     const filterWorkTimeAPI = async () => {
         try {
-            const response = await axiosInstance.get(
-                `/schedule/clinic?keyword=${filterValue}&date=${filterDate}&page=${pagination.page}&limit=${pagination.limit}`,
+            const response = await axiosClient.get(
+                `/service-schedule?keyword=${filterValue}&scheduleDate=${filterDate}&pageNo=${pagination.page}&pageSize=${pagination.limit}`,
             );
             if (response.status === 200) {
+                console.log("worktimes", response.data);
+                
                 setWorkTimes(response.data);
                 if (response.totalPages === 0) {
                     response.totalPages = 1;
@@ -81,10 +83,10 @@ function DoctorScheduleManagement() {
         setPagination((prev) => ({ ...prev, limit: newLimit, page: 1 }));
     };
 
-    const handleDeleteClick = (doctorId, scheduleDate) => {
+    const handleDeleteClick = (serviceId, scheduleDate) => {
         setShowConfirm(true);
         setDeleteWorkTime({
-            doctorId: doctorId,
+            serviceId: serviceId,
             scheduleDate: scheduleDate,
         });
     };
@@ -92,7 +94,7 @@ function DoctorScheduleManagement() {
     const handleCancelDelete = () => {
         setShowConfirm(false);
         setDeleteWorkTime({
-            doctorId: '',
+            serviceId: '',
             scheduleDate: '',
         });
     };
@@ -100,7 +102,7 @@ function DoctorScheduleManagement() {
     const handleConfirmDelete = () => {
         deleteWorkTimeAPI();
         setDeleteWorkTime({
-            doctorId: '',
+            serviceId: '',
             scheduleDate: '',
         });
         setShowConfirm(false);
@@ -123,7 +125,7 @@ function DoctorScheduleManagement() {
     }));
 
     const columns = [
-        { key: 'doctorId.fullname', label: 'Bác sĩ' },
+        { key: 'serviceId.name', label: 'Tên dịch vụ' },
         { key: 'scheduleDate', label: 'Ngày làm việc' },
         { key: 'timeTypes', label: 'Ca khám', type: 'timeTypes' },
     ];
@@ -133,15 +135,14 @@ function DoctorScheduleManagement() {
             icon: <CiEdit />,
             onClick: (worktime) =>
                 navigate(
-                    `/clinic/doctor-schedule/update-doctor-schedule/${worktime.doctorId?.userId}/${worktime.scheduleDate}`,
+                    `/clinic/service-schedule/update-service-schedule/${worktime.serviceId?.serviceId}/${worktime.scheduleDate}`,
                 ),
         },
         {
             icon: <MdDeleteOutline />,
-            onClick: (worktime) => handleDeleteClick(worktime.doctorId?.userId, worktime.scheduleDate),
+            onClick: (worktime) => handleDeleteClick(worktime.serviceId?.serviceId, worktime.scheduleDate),
         },
     ];
-
     return (
         <>
             <div className="px-3 mb-6">
@@ -171,7 +172,7 @@ function DoctorScheduleManagement() {
                         <button
                             className="flex justify-center items-center gap-2 px-4 py-2 h-10 bg-[rgba(var(--bg-active-rgb),0.15)] text-[rgb(var(--bg-active-rgb))] hover:bg-[var(--bg-active)] hover:text-[var(--text-active)] rounded-md  border border-[var(--border-primary)]"
                             onClick={() => {
-                                navigate('/clinic/doctor-schedule/create-doctor-schedule');
+                                navigate('/clinic/service-schedule/create-service-schedule');
                             }}
                         >
                             <span>Thêm</span>
@@ -217,4 +218,4 @@ function DoctorScheduleManagement() {
     );
 }
 
-export default DoctorScheduleManagement;
+export default ServiceScheduleManagement;
