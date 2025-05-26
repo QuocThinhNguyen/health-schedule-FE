@@ -1,39 +1,39 @@
-import { useState, useEffect, useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { format } from 'date-fns';
-import { toast } from 'react-toastify';
-import { MdDeleteOutline } from 'react-icons/md';
+import { useContext, useEffect, useState } from 'react';
 import { CiEdit } from 'react-icons/ci';
 import { IoIosAdd, IoIosSearch } from 'react-icons/io';
+import { MdDeleteOutline } from 'react-icons/md';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import { axiosClient, axiosInstance } from '~/api/apiRequest';
-import Title from '../../../components/Tittle';
-import Table from '~/components/Table';
 import AdvancePagination from '~/components/AdvancePagination';
+import Table from '~/components/Table';
+import Title from '~/components/Tittle';
 import { ClinicContext } from '~/context/ClinicContext';
 
-function PostManagement() {
+function ServiceManagement() {
     const navigate = useNavigate();
     const { clinicId } = useContext(ClinicContext);
-    const [posts, setPosts] = useState([]);
-    const [deletePost, setDeletePost] = useState({ postId: 0 });
+    const [services, setServices] = useState([]);
+    const [deleteService, setDeleteService] = useState({ serviceId: 0 });
     const [showConfirm, setShowConfirm] = useState(false);
     const [filterValue, setFilterValue] = useState('');
     const [pagination, setPagination] = useState({ page: 1, limit: 10, totalPages: 1 });
 
-    const handleDeleteClick = (postId) => {
+    const handleDeleteClick = (serviceId) => {
         setShowConfirm(true);
-        setDeletePost({ postId: postId });
+        setDeleteService({ serviceId: serviceId });
     };
 
     const handleCancelDelete = () => {
         setShowConfirm(false);
-        setDeletePost({ postId: '' });
+        setDeleteService({ serviceId: '' });
     };
 
     const handleConfirmDelete = () => {
-        deletePostAPI(deletePost.postId);
+        deleteServiceAPI(deleteService.serviceId);
         setShowConfirm(false);
-        toast.success('Xóa bài viết thành công!');
+        toast.success('Xóa dịch vụ thành công!');
     };
 
     const handlePageChange = async (newPage) => {
@@ -48,16 +48,21 @@ function PostManagement() {
     };
 
     useEffect(() => {
-        getAllPostsAndFilter();
-    }, [pagination, filterValue]);
+        if (clinicId) {
+            getAllServicesAndFilter();
+        }
+    }, [pagination, filterValue, clinicId]);
 
-    const getAllPostsAndFilter = async () => {
+    const getAllServicesAndFilter = async () => {
         try {
+            if (!clinicId) return;
             const response = await axiosClient.get(
-                `/post/${clinicId}/clinic-posts?query=${filterValue}&page=${pagination.page}&limit=${pagination.limit}`,
+                `/service?keyword=${filterValue}&clinicId=${clinicId}&page=${pagination.page}&limit=${pagination.limit}`,
             );
+            console.log('response getAllServicesAndFilter', response);
+
             if (response.status === 200) {
-                setPosts(response.data);
+                setServices(response.data);
                 if (response.totalPages === 0) {
                     response.totalPages = 1;
                 }
@@ -69,50 +74,48 @@ function PostManagement() {
                     }));
                 }
             } else {
-                console.error('No posts are found:', response.message);
-                setPosts([]);
+                console.error('No Services are found:', response.message);
+                setServices([]);
             }
         } catch (error) {
-            console.error('Failed to get posts:', error);
-            setPosts([]);
+            console.error('Failed to get Services:', error);
+            setServices([]);
         }
     };
 
-    const deletePostAPI = async (postId) => {
+    const deleteServiceAPI = async (serviceId) => {
         try {
-            const response = await axiosInstance.delete(`/post/${postId}`);
+            const response = await axiosInstance.delete(`/service/${serviceId}`);
             if (response.status === 200) {
                 // Xử lý khi thành công
-                await getAllPostsAndFilter();
+                await getAllServicesAndFilter();
             } else {
-                console.error('Failed to delete post:', response.message);
+                console.error('Failed to delete Service:', response.message);
             }
         } catch (error) {
-            console.error('Error delete post:', error);
+            console.error('Error delete Service:', error);
         }
     };
 
-    const processedPosts = posts.map((post) => ({
-        ...post,
-        createAt: format(new Date(post.createAt), 'dd-MM-yyyy'),
-        updateAt: format(new Date(post.updateAt), 'dd-MM-yyyy'),
-    }));
-
     const columns = [
-        { key: 'title', label: 'Tiêu đề', wrap: true },
-        { key: 'userId.fullname', label: 'Tác giả' },
-        { key: 'createAt', label: 'Ngày đăng' },
-        { key: 'updateAt', label: 'Ngày cập nhật' },
+        { key: 'name', label: 'Tiêu đề', wrap: true },
+        {
+            key: 'image',
+            label: 'Hình ảnh',
+            type: 'image',
+        },
+        { key: 'price', label: 'Giá' },
+        { key: 'serviceCategoryId.name', label: 'Loại dịch vụ' },
     ];
 
     const actions = [
-        { icon: <CiEdit />, onClick: (post) => navigate(`/clinic/post/update-post/${post.postId}`) },
-        { icon: <MdDeleteOutline />, onClick: (post) => handleDeleteClick(post.postId) },
+        { icon: <CiEdit />, onClick: (service) => navigate(`/clinic/service/update-service/${service.serviceId}`) },
+        { icon: <MdDeleteOutline />, onClick: (service) => handleDeleteClick(service.serviceId) },
     ];
 
     return (
         <div className="px-3 mb-6">
-            <Title>Quản lý tin tức</Title>
+            <Title>Quản lý dịch vụ</Title>
             <div className="p-4 rounded bg-[var(--bg-primary)] border border-[var(--border-primary)]">
                 <div className="flex items-center justify-between mb-3">
                     <div className="relative flex-1 max-w-md">
@@ -128,7 +131,7 @@ function PostManagement() {
                     <button
                         className="flex justify-center items-center gap-2 px-4 py-2 h-10 bg-[rgba(var(--bg-active-rgb),0.15)] text-[rgb(var(--bg-active-rgb))] hover:bg-[var(--bg-active)] hover:text-[var(--text-active)] rounded-md  border border-[var(--border-primary)]"
                         onClick={() => {
-                            navigate('/clinic/post/create-post');
+                            navigate('/clinic/service/create-service');
                         }}
                     >
                         <span>Thêm</span>
@@ -137,7 +140,7 @@ function PostManagement() {
                         </span>
                     </button>
                 </div>
-                <Table columns={columns} data={processedPosts} pagination={pagination} actions={actions} />
+                <Table columns={columns} data={services} pagination={pagination} actions={actions} />
                 <AdvancePagination
                     pagination={pagination}
                     totalElements="10"
@@ -150,8 +153,8 @@ function PostManagement() {
             {showConfirm && (
                 <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center z-50">
                     <div className="bg-white p-6 rounded shadow-lg">
-                        <h3 className="text-lg font-semibold mb-4">Xác nhận xóa tin tức</h3>
-                        <p>Bạn có chắc chắn muốn xóa tin tức này?</p>
+                        <h3 className="text-lg font-semibold mb-4">Xác nhận xóa dịch vụ</h3>
+                        <p>Bạn có chắc chắn muốn xóa dịch vụ này?</p>
                         <div className="mt-4 flex justify-end gap-4">
                             <button onClick={handleCancelDelete} className="px-4 py-2 bg-gray-500 text-white rounded">
                                 Hủy
@@ -167,4 +170,4 @@ function PostManagement() {
     );
 }
 
-export default PostManagement;
+export default ServiceManagement;
