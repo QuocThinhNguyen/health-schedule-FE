@@ -454,7 +454,7 @@ function DoctorInfo() {
                         </div>
                     )}
                     {activeTab === 'review' && (
-                        <div className="">
+                        <div className="mb-2">
                             <div className=" bg-white">
                                 {/* Rating Overview */}
                                 {/* <div className="p-4 flex items-start gap-8 max-w-sm bg-gray-50 mb-4">
@@ -593,7 +593,7 @@ function DoctorInfo() {
                                     )}
                                 </div>
                             </div>
-                            <div className="text-center">
+                            <div className="text-center mt-2">
                                 <Pagination
                                     currentPage={pagination.page}
                                     totalPages={pagination.totalPages}
