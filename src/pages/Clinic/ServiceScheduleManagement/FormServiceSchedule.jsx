@@ -1,12 +1,11 @@
-import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Controller, useForm } from 'react-hook-form';
-import { axiosInstance } from '~/api/apiRequest';
-import Input from '~/components/Input';
+import { useEffect, useState } from "react";
+import { Controller, useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
+import { axiosInstance } from "~/api/apiRequest";
+import Input from "~/components/Input";
+import SelectOption from "~/components/SelectOption";
 
-import SelectOption from '../../../components/SelectOption';
-
-function FormDoctorSchedule({ onSubmit, defaultValues = {} }) {
+function FormServiceSchedule({ onSubmit, defaultValues = {} }) {
     const navigate = useNavigate();
     const {
         register,
@@ -15,20 +14,19 @@ function FormDoctorSchedule({ onSubmit, defaultValues = {} }) {
         setValue,
         reset,
         control,
-        watch,
     } = useForm();
 
-    const [doctors, setDoctors] = useState([]);
+    const [services, setServices] = useState([]);
     const [data, setData] = useState({
         scheduleDate: '',
-        doctorId: '',
+        serviceId: '',
         timeTypes: [],
     });
     const [isInitialized, setIsInitialized] = useState(false);
     const [buttonName, setButtonName] = useState('Thêm');
 
     const handleClickReturn = () => {
-        navigate('/clinic/doctor-schedule');
+        navigate('/clinic/service-schedule');
     };
 
     const timeTypeMapping = {
@@ -48,27 +46,27 @@ function FormDoctorSchedule({ onSubmit, defaultValues = {} }) {
     }));
 
     useEffect(() => {
-        const getDropdownDoctors = async () => {
+        const getDropdownServices = async () => {
             try {
-                const response = await axiosInstance.get(`/doctor/clinic`);
+                const response = await axiosInstance.get(`/service/clinic`);
                 if (response.status === 200) {
-                    setDoctors(response.data);
+                    setServices(response.data);
                 } else {
                     console.error('No doctors are found:', response.message);
-                    setDoctors([]);
+                    setServices([]);
                 }
             } catch (error) {
                 console.error('Error fetching doctors:', error);
-                setDoctors([]);
+                setServices([]);
             }
         };
-        getDropdownDoctors();
+        getDropdownServices();
     }, []);
 
     useEffect(() => {
         if (!isInitialized && defaultValues && Object.keys(defaultValues).length > 0) {
             setValue('scheduleDate', defaultValues.scheduleDate || '');
-            setValue('doctorId', defaultValues.doctorId?.userId || '');
+            setValue('serviceId', defaultValues.serviceId?.serviceId || '');
             setValue('timeTypes', defaultValues.timeTypes || []);
             setIsInitialized(true);
             setButtonName('Cập nhật');
@@ -78,13 +76,13 @@ function FormDoctorSchedule({ onSubmit, defaultValues = {} }) {
     const onHandleSubmit = (data) => {
         setData({
             scheduleDate: data.scheduleDate,
-            doctorId: data.doctorId,
+            serviceId: data.serviceId,
             timeTypes: data.timeTypes,
         });
         onSubmit && onSubmit(data);
         reset({
             scheduleDate: '',
-            doctorId: '',
+            serviceId: '',
             timeTypes: [],
         });
     };
@@ -103,27 +101,27 @@ function FormDoctorSchedule({ onSubmit, defaultValues = {} }) {
                 />
                 <div className="w-full mt-4 z-20">
                     <label htmlFor="position" className="block text-sm font-medium mb-1 text-[var(--text-primary)]">
-                        Bác sĩ
+                        Dịch vụ
                     </label>
                     <Controller
-                        name="doctorId"
+                        name="serviceId"
                         control={control}
-                        rules={{ required: 'Vui lòng chọn bác sĩ' }}
+                        rules={{ required: 'Vui lòng chọn dịch vụ' }}
                         render={({ field }) => {
                             return (
                                 <SelectOption
                                     value={field.value}
                                     onChange={field.onChange}
-                                    options={doctors.map((item) => ({
-                                        value: item.doctorId?.userId,
-                                        label: item.doctorId?.fullname,
+                                    options={services.map((item) => ({
+                                        value: item.serviceId,
+                                        label: item.name,
                                     }))}
-                                    placeholder="Chọn bác sĩ"
+                                    placeholder="Chọn dịch vụ"
                                 />
                             );
                         }}
                     />
-                    {errors.doctorId && <p className="text-red-500 text-sm mt-1">{errors.doctorId?.message}</p>}
+                    {errors.serviceId && <p className="text-red-500 text-sm mt-1">{errors.serviceId?.message}</p>}
                 </div>
             </div>
             <div className="w-full mt-20">
@@ -206,4 +204,4 @@ function FormDoctorSchedule({ onSubmit, defaultValues = {} }) {
     );
 }
 
-export default FormDoctorSchedule;
+export default FormServiceSchedule;
