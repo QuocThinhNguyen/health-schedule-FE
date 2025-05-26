@@ -12,7 +12,8 @@ function ChatButton() {
     const [isHovered, setIsHovered] = useState(false);
     const [showModal, setShowModal] = useState(false);
     const socket = useSocket(user?.userId);
-    const isOnChatPage = location.pathname === '/chat' || location.pathname === '/chatbot';
+    const isOnChatPage =
+        location.pathname === '/chat' || location.pathname === '/chatbot' || location.pathname === '/video';
     const handleClick = async () => {
         if (user?.auth === true) {
             try {

@@ -1,13 +1,14 @@
-import { useContext, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { UserContext } from "~/context/UserContext";
+import { useContext, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { UserContext } from '~/context/UserContext';
 
 function ChatBotAIButton() {
-    const {user} = useContext(UserContext);
+    const { user } = useContext(UserContext);
     const navigate = useNavigate();
     const [showModal, setShowModal] = useState(false);
     const [isHovered, setIsHovered] = useState(false);
-    const isOnChatPage = location.pathname === '/chat' || location.pathname === '/chatbot'; 
+    const isOnChatPage =
+        location.pathname === '/chat' || location.pathname === '/chatbot' || location.pathname === '/video';
     const handleClick = () => {
         if (!user.auth) {
             setShowModal(true);

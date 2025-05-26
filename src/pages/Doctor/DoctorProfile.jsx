@@ -350,7 +350,7 @@ function DoctorProfile() {
                                         type="email"
                                         value={doctorInfo.email}
                                         onChange={handleInputChange}
-                                        readOnly={!isEditing}
+                                        readOnly
                                         className={`w-full px-3 py-2 border rounded-md outline-none ${
                                             !isEditing ? 'bg-gray-50' : ''
                                         }`}
