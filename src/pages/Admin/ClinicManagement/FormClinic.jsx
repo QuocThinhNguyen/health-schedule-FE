@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import Input from '~/components/Input';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import Select from 'react-select';
 
 function FormClinic({ onSubmit, defaultValues = {} }) {
     const navigate = useNavigate();
@@ -86,6 +87,13 @@ function FormClinic({ onSubmit, defaultValues = {} }) {
                         {...register('email', { required: 'Vui lòng nhập email' })}
                         error={errors.email?.message}
                     />
+                    <div className="mt-4 space-y-2">
+                        <label className="block text-sm font-medium mb-1 text-[var(--text-primary)]">
+                            Tỉnh/Thành phố
+                        </label>
+                        <Select id="province" label="Tỉnh/Thành phố" placeholder="Chọn tỉnh/thành phố" />
+                    </div>
+
                     <Input
                         id="address"
                         label="Địa chỉ"
