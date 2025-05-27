@@ -19,6 +19,9 @@ import ChatApp from '~/pages/Chat/ChatApp';
 import ServiceScheduleManagement from '~/pages/Clinic/ServiceScheduleManagement';
 import CreateServiceSchedule from '~/pages/Clinic/ServiceScheduleManagement/CreateServiceSchedule';
 import UpdateServiceSchedule from '~/pages/Clinic/ServiceScheduleManagement/UpdateServiceSchedule';
+import ServiceManagement from '~/pages/Clinic/ServiceManagement';
+import CreateService from '~/pages/Clinic/ServiceManagement/CreateService';
+import UpdateService from '~/pages/Clinic/ServiceManagement/UpdateService';
 
 function ClinicRoutes() {
     const { user } = useContext(UserContext);
@@ -45,7 +48,10 @@ function ClinicRoutes() {
                     path="doctor-schedule/update-doctor-schedule/:doctorId/:scheduleDate"
                     element={<UpdateDoctorSchedule />}
                 />
-                <Route path="service" element={<BookingManagement />} />
+                <Route path="service" element={<ServiceManagement />} />
+                <Route path="service/create-service" element={<CreateService />} />
+                <Route path="service/update-service/:serviceId" element={<UpdateService />} />
+
                 <Route path="service-schedule" element={<ServiceScheduleManagement />} />
                 <Route path="service-schedule/create-service-schedule" element={<CreateServiceSchedule />} />
                 <Route
