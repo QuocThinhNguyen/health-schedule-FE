@@ -30,7 +30,7 @@ function ListFilterService({ pagination, setPagination }) {
             // gender: searchParams.get('gender') || '',
             // minPrice: Number(searchParams.get('minPrice')) || '',
             // maxPrice: Number(searchParams.get('maxPrice')) || '',
-            // sort: searchParams.get('sort') || 'noi-bat',
+            sort: searchParams.get('sort') || 'noi-bat',
             pageNo: pagination.page,
             pageSize: pagination.limit,
         };
@@ -40,8 +40,8 @@ function ListFilterService({ pagination, setPagination }) {
         const filterServicesAPI = async () => {
             try {
                 const response = await axiosClient.get(`/service/?${new URLSearchParams(queryParams).toString()}`);
-                console.log("response", response);
-                
+                console.log('response', response);
+
                 if (response.status === 200) {
                     setServices(response.data);
                     console.log('response', response);
