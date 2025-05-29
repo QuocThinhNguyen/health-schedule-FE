@@ -2,7 +2,48 @@ import { MdDeleteForever } from 'react-icons/md';
 import { RiDeleteBin5Line } from 'react-icons/ri';
 import React from 'react';
 import Select from 'react-select';
+import { useEffect, useState } from 'react';
+import { use } from 'react';
+import { axiosInstance, axiosClient } from '~/api/apiRequest';
+import axios from 'axios';
+import { useSearchParams } from 'react-router-dom';
+
 function SideBarFilter() {
+    const [provinces, setProvinces] = useState([]);
+    const [selectedProvince, setSelectedProvince] = useState(null);
+    const [searchParams, setSearchParams] = useSearchParams();
+
+    useEffect(() => {
+        const getProvinces = async () => {
+            try {
+                const response = await axios.get('https://provinces.open-api.vn/api/p/');
+                const formatted = response.data.map((item) => ({
+                    value: item.code,
+                    label: item.name,
+                }));
+                setProvinces(formatted);
+            } catch (e) {
+                console.log('Errorr: ', e.message);
+            }
+        };
+        getProvinces();
+    }, []);
+
+    const handleDeleteAll = () => {
+        const keyword = searchParams.get('keyword');
+        const newParams = keyword ? { keyword } : {};
+        setSearchParams(newParams);
+        setSelectedProvince(null);
+    };
+
+    const handleFilterChange = (key, value) => {
+        const newParams = { ...Object.fromEntries(searchParams.entries()), [key]: value };
+        if (value === '' || value === null || value === undefined) {
+            delete newParams[key];
+        }
+        setSearchParams(newParams);
+    };
+
     return (
         <div className="w-full bg-[#f8f9fc] border border-[#E4E8EC] rounded-lg p-6 text-sm">
             <div className="h-max">
@@ -11,14 +52,13 @@ function SideBarFilter() {
                         Tỉnh/Thành phố
                     </h4>
                     <Select
-                        options={[
-                            { value: 'suc-khoe', label: 'Bình định' },
-                            { value: 'xet-nghiem', label: 'TP. HCM' },
-                            { value: 'tiem-chung', label: 'Bình Dương' },
-                        ]}
-                        
+                        options={provinces}
+                        value={selectedProvince}
                         placeholder="Tất cả tỉnh/thành phố"
-                        // onChange={handleChange}
+                        onChange={(option) => {
+                            setSelectedProvince(option);
+                            handleFilterChange('provinceCode', option ? option.value : '');
+                        }}
                         className="z-20"
                         isSearchable
                         isClearable
@@ -54,7 +94,10 @@ function SideBarFilter() {
             )}
         </div> */}
             </div>
-            <div className="flex gap-2 items-center text-base font-semibold cursor-pointer text-[#2d87f3] hover:opacity-80">
+            <div
+                className="flex gap-2 items-center text-base font-semibold cursor-pointer text-[#2d87f3] hover:opacity-80"
+                onClick={handleDeleteAll}
+            >
                 <MdDeleteForever />
                 Xóa tất cả
             </div>

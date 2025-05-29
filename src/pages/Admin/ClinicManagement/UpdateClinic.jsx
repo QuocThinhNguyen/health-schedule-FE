@@ -14,6 +14,7 @@ function UpdateClinic() {
         const getDetailClinicAPI = async (id) => {
             try {
                 const response = await axiosInstance.get(`/clinic/${id}`);
+                console.log('Check response', response);
                 if (response.status === 200) {
                     setDefaultValues(response.data);
                 } else {
