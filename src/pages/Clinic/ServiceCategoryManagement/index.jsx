@@ -1,20 +1,19 @@
-import { format } from 'date-fns';
-import { useContext, useEffect, useState } from 'react';
-import { CiEdit } from 'react-icons/ci';
-import { IoIosAdd, IoIosSearch } from 'react-icons/io';
-import { MdDeleteOutline } from 'react-icons/md';
-import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
-import { axiosClient, axiosInstance } from '~/api/apiRequest';
-import AdvancePagination from '~/components/AdvancePagination';
-import Table from '~/components/Table';
-import Title from '~/components/Tittle';
-import { ClinicContext } from '~/context/ClinicContext';
+import { useContext, useEffect, useState } from "react";
+import { CiEdit } from "react-icons/ci";
+import { IoIosAdd, IoIosSearch } from "react-icons/io";
+import { MdDeleteOutline } from "react-icons/md";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { axiosClient, axiosInstance } from "~/api/apiRequest";
+import AdvancePagination from "~/components/AdvancePagination";
+import Table from "~/components/Table";
+import Title from "~/components/Tittle";
+import { ClinicContext } from "~/context/ClinicContext";
 
-function ServiceManagement() {
+function ServiceCategoryManagement() {
     const navigate = useNavigate();
     const { clinicId } = useContext(ClinicContext);
-    const [services, setServices] = useState([]);
+    const [serviceCategories, setServiceCategories] = useState([]);
     const [deleteService, setDeleteService] = useState({ serviceId: 0 });
     const [showConfirm, setShowConfirm] = useState(false);
     const [filterValue, setFilterValue] = useState('');
@@ -48,19 +47,19 @@ function ServiceManagement() {
     };
 
     useEffect(() => {
-        if (clinicId) {
-            getAllServicesAndFilter();
-        }
-    }, [pagination, filterValue, clinicId]);
+            getAllServiceCategoriesAndFilter();
+    }, [pagination, filterValue]);
 
-    const getAllServicesAndFilter = async () => {
+    const getAllServiceCategoriesAndFilter = async () => {
         try {
             if (!clinicId) return;
             const response = await axiosClient.get(
-                `/service?keyword=${filterValue}&clinicId=${clinicId}&pageNo=${pagination.page}&pageSize=${pagination.limit}`,
+                `/service-category?keyword=${filterValue}&pageNo=${pagination.page}&pageSize=${pagination.limit}`,
             );
+            console.log('response getAllServiceCategoriesAndFilter', response);
+
             if (response.status === 200) {
-                setServices(response.data);
+                setServiceCategories(response.data);
                 if (response.totalPages === 0) {
                     response.totalPages = 1;
                 }
@@ -72,21 +71,21 @@ function ServiceManagement() {
                     }));
                 }
             } else {
-                console.error('No Services are found:', response.message);
-                setServices([]);
+                console.error('No Services category are found:', response.message);
+                setServiceCategories([]);
             }
         } catch (error) {
-            console.error('Failed to get Services:', error);
-            setServices([]);
+            console.error('Failed to get Services category:', error);
+            setServiceCategories([]);
         }
     };
 
-    const deleteServiceAPI = async (serviceId) => {
+    const deleteServiceAPI = async (serviceCategoryId) => {
         try {
-            const response = await axiosInstance.delete(`/service/${serviceId}`);
+            const response = await axiosInstance.delete(`/service-category/${serviceCategoryId}`);
             if (response.status === 200) {
                 // Xử lý khi thành công
-                await getAllServicesAndFilter();
+                await getAllServiceCategoriesAndFilter();
             } else {
                 console.error('Failed to delete Service:', response.message);
             }
@@ -97,18 +96,11 @@ function ServiceManagement() {
 
     const columns = [
         { key: 'name', label: 'Tiêu đề', wrap: true },
-        {
-            key: 'image',
-            label: 'Hình ảnh',
-            type: 'image',
-        },
-        { key: 'price', label: 'Giá' },
-        { key: 'serviceCategoryId.name', label: 'Loại dịch vụ' },
     ];
 
     const actions = [
-        { icon: <CiEdit />, onClick: (service) => navigate(`/clinic/service/update-service/${service.serviceId}`) },
-        { icon: <MdDeleteOutline />, onClick: (service) => handleDeleteClick(service.serviceId) },
+        { icon: <CiEdit />, onClick: (serviceCategory) => navigate(`/clinic/service-category/update-service-category/${serviceCategory.serviceCategoryId}`) },
+        { icon: <MdDeleteOutline />, onClick: (serviceCategory) => handleDeleteClick(serviceCategory.serviceCategoryId) },
     ];
 
     return (
@@ -129,7 +121,7 @@ function ServiceManagement() {
                     <button
                         className="flex justify-center items-center gap-2 px-4 py-2 h-10 bg-[rgba(var(--bg-active-rgb),0.15)] text-[rgb(var(--bg-active-rgb))] hover:bg-[var(--bg-active)] hover:text-[var(--text-active)] rounded-md  border border-[var(--border-primary)]"
                         onClick={() => {
-                            navigate('/clinic/service/create-service');
+                            navigate('/clinic/service-category/create-service-category');
                         }}
                     >
                         <span>Thêm</span>
@@ -138,7 +130,7 @@ function ServiceManagement() {
                         </span>
                     </button>
                 </div>
-                <Table columns={columns} data={services} pagination={pagination} actions={actions} />
+                <Table columns={columns} data={serviceCategories} pagination={pagination} actions={actions} />
                 <AdvancePagination
                     pagination={pagination}
                     totalElements="10"
@@ -168,4 +160,4 @@ function ServiceManagement() {
     );
 }
 
-export default ServiceManagement;
+export default ServiceCategoryManagement;

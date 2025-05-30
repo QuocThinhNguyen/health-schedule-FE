@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useRef } from 'react';
 import { Editor } from '@tinymce/tinymce-react';
 import { ThemeContext } from '~/context/ThemeProvider';
 
-const CustomTinyMCE = ({ name, value, onChange, onBlur = null }) => {
+const CustomTinyMCE = ({ name, value, onChange, onBlur = null , height=800}) => {
     const { isDark } = useContext(ThemeContext);
     const editorRef = useRef(null);
     useEffect(() => {}, [isDark]);
@@ -17,7 +17,7 @@ const CustomTinyMCE = ({ name, value, onChange, onBlur = null }) => {
                 value={value} // Đồng bộ giá trị từ state
                 apiKey={import.meta.env.VITE_API_KEY_TINYMCE}
                 init={{
-                    height: 800,
+                    height: height,
                     plugins:
                         'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount',
                     toolbar:
