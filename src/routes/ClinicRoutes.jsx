@@ -22,6 +22,9 @@ import UpdateServiceSchedule from '~/pages/Clinic/ServiceScheduleManagement/Upda
 import ServiceManagement from '~/pages/Clinic/ServiceManagement';
 import CreateService from '~/pages/Clinic/ServiceManagement/CreateService';
 import UpdateService from '~/pages/Clinic/ServiceManagement/UpdateService';
+import CreateServiceCategory from '~/pages/Clinic/ServiceCategoryManagement/CreateServiceCategory';
+import UpdateServiceCategory from '~/pages/Clinic/ServiceCategoryManagement/UpdateServiceCategory';
+import ServiceCategoryManagement from '~/pages/Clinic/ServiceCategoryManagement';
 
 function ClinicRoutes() {
     const { user } = useContext(UserContext);
@@ -48,14 +51,16 @@ function ClinicRoutes() {
                     path="doctor-schedule/update-doctor-schedule/:doctorId/:scheduleDate"
                     element={<UpdateDoctorSchedule />}
                 />
+                <Route path="service-category" element={<ServiceCategoryManagement />} />
+                <Route path="service-category/create-service-category" element={<CreateServiceCategory />} />
+                <Route path="service-category/update-service-category/:id" element={<UpdateServiceCategory />} />
                 <Route path="service" element={<ServiceManagement />} />
                 <Route path="service/create-service" element={<CreateService />} />
-                <Route path="service/update-service/:serviceId" element={<UpdateService />} />
-
+                <Route path="service/update-service/:id" element={<UpdateService />} />
                 <Route path="service-schedule" element={<ServiceScheduleManagement />} />
                 <Route path="service-schedule/create-service-schedule" element={<CreateServiceSchedule />} />
                 <Route
-                    path="service-schedule/update-service-schedule/:serviceId/:scheduleDate"
+                    path="service-schedule/update-service-schedule/:id/:scheduleDate"
                     element={<UpdateServiceSchedule />}
                 />
                 <Route path="post" element={<PostManagement />} />
