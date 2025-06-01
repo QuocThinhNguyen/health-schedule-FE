@@ -42,7 +42,7 @@ function UpdateDoctor() {
     return (
         <>
             <div className="px-3 mb-6">
-                <Title>Cập nhật bệnh viện</Title>
+                <Title>Cập nhật bác sĩ</Title>
                 <FormDoctor defaultValues={defaultValues} onSubmit={updateDoctorAPI} />
             </div>
         </>

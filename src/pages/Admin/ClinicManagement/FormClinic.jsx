@@ -2,8 +2,11 @@ import CustomTinyMCE from '~/components/CustomTinyMCE';
 import ImageInput from '../../../components/ImageInput';
 import { useNavigate } from 'react-router-dom';
 import Input from '~/components/Input';
+import SelectInput from '~/components/SelectInput/SelectInput';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import Select from 'react-select';
+import axios from 'axios';
 
 function FormClinic({ onSubmit, defaultValues = {} }) {
     const navigate = useNavigate();
@@ -25,15 +28,47 @@ function FormClinic({ onSubmit, defaultValues = {} }) {
         navigate('/admin/clinic');
     };
 
+    const [provinces, setProvinces] = useState([]);
+    const [selectedProvince, setSelectedProvince] = useState(null);
+    const [districts, setDistricts] = useState([]);
+    const [selectDistrict, setSelectDistrict] = useState(null);
+    const [wards, setWards] = useState([]);
+    const [selectWard, setSelectWard] = useState(null);
+
+    console.log('Select province:', selectedProvince);
+
     useEffect(() => {
         if (!isInitialized && defaultValues && Object.keys(defaultValues).length > 0) {
             setValue('name', defaultValues.name || '');
             setValue('email', defaultValues.email || '');
             setValue('address', defaultValues.address || '');
             setValue('phoneNumber', defaultValues.phoneNumber || '');
+            setValue('street', defaultValues.street || '');
             setAvatar(defaultValues.image);
             setBackground(defaultValues.background);
             setDescription(defaultValues.description || '');
+
+            if (defaultValues.provinceCode && defaultValues.provinceName) {
+                setSelectedProvince({
+                    value: defaultValues.provinceCode,
+                    label: defaultValues.provinceName,
+                });
+            }
+
+            if (defaultValues.districtCode && defaultValues.districtName) {
+                setSelectDistrict({
+                    value: defaultValues.districtCode,
+                    label: defaultValues.districtName,
+                });
+            }
+
+            if (defaultValues.wardCode && defaultValues.wardName) {
+                setSelectWard({
+                    value: defaultValues.wardCode,
+                    label: defaultValues.wardName,
+                });
+            }
+
             setIsInitialized(true);
             setButtonName('Cập nhật');
         }
@@ -41,11 +76,31 @@ function FormClinic({ onSubmit, defaultValues = {} }) {
 
     const onHandleSubmit = (data) => {
         const formData = new FormData();
+        const fullAddress = `${data.street}, ${selectWard.label || ''}, ${selectDistrict.label || ''}, ${
+            selectedProvince.label || ''
+        }`;
         formData.append('name', data.name);
         formData.append('email', data.email);
-        formData.append('address', data.address);
+        // formData.append('address', data.address);
+        formData.append('address', fullAddress);
         formData.append('phoneNumber', data.phoneNumber);
         formData.append('description', description);
+        formData.append('street', data.street);
+
+        if (selectedProvince) {
+            formData.append('provinceCode', selectedProvince.value);
+            formData.append('provinceName', selectedProvince.label);
+        }
+
+        if (selectDistrict) {
+            formData.append('districtCode', selectDistrict.value);
+            formData.append('districtName', selectDistrict.label);
+        }
+
+        if (selectWard) {
+            formData.append('wardCode', selectWard.value);
+            formData.append('wardName', selectWard.label);
+        }
         if (avatar) formData.append('image', avatar);
         // if (background) formData.append('background', background);
         onSubmit && onSubmit(formData);
@@ -53,6 +108,12 @@ function FormClinic({ onSubmit, defaultValues = {} }) {
         setAvatar(null);
         setBackground(null);
         setDescription('');
+        setProvinces([]);
+        setSelectedProvince(null);
+        setDistricts([]);
+        setSelectDistrict(null);
+        setWards([]);
+        setSelectWard(null);
         // setIsInitialized(false);
         reset({
             name: '',
@@ -61,6 +122,70 @@ function FormClinic({ onSubmit, defaultValues = {} }) {
             phoneNumber: '',
         });
     };
+
+    useEffect(() => {
+        const getProvinces = async () => {
+            try {
+                const response = await axios.get('https://provinces.open-api.vn/api/p/');
+                const formatted = response.data.map((item) => ({
+                    value: item.code,
+                    label: item.name,
+                }));
+                setProvinces(formatted);
+            } catch (e) {
+                console.log('Errorr: ', e.message);
+            }
+        };
+        getProvinces();
+    }, []);
+
+    // lấy danh sách quận, huyện
+    useEffect(() => {
+        const getDistricts = async () => {
+            if (!selectedProvince) {
+                setDistricts([]);
+                setSelectDistrict(null);
+                setWards([]);
+                setSelectWard(null);
+                return;
+            }
+            try {
+                const response = await axios.get(
+                    `https://provinces.open-api.vn/api/p/${selectedProvince.value}?depth=2`,
+                );
+                const formatted = response.data.districts.map((item) => ({
+                    value: item.code,
+                    label: item.name,
+                }));
+                setDistricts(formatted);
+            } catch (err) {
+                console.log('Error: ', err);
+            }
+        };
+        getDistricts();
+    }, [selectedProvince]);
+
+    // lấy danh sách phường, xã
+    useEffect(() => {
+        const getWards = async () => {
+            if (!selectDistrict) {
+                setWards([]);
+                setSelectWard(null);
+                return;
+            }
+            try {
+                const response = await axios.get(`https://provinces.open-api.vn/api/d/${selectDistrict.value}?depth=2`);
+                const formatted = response.data.wards.map((item) => ({
+                    value: item.code,
+                    label: item.name,
+                }));
+                setWards(formatted);
+            } catch (err) {
+                console.log('Error', err.message);
+            }
+        };
+        getWards();
+    }, [selectDistrict]);
 
     return (
         <form
@@ -86,14 +211,48 @@ function FormClinic({ onSubmit, defaultValues = {} }) {
                         {...register('email', { required: 'Vui lòng nhập email' })}
                         error={errors.email?.message}
                     />
+
+                    <SelectInput
+                        label="Tỉnh/Thành phố"
+                        placeholder="Chọn tỉnh/thành phố"
+                        options={provinces}
+                        value={selectedProvince}
+                        onChange={setSelectedProvince}
+                        isClearable={true}
+                    />
+                    <SelectInput
+                        label="Quận/Huyện"
+                        placeholder="Chọn quận/huyện"
+                        options={districts}
+                        value={selectDistrict}
+                        onChange={setSelectDistrict}
+                        isClearable={true}
+                    />
+                    <SelectInput
+                        label="Phường/Xã"
+                        placeholder="Chọn phường/xã"
+                        options={wards}
+                        value={selectWard}
+                        onChange={setSelectWard}
+                        isClearable={true}
+                    />
+
                     <Input
+                        id="street"
+                        label="Số nhà, tên đường"
+                        type="text"
+                        placeholder="Nhập số nhà, tên đường"
+                        {...register('street', { required: 'Vui lòng nhập số nhà, tên đường' })}
+                    />
+
+                    {/* <Input
                         id="address"
                         label="Địa chỉ"
                         type="text"
                         placeholder="Nhập địa chỉ bệnh viện"
                         {...register('address', { required: 'Vui lòng nhập địa chỉ bệnh viện' })}
                         error={errors.address?.message}
-                    />
+                    /> */}
                     <Input
                         id="phoneNumber"
                         label="Số điện thoại"
