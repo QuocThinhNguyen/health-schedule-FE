@@ -15,20 +15,20 @@ function Statistics() {
     useEffect(() => {
         const fetchStatistics = async () => {
             try {
-                const response = await axiosInstance.get('/admin/homepage');
+                const response = await axiosInstance.get('/statistics-homepage');
                 if (response.status === 200) {
                     setCounts({
+                        countBooking: response.data.totalBookings,
                         countClinic: response.data.totalClinics,
                         countDoctor: response.data.totalDoctors,
-                        countUser: response.data.countOfNewUserThisMonth,
-                        countBooking: response.data.totalBookingThisMonth,
+                        countUser: response.data.totalUsers,
                     });
                 } else {
-                    toast.error('Failed to fetch data:', response.message);
+                    toast.error('Failed to fetch statistics homepage:', response.message);
                     setCounts([]);
                 }
             } catch (error) {
-                toast.error('Error fetching appointments:', error);
+                toast.error('Error fetching statistics homepage:', error);
                 setCounts([]);
             }
         };

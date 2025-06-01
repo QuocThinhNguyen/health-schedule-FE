@@ -27,10 +27,9 @@ function ListFilterService({ pagination, setPagination }) {
             keyword: searchParams.get('keyword') || '',
             clinicId: Number(searchParams.get('clinic')) || '',
             serviceCategoryId: Number(searchParams.get('serviceCategory')) || '',
-            // gender: searchParams.get('gender') || '',
-            // minPrice: Number(searchParams.get('minPrice')) || '',
-            // maxPrice: Number(searchParams.get('maxPrice')) || '',
-            // sort: searchParams.get('sort') || 'noi-bat',
+            minPrice: Number(searchParams.get('minPrice')) || '',
+            maxPrice: Number(searchParams.get('maxPrice')) || '',
+            sort: searchParams.get('sort') || '',
             pageNo: pagination.page,
             pageSize: pagination.limit,
         };
