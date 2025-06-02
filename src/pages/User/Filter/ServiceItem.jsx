@@ -3,17 +3,11 @@ import { BsCoin } from 'react-icons/bs';
 import { formatTitleForUrl } from '~/utils/formatTitleForUrl';
 
 function ServiceItem({ data }) {
-
     const navigate = useNavigate();
-
     const formatCurrency = (value) => {
         return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(value);
     };
-
     const handleClickService = () => {
-        console.log("url", `/dich-vu/${formatTitleForUrl(data.name)}-${data.serviceId}`);
-        // Chuyển hướng đến trang chi tiết dịch vụ
-        
         navigate(`/dich-vu/${formatTitleForUrl(data.name)}-${data.serviceId}`);
     };
     return (
@@ -37,13 +31,13 @@ function ServiceItem({ data }) {
             <div className="bg-[#F8F9FC] px-4 py-2 flex items-center justify-between w-full">
                 <div className="flex items-center gap-2">
                     <img
-                        src="https://cdn-healthcare.hellohealthgroup.com/hospitals/vn/1wnumG7SuolmS0_-DxFqUbtmTfRFRmBtp.png?w=48&q=75"
+                        src={data?.clinicImage}
                         alt={data?.name || 'Chưa xác định'}
                         className="w-10 h-10 rounded-full object-cover border border-[#E4E8EC]"
                     />
                     <div>
-                        <div className="font-semibold text-sm">{data?.clinicId?.name || 'Chưa xác định'}</div>
-                        <div className="text-xs text-[#595959]">{data?.clinicId?.address || 'Chưa xác định'}</div>
+                        <div className="font-semibold text-sm">{data?.clinicName || 'Chưa xác định'}</div>
+                        <div className="text-xs text-[#595959]">{data?.clinicAddress || 'Chưa xác định'}</div>
                     </div>
                 </div>
                 <div

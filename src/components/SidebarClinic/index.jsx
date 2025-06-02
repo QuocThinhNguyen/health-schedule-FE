@@ -1,10 +1,7 @@
-import { IoChatboxEllipsesOutline, IoMenu, IoNewspaperOutline } from 'react-icons/io5';
+import {IoNewspaperOutline } from 'react-icons/io5';
 import { useNavigate, NavLink } from 'react-router-dom';
 import { LuLayoutDashboard } from 'react-icons/lu';
-import { CiHospital1 } from 'react-icons/ci';
 import { FaUserDoctor } from 'react-icons/fa6';
-import { FaRegUser } from 'react-icons/fa';
-import { LiaStethoscopeSolid } from 'react-icons/lia';
 import { SlCalender } from 'react-icons/sl';
 import { MdOutlineAccessTime, MdOutlineComment } from 'react-icons/md';
 import Logo from '../Logo';
@@ -16,6 +13,7 @@ function SidebarClinic() {
         { path: '/clinic/doctor', label: 'Quản lý bác sĩ', icon: <FaUserDoctor /> },
         { path: '/clinic/booking', label: 'Quản lý lịch hẹn', icon: <SlCalender /> },
         { path: '/clinic/doctor-schedule', label: 'Quản lý thời gian làm việc', icon: <MdOutlineAccessTime /> },
+        { path: '/clinic/service-category', label: 'Quản lý loại dịch vụ', icon: <SlCalender /> },
         { path: '/clinic/service', label: 'Quản lý dịch vụ', icon: <SlCalender /> },
         { path: '/clinic/service-schedule', label: 'Quản lý thời gian dịch vụ', icon: <MdOutlineAccessTime /> },
         { path: '/clinic/post', label: 'Quản lý tin tức', icon: <IoNewspaperOutline /> },

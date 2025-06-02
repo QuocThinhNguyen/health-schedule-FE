@@ -66,7 +66,6 @@ function ListFilterDoctor({ pagination, setPagination }) {
             }
         };
         filterDoctorAPI();
-
         const timeoutId = setTimeout(() => {
             window.scrollTo(0, 0);
         }, 100);

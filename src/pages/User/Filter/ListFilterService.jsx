@@ -1,5 +1,5 @@
 import ServiceItem from './ServiceItem';
-import React, { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useLocation, useSearchParams } from 'react-router-dom';
 import Select from 'react-select';
 import { axiosClient } from '~/api/apiRequest';
@@ -27,10 +27,9 @@ function ListFilterService({ pagination, setPagination }) {
             keyword: searchParams.get('keyword') || '',
             clinicId: Number(searchParams.get('clinic')) || '',
             serviceCategoryId: Number(searchParams.get('serviceCategory')) || '',
-            // gender: searchParams.get('gender') || '',
-            // minPrice: Number(searchParams.get('minPrice')) || '',
-            // maxPrice: Number(searchParams.get('maxPrice')) || '',
-            sort: searchParams.get('sort') || 'noi-bat',
+            minPrice: Number(searchParams.get('minPrice')) || '',
+            maxPrice: Number(searchParams.get('maxPrice')) || '',
+            sort: searchParams.get('sort') || '',
             pageNo: pagination.page,
             pageSize: pagination.limit,
         };
@@ -40,12 +39,8 @@ function ListFilterService({ pagination, setPagination }) {
         const filterServicesAPI = async () => {
             try {
                 const response = await axiosClient.get(`/service/?${new URLSearchParams(queryParams).toString()}`);
-                console.log('response', response);
-
                 if (response.status === 200) {
                     setServices(response.data);
-                    console.log('response', response);
-
                     setTotalServices(response.totalElement);
                     if (response.totalPage === 0) {
                         response.totalPage = 1;

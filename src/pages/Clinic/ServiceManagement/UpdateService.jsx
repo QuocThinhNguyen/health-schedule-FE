@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { axiosInstance } from "~/api/apiRequest";
-import FormService from "./FormService";
-import Title from "~/components/Tittle";
-import { toast } from "react-toastify";
+import { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { axiosInstance } from '~/api/apiRequest';
+import FormService from './FormService';
+import Title from '~/components/Tittle';
+import { toast } from 'react-toastify';
 
 function UpdateService() {
     const { id } = useParams();
@@ -11,24 +11,24 @@ function UpdateService() {
     const [defaultValues, setDefaultValues] = useState();
 
     useEffect(() => {
-        const getDetailPostAPI = async (id) => {
+        const getDetailServiceAPI = async (id) => {
             try {
                 const response = await axiosInstance.get(`/service/${id}`);
                 if (response.status === 200) {
                     setDefaultValues(response.data);
                 } else {
-                    console.error('No post found:', response.message);
+                    console.error('No service found:', response.message);
                 }
             } catch (error) {
                 console.error('Failed to get service:', error);
             }
         };
-        getDetailPostAPI(id);
+        getDetailServiceAPI(id);
     }, [id]);
 
     const updateServiceAPI = async (formData) => {
         try {
-            const response = await axiosInstance.put(`/post/${id}`, formData, {
+            const response = await axiosInstance.put(`/service/${id}`, formData, {
                 headers: { 'Content-Type': 'multipart/form-data' },
             });
 
@@ -45,7 +45,7 @@ function UpdateService() {
     return (
         <>
             <div className="px-3 mb-6">
-                <Title>Cập nhật bài viết</Title>
+                <Title>Cập nhật dịch vụ</Title>
                 <FormService defaultValues={defaultValues} onSubmit={updateServiceAPI} />
             </div>
         </>

@@ -1,8 +1,7 @@
-
-import FormPost from "../PostManagement/FormPost";
 import { toast } from "react-toastify";
 import { axiosInstance } from "~/api/apiRequest";
 import Title from "~/components/Tittle";
+import FormService from "./FormService";
 
 function CreateService() {
     const createServiceAPI = async (formData) => {
@@ -26,7 +25,7 @@ function CreateService() {
         <>
             <div className="px-3 mb-6">
                 <Title>Thêm dịch vụ</Title>
-                <FormPost onSubmit={createServiceAPI} />
+                <FormService onSubmit={createServiceAPI} />
             </div>
         </>
     );
