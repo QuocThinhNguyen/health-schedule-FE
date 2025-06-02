@@ -7,6 +7,7 @@ import Statistics from './Statistics';
 import News from './News/News';
 import ListService from './ListService/ListService';
 import ListDoctorRecommended from './DoctorRecommended/ListDoctorRecommended';
+import ListVideo from './ListVideo/ListVideo';
 import { UserContext } from '~/context/UserContext';
 
 function Home() {
@@ -76,6 +77,8 @@ function Home() {
             {/* Dich vu */}
             <ListService />
 
+            {/* Video */}
+            <ListVideo />
             {/* Binh luan */}
             <Introduce />
 

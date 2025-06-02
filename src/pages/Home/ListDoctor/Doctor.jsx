@@ -56,8 +56,8 @@ function Doctor(data) {
                 <div className="pt-4 pb-2 gap-3 flex flex-col items-center">
                     <div className="relative w-full flex justify-center items-center">
                         {isBooking && (
-                            <div className="absolute top-0 right-0 text-xs bg-gradient-to-r from-green-500 to-emerald-600 text-white font-medium px-3 py-1 rounded-full flex items-center">
-                                <BadgeCheck className="w-4 h-4 mr-1" /> Bác sĩ mới
+                            <div className="absolute top-0 right-2 text-xs bg-gradient-to-r from-[#2d87f3] to-[#00b5f1] text-white font-medium px-3 py-1 rounded-full flex items-center">
+                                <BadgeCheck className="w-4 h-4 mr-1" /> Mới
                             </div>
                         )}
 
