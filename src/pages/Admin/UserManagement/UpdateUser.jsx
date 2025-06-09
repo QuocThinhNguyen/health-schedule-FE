@@ -34,8 +34,6 @@ function UpdateUser() {
             if (response.status === 200) {
                 toast.success('Cập nhật tài khoản người dùng thành công!');
                 navigate('/admin/user');
-            } else {
-                console.error('Failed to update user:', response.message);
             }
         } catch (error) {
             console.error('Error update user:', error);
