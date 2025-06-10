@@ -5,6 +5,7 @@ import { axiosInstance, axiosClient } from '~/api/apiRequest';
 import { UserContext } from '~/context/UserContext';
 import { NavLink, useNavigate, useLocation } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import loadingGif from '../../../public/loading.gif';
 
 function MakeAnAppointment() {
     const location = useLocation();
@@ -13,7 +14,7 @@ function MakeAnAppointment() {
     const currentDate = queryParams.get('currentDate');
     const timeSlot = queryParams.get('timeSlot');
 
-    const [paymentMethod, setPaymentMethod] = useState('cash');
+    const [paymentMethod, setPaymentMethod] = useState('CASH');
     const [isVisible, setIsVisible] = useState(true);
     const [isDragging, setIsDragging] = useState(false);
     const [files, setFiles] = useState([]);
@@ -233,9 +234,9 @@ function MakeAnAppointment() {
         }
         setIsLoading(true);
         try {
-            if (paymentMethod === 'cash') {
+            if (paymentMethod === 'CASH') {
                 await handlePaymentDirect();
-            } else if (paymentMethod === 'online') {
+            } else if (paymentMethod === 'ONLINE') {
                 await handlePaymentOnline();
             }
         } catch (error) {
@@ -760,8 +761,8 @@ function MakeAnAppointment() {
                             <div className="mt-4 space-y-3">
                                 <div
                                     className={`border-2 rounded-md p-4 flex items-center gap-3 cursor-pointer transition-colors
-                  ${paymentMethod === 'cash' ? 'border-2 border-blue-600' : 'border-gray-200'}`}
-                                    onClick={() => setPaymentMethod('cash')}
+                  ${paymentMethod === 'CASH' ? 'border-2 border-blue-600' : 'border-gray-200'}`}
+                                    onClick={() => setPaymentMethod('CASH')}
                                 >
                                     <div className="w-10 h-10 bg-green-50 rounded-md flex items-center justify-center">
                                         <Banknote className="w-6 h-6 text-green-600" />
@@ -772,18 +773,18 @@ function MakeAnAppointment() {
                                     </div>
                                     <div
                                         className={`w-6 h-6 rounded-full border-2 flex items-center justify-center
-                  ${paymentMethod === 'cash' ? 'border-blue-600' : 'border-gray-300'}`}
+                  ${paymentMethod === 'CASH' ? 'border-blue-600' : 'border-gray-300'}`}
                                     >
-                                        {paymentMethod === 'cash' && (
-                                            <div className="w-3 h-3 bg-blue-600 rounded-full"></div>
+                                        {paymentMethod === 'CASH' && (
+                                            <div className="p-2 bg-blue-600 rounded-full"></div>
                                         )}
                                     </div>
                                 </div>
 
                                 <div
                                     className={`border-2 rounded-md p-4 flex items-center gap-3 cursor-pointer transition-colors
-                  ${paymentMethod === 'online' ? 'border-2 border-blue-600' : 'border-gray-200'}`}
-                                    onClick={() => setPaymentMethod('online')}
+                  ${paymentMethod === 'ONLINE' ? 'border-2 border-blue-600' : 'border-gray-200'}`}
+                                    onClick={() => setPaymentMethod('ONLINE')}
                                 >
                                     <div className="w-10 h-10 bg-blue-50 rounded-md flex items-center justify-center">
                                         <CreditCard className="w-6 h-6 text-blue-600" />
@@ -794,10 +795,10 @@ function MakeAnAppointment() {
                                     </div>
                                     <div
                                         className={`w-6 h-6 rounded-full border-2 flex items-center justify-center
-                  ${paymentMethod === 'online' ? 'border-blue-600' : 'border-gray-300'}`}
+                  ${paymentMethod === 'ONLINE' ? 'border-blue-600' : 'border-gray-300'}`}
                                     >
-                                        {paymentMethod === 'online' && (
-                                            <div className="w-3 h-3 bg-blue-600 rounded-full"></div>
+                                        {paymentMethod === 'ONLINE' && (
+                                            <div className="p-2 bg-blue-600 rounded-full"></div>
                                         )}
                                     </div>
                                 </div>
@@ -1206,9 +1207,9 @@ function MakeAnAppointment() {
             {isLoading && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
                     <img
-                        src="https://media.tenor.com/On7kvXhzml4AAAAj/loading-gif.gif"
+                        src={loadingGif || 'https://media.tenor.com/On7kvXhzml4AAAAj/loading-gif.gif'}
                         alt="Loading..."
-                        className="w-fit h-fit"
+                        className="w-32 h-32"
                     />
                 </div>
             )}
