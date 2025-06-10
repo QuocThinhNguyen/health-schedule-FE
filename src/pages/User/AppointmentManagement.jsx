@@ -93,7 +93,6 @@ const AppointmentManagement = () => {
                 const response = await axiosInstance.post('/booking/allbooking', {
                     userId: user.userId,
                 });
-
                 if (response.status === 200) {
                     const updatedAppointments = await Promise.all(
                         response.data.map(async (appointment) => {
@@ -230,7 +229,13 @@ const AppointmentManagement = () => {
                                     </div>
                                 </div>
 
-                                <div className="flex">
+                                <div className="flex items-center gap-4 mt-1">
+                                    {appointment.paymentMethod === 'CASH' ? (
+                                        <span className="text-[var(--text-primary)] text-lg px-3 py-1 border border-[var(--border-primary)] bg-[var(--bg-primary)]">
+                                            {appointment?.paymentMethod}
+                                        </span>
+                                    ) : null}
+
                                     <span className="text-red-500 font-bold text-lg">{appointment.status.valueVi}</span>
                                 </div>
                             </div>
@@ -257,7 +262,7 @@ const AppointmentManagement = () => {
 
                                         <div className="flex">
                                             <span className="mr-2 font-medium">Chuyên khoa:</span>
-                                            <span>{appointment.doctorInfo.specialty.name}</span>
+                                            <span>{appointment?.doctorInfo?.specialty?.name || 'Không xác định'}</span>
                                         </div>
                                     </div>
 

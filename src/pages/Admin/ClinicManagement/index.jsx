@@ -43,6 +43,7 @@ function ClinicManagement() {
             const response = await axiosInstance.get(
                 `/clinic/?query=${filterValue}&page=${pagination.page}&limit=${pagination.limit}`,
             );
+            
             if (response.status === 200) {
                 setClinics(response.data);
                 if (response.totalPages === 0) {

@@ -11,7 +11,7 @@ import { ClinicContext } from '~/context/ClinicContext';
 const BookingManagement = () => {
     const navigate = useNavigate();
 
-    const {clinicId} = useContext(ClinicContext);
+    const { clinicId } = useContext(ClinicContext);
 
     const [selectedStatus, setSelectedStatus] = useState('');
     const [filterValue, setFilterValue] = useState('');
@@ -31,6 +31,8 @@ const BookingManagement = () => {
             const response = await axiosInstance.get(
                 `/booking/getBookingByClinicId?clinicId=${clinicId}&query=${filterValue}&date=${filterDate}&status=${selectedStatus}&page=${pagination.page}&limit=${pagination.limit}`,
             );
+            console.log('filterScheduleAPI from API:', response);
+
             if (response.status === 200) {
                 setSchedules(response.data);
                 if (response.totalPages === 0) {
@@ -94,6 +96,7 @@ const BookingManagement = () => {
         { key: 'appointmentDate', label: 'Ngày khám' },
         { key: 'timeType', label: 'Ca khám' },
         { key: 'price', label: 'Giá khám' },
+        { key: 'paymentMethod', label: 'Phương thức thanh toán' },
         { key: 'doctorId.fullname', label: 'Bác sĩ' },
         { key: 'patientRecordId.fullname', label: 'Tên bệnh nhân' },
         { key: 'patientRecordId.phoneNumber', label: 'Số điện thoại' },

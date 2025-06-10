@@ -3,9 +3,8 @@ import { Controller, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import Input from '~/components/Input';
 import { UserContext } from '~/context/UserContext';
-import ImageInput from '../../../components/ImageInput';
-import Select from 'react-select';
 import SelectOption from '../../../components/SelectOption';
+import { formatDate, formatWithInputDate } from '~/utils/formatDate';
 
 function FormBooking({ onSubmit, defaultValues = {} }) {
     const { user } = useContext(UserContext);
@@ -48,7 +47,7 @@ function FormBooking({ onSubmit, defaultValues = {} }) {
     useEffect(() => {
         if (!isInitialized && defaultValues && Object.keys(defaultValues).length > 0) {
             setValue('bookingId', defaultValues.bookingId || '');
-            setValue('createAt', defaultValues.createAt || '');
+            setValue('createdAt', formatWithInputDate(defaultValues.createdAt) || '');
             setValue('patientName', defaultValues.patientRecordId?.fullname || '');
             setValue('patientPhoneNumber', defaultValues.patientRecordId?.phoneNumber || '');
             setValue('patientEmail', defaultValues.patientRecordId?.email || '');
@@ -59,7 +58,7 @@ function FormBooking({ onSubmit, defaultValues = {} }) {
             setValue('appointmentDate', defaultValues.appointmentDate || '');
             setValue('timeType', defaultValues.timeType || '');
             setValue('price', defaultValues.price || '');
-            setValue('payemntMethod', defaultValues.paymentMethod || '');
+            setValue('paymentMethod', defaultValues.paymentMethod || '');
             setValue('status', defaultValues.status || '');
             setValue('reason', defaultValues.reason || '');
             setIsInitialized(true);
@@ -71,6 +70,7 @@ function FormBooking({ onSubmit, defaultValues = {} }) {
         const formData = new FormData();
         formData.append('timeType', data.timeType);
         formData.append('status', data.status);
+        // formData.append('paymentMethod', data.paymentMethod);
         onSubmit && onSubmit(formData);
     };
     return (
@@ -80,7 +80,7 @@ function FormBooking({ onSubmit, defaultValues = {} }) {
         >
             <div className="flex items-center justify-between gap-3">
                 <Input id="bookingId" label="Mã lịch hẹn (ID)" type="text" readOnly {...register('bookingId')} />
-                <Input id="createdAt" label="Ngày đặt lịch" type="date" readOnly {...register('createAt')} />
+                <Input id="createdAt" label="Ngày đặt lịch" type="date" readOnly {...register('createdAt')} />
             </div>
             <div className="flex items-center justify-between gap-3">
                 <Input id="patientName" label="Bệnh nhân" type="text" readOnly {...register('patientName')} />
@@ -126,11 +126,11 @@ function FormBooking({ onSubmit, defaultValues = {} }) {
                 <Input id="price" label="Giá khám" type="text" readOnly {...register('price')} />
             </div>
             <Input
-                id="payemntMethod"
+                id="paymentMethod"
                 label="Phương thức thanh toán"
                 type="text"
                 readOnly
-                {...register('payemntMethod')}
+                {...register('paymentMethod')}
             />
 
             <div className="w-full mt-4">
