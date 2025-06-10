@@ -495,7 +495,7 @@ function ClinicInfo() {
                                 </div>
                             </div>
                         </div>
-                        <div className="mt-8">
+                        {/* <div className="mt-8">
                             <button
                                 onClick={handleClickButtonMessage}
                                 className="flex justify-center items-center gap-2 px-4 py-2 h-10 hover:bg-[rgba(var(--bg-active-rgb),0.85)] bg-[var(--bg-active)] text-[var(--text-active)] rounded-md  border border-[var(--border-primary)]"
@@ -505,7 +505,7 @@ function ClinicInfo() {
                                     <IoChatboxEllipsesOutline className="text-lg mt-1" />
                                 </span>
                             </button>
-                        </div>
+                        </div> */}
                     </div>
                 </div>
             </div>

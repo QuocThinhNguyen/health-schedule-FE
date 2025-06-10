@@ -61,14 +61,14 @@ function ServiceManagement() {
             );
             if (response.status === 200) {
                 setServices(response.data);
-                if (response.totalPages === 0) {
-                    response.totalPages = 1;
+                if (response.totalPage === 0) {
+                    response.totalPage = 1;
                 }
-                if (pagination.totalPages !== response.totalPages) {
+                if (pagination.totalPages !== response.totalPage) {
                     setPagination((prev) => ({
                         ...prev,
                         page: 1,
-                        totalPages: response.totalPages,
+                        totalPages: response.totalPage,
                     }));
                 }
             } else {
