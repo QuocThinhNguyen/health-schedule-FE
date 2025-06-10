@@ -47,7 +47,7 @@ function AllNews() {
     };
 
     return (
-        <div className="max-w-6xl mx-auto min-h-screen bg-white">
+        <div className="max-w-6xl mx-auto min-h-screen bg-white mb-3">
             <div className="container mx-auto">
                 <div className="flex items-center h-16 space-x-8">
                     <h1 className="text-[#003553] font-bold text-3xl px-4 pt-6 pb-4">TIN TỨC Y KHOA</h1>

@@ -513,7 +513,7 @@ function ClinicInfo() {
             <div className="bg-blue-50 mt-52 h-2"></div>
 
             <div className="flex flex-col lg:flex-row gap-8 max-w-6xl mt-2 mx-auto">
-                <div className="flex-1">
+                <div className="flex-1 mb-3">
                     <div className="border-b-2 mb-6">
                         <div className="flex">
                             {tabs.map((tab) => (
