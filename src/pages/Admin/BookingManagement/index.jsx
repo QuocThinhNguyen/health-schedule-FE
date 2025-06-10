@@ -27,9 +27,6 @@ const BookingManagement = () => {
             const response = await axiosInstance.get(
                 `/booking/?query=${filterValue}&date=${filterDate}&status=${selectedStatus}&page=${pagination.page}&limit=${pagination.limit}`,
             );
-            console.log(
-                `/booking/?query=${filterValue}&date=${filterDate}&status=${selectedStatus}&page=${pagination.page}&limit=${pagination.limit}`,
-            );
             if (response.status === 200) {
                 setSchedules(response.data);
                 if (response.totalPages === 0) {
@@ -93,6 +90,7 @@ const BookingManagement = () => {
         { key: 'appointmentDate', label: 'Ngày khám' },
         { key: 'timeType', label: 'Ca khám' },
         { key: 'price', label: 'Giá khám' },
+        { key: 'paymentMethod', label: 'PTTT' },
         { key: 'doctorId.fullname', label: 'Bác sĩ' },
         { key: 'patientRecordId.fullname', label: 'Tên bệnh nhân' },
         { key: 'patientRecordId.phoneNumber', label: 'Số điện thoại' },

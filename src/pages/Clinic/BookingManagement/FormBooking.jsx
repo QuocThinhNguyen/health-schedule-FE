@@ -59,7 +59,7 @@ function FormBooking({ onSubmit, defaultValues = {} }) {
             setValue('appointmentDate', defaultValues.appointmentDate || '');
             setValue('timeType', defaultValues.timeType || '');
             setValue('price', defaultValues.price || '');
-            setValue('payemntMethod', defaultValues.paymentMethod || '');
+            setValue('paymentMethod', defaultValues.paymentMethod || '');
             setValue('status', defaultValues.status || '');
             setValue('reason', defaultValues.reason || '');
             setIsInitialized(true);
@@ -71,6 +71,7 @@ function FormBooking({ onSubmit, defaultValues = {} }) {
         const formData = new FormData();
         formData.append('timeType', data.timeType);
         formData.append('status', data.status);
+        formData.append('paymentMethod', data.paymentMethod);
         onSubmit && onSubmit(formData);
     };
     return (
@@ -132,7 +133,7 @@ function FormBooking({ onSubmit, defaultValues = {} }) {
                 <Input id="price" label="Giá khám" type="text" readOnly {...register('price')} />
             </div>
             <Input
-                id="payemntMethod"
+                id="paymentMethod"
                 label="Phương thức thanh toán"
                 type="text"
                 readOnly
