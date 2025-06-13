@@ -53,8 +53,8 @@ function FormBooking({ onSubmit, defaultValues = {} }) {
             setValue('patientEmail', defaultValues.patientRecordId?.email || '');
             setValue('patientAddress', defaultValues.patientRecordId?.address || '');
             setValue('doctor', defaultValues.doctorId?.fullname || '');
-            setValue('specialty', defaultValues.specialtyId?.name || '');
-            setValue('clinic', defaultValues.clinicId?.name || '');
+            setValue('specialty', defaultValues.info.specialtyId?.name || '');
+            setValue('clinic', defaultValues.info.clinicId?.name || '');
             setValue('appointmentDate', defaultValues.appointmentDate || '');
             setValue('timeType', defaultValues.timeType || '');
             setValue('price', defaultValues.price || '');

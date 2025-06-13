@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext } from 'react';
-import { ChevronRight, Star } from 'lucide-react';
+import { ChevronRight, Star, Users } from 'lucide-react';
 import { axiosInstance, axiosClient } from '~/api/apiRequest';
 import { NavLink, useSearchParams, useNavigate, useLocation } from 'react-router-dom'; // Dùng để lấy `patientRecordId` từ URL
 import parse from 'html-react-parser';
@@ -71,6 +71,7 @@ function DoctorInfo() {
         const fetchDoctorInfo = async () => {
             try {
                 const response = await axiosInstance.get(`/doctor/${doctorId}`);
+                console.log('Check doctor: ', response);
                 if (response.status === 200) {
                     setDoctorInfo(response.data);
                 }
@@ -375,6 +376,13 @@ function DoctorInfo() {
                             </svg>
                             <span className="font-semibold">{feedbacks.averageRating}/5</span>
                             <a className="text-gray-700 ml-1 underline">{feedbacks.totalFeedBacks} đánh giá</a>
+                            <div className="text-gray-700 ml-1 mr-1">|</div>
+                            <div className="flex items-center gap-1">
+                                <Users className="w-4 h-4 text-blue-500" />
+                                <span className="text-gray-700 ml-1 underline">
+                                    {doctorInfo.bookingCount} lượt đặt khám
+                                </span>
+                            </div>
                         </div>
                     </div>
                     <div className="flex justify-between items-center mt-2">

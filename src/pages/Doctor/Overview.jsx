@@ -5,6 +5,7 @@ import { toast } from 'react-toastify';
 import { Eye, Phone, Mail, MapPin } from 'lucide-react';
 import ConfirmationModal from '~/components/Confirm/ConfirmationModal';
 import Pagination from '~/components/Pagination';
+import emailjs from '@emailjs/browser';
 
 function Overview() {
     const { user } = useContext(UserContext);
@@ -18,6 +19,7 @@ function Overview() {
     const [feedbacks, setFeedbacks] = useState([]);
     const [statistical, setStatistical] = useState([]);
     const [bookings, setBookings] = useState([]);
+    const [clinicName, setClinicName] = useState([]);
 
     const handlePageChange = (page) => {
         setPagination((prev) => ({
@@ -25,6 +27,21 @@ function Overview() {
             page: page, // Cập nhật thuộc tính page
         }));
     };
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await axiosInstance.get(`/doctor/${user.userId}`);
+                console.log('Check User:', response);
+                if (response.status === 200) {
+                    setClinicName(response.data.clinicName);
+                }
+            } catch (error) {
+                console.error('Error fetching doctor data:', error);
+            }
+        };
+        fetchData();
+    }, []);
+
     useEffect(() => {
         // Đặt ngày mặc định là ngày hiện tại và ngày hôm qua khi component được tải
         const today = new Date();
@@ -70,6 +87,8 @@ function Overview() {
     }, [today, yesterdayDate]);
 
     const [getBooking, setGetBooking] = useState([]);
+
+    console.log('Check get booking:', getBooking);
 
     useEffect(() => {
         // Hàm gọi API để lấy dữ liệu lịch hẹn
@@ -267,6 +286,32 @@ function Overview() {
                     ),
                 );
                 toast.success('Cập nhật trạng thái thành công!');
+
+                const selectAppointment = getBooking.find((a) => a.bookingId === appointmentId);
+                const templateParams = {
+                    email: selectAppointment.patientRecordId.patientId.email,
+                    name: selectAppointment.patientRecordId.patientId.fullname,
+                    patientName: selectAppointment.patientRecordId.fullname,
+                    doctorName: selectAppointment.doctorId.fullname,
+                    appointmentDate: new Date(selectAppointment.appointmentDate).toLocaleDateString('vi-VN'),
+                    appointmentTime: selectAppointment.timeType.valueVi,
+                    clinicName: clinicName,
+                };
+                if (statusKey === 'S4') {
+                    emailjs.send(
+                        import.meta.env.VITE_EMAIL_SERVICE1_ID,
+                        import.meta.env.VITE_EMAIL_TEMPLATE_DOCTOR_COMFIRM_ID,
+                        templateParams,
+                        import.meta.env.VITE_EMAIL_PUBLIC_KEY1,
+                    );
+                } else {
+                    emailjs.send(
+                        import.meta.env.VITE_EMAIL_SERVICE1_ID,
+                        import.meta.env.VITE_EMAIL_TEMPLATE_DOCTOR_CANCLE_ID,
+                        templateParams,
+                        import.meta.env.VITE_EMAIL_PUBLIC_KEY1,
+                    );
+                }
             } else {
                 toast.error('Cập nhật trạng thái thất bại.');
             }
