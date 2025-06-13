@@ -33,18 +33,18 @@ const AppointmentManagement = () => {
     console.log('User:', user);
     const openModal = (bookingId, patientName, appointmentDate) => {
         // Kiểm tra xem lịch hẹn đã qua chưa
-        const currentDate = new Date();
-        const appointmentDateObj = new Date(appointmentDate);
-        // console.log('Current Date:', currentDate);
-        // console.log('Appointment Date:', appointmentDateObj);
-        // console.log('Difference:', appointmentDateObj - currentDate);
+        // const currentDate = new Date();
+        // const appointmentDateObj = new Date(appointmentDate);
+        // // console.log('Current Date:', currentDate);
+        // // console.log('Appointment Date:', appointmentDateObj);
+        // // console.log('Difference:', appointmentDateObj - currentDate);
 
-        if (appointmentDateObj - currentDate < 24 * 60 * 60 * 1000) {
-            toast.error(
-                'Lịch khám không thể hủy trong vòng 24 giờ trước giờ hẹn. Vui lòng liên hệ hỗ trợ để được xử lý.',
-            );
-            return;
-        }
+        // if (appointmentDateObj - currentDate < 24 * 60 * 60 * 1000) {
+        //     toast.error(
+        //         'Lịch khám không thể hủy trong vòng 24 giờ trước giờ hẹn. Vui lòng liên hệ hỗ trợ để được xử lý.',
+        //     );
+        //     return;
+        // }
 
         setSelectedBookingId(bookingId);
         setPatientName(patientName);
