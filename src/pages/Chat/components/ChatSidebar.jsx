@@ -98,8 +98,8 @@ export default function ChatSidebar({ activeChat, setActiveChat }) {
                     recentChatList.map((chat, index) => (
                         <div key={index} className="mx-[6px]">
                             <div
-                                className={`flex items-center rounded p-[10px] cursor-pointer hover:bg-gray-100 ${
-                                    activeChat?.partner?.partner?.userId === chat?.partner?.userId ? 'bg-[#dbebff]' : ''
+                                className={`flex items-center rounded p-[10px] cursor-pointer hover:bg-[rgba(var(--bg-active-rgb),0.85)] ${
+                                    activeChat?.partner?.partner?.userId === chat?.partner?.userId ? 'bg-[var(--bg-active)]' : ''
                                 }`}
                                 onClick={() => handleClickFriend(chat)}
                             >
@@ -113,13 +113,13 @@ export default function ChatSidebar({ activeChat, setActiveChat }) {
                                 {chat?.latestMessage?.status === 'sent' ? (
                                     <div className="ml-[10px] flex-1 flex flex-col justify-between h-full">
                                         <div className="flex justify-between items-center mb-1">
-                                            <h3 className="text-black font-medium">{chat?.partner?.fullname}</h3>
-                                            <p className="text-xs text-[var(--text-secondary)]">
+                                            <h3 className="text-[var(--text-primary)] font-medium">{chat?.partner?.fullname}</h3>
+                                            <p className="text-xs">
                                                 {formatTimeAgo(chat?.latestMessage?.createdAt)}
                                             </p>
                                         </div>
                                         {chat?.latestMessage && (
-                                            <p className="line-clamp-1 text-sm text-[var(--text-secondary)]">
+                                            <p className="line-clamp-1 text-sm">
                                                 {chat?.latestMessage?.senderId === user?.userId
                                                     ? 'Bạn: ' + chat?.latestMessage?.content
                                                     : chat?.partner?.fullname + ': ' + chat?.latestMessage?.content}

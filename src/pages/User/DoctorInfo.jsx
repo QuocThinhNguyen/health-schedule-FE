@@ -544,7 +544,8 @@ function DoctorInfo() {
                                                             >
                                                                 {mediaName.endsWith('.png') ||
                                                                 mediaName.endsWith('.jpg') ||
-                                                                mediaName.endsWith('.jpeg') ? (
+                                                                mediaName.endsWith('.jpeg') ||
+                                                                mediaName.endsWith('.webp') ? (
                                                                     <img
                                                                         src={mediaName}
                                                                         alt="Preview"
@@ -578,7 +579,8 @@ function DoctorInfo() {
                                                             {selectedMedia &&
                                                             (selectedMedia.endsWith('.png') ||
                                                                 selectedMedia.endsWith('.jpg') ||
-                                                                selectedMedia.endsWith('.jpeg')) ? (
+                                                                selectedMedia.endsWith('.jpeg') ||
+                                                                selectedMedia.endsWith('.webp')) ? (
                                                                 <img
                                                                     src={selectedMedia}
                                                                     alt="Full View"
