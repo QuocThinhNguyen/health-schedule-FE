@@ -22,6 +22,7 @@ function DoctorScheduleManagement() {
     const [customReason, setCustomReason] = useState('');
     const [nameDoctor, setNameDoctor] = useState('');
     const [slotValue, setSlotValue] = useState('');
+    const [currentNumberMap, setCurrentNumberMap] = useState({});
 
     console.log('currentNumber', currentNumber);
 
@@ -63,20 +64,30 @@ function DoctorScheduleManagement() {
     const fetchScheduleByDate = async (date) => {
         try {
             const response = await axiosInstance.get(`/schedule/${user.userId}?date=${date}`);
+            console.log('Check response:', response);
             const scheduleData = response?.data ?? [];
             if (response.status === 200 && scheduleData.length > 0) {
                 const { timeTypes = [], currentNumbers = [] } = scheduleData[0];
+                // setSelectedTimeSlots(timeTypes);
+                // setCurrentNumber(currentNumbers);
+                const timeMap = {};
+                timeTypes.forEach((type, idx) => {
+                    timeMap[type] = currentNumbers[idx] ?? 0;
+                });
+
                 setSelectedTimeSlots(timeTypes);
-                setCurrentNumber(currentNumbers);
+                setCurrentNumberMap(timeMap);
             } else {
                 console.log('Error fetching schedule:', response.message);
                 setSelectedTimeSlots([]); // Nếu không có lịch thì để rỗng
                 setCurrentNumber([]);
+                setCurrentNumberMap({});
             }
         } catch (error) {
             console.error('Error fetching schedule:', error);
             setSelectedTimeSlots([]);
             setCurrentNumber([]);
+            setCurrentNumberMap({});
         }
     };
 
@@ -124,16 +135,39 @@ function DoctorScheduleManagement() {
     };
 
     // Xử lý khi người dùng chọn hoặc bỏ chọn khung giờ
-    const toggleTimeSlot = async (slotValue, index) => {
-        // setSelectedTimeSlots((prevSlots) =>
-        //     prevSlots.includes(slotValue) ? prevSlots.filter((time) => time !== slotValue) : [...prevSlots, slotValue],
-        // );
+    // const toggleTimeSlot = async (slotValue, index) => {
+    //     // setSelectedTimeSlots((prevSlots) =>
+    //     //     prevSlots.includes(slotValue) ? prevSlots.filter((time) => time !== slotValue) : [...prevSlots, slotValue],
+    //     // );
+    //     console.log('slot value', slotValue);
+    //     console.log('index', index);
+    //     setSlotValue(slotValue);
+    //     const isSelected = selectedTimeSlots.includes(slotValue);
+    //     if (isSelected) {
+    //         if (currentNumber[index] > 0) {
+    //             const data = await fetchBookingByTimeType(user.userId, slotValue, selectedDate);
+    //             if (data) {
+    //                 setGetBookingConflict(data);
+    //                 setShowConfilctModel(true);
+    //             }
+    //             return;
+    //         }
+    //         setSelectedTimeSlots(selectedTimeSlots.filter((slot) => slot !== slotValue));
+    //     } else {
+    //         setSelectedTimeSlots([...selectedTimeSlots, slotValue]);
+    //     }
+    // };
+
+    const toggleTimeSlot = async (slotValue) => {
         console.log('slot value', slotValue);
-        console.log('index', index);
         setSlotValue(slotValue);
+
         const isSelected = selectedTimeSlots.includes(slotValue);
+        const current = currentNumberMap[slotValue] || 0;
+
         if (isSelected) {
-            if (currentNumber[index] > 0) {
+            // Nếu khung giờ đang có người đặt thì không cho bỏ chọn
+            if (current > 0) {
                 const data = await fetchBookingByTimeType(user.userId, slotValue, selectedDate);
                 if (data) {
                     setGetBookingConflict(data);
@@ -141,8 +175,10 @@ function DoctorScheduleManagement() {
                 }
                 return;
             }
+            // Nếu không có ai đặt thì cho bỏ chọn
             setSelectedTimeSlots(selectedTimeSlots.filter((slot) => slot !== slotValue));
         } else {
+            // Thêm vào danh sách chọn
             setSelectedTimeSlots([...selectedTimeSlots, slotValue]);
         }
     };
@@ -325,7 +361,7 @@ function DoctorScheduleManagement() {
 
                 {/* Hiển thị các khung giờ */}
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 mb-8 mt-2">
-                    {timeSlots.map((slot, index) => (
+                    {/* {timeSlots.map((slot, index) => (
                         <button
                             key={slot.value}
                             onClick={() => toggleTimeSlot(slot.value, index)}
@@ -342,7 +378,29 @@ function DoctorScheduleManagement() {
                                 </div>
                             )}
                         </button>
-                    ))}
+                    ))} */}
+                    {timeSlots.map((slot) => {
+                        const count = currentNumberMap[slot.value] || 0;
+
+                        return (
+                            <button
+                                key={slot.value}
+                                onClick={() => toggleTimeSlot(slot.value)}
+                                className={`relative h-12 px-4 rounded-lg border-2 hover:border-green-500 hover:bg-green-50/50 ${
+                                    selectedTimeSlots.includes(slot.value)
+                                        ? 'border-green-500 bg-green-50 text-green-600'
+                                        : 'border-gray-200'
+                                }`}
+                            >
+                                {slot.label}
+                                {count > 0 && (
+                                    <div className="absolute -top-2 -right-1 rounded-full bg-red-500 w-5 h-5 text-white flex items-center justify-center text-xs">
+                                        {count}
+                                    </div>
+                                )}
+                            </button>
+                        );
+                    })}
                 </div>
 
                 {/* Nút Lưu thông tin */}
