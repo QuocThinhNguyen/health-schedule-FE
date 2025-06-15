@@ -1,7 +1,7 @@
 import { Route, Navigate } from 'react-router-dom';
 import UserDashboard from '~/pages/User/UserDashboard';
 import UserProfile from '~/pages/User/UserProfile';
-import AppointmentManagement from '~/pages/User/AppointmentManagement';
+import AppointmentManagement from '~/pages/User/AppointmentManagement/AppointmentManagement';
 import PatientRecords from '~/pages/User/PatientRecords';
 import ChangePassword from '~/pages/User/ChangePassword';
 import HomeLayout from '~/layouts/HomeLayout';

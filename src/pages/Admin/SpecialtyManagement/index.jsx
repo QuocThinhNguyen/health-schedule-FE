@@ -8,6 +8,7 @@ import { axiosInstance } from '~/api/apiRequest';
 import Title from '../../../components/Tittle';
 import Table from '~/components/Table';
 import AdvancePagination from '~/components/AdvancePagination';
+import ConfirmationModal from '~/components/Confirm/ConfirmationModal';
 
 const SpecialtyManagement = () => {
     const navigate = useNavigate();
@@ -149,7 +150,7 @@ const SpecialtyManagement = () => {
                         onSlectChange={handleLimitChange}
                     />
                 </div>
-
+{/* 
                 {showConfirm && (
                     <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center z-50">
                         <div className="bg-white p-6 rounded shadow-lg">
@@ -171,7 +172,13 @@ const SpecialtyManagement = () => {
                             </div>
                         </div>
                     </div>
-                )}
+                )} */}
+                <ConfirmationModal
+                    isOpen={showConfirm}
+                    onClose={handleCancelDelete}
+                    onConfirm={handleConfirmDelete}
+                    message={`Bạn có chắc chắn muốn xóa chuyên khoa này không?`}
+                />
             </div>
         </>
     );
