@@ -1,14 +1,10 @@
-import React, { useState, useEffect, useContext } from 'react';
-import axios from 'axios';
+import { useState, useEffect, useContext } from 'react';
 import { axiosInstance } from '~/api/apiRequest';
 import { UserContext } from '~/context/UserContext';
-import { Building2, User2, Stethoscope } from 'lucide-react';
 import { toast } from 'react-toastify';
 import ConfirmationModal from '~/components/Confirm/ConfirmationModal';
-import { Route, Navigate, useNavigate, useLocation } from 'react-router-dom';
-import { MdOutlineCalendarToday } from 'react-icons/md';
+import { useNavigate, useLocation } from 'react-router-dom';
 import emailjs from '@emailjs/browser';
-import { use } from 'react';
 import AppointmentCard from './AppointmentCard';
 
 const AppointmentManagement = () => {
@@ -40,12 +36,12 @@ const AppointmentManagement = () => {
         // console.log('Appointment Date:', appointmentDateObj);
         // console.log('Difference:', appointmentDateObj - currentDate);
 
-        if (appointmentDateObj - currentDate < 24 * 60 * 60 * 1000) {
-            toast.error(
-                'Lịch khám không thể hủy trong vòng 24 giờ trước giờ hẹn. Vui lòng liên hệ hỗ trợ để được xử lý.',
-            );
-            return;
-        }
+        // if (appointmentDateObj - currentDate < 24 * 60 * 60 * 1000) {
+        //     toast.error(
+        //         'Lịch khám không thể hủy trong vòng 24 giờ trước giờ hẹn. Vui lòng liên hệ hỗ trợ để được xử lý.',
+        //     );
+        //     return;
+        // }
 
         setSelectedBookingId(bookingId);
         setPatientName(patientName);
@@ -295,7 +291,7 @@ const AppointmentManagement = () => {
                             //         )}
                             //     </div>
                             // </div>
-                            
+
                             <AppointmentCard
                                 key={appointment._id}
                                 data={appointment}

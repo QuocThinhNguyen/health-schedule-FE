@@ -59,6 +59,7 @@ function ServiceManagement() {
             const response = await axiosClient.get(
                 `/service?keyword=${filterValue}&clinicId=${clinicId}&pageNo=${pagination.page}&pageSize=${pagination.limit}`,
             );
+
             if (response.status === 200) {
                 setServices(response.data);
                 if (response.totalPage === 0) {
@@ -103,7 +104,7 @@ function ServiceManagement() {
             type: 'image',
         },
         { key: 'price', label: 'Giá' },
-        { key: 'serviceCategoryId.name', label: 'Loại dịch vụ' },
+        { key: 'serviceCategoryName', label: 'Loại dịch vụ' },
     ];
 
     const actions = [

@@ -36,9 +36,9 @@ function FormUser({ onSubmit, defaultValues = {} }) {
     const [readOnly, setReadOnly] = useState(false);
     const [required, setRequired] = useState(true);
     const [clinicOptions, setClinicOptions] = useState([]);
-    console.log('clinicOptions', clinicOptions);
-    console.log('required', required);
-    console.log('readOnly', readOnly);
+    // console.log('clinicOptions', clinicOptions);
+    // console.log('required', required);
+    // console.log('readOnly', readOnly);
 
     const [avatar, setAvatar] = useState(null);
     const [isInitialized, setIsInitialized] = useState(false);
@@ -48,26 +48,52 @@ function FormUser({ onSubmit, defaultValues = {} }) {
         navigate('/admin/user');
     };
 
+    // useEffect(() => {
+    //     const fetchClinicOptions = async () => {
+    //         try {
+    //             const response = await axiosInstance.get('/clinic/dropdown');
+    //             console.log('response', response);
+    //             if (response.status === 200) {
+    //                 const option = response.data.map((item) => ({
+    //                     value: item.clinicId,
+    //                     label: item.name,
+    //                 }));
+    //                 setClinicOptions(option);
+
+    //             } else {
+    //                 console.log('Error fetching clinic options:', response.message);
+    //             }
+    //         } catch (error) {
+    //             console.error('Error fetching clinic options:', error);
+    //         }
+    //     };
+    //     fetchClinicOptions();
+    // }, []);
     useEffect(() => {
         const fetchClinicOptions = async () => {
             try {
                 const response = await axiosInstance.get('/clinic/dropdown');
-                console.log('response', response);
                 if (response.status === 200) {
                     const option = response.data.map((item) => ({
                         value: item.clinicId,
                         label: item.name,
                     }));
                     setClinicOptions(option);
-                } else {
-                    console.log('Error fetching clinic options:', response.message);
+
+                    if (defaultValues.roleId === 'R4' && defaultValues.clinic && defaultValues.clinic.length > 0) {
+                        const clinicId = defaultValues.clinic[0].clinicId;
+                        const matched = option.find((item) => Number(item.value) === Number(clinicId));
+                        if (matched) {
+                            setValue('clinicId', matched.value);
+                        }
+                    }
                 }
             } catch (error) {
                 console.error('Error fetching clinic options:', error);
             }
         };
         fetchClinicOptions();
-    }, []);
+    }, [defaultValues, setValue]);
 
     useEffect(() => {
         console.log('defaultValues', defaultValues);
@@ -80,6 +106,13 @@ function FormUser({ onSubmit, defaultValues = {} }) {
             setValue('address', defaultValues.address || '');
             setValue('gender', defaultValues.gender || '');
             setValue('roleId', defaultValues.roleId || '');
+
+            // const option = {
+            //     value: defaultValues.clinic.clinicId,
+            //     label: defaultValues.clinic.name,
+            // };
+            // setClinicOptions(option);
+
             setAvatar(defaultValues.image || null);
             setReadOnly(true);
             setRequired(false);
