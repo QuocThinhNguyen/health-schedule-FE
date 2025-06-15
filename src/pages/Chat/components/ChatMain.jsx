@@ -5,7 +5,6 @@ import { useSocket } from '../useSocket';
 import { axiosClient } from '~/api/apiRequest';
 
 export default function ChatMain({ activeChat }) {
-
     const [partner, setPartner] = useState();
     const { user } = useContext(UserContext);
     const socket = useSocket(user?.userId);
@@ -137,7 +136,7 @@ export default function ChatMain({ activeChat }) {
 
     return activeChat ? (
         <div className="flex flex-col h-full">
-            <div className="bg-white px-4 py-[10px] border-b flex justify-between items-center shadow-sm">
+            <div className="bg-[var(--bg-primary)] px-4 py-[10px] border-b border-[var(--border-primary)] flex justify-between items-center shadow-sm">
                 <div className="flex items-center">
                     <div className="relative">
                         <img
@@ -147,8 +146,8 @@ export default function ChatMain({ activeChat }) {
                         />
                     </div>
                     <div className="ml-3">
-                        <h2 className="text-lg font-medium text-gray-900">{partner?.partner?.fullname}</h2>
-                        <p className="text-xs text-gray-500">
+                        <h2 className="text-lg font-medium">{partner?.partner?.fullname}</h2>
+                        <p className="text-xs text-[var(--text-secondary)]">
                             {partner && partner?.partner?.roleId === 'R1'
                                 ? 'Admin'
                                 : partner?.partner?.roleId === 'R2'
@@ -174,15 +173,15 @@ export default function ChatMain({ activeChat }) {
                 <div ref={messagesEndRef}></div>
             </div>
 
-            <div className="bg-white px-3 py-[10px] border-t">
+            <div className="bg-[var(--bg-primary)] px-3 py-[10px] border-t border-[var(--border-primary)]">
                 <form onSubmit={handleSendMessage} className="flex items-center">
                     <div className="flex-1 relative">
                         <input
                             type="text"
                             value={message}
                             onChange={(e) => setMessage(e.target.value)}
-                            placeholder="Aa"
-                            className="w-full outline-none"
+                            placeholder={`Nhập tin nhắn tới ${partner?.partner?.fullname || ''}`}
+                            className="w-full outline-none bg-[var(--bg-primary)]"
                         />
                     </div>
                     {message.trim() === '' ? (

@@ -96,7 +96,7 @@ function Header() {
                                 <ul>
                                     {user && user.auth && (
                                         <li
-                                            className="group px-4 py-2  text-[#e74c3c] font-medium hover:bg-slate-100 cursor-pointer flex items-center"
+                                            className="group px-4 py-2  text-[#e74c3c] font-medium hover:bg-[var(--bg-tertiary)] cursor-pointer flex items-center"
                                             onClick={handleLogout}
                                         >
                                             <IoLogOutOutline className="mr-2 transform group-hover:animate-rotate-fast" />

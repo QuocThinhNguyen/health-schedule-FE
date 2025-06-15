@@ -61,9 +61,9 @@ function ThongKeLuotDatKhamNgayTrongThang() {
                     pointHoverBackgroundColor: 'rgba(0, 255, 0, 0.5)', // Màu nền của các điểm dữ liệu khi di chuột qua
                     pointHoverBorderColor: 'rgba(255, 0, 0, 0.5)', // Màu viền của các điểm dữ liệu khi di chuột qua
                     tension: 0.4,
-                    pointRadius: 3, // Kích thước của các điểm dữ liệu
+                    pointRadius: 2, // Kích thước của các điểm dữ liệu
                     pointHoverRadius: 5,
-                    fill: true,
+                    // fill: true,
                     color: isDark ? '#ffffffe6' : '#262626',
                 },
             ],

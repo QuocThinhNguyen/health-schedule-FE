@@ -169,13 +169,13 @@ function FormBooking({ onSubmit, defaultValues = {} }) {
             <div className="mt-4 flex justify-end gap-3">
                 <button
                     onClick={handleClickReturn}
-                    className="flex justify-center items-center gap-2 px-4 py-2 h-10 bg-[var(--bg-primary)] text-[var(--bg-active)] hover:bg-[#735dff26] dark:hover:bg-[#735dff26] transition-colors  rounded  border-2 border-[var(--bg-active)]"
+                    className="flex justify-center items-center gap-2 px-4 py-2 min-w-24 h-10 bg-[var(--bg-primary)] text-[var(--bg-active)] hover:bg-[#735dff26] dark:hover:bg-[#735dff26] transition-colors  rounded  border-2 border-[var(--bg-active)]"
                 >
                     <span>Quay lại</span>
                 </button>
                 <button
                     type="submit"
-                    className="flex justify-center items-center gap-2 px-4 py-2 h-10 bg-[var(--bg-active)] text-[var(--text-active)] hover:bg-[rgba(var(--bg-active-rgb),0.9)] rounded border border-[var(--border-primary)]"
+                    className="flex justify-center items-center gap-2 px-4 py-2 min-w-24 h-10 bg-[var(--bg-active)] text-[var(--text-active)] hover:bg-[rgba(var(--bg-active-rgb),0.9)] rounded border border-[var(--border-primary)]"
                 >
                     <span>{buttonName}</span>
                 </button>

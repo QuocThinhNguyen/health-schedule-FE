@@ -5,7 +5,7 @@ import { axiosInstance, axiosClient } from '~/api/apiRequest';
 import { UserContext } from '~/context/UserContext';
 import { NavLink, useNavigate, useLocation } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import loadingGif from '../../../public/loading.gif';
+import loadingGif from '../../assets/img/loading.gif';
 
 function MakeAnAppointment() {
     const location = useLocation();
@@ -315,6 +315,10 @@ function MakeAnAppointment() {
     useEffect(() => {
         const fetchRecordData = async () => {
             try {
+                console.log("Fetching record data for ID:", recordId);
+                console.log("selectedPatientId:", selectedPatientId);
+                
+                
                 const response = await axiosInstance.get(`/patientrecord/${recordId}`);
                 if (response.status === 200) {
                     const data = response.data;
