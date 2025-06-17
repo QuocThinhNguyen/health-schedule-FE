@@ -7,6 +7,7 @@ function DoctorItem(data) {
     const navigate = useNavigate();
     const [academicRanksAndDegreess, setAcademicRanksAndDegreess] = useState([]);
     const doctor = data.data;
+    console.log('Check data', doctor);
 
     const handleBooking = (doctorId) => {
         navigate(`/bac-si/get?id=${doctorId}`);
@@ -59,7 +60,9 @@ function DoctorItem(data) {
                                 <IoIosStar className="text-yellow-500" />
                                 <span className="font-semibold text-black text-sm">{doctor.avgRating}/5</span>
                             </div>
-                            <span className="underline text-[#595959] text-sm">{doctor.countFeedBack} đánh giá</span>
+                            <span className=" text-[#595959] text-sm">{doctor.countFeedBack} đánh giá</span>
+                            <div className="text-[#595959] text-sm">|</div>
+                            <span className=" text-[#595959] text-sm">{doctor.totalBookings} lượt đặt khám</span>
                         </div>
                     </div>
 

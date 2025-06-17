@@ -13,7 +13,7 @@ import { IoChatboxEllipsesOutline } from 'react-icons/io5';
 import { useSocket } from '../Chat/useSocket';
 
 function ClinicInfo() {
-    const [clinicData, setClinicData] = useState([]); // Trạng thái lưu dữ liệu từ API
+    const [clinicData, setClinicData] = useState([]);
     const { state } = useLocation();
     const [searchQuery, setSearchQuery] = useState('');
     const [academicRanksAndDegreess, setAcademicRanksAndDegreess] = useState([]);
@@ -31,6 +31,7 @@ function ClinicInfo() {
     const [isDoctorSelected, setIsDoctorSelected] = useState(false);
     const [currentDate, setCurrentDate] = useState('');
     const [schedule, setSchedule] = useState([]);
+    const [clinicMap, setClinicMap] = useState({});
     const { user } = useContext(UserContext);
     const [pagination_1, setPagination_1] = useState({ page: 1, limit: 5, totalPages: 1 });
 
@@ -54,7 +55,7 @@ function ClinicInfo() {
         };
 
         fetchClinicInfo();
-    }, []);
+    }, [state.clinicId]);
 
     const handleGetSpecialty = (clinicId, clinicName) => {
         console.log('clinicId:', clinicId);
@@ -633,6 +634,24 @@ function ClinicInfo() {
                                                         nhận cho đội ngũ lễ tân/y tá và tiến hành thăm khám.
                                                     </li>
                                                 </ul>
+                                            </div>
+                                            <div>
+                                                <div className="text-base font-semibold mb-2 border-l-4 border-blue-400 pl-4 mt-5">
+                                                    Vị trí phòng khám
+                                                </div>
+                                                <iframe
+                                                    key={clinicData.address}
+                                                    title="Google Map"
+                                                    width="100%"
+                                                    height="300"
+                                                    style={{ border: 0, borderRadius: '8px' }}
+                                                    loading="lazy"
+                                                    allowFullScreen
+                                                    referrerPolicy="no-referrer-when-downgrade"
+                                                    src={`https://maps.google.com/maps?q=${encodeURIComponent(
+                                                        clinicData.address,
+                                                    )}&t=&z=15&ie=UTF8&iwloc=&output=embed`}
+                                                />
                                             </div>
                                             <div className="text-base font-semibold mb-2 border-l-4 border-blue-400 pl-4 mt-5">
                                                 Hình thức thanh toán
