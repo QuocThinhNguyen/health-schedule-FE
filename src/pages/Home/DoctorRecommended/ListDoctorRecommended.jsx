@@ -9,7 +9,7 @@ import { use } from 'react';
 import { set } from 'date-fns';
 import { toast } from 'react-toastify';
 
-function ListDoctorRecommended() {
+function ListDoctorRecommended({ symptoms = [] }) {
     const [doctors, setDoctors] = useState([]);
     const { user } = useContext(UserContext);
     const [recommendation, setRecommendation] = useState([]);
@@ -18,11 +18,12 @@ function ListDoctorRecommended() {
     useEffect(() => {
         const getDoctorRecommendation = async () => {
             try {
-                const response = await axiosClientPython.post(
-                    '/recommend',
-                    { patient_id: userId },
-                    { withCredentials: true },
-                );
+                const payload = {
+                    patient_id: user.userId,
+                    specialist_symptoms: symptoms,
+                };
+
+                const response = await axiosClientPython.post('/recommend', payload, { withCredentials: true });
                 if (response.status === 200) {
                     // console.log('Response:', response.data);
                     setRecommendation(response.data.map((item) => item.doctor_id));
@@ -46,10 +47,11 @@ function ListDoctorRecommended() {
 
             try {
                 // Gọi song song tất cả các API /doctor/:id
+                console.log('Check recommendation', recommendation);
                 const promises = recommendation.map((id) => axiosClient.get(`/doctor/${id}`));
                 const responses = await Promise.all(promises);
 
-                // console.log('Responses:', responses);
+                console.log('Responses 123:', responses);
 
                 const formattedData = responses.map((res) => {
                     const doctorData = res.data;

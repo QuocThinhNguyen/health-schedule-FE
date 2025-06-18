@@ -6,7 +6,7 @@ import { LiaBirthdayCakeSolid } from 'react-icons/lia';
 import { Link } from 'react-router-dom';
 import { formatDate } from '~/utils/formatDate';
 
-function AppointmentCard({data, onCancel, onReview, onReviewed, onReschedule}) {
+function AppointmentCard({ data, onCancel, onReview, onReviewed, onReschedule }) {
     const appointment = data;
     console.log('AppointmentCard data: ', appointment);
 
@@ -106,18 +106,29 @@ function AppointmentCard({data, onCancel, onReview, onReviewed, onReschedule}) {
                         <p className=" text-gray-600 mt-1">
                             {appointment?.doctorInfo?.clinic?.address || 'Không xác định'}
                         </p>
-                        <button className="flex items-center space-x-1 text-blue-600  mt-2 hover:text-blue-700">
+                        {/* <button className="flex items-center space-x-1 text-blue-600  mt-2 hover:text-blue-700">
                             <FiNavigation className="mt-[2px] text-[var(--text-secondary)]" />
                             <Link target="_blank" to={appointment?.doctorInfo?.clinic?.mapUrl}>
                                 Chỉ đường
                             </Link>
+                        </button> */}
+                        <button className="flex items-center space-x-1 text-blue-600 mt-2 hover:text-blue-700">
+                            <FiNavigation className="mt-[2px] text-[var(--text-secondary)]" />
+                            <a
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(
+                                    appointment?.doctorInfo?.clinic?.address || '',
+                                )}`}
+                            >
+                                Chỉ đường
+                            </a>
                         </button>
                     </div>
                 </div>
             </div>
             <div className="px-4 py-2 flex justify-end gap-2">
-                {(appointment?.status?.keyMap === 'S2' ||
-                    appointment?.status?.keyMap === 'S3') && (
+                {(appointment?.status?.keyMap === 'S2' || appointment?.status?.keyMap === 'S3') && (
                     <button
                         className="px-4 py-2 h-9 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600 transition-colors"
                         onClick={onCancel}
