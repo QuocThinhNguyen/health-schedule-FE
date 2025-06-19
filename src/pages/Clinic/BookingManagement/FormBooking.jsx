@@ -71,7 +71,7 @@ function FormBooking({ onSubmit, defaultValues = {} }) {
         const formData = new FormData();
         formData.append('timeType', data.timeType);
         formData.append('status', data.status);
-        formData.append('paymentMethod', data.paymentMethod);
+        // formData.append('paymentMethod', data.paymentMethod);
         onSubmit && onSubmit(formData);
     };
     return (
@@ -81,13 +81,7 @@ function FormBooking({ onSubmit, defaultValues = {} }) {
         >
             <div className="flex items-center justify-between gap-3">
                 <Input id="bookingId" label="Mã lịch hẹn (ID)" type="text" readOnly {...register('bookingId')} />
-                <Input
-                    id="createdAt"
-                    label="Ngày đặt lịch"
-                    type="date"
-                    readOnly
-                    {...register('createAt')}
-                />
+                <Input id="createdAt" label="Ngày đặt lịch" type="date" readOnly {...register('createAt')} />
             </div>
             <div className="flex items-center justify-between gap-3">
                 <Input id="patientName" label="Bệnh nhân" type="text" readOnly {...register('patientName')} />
