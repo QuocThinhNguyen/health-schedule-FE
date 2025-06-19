@@ -120,18 +120,18 @@ function Home() {
             {/* Tim kiem */}
             <SearchInput />
 
-            {/* Benh vien */}
-            <ListClinic />
-
-            {/* Bac si */}
-            <ListDoctor />
-
             {/* Gợi ý bác sĩ */}
             {user.auth && hasSubmittedRecommendation && <ListDoctorRecommended symptoms={selectedSymptoms} />}
 
             {showRecommendationForm && (
                 <FormRecommendationDoctor onClose={handleCloseForm} onRecommend={handleRecommendDoctor} />
             )}
+
+            {/* Benh vien */}
+            <ListClinic />
+
+            {/* Bac si */}
+            <ListDoctor />
 
             {/* Dich vu */}
             <ListService />

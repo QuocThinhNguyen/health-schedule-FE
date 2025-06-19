@@ -84,7 +84,7 @@ function ListDoctorRecommended({ symptoms = [] }) {
     return (
         <div>
             {doctors.length > 0 && (
-                <div className="bg-[#E3F2FF]">
+                <div className="bg-[#F8F9FC]">
                     <div className="max-w-6xl mx-auto px-4 pt-2 pb-10">
                         <div className="flex items-center justify-between gap-2 mt-8 mb-2 text-2xl text-[#2D87F3]">
                             <div className="flex items-center gap-2">
