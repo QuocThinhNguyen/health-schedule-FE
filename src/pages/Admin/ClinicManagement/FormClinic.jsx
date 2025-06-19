@@ -266,10 +266,10 @@ function FormClinic({ onSubmit, defaultValues = {} }) {
                     <ImageInput value={avatar} onChange={setAvatar} className="w-48 h-48" />
                 </div>
             </div>
-            <div className="w-full mt-4 flex flex-col">
+            {/* <div className="w-full mt-4 flex flex-col">
                 <label className="block text-sm font-medium mb-1 text-[var(--text-primary)]">Ảnh nền</label>
                 <ImageInput value={background} onChange={setBackground} className="max-w-6xl h-96" />
-            </div>
+            </div> */}
 
             <div className="w-full mt-4">
                 <label className="block text-sm font-medium mb-1 text-[var(--text-primary)]">Mô tả</label>

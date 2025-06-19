@@ -43,7 +43,7 @@ function ListFilterDoctor({ pagination, setPagination }) {
                 if (response.status === 200) {
                     setDoctors(response.data);
                     console.log('response', response);
-                    
+
                     setTotalDoctors(response.totalDoctors);
                     if (response.totalPages === 0) {
                         response.totalPages = 1;
@@ -82,7 +82,7 @@ function ListFilterDoctor({ pagination, setPagination }) {
                     onChange={(e) => handleFilterChange('sort', e.target.value)}
                     className="w-max h-10 border border-[#E4E8EC] rounded-lg p-2 text-ellipsis overflow-hidden whitespace-nowrap"
                 >
-                    <option value="noi-bat">Nổi bật</option>
+                    {/* <option value="noi-bat">Nổi bật</option> */}
                     <option value="danh-gia-cao-den-thap">Đánh giá từ cao đến thấp</option>
                     <option value="danh-gia-thap-den-cao">Đánh giá từ thấp đến cao</option>
                     <option value="gia-cao-den-thap">Giá cao nhất</option>
