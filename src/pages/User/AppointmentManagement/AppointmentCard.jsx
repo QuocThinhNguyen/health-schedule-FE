@@ -5,6 +5,7 @@ import { TbFileDescription } from 'react-icons/tb';
 import { LiaBirthdayCakeSolid } from 'react-icons/lia';
 import { Link } from 'react-router-dom';
 import { formatDate } from '~/utils/formatDate';
+import { getPaymentStatusText } from '~/utils/paymentStatusUtils';
 
 function AppointmentCard({ data, onCancel, onReview, onReviewed, onReschedule }) {
     const appointment = data;
@@ -12,67 +13,93 @@ function AppointmentCard({ data, onCancel, onReview, onReviewed, onReschedule })
 
     return (
         <div className="w-full bg-[var(--bg-primary)] rounded-md shadow-lg overflow-hidden mx-[1px] my-3 border border-[var(--border-primary)]">
-            <div className="px-4 py-2 bg-gray-50">
+            <div className="px-4 pt-3 pb-2 bg-gray-50">
                 <div className="flex items-center justify-between">
-                    <div className="flex-1 flex items-center space-x-4">
-                        <div className="w-10 h-10 min-w-10 rounded-full overflow-hidden">
-                            <img
-                                src="https://cdn-healthcare.hellohealthgroup.com/2023/09/1695616991_65110fdf078417.49245494.jpg"
-                                alt="Doctor Avatar"
-                                className="w-full h-full object-cover block"
-                            />
+                    {appointment?.bookingType === 'SERVICE' ? (
+                        <div className="flex-1 flex items-center space-x-4">
+                            <div className="w-10 h-10 min-w-10 rounded-full overflow-hidden">
+                                <img
+                                    src="https://cdn-healthcare.hellohealthgroup.com/services/Specialty.png"
+                                    alt="Doctor Avatar"
+                                    className="w-full h-full object-cover block"
+                                />
+                            </div>
+                            <div className="">
+                                <h2 className="text font-semibold text-gray-900">
+                                    TS.BS {appointment?.serviceId?.name || 'Không xác định'}
+                                </h2>
+                                <p className="text-sm text-gray-600">
+                                    {appointment?.serviceId?.serviceCategoryId?.name || 'Không xác định'}
+                                </p>
+                            </div>
                         </div>
-                        <div className="">
-                            <h2 className="text font-semibold text-gray-900">
-                                TS.BS {appointment?.doctorId?.fullname || 'Không xác định'}
-                            </h2>
-                            <p className="text-sm text-gray-600">
-                                {appointment?.doctorInfo?.specialty?.name || 'Không xác định'}
-                            </p>
+                    ) : (
+                        <div className="flex-1 flex items-center space-x-4">
+                            <div className="w-10 h-10 min-w-10 rounded-full overflow-hidden">
+                                <img
+                                    src={appointment?.doctorId?.image}
+                                    alt="Doctor Avatar"
+                                    className="w-full h-full object-cover block"
+                                />
+                            </div>
+                            <div className="">
+                                <h2 className="text font-semibold text-gray-900">
+                                    TS.BS {appointment?.doctorId?.fullname || 'Không xác định'}
+                                </h2>
+                                <p className="text-sm text-gray-600">
+                                    {appointment?.doctorInfo?.specialty?.name || 'Không xác định'}
+                                </p>
+                            </div>
                         </div>
-                    </div>
+                    )}
+
                     <div className="flex gap-2">
                         <span className="px-2 py-1 bg-red-100 text-red-600 text-sm rounded-full">
                             {appointment?.status?.valueVi || 'Không xác định'}
                         </span>
                         <span className="px-2 py-1 bg-blue-100 text-blue-600 text-sm rounded-full flex items-center">
                             <FiPhone className="w-3 h-3 mr-1" />
-                            Bác sĩ
+                            {appointment?.bookingType === 'SERVICE' ? 'Dịch vụ' : 'Bác sĩ'}
                         </span>
                     </div>
                 </div>
             </div>
-            <div className="px-4 py-2 space-y-2 text-sm">
+            <div className="px-4 py-2 text-sm">
+                {appointment?.orderNumber && (
+                    <div className="flex items-center space-x-6 text-gray-600">
+                        <FiHash className="text-[var(--text-secondary)]" />
+                        <span className="gap-2 flex items-center mt-[2px]">
+                            <span className="font-semibold"> Số thứ tự:</span>{' '}
+                            <span className="font-bold">{appointment?.orderNumber}</span>
+                        </span>
+                    </div>
+                )}
                 <div className="flex items-center space-x-6 text-gray-600">
-                    <FiHash className="mt-[2px] text-[var(--text-secondary)]" />
-                    <span>
-                        Số thứ tự:<span className="font-bold text-lg">16</span>
-                    </span>
-                </div>
-                <div className="flex items-center space-x-6 text-gray-600">
-                    <FiCalendar className="mt-[2px] text-[var(--text-secondary)]" />
-                    <span className="">
+                    <FiCalendar className="text-[var(--text-secondary)]" />
+                    <span className="gap-2 flex items-center mt-[2px] mt-[2px]">
+                        <span className="font-semibold">Ngày khám:</span>
                         {formatDate(appointment?.appointmentDate)} • {appointment?.timeType?.valueVi}
                     </span>
                 </div>
                 <div className="flex items-center space-x-6 text-gray-600">
-                    <FiDollarSign className="mt-[2px] text-[var(--text-secondary)]" />
-                    <span className="">
-                        Giá khám <span className="font-semibold ">{appointment?.price || '500.000'} đ</span>
+                    <FiDollarSign className="text-[var(--text-secondary)]" />
+                    <span className="gap-2 flex items-center mt-[2px] mt-[2px]">
+                        <span className="font-semibold">Giá khám:</span>
+                        <span className="">{appointment?.price || '500.000'} đ</span>
                     </span>
                 </div>
 
                 <div className="flex items-center space-x-6 text-gray-600">
-                    <AiOutlineUser className="mt-[2px] text-[var(--text-secondary)]" />
-                    <span>
-                        Bệnh nhân:{' '}
+                    <AiOutlineUser className="text-[var(--text-secondary)]" />
+                    <span className="gap-2 flex items-center mt-[2px]">
+                        <span className="font-semibold">Bệnh nhân:</span>
                         <span className=" ">{appointment?.patientRecordId?.fullname || 'Không xác định'}</span>
                     </span>
                 </div>
                 <div className="flex items-center space-x-6 text-gray-600">
-                    <LiaBirthdayCakeSolid className="mt-[2px] text-[var(--text-secondary)]" />
-                    <span>
-                        Ngày sinh:{' '}
+                    <LiaBirthdayCakeSolid className="text-[var(--text-secondary)]" />
+                    <span className="gap-2 flex items-center mt-[2px]">
+                        <span className="font-semibold">Ngày sinh:</span>
                         <span className=" ">
                             {formatDate(appointment?.patientRecordId?.birthDate) || 'Không xác định'}
                         </span>
@@ -80,35 +107,39 @@ function AppointmentCard({ data, onCancel, onReview, onReviewed, onReschedule })
                 </div>
 
                 <div className="flex items-center space-x-6 text-gray-600">
-                    <FiCreditCard className="mt-[2px] text-[var(--text-secondary)]" />
-                    <span className="">
-                        Phương thức thanh toán:{' '}
+                    <FiCreditCard className="text-[var(--text-secondary)]" />
+                    <span className="gap-2 flex items-center mt-[2px]">
+                        <span className="font-semibold">Phương thức thanh toán:</span>
                         <span className="">
                             {appointment?.paymentMethod || 'Không xác định'} (
-                            {appointment?.status?.valueVi || 'Không xác định'})
+                            {getPaymentStatusText(appointment?.paymentStatus) || 'Không xác định'})
                         </span>
                     </span>
                 </div>
 
                 <div className="flex items-center space-x-6 text-gray-600">
-                    <TbFileDescription className="mt-[2px] text-[var(--text-secondary)]" />
-                    <span className="">
-                        Lý do khám: <span>{appointment?.reason || 'Không xác định'}</span>
+                    <TbFileDescription className="text-[var(--text-secondary)]" />
+                    <span className="gap-2 flex items-center mt-[2px]">
+                        <span className="font-semibold">Lý do khám:</span>
+                        <span>{appointment?.reason}</span>
                     </span>
                 </div>
 
                 <div className="flex items-start space-x-6 text-gray-600">
-                    <FiMapPin className="mt-1 text-[var(--text-secondary)]" />
+                    <FiMapPin className="mt-[2px] text-[var(--text-secondary)]" />
                     <div className="flex-1">
-                        <p className="font-medium text-gray-900">
-                            {appointment?.doctorInfo?.clinic?.name || 'Không xác định'}
+                        <p className="font-medium">
+                            <span className="font-semibold">Bệnh viện:</span>{' '}
+                            {appointment?.doctorInfo?.clinic?.name || appointment?.serviceId?.clinicId?.name || 'Không xác định'}
                         </p>
-                        <p className=" text-gray-600 mt-1">
-                            {appointment?.doctorInfo?.clinic?.address || 'Không xác định'}
+                        <p className=" mt-1">
+                            <span className="font-semibold">Địa chỉ:</span>{' '}
+                            {appointment?.doctorInfo?.clinic?.address || appointment?.serviceId?.clinicId?.address || 'Không xác định'}
                         </p>
-                        {/* <button className="flex items-center space-x-1 text-blue-600  mt-2 hover:text-blue-700">
+
+                        <button className="flex items-center space-x-1 text-blue-600  mt-1 hover:text-blue-700">
                             <FiNavigation className="mt-[2px] text-[var(--text-secondary)]" />
-                            <Link target="_blank" to={appointment?.doctorInfo?.clinic?.mapUrl}>
+                            <Link target="_blank" to={appointment?.doctorInfo?.clinic?.mapUrl || appointment?.serviceId?.clinicId?.mapUrl || '#'}>
                                 Chỉ đường
                             </Link>
                         </button> */}
@@ -127,7 +158,8 @@ function AppointmentCard({ data, onCancel, onReview, onReviewed, onReschedule })
                     </div>
                 </div>
             </div>
-            <div className="px-4 py-2 flex justify-end gap-2">
+
+            <div className="px-4 pb-2 flex justify-end gap-2">
                 {(appointment?.status?.keyMap === 'S2' || appointment?.status?.keyMap === 'S3') && (
                     <button
                         className="px-4 py-2 h-9 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600 transition-colors"

@@ -14,6 +14,7 @@ const AppointmentManagement = () => {
     const { user } = useContext(UserContext);
     const navigate = useNavigate();
     const { state } = useLocation();
+    // const [pagination, setPagination] = useState({ page: 1, limit: 10, totalPages: 1 });
     const tabs = [
         // chưa thanh toán
         // chưa xác nhận
@@ -84,18 +85,21 @@ const AppointmentManagement = () => {
         fetchData();
     }, []);
 
+
+
     useEffect(() => {
         const fetchAppointments = async () => {
             try {
                 const response = await axiosInstance.post('/booking/allbooking', {
                     userId: user.userId,
                 });
+                console.log('Response data:', response.data);
                 if (response.status === 200) {
                     const updatedAppointments = await Promise.all(
                         response.data.map(async (appointment) => {
                             const feedbackChecked = await checkFeedbackStatus(
-                                appointment.patientRecordId.patientRecordId,
-                                appointment.doctorId.userId,
+                                appointment.patientRecordId?.patientRecordId,
+                                appointment.doctorId?.userId,
                                 appointment.appointmentDate,
                             );
                             return { ...appointment, feedbackChecked };
@@ -104,10 +108,10 @@ const AppointmentManagement = () => {
                     setAppointments(updatedAppointments);
                     console.log('Appointments:', updatedAppointments);
                 } else {
-                    setError('Không có dữ liệu');
+                    console.log('Không có dữ liệu');
                 }
-            } catch (err) {
-                setError('Đã xảy ra lỗi khi tải dữ liệu.');
+            } catch (e) {
+                console.log('Đã xảy ra lỗi khi tải dữ liệu.', e);
             }
         };
 
@@ -160,8 +164,8 @@ const AppointmentManagement = () => {
             } else {
                 toast.error('Hủy lịch hẹn thất bại.');
             }
-        } catch (err) {
-            console.error('Error canceling booking:', error);
+        } catch (e) {
+            console.error('Error canceling booking:', e);
             toast.error('Đã xảy ra lỗi khi hủy lịch hẹn!');
         } finally {
             closeModal();
