@@ -23,7 +23,7 @@ function ThongKeLuotDatKhamThangTrongNam() {
     useEffect(() => {
         const fetchBookingMonthInYearChart = async () => {
             try {
-                const response = await axiosInstance.get('/admin/booking-monthinyear-chart');
+                const response = await axiosInstance.get('/clinic/booking-monthinyear-chart');
                 if (response.status === 200) {
                     setLabels(response.data.labels);
                     setValues(response.data.values);
@@ -64,7 +64,7 @@ function ThongKeLuotDatKhamThangTrongNam() {
             plugins: {
                 title: {
                     display: true,
-                    text: 'Thống kê số lượt đặt khám theo tháng trong năm',
+                    text: 'Thống kê số lượt đặt khám thành công theo tháng trong năm',
                     color: isDark ? '#ffffffe6' : '#262626',
                 },
             },

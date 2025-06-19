@@ -8,7 +8,8 @@ import { ThemeContext } from '~/context/ThemeProvider';
 import { ClinicContext } from '~/context/ClinicContext';
 function Header() {
     const { user, logout } = useContext(UserContext);
-    const {clearClinicId}  = useContext(ClinicContext);
+    const { clinicId, clearClinicId } = useContext(ClinicContext);
+    const [clinicName, setClinicName] = useState('');
     const { isDark, toggleTheme } = useContext(ThemeContext);
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [userInfo, setUserInfo] = useState({});
@@ -23,8 +24,8 @@ function Header() {
             if (user.userId) {
                 try {
                     const response = await axiosInstance.get(`/user/${user.userId}`);
-                    console.log("resonse", response);
-                    
+                    console.log('resonse', response);
+
                     if (response.status === 200) {
                         const imageUrl = response.data.image ? response.data.image : avatar;
                         const img = new Image();
@@ -45,17 +46,43 @@ function Header() {
                 }
             }
         };
+        const fetchClinicName = async () => {
+            if (!clinicId) return;
+            try {
+                const response = await axiosInstance.get(`/clinic/${clinicId}`);
+                console.log('resonse', response);
+
+                if (response.status === 200) {
+                    setClinicName(response.data.name);
+                } else {
+                    console.error('Failed to fetch data:', response.message);
+                    setClinicName([]);
+                }
+            } catch (error) {
+                console.error('Error fetching appointments:', error);
+                setClinicName([]);
+            }
+        };
         fetchFullName();
-    }, [user]);
+        fetchClinicName();
+    }, [user, clinicId]);
 
     return (
         <header className="fixed top-0 right-0 left-60  z-50  bg-[var(--bg-primary)]">
             <div className="flex justify-between items-stretch border-b border-[var(--border-primary)] h-[68px] px-3">
-                <div className="mx-1 my-auto">
-                    <div className="w-[34px] h-[34px]  p-2">
-                        <FiMenu className="text-lg" />
+                <div className="flex items-center">
+                    <div className="mx-1 my-auto">
+                        <div className="w-[34px] h-[34px]  p-2">
+                            <FiMenu className="text-lg" />
+                        </div>
                     </div>
+                    {clinicId && (
+                        <div className="mx-1 my-auto border border-[var(--bg-active)] rounded-full px-2 py-1">
+                            <h1 className="font-medium text-[var(--text-primary)]">{clinicName}</h1>
+                        </div>
+                    )}
                 </div>
+
                 <ul className="my-auto flex items-stretch">
                     <li onClick={toggleTheme} className="mx-1 my-auto cursor-pointer">
                         <div className="w-[34px] h-[34px]  p-2">
@@ -76,9 +103,12 @@ function Header() {
                                 />
                             </div>
                             <div className="ml-2">
-                                <p className="font-medium">
-                                    {userInfo && userInfo.fullname ? userInfo.fullname : 'Guest'}
-                                </p>
+                                <div className="flex flex-col items-start">
+                                    <p className="font-semibold text-[var(--text-primary)]">
+                                        {userInfo && userInfo.fullname ? userInfo.fullname : 'Guest'}
+                                    </p>
+                                    <p className="text- leading-3">{userInfo && userInfo.email ? userInfo.email : 'Guest'}</p>
+                                </div>
                             </div>
                         </div>
                         {isDropdownOpen && (

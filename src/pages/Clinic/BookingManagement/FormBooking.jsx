@@ -71,7 +71,7 @@ function FormBooking({ onSubmit, defaultValues = {} }) {
         const formData = new FormData();
         formData.append('timeType', data.timeType);
         formData.append('status', data.status);
-        formData.append('paymentMethod', data.paymentMethod);
+        // formData.append('paymentMethod', data.paymentMethod);
         onSubmit && onSubmit(formData);
     };
     return (

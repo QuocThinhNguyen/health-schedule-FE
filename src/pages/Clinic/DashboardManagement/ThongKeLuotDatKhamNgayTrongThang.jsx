@@ -24,7 +24,7 @@ function ThongKeLuotDatKhamNgayTrongThang() {
     useEffect(() => {
         const fetchBookingDayInMonthChart = async () => {
             try {
-                const response = await axiosInstance.get('/admin/booking-dayinmonth-chart');
+                const response = await axiosInstance.get('/clinic/booking-dayinmonth-chart');
                 if (response.status === 200) {
                     setLabels(response.data.labels);
                     setValues(response.data.values);
@@ -76,7 +76,7 @@ function ThongKeLuotDatKhamNgayTrongThang() {
             plugins: {
                 title: {
                     display: true,
-                    text: 'Thống kê số lượt đặt khám theo ngày trong tháng',
+                    text: 'Thống kê số lượt đặt khám thành công theo ngày trong tháng',
                     color: isDark ? '#ffffffe6' : '#262626',
                 },
                 legend: {

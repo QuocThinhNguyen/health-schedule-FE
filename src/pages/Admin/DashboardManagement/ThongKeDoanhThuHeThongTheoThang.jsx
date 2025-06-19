@@ -63,7 +63,7 @@ function ThongKeDoanhThuHeThongTheoThang() {
                     legend: { display: true },
                     title: {
                         display: true,
-                        text: 'Biểu đồ doanh thu hệ thống theo tháng',
+                        text: 'Biểu đồ doanh thu của toàn hệ thống theo tháng',
                         color: isDark ? '#ffffffe6' : '#262626',
                     },
                 },

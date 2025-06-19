@@ -1,40 +1,49 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { FaUserDoctor } from 'react-icons/fa6';
 import { FaHospital, FaUser } from 'react-icons/fa';
 import { AiOutlineSchedule } from 'react-icons/ai';
+import { BiCoin, BiCoinStack } from "react-icons/bi";
 import { axiosInstance } from '~/api/apiRequest';
 import ThongKeLuotDatKhamNgayTrongThang from './ThongKeLuotDatKhamNgayTrongThang';
 import ThongKeLuotDatKhamThangTrongNam from './ThongKeLuotDatKhamThangTrongNam';
 import ThongKeDoanhThuHeThongTheoThang from './ThongKeDoanhThuHeThongTheoThang';
 import ThongKeCaKhamTrongThangNay from './ThongKeCaKhamTrongThangNay';
 import Title from '../../../components/Tittle';
+import { TbRosetteDiscount } from 'react-icons/tb';
+import { formatCurrency } from '~/utils/formatCurrency';
 
 function Dashboard() {
     const [count, setCounts] = useState({
-        countClinic: 0,
+        countTotalRevenue: 0,
+        countCommission: 0,
+        countRestRevenue: 0,
         countDoctor: 0,
-        countUser: 0,
+        countPatient: 0,
         countBooking: 0,
     });
 
     useEffect(() => {
         const fetchStatistics = async () => {
             try {
-                const response = await axiosInstance.get('/admin/homepage');
+                const response = await axiosInstance.get('/clinic/statistics');
+                console.log("Response from statistics API:", response.data);
+                
                 if (response.status === 200) {
                     setCounts({
-                        countClinic: response.data.totalClinics,
-                        countDoctor: response.data.totalDoctors,
-                        countUser: response.data.countOfNewUserThisMonth,
-                        countBooking: response.data.totalBookingThisMonth,
+                        countTotalRevenue: response.data?.statistics?.totalRevenue,
+                        countCommission: response.data?.statistics?.commission,
+                        countRestRevenue: response.data?.statistics?.actualRevenue,
+                        countDoctor: response.data?.statistics?.countDoctorInfos,
+                        countPatient:response.data?.statistics?.totalPatients,
+                        countBooking:response.data?.statistics?.bookingsThisMonth,
                     });
                 } else {
                     console.error('Failed to fetch data:', response.message);
-                    setDoctors([]);
+                    setCounts([]);
                 }
             } catch (error) {
                 console.error('Error fetching appointments:', error);
-                setDoctors([]);
+                setCounts([]);
             }
         };
         fetchStatistics();
@@ -44,31 +53,47 @@ function Dashboard() {
         () => [
             {
                 id: 1,
-                key: 'Tổng số bệnh viện',
-                value: count.countClinic,
+                key: 'Tổng doanh thu tháng này',
+                value: formatCurrency(count.countTotalRevenue),
                 backgroundColor: 'bg-[rgba(115,93,255,0.15)]',
                 textColor: 'text-[rgb(115,93,255)]',
-                icon: <FaUserDoctor />,
+                icon: <BiCoinStack />,
             },
             {
                 id: 2,
-                key: 'Tổng số bác sĩ',
-                value: count.countDoctor,
+                key: 'Hoa hồng hệ thống ',
+                value: formatCurrency(count.countCommission),
                 backgroundColor: 'bg-[rgba(255,90,41,0.15)]',
                 textColor: 'text-[rgb(255,90,41)]',
-                icon: <FaHospital />,
+                icon: <TbRosetteDiscount />,
             },
             {
                 id: 3,
-                key: 'Người dùng mới tháng này',
-                value: count.countUser,
+                key: 'Doanh thu thực nhận tháng này',
+                value: formatCurrency(count.countRestRevenue),
                 backgroundColor: 'bg-[rgba(12,199,99,0.15)]',
                 textColor: 'text-[rgb(12,199,99)]',
-                icon: <FaUser />,
+                icon: <BiCoin />,
+            },
+            {
+                id: 3,
+                key: 'Tổng số bác sĩ',
+                value: count.countDoctor,
+                backgroundColor: 'bg-[rgba(12,156,252,0.15)]',
+                textColor: 'text-[rgb(12,156,252)]',
+                icon: <FaUserDoctor />,
             },
             {
                 id: 4,
-                key: 'Số ca khám tháng này',
+                key: 'Tổng số bệnh nhân',
+                value: count.countPatient,
+                backgroundColor: 'bg-[rgba(12,156,252,0.15)]',
+                textColor: 'text-[rgb(12,156,252)]',
+                icon: <FaUser />,
+            },
+            {
+                id: 5,
+                key: 'Số lượt đặt lịch tháng này',
                 value: count.countBooking,
                 backgroundColor: 'bg-[rgba(12,156,252,0.15)]',
                 textColor: 'text-[rgb(12,156,252)]',
@@ -82,7 +107,7 @@ function Dashboard() {
         <>
             <div className="px-3">
                 <Title>Bảng thống kê</Title>
-                <div className="flex flex-wrap justify-between min-h-28 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 min-h-28 ">
                     {ITEMS.map((item) => (
                         <div
                             key={item.id}

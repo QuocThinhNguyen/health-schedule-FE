@@ -106,7 +106,7 @@ function ThongKeCaKhamTrongThangNay() {
                     },
                     title: {
                         display: true,
-                        text: 'Biểu đồ ca khám trong tháng',
+                        text: 'Biểu đồ tổng số lượt đặt khám trong tháng',
                         color: isDark ? '#ffffffe6' : '#262626',
                     },
                     tooltip: {
