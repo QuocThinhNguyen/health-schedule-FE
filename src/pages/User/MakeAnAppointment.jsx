@@ -14,7 +14,7 @@ function MakeAnAppointment() {
     const currentDate = queryParams.get('currentDate');
     const timeSlot = queryParams.get('timeSlot');
 
-    const [paymentMethod, setPaymentMethod] = useState('CASH');
+    const [paymentMethod, setPaymentMethod] = useState('COD');
     const [isVisible, setIsVisible] = useState(true);
     const [isDragging, setIsDragging] = useState(false);
     const [files, setFiles] = useState([]);
@@ -234,7 +234,7 @@ function MakeAnAppointment() {
         }
         setIsLoading(true);
         try {
-            if (paymentMethod === 'CASH') {
+            if (paymentMethod === 'COD') {
                 await handlePaymentDirect();
             } else if (paymentMethod === 'ONLINE') {
                 await handlePaymentOnline();
@@ -765,8 +765,8 @@ function MakeAnAppointment() {
                             <div className="mt-4 space-y-3">
                                 <div
                                     className={`border-2 rounded-md p-4 flex items-center gap-3 cursor-pointer transition-colors
-                  ${paymentMethod === 'CASH' ? 'border-2 border-blue-600' : 'border-gray-200'}`}
-                                    onClick={() => setPaymentMethod('CASH')}
+                  ${paymentMethod === 'COD' ? 'border-2 border-blue-600' : 'border-gray-200'}`}
+                                    onClick={() => setPaymentMethod('COD')}
                                 >
                                     <div className="w-10 h-10 bg-green-50 rounded-md flex items-center justify-center">
                                         <Banknote className="w-6 h-6 text-green-600" />
@@ -777,9 +777,9 @@ function MakeAnAppointment() {
                                     </div>
                                     <div
                                         className={`w-6 h-6 rounded-full border-2 flex items-center justify-center
-                  ${paymentMethod === 'CASH' ? 'border-blue-600' : 'border-gray-300'}`}
+                  ${paymentMethod === 'COD' ? 'border-blue-600' : 'border-gray-300'}`}
                                     >
-                                        {paymentMethod === 'CASH' && (
+                                        {paymentMethod === 'COD' && (
                                             <div className="p-2 bg-blue-600 rounded-full"></div>
                                         )}
                                     </div>
