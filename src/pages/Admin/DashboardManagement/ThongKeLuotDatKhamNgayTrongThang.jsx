@@ -76,7 +76,7 @@ function ThongKeLuotDatKhamNgayTrongThang() {
             plugins: {
                 title: {
                     display: true,
-                    text: 'Thống kê số lượt đặt khám theo ngày trong tháng',
+                    text: 'Thống kê số lượt đặt khám thành công theo ngày trong tháng',
                     color: isDark ? '#ffffffe6' : '#262626',
                 },
                 legend: {

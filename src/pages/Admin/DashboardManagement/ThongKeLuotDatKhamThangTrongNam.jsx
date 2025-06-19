@@ -64,7 +64,7 @@ function ThongKeLuotDatKhamThangTrongNam() {
             plugins: {
                 title: {
                     display: true,
-                    text: 'Thống kê số lượt đặt khám theo tháng trong năm',
+                    text: 'Thống kê số lượt đặt khám thành công theo tháng trong năm',
                     color: isDark ? '#ffffffe6' : '#262626',
                 },
             },

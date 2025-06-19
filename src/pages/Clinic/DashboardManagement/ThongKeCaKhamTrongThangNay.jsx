@@ -35,7 +35,7 @@ function ThongKeCaKhamTrongThangNay() {
     useEffect(() => {
         const fetchStatusBookingChart = async () => {
             try {
-                const response = await axiosInstance.get('/admin/status-booking-chart');
+                const response = await axiosInstance.get('/clinic/status-booking-chart');
                 if (response.status === 200) {
                     setLabels(response.data.labels);
                     setValues(response.data.values);
@@ -106,7 +106,7 @@ function ThongKeCaKhamTrongThangNay() {
                     },
                     title: {
                         display: true,
-                        text: 'Biểu đồ ca khám trong tháng',
+                        text: 'Biểu đồ tổng số lượt đặt khám trong tháng',
                         color: isDark ? '#ffffffe6' : '#262626',
                     },
                     tooltip: {

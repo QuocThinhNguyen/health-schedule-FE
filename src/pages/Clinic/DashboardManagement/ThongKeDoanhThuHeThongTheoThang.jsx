@@ -24,7 +24,7 @@ function ThongKeDoanhThuHeThongTheoThang() {
     useEffect(() => {
         const fetchRevenueChart = async () => {
             try {
-                const response = await axiosInstance.get('/admin/revenue-chart');
+                const response = await axiosInstance.get('/clinic/revenue-chart');
                 if (response.status === 200) {
                     setLabels(response.data.labels);
                     setValues(response.data.values);
@@ -63,7 +63,7 @@ function ThongKeDoanhThuHeThongTheoThang() {
                     legend: { display: true },
                     title: {
                         display: true,
-                        text: 'Biểu đồ doanh thu hệ thống theo tháng',
+                        text: 'Biểu đồ doanh thu của bệnh viện theo tháng',
                         color: isDark ? '#ffffffe6' : '#262626',
                     },
                 },
