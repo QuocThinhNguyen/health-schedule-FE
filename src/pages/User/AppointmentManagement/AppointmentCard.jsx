@@ -136,15 +136,29 @@ function AppointmentCard({ data, onCancel, onReview, onReviewed, onReschedule })
                             <span className="font-semibold">Địa chỉ:</span>{' '}
                             {appointment?.doctorInfo?.clinic?.address || appointment?.serviceId?.clinicId?.address || 'Không xác định'}
                         </p>
+
                         <button className="flex items-center space-x-1 text-blue-600  mt-1 hover:text-blue-700">
                             <FiNavigation className="mt-[2px] text-[var(--text-secondary)]" />
                             <Link target="_blank" to={appointment?.doctorInfo?.clinic?.mapUrl || appointment?.serviceId?.clinicId?.mapUrl || '#'}>
                                 Chỉ đường
                             </Link>
+                        </button> */}
+                        <button className="flex items-center space-x-1 text-blue-600 mt-2 hover:text-blue-700">
+                            <FiNavigation className="mt-[2px] text-[var(--text-secondary)]" />
+                            <a
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(
+                                    appointment?.doctorInfo?.clinic?.address || '',
+                                )}`}
+                            >
+                                Chỉ đường
+                            </a>
                         </button>
                     </div>
                 </div>
             </div>
+
             <div className="px-4 pb-2 flex justify-end gap-2">
                 {(appointment?.status?.keyMap === 'S2' || appointment?.status?.keyMap === 'S3') && (
                     <button

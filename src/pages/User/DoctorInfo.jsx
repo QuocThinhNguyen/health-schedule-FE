@@ -375,13 +375,11 @@ function DoctorInfo() {
                                 <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
                             </svg>
                             <span className="font-semibold">{feedbacks.averageRating}/5</span>
-                            <a className="text-gray-700 ml-1 underline">{feedbacks.totalFeedBacks} đánh giá</a>
+                            <a className="text-gray-700 ml-1 ">{feedbacks.totalFeedBacks} đánh giá</a>
                             <div className="text-gray-700 ml-1 mr-1">|</div>
                             <div className="flex items-center gap-1">
-                                <Users className="w-4 h-4 text-blue-500" />
-                                <span className="text-gray-700 ml-1 underline">
-                                    {doctorInfo.bookingCount} lượt đặt khám
-                                </span>
+                                {/* <Users className="w-4 h-4 text-blue-500" /> */}
+                                <span className="text-gray-700">{doctorInfo.bookingCount} lượt đặt khám</span>
                             </div>
                         </div>
                     </div>

@@ -19,7 +19,7 @@ function ChatBotAIButton() {
     return (
         <>
             {!isOnChatPage && (
-                <div className="fixed bottom-6 right-3 z-50">
+                <div className="fixed bottom-6 right-3 z-40">
                     <button
                         onClick={handleClick}
                         onMouseEnter={() => setIsHovered(true)}

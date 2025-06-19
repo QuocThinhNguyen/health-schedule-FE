@@ -12,6 +12,7 @@ function ListDoctor() {
         const fetchDoctors = async () => {
             try {
                 const response = await axiosClient.get('/doctor/dropdown');
+                console.log('Check doctor response:', response);
                 if (response.status === 200) {
                     const formattedData = response.data.map((item) => ({
                         doctorInforId: item.doctorInforId,

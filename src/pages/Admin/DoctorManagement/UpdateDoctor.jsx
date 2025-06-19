@@ -14,6 +14,7 @@ function UpdateDoctor() {
         const getDetailDoctorAPI = async () => {
             try {
                 const response = await axiosInstance.get(`/doctor/${id}`);
+                console.log('Check update doctor', response);
                 if (response.status === 200) {
                     setDefaultValues(response.data);
                 }

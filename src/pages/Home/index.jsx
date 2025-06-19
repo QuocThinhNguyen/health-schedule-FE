@@ -9,6 +9,7 @@ import ListService from './ListService/ListService';
 import ListDoctorRecommended from './DoctorRecommended/ListDoctorRecommended';
 import ListVideo from './ListVideo/ListVideo';
 import { UserContext } from '~/context/UserContext';
+import FormRecommendationDoctor from './DoctorRecommended/FormRecommendationDoctor';
 
 function Home() {
     const images = ['home_image1.jpg', 'home_image2.jpg', 'home_image3.jpg', 'home_image4.jpg'];
@@ -16,6 +17,16 @@ function Home() {
     //Slider
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const { user } = useContext(UserContext);
+
+    const [showRecommendationForm, setShowRecommendationForm] = useState(false);
+    const [selectedSymptoms, setSelectedSymptoms] = useState([]);
+    const [hasSubmittedRecommendation, setHasSubmittedRecommendation] = useState(false);
+
+    // useEffect(() => {
+    //     if (user.auth) {
+    //         setShowRecommendationForm(true);
+    //     }
+    // }, [user.auth]);
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -26,6 +37,50 @@ function Home() {
 
     const handleChangeImage = (index) => {
         setCurrentImageIndex(index);
+    };
+
+    const handleCloseForm = () => {
+        setShowRecommendationForm(false);
+        setHasSubmittedRecommendation(true);
+    };
+
+    useEffect(() => {
+        if (user?.auth && user?.userId) {
+            const key = `recommendFormDate_${user.userId}`;
+            const lastShownStr = localStorage.getItem(key);
+
+            const today = new Date();
+            const todayStr = today.toISOString().split('T')[0];
+
+            if (!lastShownStr) {
+                setShowRecommendationForm(true);
+                localStorage.setItem(key, todayStr);
+            } else {
+                const lastShown = new Date(lastShownStr);
+                const diffInDays = Math.floor((today - lastShown) / (1000 * 60 * 60 * 24));
+                if (diffInDays >= 3) {
+                    setShowRecommendationForm(true);
+                    setHasSubmittedRecommendation(true);
+                    localStorage.setItem(key, todayStr);
+                } else {
+                    const savedSymptoms = localStorage.getItem(`selectedSymptoms_${user.userId}`);
+                    if (savedSymptoms) {
+                        setSelectedSymptoms(JSON.parse(savedSymptoms));
+                    }
+                    setHasSubmittedRecommendation(true);
+                }
+            }
+        }
+    }, [user?.auth, user?.userId]);
+
+    const handleRecommendDoctor = (symptoms) => {
+        setSelectedSymptoms(symptoms);
+        setShowRecommendationForm(false);
+        setHasSubmittedRecommendation(true);
+
+        if (user?.userId) {
+            localStorage.setItem(`selectedSymptoms_${user.userId}`, JSON.stringify(symptoms));
+        }
     };
 
     return (
@@ -72,7 +127,11 @@ function Home() {
             <ListDoctor />
 
             {/* Gợi ý bác sĩ */}
-            {user.auth && <ListDoctorRecommended />}
+            {user.auth && hasSubmittedRecommendation && <ListDoctorRecommended symptoms={selectedSymptoms} />}
+
+            {showRecommendationForm && (
+                <FormRecommendationDoctor onClose={handleCloseForm} onRecommend={handleRecommendDoctor} />
+            )}
 
             {/* Dich vu */}
             <ListService />
