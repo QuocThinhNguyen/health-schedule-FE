@@ -76,7 +76,7 @@ function ListFilterClinic({ pagination, setPagination }) {
                     value={searchParams.get('sort') || ''}
                     onChange={(e) => handleFilterChange('sort', e.target.value)}
                 >
-                    <option value="">Nổi bật</option>
+                    {/* <option value="">Nổi bật</option> */}
                     <option value="desc">Đánh giá từ cao đến thấp</option>
                     <option value="asc">Đánh giá từ thấp đến cao</option>
                 </select>
