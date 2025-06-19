@@ -76,14 +76,14 @@ function AppointmentCard({ data, onCancel, onReview, onReviewed, onReschedule })
                 )}
                 <div className="flex items-center space-x-6 text-gray-600">
                     <FiCalendar className="text-[var(--text-secondary)]" />
-                    <span className="gap-2 flex items-center mt-[2px] mt-[2px]">
+                    <span className="gap-2 flex items-center mt-[2px]">
                         <span className="font-semibold">Ngày khám:</span>
                         {formatDate(appointment?.appointmentDate)} • {appointment?.timeType?.valueVi}
                     </span>
                 </div>
                 <div className="flex items-center space-x-6 text-gray-600">
                     <FiDollarSign className="text-[var(--text-secondary)]" />
-                    <span className="gap-2 flex items-center mt-[2px] mt-[2px]">
+                    <span className="gap-2 flex items-center mt-[2px]">
                         <span className="font-semibold">Giá khám:</span>
                         <span className="">{appointment?.price || '500.000'} đ</span>
                     </span>
@@ -130,31 +130,36 @@ function AppointmentCard({ data, onCancel, onReview, onReviewed, onReschedule })
                     <div className="flex-1">
                         <p className="font-medium">
                             <span className="font-semibold">Bệnh viện:</span>{' '}
-                            {appointment?.doctorInfo?.clinic?.name || appointment?.serviceId?.clinicId?.name || 'Không xác định'}
+                            {appointment?.doctorInfo?.clinic?.name ||
+                                appointment?.serviceId?.clinicId?.name ||
+                                'Không xác định'}
                         </p>
                         <p className=" mt-1">
                             <span className="font-semibold">Địa chỉ:</span>{' '}
-                            {appointment?.doctorInfo?.clinic?.address || appointment?.serviceId?.clinicId?.address || 'Không xác định'}
+                            {appointment?.doctorInfo?.clinic?.address ||
+                                appointment?.serviceId?.clinicId?.address ||
+                                'Không xác định'}
                         </p>
-
                         <button className="flex items-center space-x-1 text-blue-600  mt-1 hover:text-blue-700">
                             <FiNavigation className="mt-[2px] text-[var(--text-secondary)]" />
-                            <Link target="_blank" to={appointment?.doctorInfo?.clinic?.mapUrl || appointment?.serviceId?.clinicId?.mapUrl || '#'}>
-                                Chỉ đường
-                            </Link>
-                        </button> */}
-                        <button className="flex items-center space-x-1 text-blue-600 mt-2 hover:text-blue-700">
-                            <FiNavigation className="mt-[2px] text-[var(--text-secondary)]" />
-                            <a
+                            <Link
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(
-                                    appointment?.doctorInfo?.clinic?.address || '',
-                                )}`}
+                                to={
+                                    appointment?.doctorInfo?.clinic?.address
+                                        ? `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(
+                                              appointment?.doctorInfo?.clinic?.address,
+                                          )}`
+                                        : appointment?.serviceId?.clinicId?.mapUrl
+                                        ? `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(
+                                              appointment?.serviceId?.clinicId?.mapUrl,
+                                          )}`
+                                        : '#'
+                                }
                             >
                                 Chỉ đường
-                            </a>
-                        </button>
+                            </Link>
+                        </button>{' '}
                     </div>
                 </div>
             </div>

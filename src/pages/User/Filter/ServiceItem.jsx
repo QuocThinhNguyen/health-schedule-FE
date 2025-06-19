@@ -42,7 +42,7 @@ function ServiceItem({ data }) {
                 </div>
                 <div
                     onClick={handleClickService}
-                    className=" h-10 bg-customBlue hover:bg-blue-600 text-white border px-5 py-2 rounded-lg font-semibold cursor-pointer"
+                    className=" h-10 leading-6 bg-customBlue hover:bg-blue-600 text-white border px-5 py-2 rounded-lg font-semibold cursor-pointer"
                 >
                     Đặt Lịch Hẹn
                 </div>
