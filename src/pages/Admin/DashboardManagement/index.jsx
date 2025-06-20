@@ -8,6 +8,9 @@ import ThongKeLuotDatKhamThangTrongNam from './ThongKeLuotDatKhamThangTrongNam';
 import ThongKeDoanhThuHeThongTheoThang from './ThongKeDoanhThuHeThongTheoThang';
 import ThongKeCaKhamTrongThangNay from './ThongKeCaKhamTrongThangNay';
 import Title from '../../../components/Tittle';
+import { formatCurrency } from '~/utils/formatCurrency';
+import { TbRosetteDiscount } from 'react-icons/tb';
+import { BiCoinStack } from 'react-icons/bi';
 
 function Dashboard() {
     const [count, setCounts] = useState({
@@ -15,6 +18,8 @@ function Dashboard() {
         countDoctor: 0,
         countUser: 0,
         countBooking: 0,
+        totalRevenue: 0,
+        commission: 0,
     });
 
     useEffect(() => {
@@ -27,14 +32,16 @@ function Dashboard() {
                         countDoctor: response.data.totalDoctors,
                         countUser: response.data.countOfNewUserThisMonth,
                         countBooking: response.data.totalBookingThisMonth,
+                        totalRevenue: response.data.totalRevenue,
+                        commission: response.data.commission,
                     });
                 } else {
                     console.error('Failed to fetch data:', response.message);
-                    setDoctors([]);
+                    setCounts([]);
                 }
             } catch (error) {
                 console.error('Error fetching appointments:', error);
-                setDoctors([]);
+                setCounts([]);
             }
         };
         fetchStatistics();
@@ -44,6 +51,22 @@ function Dashboard() {
         () => [
             {
                 id: 1,
+                key: 'Tổng doanh thu toàn hệ thống',
+                value: formatCurrency(count.totalRevenue),
+                backgroundColor: 'bg-[rgba(12,156,252,0.15)]',
+                textColor: 'text-[rgb(12,156,252)]',
+                icon: <BiCoinStack />,
+            },
+            {
+                id: 2,
+                key: 'Hoa hồng hệ thống nhận được',
+                value: formatCurrency(count.commission),
+                backgroundColor: 'bg-[rgba(12,156,252,0.15)]',
+                textColor: 'text-[rgb(12,156,252)]',
+                icon: <TbRosetteDiscount />,
+            },
+            {
+                id: 3,
                 key: 'Tổng số bệnh viện',
                 value: count.countClinic,
                 backgroundColor: 'bg-[rgba(115,93,255,0.15)]',
@@ -51,7 +74,7 @@ function Dashboard() {
                 icon: <FaUserDoctor />,
             },
             {
-                id: 2,
+                id: 4,
                 key: 'Tổng số bác sĩ',
                 value: count.countDoctor,
                 backgroundColor: 'bg-[rgba(255,90,41,0.15)]',
@@ -59,7 +82,7 @@ function Dashboard() {
                 icon: <FaHospital />,
             },
             {
-                id: 3,
+                id: 5,
                 key: 'Người dùng mới tháng này',
                 value: count.countUser,
                 backgroundColor: 'bg-[rgba(12,199,99,0.15)]',
@@ -67,13 +90,14 @@ function Dashboard() {
                 icon: <FaUser />,
             },
             {
-                id: 4,
-                key: 'Số ca khám tháng này',
+                id: 6,
+                key: 'Số lượt đặt tháng này',
                 value: count.countBooking,
                 backgroundColor: 'bg-[rgba(12,156,252,0.15)]',
                 textColor: 'text-[rgb(12,156,252)]',
                 icon: <AiOutlineSchedule />,
             },
+            
         ],
         [count],
     );
@@ -82,7 +106,7 @@ function Dashboard() {
         <>
             <div className="px-3">
                 <Title>Bảng thống kê</Title>
-                <div className="flex flex-wrap justify-between min-h-28 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 min-h-32 ">
                     {ITEMS.map((item) => (
                         <div
                             key={item.id}

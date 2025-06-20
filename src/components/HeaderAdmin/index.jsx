@@ -76,7 +76,7 @@ function Header() {
                             <FiMenu className="text-lg" />
                         </div>
                     </div>
-                    {clinicId && (
+                    {clinicId && user?.role !="R1" && (
                         <div className="mx-1 my-auto border border-[var(--bg-active)] rounded-full px-2 py-1">
                             <h1 className="font-medium text-[var(--text-primary)]">{clinicName}</h1>
                         </div>
