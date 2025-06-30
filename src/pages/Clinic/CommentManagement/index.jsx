@@ -10,7 +10,7 @@ import { format } from 'date-fns';
 import { ClinicContext } from '~/context/ClinicContext';
 
 const CommentManagement = () => {
-    const {clinicId} = useContext(ClinicContext);
+    const { clinicId } = useContext(ClinicContext);
     const [showConfirm, setShowConfirm] = useState(false);
     const [filterValue, setFilterValue] = useState('');
     const [pagination, setPagination] = useState({ page: 1, limit: 10, totalPages: 1 });

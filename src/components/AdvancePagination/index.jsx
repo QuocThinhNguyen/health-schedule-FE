@@ -4,8 +4,8 @@ function AdvancePagination({ pagination, totalElements, onPageChange, selects, o
     return (
         <div className="flex items-center justify-between mt-4">
             <div className="text-sm">
-                Hiển thị {(pagination.page - 1) * pagination.limit + 1} đến {pagination.page * pagination.limit} trong
-                số {totalElements} mục
+                {/* Hiển thị {(pagination.page - 1) * pagination.limit + 1} đến {pagination.page * pagination.limit} trong
+                số {totalElements} mục */}
             </div>
             <div className="text-right">
                 <Pagination
