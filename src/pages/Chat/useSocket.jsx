@@ -6,10 +6,6 @@ const useSocket = (userId) => {
     if (!socket) {
         socket = io(import.meta.env.VITE_REACT_APP_BACKEND_URL, {
             auth: { userId },
-            transports: ['websocket'],
-            withCredentials: true,
-            reconnectionAttempts: 3,
-            timeout: 2000,
         });
         console.log('Socket initialized:', socket);
 
